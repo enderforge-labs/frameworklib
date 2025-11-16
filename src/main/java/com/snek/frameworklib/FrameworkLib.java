@@ -53,7 +53,7 @@ public class FrameworkLib implements ModInitializer {
             serverInstance = server;
 
             // Read config files
-            Configs.loadConfigs();
+            if(!Configs.loadConfigs()) return;
 
             // Register chat input handler
             ServerMessageEvents.ALLOW_CHAT_MESSAGE.register((message, sender, params) -> {
