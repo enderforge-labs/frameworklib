@@ -1,13 +1,17 @@
 package com.snek.frameworklib.graphics.hud._elements;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
+import com.snek.frameworklib.graphics.Canvas;
+import com.snek.frameworklib.graphics.Context;
 import com.snek.frameworklib.graphics.Div;
 import com.snek.frameworklib.graphics.Elm;
+import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 import com.snek.frameworklib.graphics.hud._styles.HudCanvasBack_S;
 import com.snek.frameworklib.graphics.hud._styles.HudCanvasBackground_S;
 import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
@@ -22,34 +26,31 @@ import net.minecraft.world.entity.player.Player;
 
 
 
-public class HudCanvas extends UiCanvas implements __HudElm {
+public class HudCanvas extends Canvas implements __HudElm {
 
-    // UI
+    // HUD
     public static final float POS_UPDATE_DISTANCE = 0.1f;
     public static final float HUD_DISTANCE = 1.3f;
 
     // Canvas data
-    protected final @NotNull Hud hud;
     private @NotNull Vector3f lastPos = new Vector3f();
-    private int lastRotation = 0;
     private boolean spawned = false;
 
 
 
 
     public HudCanvas(final @NotNull Hud _hud, final float height, final float heightTop, final float heightBottom) {
-        super(_hud.getActiveCanvas(), (ServerLevel)(_hud.getPlayer().level()), height, heightTop, heightBottom, new HudCanvasBackground_S(), new HudCanvasBack_S());
-        hud = _hud;
+        super(_hud, _hud.getActiveCanvas(), (ServerLevel)(_hud.getPlayer().level()), height, heightTop, heightBottom, new HudCanvasBackground_S(), new HudCanvasBack_S());
     }
 
 
+    @Override
     public void update() {
-        final Player player = hud.getPlayer();
+        final Player player = context.getPlayer();
 
         // Update rotation
         final int newRot = Math.round((player.getViewYRot(1) + 180f) / 45f) % 8;
         updateRot(newRot);
-
 
         // Calculate new position and position difference
         final Vector3f newPos = player.getEyePosition().toVector3f();
@@ -59,14 +60,6 @@ public class HudCanvas extends UiCanvas implements __HudElm {
         if(posDelta.length() >= POS_UPDATE_DISTANCE) {
             lastPos = newPos;
             updatePos(this);
-        }
-    }
-
-
-    public void updateRot(final int newRot) {
-        if(lastRotation != newRot) {
-            applyAnimationRecursive(UiCanvas.calcCanvasRotationAnimation(lastRotation, newRot));
-            lastRotation = newRot;
         }
     }
 

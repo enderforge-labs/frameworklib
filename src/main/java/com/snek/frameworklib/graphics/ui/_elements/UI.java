@@ -1,4 +1,4 @@
-package com.snek.frameworklib.graphics.hud._elements;
+package com.snek.frameworklib.graphics.ui._elements;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,8 +16,6 @@ import com.snek.frameworklib.graphics.Canvas;
 import com.snek.frameworklib.graphics.Context;
 import com.snek.frameworklib.graphics.Elm;
 import com.snek.frameworklib.graphics.InteractionBlocker;
-import com.snek.frameworklib.graphics.ui._elements.UI;
-import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -31,11 +29,19 @@ import net.minecraft.world.phys.Vec3;
 
 
 /**
- * A Context that follows its player and rotates around them
+ * The root element of any UI. It contains canvases which contain the UI elements.
+ * Only one canvas at a time can be displayed.
  */
-public class Hud extends Context {
+public class UI extends Context {
+    public static final float INTERACTION_BLOCKER_SIZE = 0.5f;
 
-    public Hud(final @NotNull Player _player) {
+    // UI data
+    protected final Vector3d spawnPos = new Vector3d();
+
+
+
+
+    public UI(final @NotNull Player _player) {
         super(_player);
     }
 
@@ -44,19 +50,12 @@ public class Hud extends Context {
 
     @Override
     public void update() {
-        super.update();
-        if(interactionBlocker != null) {
-            final Vec3 pos = player.getEyePosition();
-            interactionBlocker.teleport(new Vector3d(pos.x, pos.y - INTERACTION_BLOCKER_SIZE / 2f, pos.z));
-        }
+        if(activeCanvas != null) activeCanvas.update();
     }
 
 
 
-    /**
-     * Override changeCanvas method to spawn the new canvas at the player's position
-     * @param canvas
-     */
+
     @Override
     public void changeCanvas(final @NotNull Canvas canvas) {
         activeCanvas = canvas;
@@ -69,19 +68,17 @@ public class Hud extends Context {
         //         c.applyAnimationNowRecursive(animation);
         //     }
         // }
-
-        // Spawn canvas into the world and play a sound to the user
-        final Vec3 pos = player.getPosition(1);
-        canvas.spawn(new Vector3d(pos.x, pos.y, pos.z));
+        canvas.spawn(spawnPos);
     }
 
 
 
 
-    public static Hud getOpenHudOrCreate(final @NotNull Player player) {
-        //FIXME it might be necessary to check if the open context is an HUD or not (it might be a UI or other stuff)
-        final Context hud = getOpenContext(player);
-        if(hud == null) return new Hud(player);
-        else return (Hud)hud;  //FIXME it might be necessary to check if the open context is an HUD or not (it might be a UI or other stuff)
+    @Override
+    public void spawn(Vector3d pos) {
+        if(!spawned) {
+            spawnPos.set(pos);
+        }
+        super.spawn(pos);
     }
 }

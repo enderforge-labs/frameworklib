@@ -1,4 +1,4 @@
-package com.snek.frameworklib.graphics.ui._elements;
+package com.snek.frameworklib.graphics;
 
 import java.lang.reflect.Method;
 

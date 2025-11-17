@@ -7,8 +7,9 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.snek.frameworklib.graphics.Context;
+import com.snek.frameworklib.graphics.InteractionBlocker;
 import com.snek.frameworklib.graphics.hud._elements.Hud;
-import com.snek.frameworklib.graphics.ui._elements.InteractionBlocker;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
 import net.minecraft.core.Vec3i;
@@ -53,16 +54,16 @@ public abstract class ClickReceiver {
 
 
         //FIXME run this code in the hud's click event
-        // // Handle limiter
-        // RateLimiter limiter = clickLimiters.get(player.getUUID());
-        // if(limiter == null) {
-        //     limiter = new RateLimiter();
-        //     clickLimiters.put(player.getUUID(), limiter);
-        // }
+        // Handle limiter
+        RateLimiter limiter = clickLimiters.get(player.getUUID());
+        if(limiter == null) {
+            limiter = new RateLimiter();
+            clickLimiters.put(player.getUUID(), limiter);
+        }
 
 
-        // Send click to HUD and return if one is present
-        if(Hud.forwardClickStatic(player, clickType)) {
+        // Send click to Context and return if one is present
+        if(Context.forwardClickStatic(player, clickType)) {
             return InteractionResult.FAIL;
         }
 

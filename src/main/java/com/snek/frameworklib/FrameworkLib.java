@@ -5,10 +5,13 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.frameworkconfig.FrameworkConfig;
 import com.snek.frameworklib.configs.Configs;
+import com.snek.frameworklib.graphics.Context;
 import com.snek.frameworklib.graphics.Elm;
+import com.snek.frameworklib.graphics.InteractionBlocker;
 import com.snek.frameworklib.graphics.hud._elements.Hud;
-import com.snek.frameworklib.graphics.ui._elements.InteractionBlocker;
+import com.snek.frameworklib.graphics.ui._elements.UI;
 import com.snek.frameworklib.input.ClickReceiver;
+import com.snek.frameworklib.input.HoverReceiver;
 import com.snek.frameworklib.input.MessageReceiver;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
 
@@ -16,11 +19,14 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.inventory.ClickAction;
 
 
@@ -32,7 +38,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 public class FrameworkLib implements ModInitializer {
     public static final String LIB_ID = "frameworklib";
-    public static final ResourceLocation INIT_PHASE_ID = new ResourceLocation(LIB_ID, "init");
+    public static final ResourceLocation PHASE_ID = new ResourceLocation(LIB_ID, "phase_id");
 
 
     // Server instance
@@ -58,17 +64,9 @@ public class FrameworkLib implements ModInitializer {
     public void onInitialize() {
 
 
-        // Make sure Framework Config is initialized before Framework Lib
-        ServerLifecycleEvents.SERVER_STARTING.addPhaseOrdering(
-            FrameworkConfig.INIT_PHASE_ID,
-            INIT_PHASE_ID
-        );
-
-
-
-
         // Register initialization
-        ServerLifecycleEvents.SERVER_STARTING.register(INIT_PHASE_ID, server -> {
+        ServerLifecycleEvents.SERVER_STARTING.addPhaseOrdering(FrameworkConfig.PHASE_ID, PHASE_ID);
+        ServerLifecycleEvents.SERVER_STARTING.register(PHASE_ID, server -> {
             serverInstance = server;
 
 
@@ -90,34 +88,57 @@ public class FrameworkLib implements ModInitializer {
 
 
         // Register post-initialization events
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+        ServerLifecycleEvents.SERVER_STARTED.register(PHASE_ID, server -> {
             if(fatal) return;
 
 
             // Schedule UI element update loop
             Scheduler.loop(0, com.snek.frameworklib.configs.Configs.perf.animation_refresh_time.getValue(), () -> {
                 Elm.processUpdateQueue();
-                Hud.updateActiveHuds();
+                Context.updateActiveContexts();
             });
+
+
+
+
+            // Schedule hover manager loop
+            //TODO this might need some settings to make it slower?
+            //TODO or at least limit it to players with a scrollable context open
+            Scheduler.loop(0, 1, HoverReceiver::tick);
+
+
 
 
             // Create and register entity click events (interaction blocker clicks)
-            AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+            AttackEntityCallback.EVENT.register(PHASE_ID, (player, world, hand, entity, hitResult) -> {
                 return ClickReceiver.onClickEntity(world, player, hand, ClickAction.PRIMARY, entity);
             });
-            UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+            UseEntityCallback.EVENT.register(PHASE_ID, (player, world, hand, entity, hitResult) -> {
                 return ClickReceiver.onClickEntity(world, player, hand, ClickAction.SECONDARY, entity);
             });
 
 
+
+
+            // Create and register block click events (shop placement + prevents early clicks going through the shop) //TODO update comment
+            AttackBlockCallback.EVENT.register(PHASE_ID, (player, world, hand, blockPos, direction) -> {
+                return ClickReceiver.onClickBlock(world, player, hand, ClickAction.PRIMARY, blockPos.offset(direction.getNormal()));
+            });
+            UseBlockCallback.EVENT.register(PHASE_ID, (player, world, hand, hitResult) -> {
+                return ClickReceiver.onClickBlock(world, player, hand, ClickAction.SECONDARY, hitResult.getBlockPos().offset(hitResult.getDirection().getNormal()));
+            });
+
+
+
+
             // Register scheduler
-            ServerTickEvents.END_SERVER_TICK.register(_server -> {
+            ServerTickEvents.END_SERVER_TICK.register(PHASE_ID, _server -> {
                 Scheduler.tick();
             });
 
 
             // Register entity display purge
-            ServerEntityEvents.ENTITY_LOAD.register((entity, world) -> {
+            ServerEntityEvents.ENTITY_LOAD.register(PHASE_ID, (entity, world) -> {
                 Elm.onEntityLoad(entity);
                 InteractionBlocker.onEntityLoad(entity);
             });

@@ -18,6 +18,7 @@ import com.snek.frameworklib.configs.Configs;
 // import com.snek.fancyplayershops.main.Shop;
 import com.snek.frameworklib.debug.DebugCheck;
 import com.snek.frameworklib.debug.UiDebugWindow;
+import com.snek.frameworklib.graphics.Context;
 import com.snek.frameworklib.graphics.Elm;
 import com.snek.frameworklib.graphics.hud._elements.Hud;
 import com.snek.frameworklib.utils.MinecraftUtils;
@@ -239,9 +240,9 @@ public abstract class HoverReceiver {
         }
 
 
-        // Send hover updates to active HUDs
+        // Send hover updates to active Contexts
         for(final Player player : hudPlayers) {
-            Hud.forwardHoverStatic(player);
+            Context.forwardHoverStatic(player);
         }
 
 
