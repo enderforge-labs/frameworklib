@@ -125,41 +125,41 @@ public abstract class HoverReceiver {
 
 
 
-        // // Find currently focused shops and their viewers
-        // final int batchSize = Math.max(1, playerListSnapshot.size() / Configs.perf.ray_casting_batches.getValue());
-        // for(int i = 0; i < batchSize && updateIndex < playerListSnapshot.size(); ++i, ++updateIndex) {
-        //     final Player player = playerListSnapshot.get(updateIndex);
+        // Find currently focused shops and their viewers
+        final int batchSize = Math.max(1, playerListSnapshot.size() / Configs.perf.ray_casting_batches.getValue());
+        for(int i = 0; i < batchSize && updateIndex < playerListSnapshot.size(); ++i, ++updateIndex) {
+            final Player player = playerListSnapshot.get(updateIndex);
 
 
-        //     // Skip player if they are dead or in spectator mode or have a HUD open or they aren't looking at any shop
-        //     if(player.isSpectator() || player.isDeadOrDying()) continue;
-        //     if(Hud.getOpenHud(player) != null) {
-        //         hudPlayers.add(player);
-        //         continue;
-        //     }
-        //     final Shop shop = HoverReceiver.getLookedAtShop(player);
-        //     if(shop == null) continue;
+            // Skip player if they are dead or in spectator mode or have a HUD open or they aren't looking at any shop
+            if(player.isSpectator() || player.isDeadOrDying()) continue;
+            if(Context.getOpenContext(player) != null) {
+                hudPlayers.add(player);
+                // continue;
+            }
+            // final Shop shop = HoverReceiver.getLookedAtShop(player);
+            // if(shop == null) continue;
 
 
-        //     // Add shop to list of shops with looked at elements if the player is in the looked at elements key list
-        //     if(targetedElms.containsKey(player)) {
-        //         shopsWithTargetedElm.add(shop);
-        //     }
+            // // Add shop to list of shops with looked at elements if the player is in the looked at elements key list
+            // if(targetedElms.containsKey(player)) {
+            //     shopsWithTargetedElm.add(shop);
+            // }
 
-        //     // Try to add a shop to the focused shops list. If it's not already in it, set its next focus state to true
-        //     final boolean isShopNew = targetedShops.add(shop);
-        //     if(isShopNew) {
-        //         shop.setFocusStateNext(true);
-        //         shop.setViewer(player);
-        //     }
+            // // Try to add a shop to the focused shops list. If it's not already in it, set its next focus state to true
+            // final boolean isShopNew = targetedShops.add(shop);
+            // if(isShopNew) {
+            //     shop.setFocusStateNext(true);
+            //     shop.setViewer(player);
+            // }
 
-        //     // If the shop is already in the list, check if the current player has a higher priority. If that's the case, update the viewer value
-        //     else {
-        //         if(getPlayerPriority(shop, player) > getPlayerPriority(shop, shop.getViewer())) {
-        //             shop.setViewer(player);
-        //         }
-        //     }
-        // }
+            // // If the shop is already in the list, check if the current player has a higher priority. If that's the case, update the viewer value
+            // else {
+            //     if(getPlayerPriority(shop, player) > getPlayerPriority(shop, shop.getViewer())) {
+            //         shop.setViewer(player);
+            //     }
+            // }
+        }
 
 
 
