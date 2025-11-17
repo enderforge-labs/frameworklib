@@ -75,10 +75,11 @@ public abstract class Canvas extends Div {
     protected final @NotNull Elm bottom;
 
     // Getters
-    public @NotNull Elm getBg    () { return bg;     }
-    public @NotNull Elm getBack  () { return back;   }
-    public @NotNull Elm getTop   () { return top;    }
-    public @NotNull Elm getBottom() { return bottom; }
+    public @NotNull Elm getBg      () { return bg;           }
+    public @NotNull Elm getBack    () { return back;         }
+    public @NotNull Elm getTop     () { return top;          }
+    public @NotNull Elm getBottom  () { return bottom;       }
+    public @NotNull int getRotation() { return lastRotation; }
 
     // Height cache
     private final float newHeightBg;
