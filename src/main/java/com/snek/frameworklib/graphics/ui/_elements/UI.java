@@ -33,12 +33,9 @@ import net.minecraft.world.phys.Vec3;
  * Only one canvas at a time can be displayed.
  */
 public class UI extends Context {
-    public static final float INTERACTION_BLOCKER_SIZE = 0.5f;
 
     // UI data
     protected final Vector3d spawnPos = new Vector3d();
-
-
 
 
     public UI(final @NotNull Player _player) {
@@ -46,6 +43,10 @@ public class UI extends Context {
     }
 
 
+    @Override
+    public float getInteractionBlockerSize() {
+        return 1;
+    }
 
 
     @Override

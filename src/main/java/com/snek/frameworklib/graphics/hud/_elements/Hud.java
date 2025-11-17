@@ -40,6 +40,10 @@ public class Hud extends Context {
     }
 
 
+    @Override
+    public float getInteractionBlockerSize() {
+        return 1;
+    }
 
 
     @Override
@@ -47,9 +51,10 @@ public class Hud extends Context {
         super.update();
         if(interactionBlocker != null) {
             final Vec3 pos = player.getEyePosition();
-            interactionBlocker.teleport(new Vector3d(pos.x, pos.y - INTERACTION_BLOCKER_SIZE / 2f, pos.z));
+            interactionBlocker.teleport(new Vector3d(pos.x, pos.y - getInteractionBlockerSize() / 2f, pos.z));
         }
     }
+
 
 
 

@@ -20,7 +20,6 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 public abstract class Context {
-    public static final float INTERACTION_BLOCKER_SIZE = 0.5f;
 
     // Hud data
     protected final Player player;
@@ -29,9 +28,10 @@ public abstract class Context {
     protected boolean spawned = false;
 
     // Getters
-    public @NotNull  Player             getPlayer            () { return player; }
-    public @Nullable Canvas             getActiveCanvas      () { return activeCanvas; }
-    public @Nullable InteractionBlocker getInteractionBlocker() { return interactionBlocker; }
+    public @NotNull  Player             getPlayer                () { return player; }
+    public @Nullable Canvas             getActiveCanvas          () { return activeCanvas; }
+    public @Nullable InteractionBlocker getInteractionBlocker    () { return interactionBlocker; }
+    public abstract float getInteractionBlockerSize();
 
     // Active contex list
     private static final Map<UUID, Context> activeContexts = new HashMap<>();
@@ -55,9 +55,10 @@ public abstract class Context {
     public void spawn(Vector3d pos) {
         if(!spawned) {
             spawned = true;
+            final float size = getInteractionBlockerSize();
             if(activeCanvas != null) activeCanvas.spawn(pos);
-            interactionBlocker = new InteractionBlocker(player.level(), INTERACTION_BLOCKER_SIZE, INTERACTION_BLOCKER_SIZE);
-            interactionBlocker.spawn(pos.sub(new Vector3d(0, INTERACTION_BLOCKER_SIZE / -2f, 0), new Vector3d()));
+            interactionBlocker = new InteractionBlocker(player.level(), size, size);
+            interactionBlocker.spawn(pos.sub(new Vector3d(0, size / -2f, 0), new Vector3d()));
         }
     }
 
