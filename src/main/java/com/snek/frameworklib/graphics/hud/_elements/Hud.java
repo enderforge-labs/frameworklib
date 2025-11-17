@@ -42,7 +42,7 @@ public class Hud extends Context {
 
     @Override
     public float getInteractionBlockerSize() {
-        return 1;
+        return 0.5f;
     }
 
 

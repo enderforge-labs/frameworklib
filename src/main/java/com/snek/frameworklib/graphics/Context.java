@@ -52,6 +52,11 @@ public abstract class Context {
     }
 
 
+    /**
+     * Spawns the context at the provided coordinates.
+     * @param pos The coordinates to spawn the context at.
+     *     This defines the the center of the context's hitbox.
+     */
     public void spawn(Vector3d pos) {
         if(!spawned) {
             spawned = true;
@@ -62,6 +67,10 @@ public abstract class Context {
         }
     }
 
+
+    /**
+     * Despawns the context and all of its graphic elements.
+     */
     public void despawn() {
         if(spawned) {
             spawned = false;
@@ -84,18 +93,30 @@ public abstract class Context {
 
 
 
-
+    /**
+     * Closes the context of the specified player.
+     *     Does nothing if the player doesn't have any context open.
+     * @param player The player.
+     */
     public static void closeContext(final @NotNull Player player) {
         final Context context = activeContexts.get(player.getUUID());
         if(context != null) context.despawn();
     }
 
 
-    public static Context getOpenContext(final @NotNull Player player) {
+    /**
+     * Returns the context of the specified player.
+     * @param player The player.
+     * @return The context, or null if the player doesn't have any open context.
+     */
+    public static @Nullable Context getOpenContext(final @NotNull Player player) {
         return activeContexts.get(player.getUUID());
     }
 
 
+    /**
+     * Updates all active contexts.
+     */
     public static void updateActiveContexts() {
         for(Context context : activeContexts.values()) {
             context.update();
@@ -104,7 +125,7 @@ public abstract class Context {
 
 
     /**
-     * Forwards a click event to the context of a player.
+     * Forwards a click event to the context of the specified player.
      * @param _player The player.
      * @param action The type of click.
      * @return True if the player has an open context, false otherwise.
@@ -119,6 +140,8 @@ public abstract class Context {
         return true;
     }
 
+
+    //TODO comment
     public static void forwardHoverStatic(final @NotNull Player _player) {
         final Context context = activeContexts.get(_player.getUUID());
         if(context == null) return;
