@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
 
 import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
@@ -461,15 +462,43 @@ public abstract class MinecraftUtils {
 
     /**
      * Converts entity coordinates (double) to block coordinates (int).
-     * <p> Minecraft's block grid is weird and simply truncating the decimal part is not enough to convert coordinates.
-     * @param pos
-     * @return
+     * @param pos The entity coordinates.
+     * @return The coordinates of the block as a Vec3i.
      */
-    public static @NotNull Vec3i doubleToBlockCoords(final @NotNull Vec3 pos) {
+    public static @NotNull Vec3i doubleToBlockCoords(final @NotNull Vector3d pos) {
         return new Vec3i(
-            pos.x < 0 ? (int)(Math.floor(pos.x) - 0.1) : (int) pos.x,
-            pos.y < 0 ? (int)(Math.floor(pos.y) - 0.1) : (int) pos.y,
-            pos.z < 0 ? (int)(Math.floor(pos.z) - 0.1) : (int) pos.z
+            (int) Math.floor(pos.x),
+            (int) Math.floor(pos.y),
+            (int) Math.floor(pos.z)
+        );
+    }
+
+
+    /**
+     * Finds the entity coordinates (double) of the center of a block.
+     * @param pos The block coordinates.
+     * @return The coordinates of the center of the block.
+     */
+    public static @NotNull Vector3d blockCenterCoords(final @NotNull Vec3i pos) {
+        return new Vector3d(
+            pos.getX() + 0.5,
+            pos.getY() + 0.5,
+            pos.getZ() + 0.5
+        );
+    }
+
+
+    /**
+     * Finds the entity coordinates (double) of the lowest point along the vertical axis of a block.
+     * These coordinates are the coordinates a 1-block wide interaction entity needs to be at to perfectly align with the specified block.
+     * @param pos The block coordinates.
+     * @return The coordinates of the point.
+     */
+    public static @NotNull Vector3d blockSourceCoords(final @NotNull Vec3i pos) {
+        return new Vector3d(
+            pos.getX() + 0.5,
+            pos.getY(),
+            pos.getZ() + 0.5
         );
     }
 }
