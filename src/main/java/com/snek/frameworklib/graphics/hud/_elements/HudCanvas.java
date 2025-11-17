@@ -29,12 +29,18 @@ import net.minecraft.world.entity.player.Player;
 public class HudCanvas extends Canvas implements __HudElm {
 
     // HUD
-    public static final float POS_UPDATE_DISTANCE = 0.1f;
     public static final float HUD_DISTANCE = 1.3f;
 
     // Canvas data
-    private @NotNull Vector3f lastPos = new Vector3f();
     private boolean spawned = false;
+
+    // Optimization data
+    private @NotNull Vector3d lastPlayerEyePos = new Vector3d();
+    public static final double POS_UPDATE_DISTANCE = 0.1f;
+
+
+
+
 
 
 
@@ -53,12 +59,12 @@ public class HudCanvas extends Canvas implements __HudElm {
         updateRot(newRot);
 
         // Calculate new position and position difference
-        final Vector3f newPos = player.getEyePosition().toVector3f();
-        final Vector3f posDelta = newPos.sub(lastPos, new Vector3f());
+        final Vector3d newPos = new Vector3d(player.getEyePosition().toVector3f());
+        final Vector3d posDelta = newPos.sub(lastPlayerEyePos, new Vector3d());
 
         // If the player moved too far since the last update, teleport the entities
         if(posDelta.length() >= POS_UPDATE_DISTANCE) {
-            lastPos = newPos;
+            lastPlayerEyePos = newPos;
             updatePos(this);
         }
     }
@@ -66,7 +72,7 @@ public class HudCanvas extends Canvas implements __HudElm {
 
     public void updatePos(final @NotNull Div div) {
         if(div instanceof Elm e) {
-            e.getEntity().teleport(new Vector3d(lastPos.x, lastPos.y, lastPos.z));
+            e.getEntity().teleport(lastPlayerEyePos);
         }
         for(Div c : div.getChildren()) {
             updatePos(c);
@@ -81,7 +87,7 @@ public class HudCanvas extends Canvas implements __HudElm {
         if(!spawned) {
             spawned = true;
             super.spawn(pos);
-            lastPos = new Vector3f((float)pos.x, (float)pos.y, (float)pos.z);
+            lastPlayerEyePos = new Vector3d(pos);
 
             // Move displays away from the player's center
             applyAnimationNowRecursive(new Transition().additiveTransform(new Transform().move(__calcVisualShift())));
@@ -90,8 +96,7 @@ public class HudCanvas extends Canvas implements __HudElm {
     public @NotNull Vector3f __calcVisualShift() {
         final float rotation = (float)Math.toRadians((lastRotation + 4) % 8 * -45f);
         final Vector3f direction = new Vector3f((float)Math.sin(rotation), 0, (float)Math.cos(rotation));
-        final Vector3f shift = direction.mul(HUD_DISTANCE).sub(0, 0.5f, 0);
-        return shift;
+        return direction.mul(HUD_DISTANCE).sub(0, 0.5f, 0);
     }
 
 

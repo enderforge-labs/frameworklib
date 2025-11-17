@@ -46,6 +46,10 @@ import net.minecraft.world.phys.Vec3;
 public abstract class UiCanvas extends Canvas {
     protected @NotNull RateLimiter canvasRotationLimiter = new RateLimiter();
 
+    // Optimization data
+    private Vec3 lastPlayerPos = new Vec3(0, 0, 0);
+    public static final float POS_UPDATE_DISTANCE = 0.1f;
+
 
 
 
@@ -74,20 +78,14 @@ public abstract class UiCanvas extends Canvas {
 
         // Calculate target direction
         final Vec3 playerPos = player.getPosition(1f);                      // Get player position
-        final double dx = ((UI)context).spawnPos.x + 0.5d - playerPos.x;                  // Calculate X difference
-        final double dz = ((UI)context).spawnPos.z + 0.5d - playerPos.z;                  // Calculate Z difference
-        final double angle = Math.toDegrees(Math.atan2(-dx, dz));           // Calculate angle from position difference
-        final int targetDir = (int)Math.round((angle + 180d) / 45d) % 8;    // Convert from degrees to direction
+        if(!lastPlayerPos.closerThan(playerPos, POS_UPDATE_DISTANCE)) {     // If the player has moved enough
+            final double dx = ((UI)context).spawnPos.x - playerPos.x;           // Calculate X difference
+            final double dz = ((UI)context).spawnPos.z - playerPos.z;           // Calculate Z difference
+            final double angle = Math.toDegrees(Math.atan2(-dx, dz));           // Calculate angle from position difference
+            final int targetDir = (int)Math.round((angle + 180d) / 45d) % 8;    // Convert from degrees to direction
 
-        // Apply animations and update the current direction if needed
-        updateRot(targetDir);
-
-        //FIXME RUN THIS IN THE SHOP UI CANVAS UPDATE CALL
-        //FIXME RUN THIS IN THE SHOP UI CANVAS UPDATE CALL
-        // getItemDisplay().applyAnimationRecursive(UiCanvas.calcItemDisplayRotationAnimation(lastDirection, targetDir));
-        //FIXME RUN THIS IN THE SHOP UI CANVAS UPDATE CALL
-        //FIXME RUN THIS IN THE SHOP UI CANVAS UPDATE CALL
-
-        canvasRotationLimiter.renewCooldown(CANVAS_ROTATION_TIME);
+            updateRot(targetDir);                                               // Apply animations and update the current direction if needed
+            canvasRotationLimiter.renewCooldown(CANVAS_ROTATION_TIME);          // Renew the  rotation cooldown
+        }
     }
 }

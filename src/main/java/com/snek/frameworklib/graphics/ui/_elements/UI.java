@@ -56,7 +56,7 @@ public class UI extends Context {
 
 
 
-
+    //FIXME add a check that makes sure the canvas is a subclass of UiCanvas
     @Override
     public void changeCanvas(final @NotNull Canvas canvas) {
         activeCanvas = canvas;

@@ -58,10 +58,7 @@ public class Hud extends Context {
 
 
 
-    /**
-     * Override changeCanvas method to spawn the new canvas at the player's position
-     * @param canvas
-     */
+    //FIXME add a check that makes sure the canvas is a subclass of HudCanvas
     @Override
     public void changeCanvas(final @NotNull Canvas canvas) {
         activeCanvas = canvas;
