@@ -63,7 +63,7 @@ public abstract class Context {
             final float size = getInteractionBlockerSize();
             if(activeCanvas != null) activeCanvas.spawn(pos);
             interactionBlocker = new InteractionBlocker(player.level(), size, size);
-            interactionBlocker.spawn(pos.sub(new Vector3d(0, size / 2f, 0), new Vector3d()));
+            interactionBlocker.spawn(pos);
         }
     }
 
