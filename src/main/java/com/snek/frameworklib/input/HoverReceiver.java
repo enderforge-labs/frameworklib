@@ -2,6 +2,7 @@ package com.snek.frameworklib.input;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -15,6 +16,8 @@ import com.snek.frameworklib.debug.DebugCheck;
 import com.snek.frameworklib.debug.UiDebugWindow;
 import com.snek.frameworklib.graphics.Context;
 import com.snek.frameworklib.graphics.Elm;
+import com.snek.frameworklib.graphics.hud._elements.Hud;
+import com.snek.frameworklib.graphics.ui._elements.UI;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -44,7 +47,7 @@ public abstract class HoverReceiver {
     // Partial ray casting batch data
     private static @Nullable List<Player> playerListSnapshot = null;
     private static int updateIndex = 0;
-    private static @Nullable List<Player> hudPlayers = null;
+    private static @Nullable HashSet<Player> playersWithContexts = null;
 
 
     // Optimization structures
@@ -67,8 +70,8 @@ public abstract class HoverReceiver {
         if(updateIndex == 0) {
 
             // Reset the lists
-            playerListSnapshot   = new ArrayList<>();
-            hudPlayers           = new ArrayList<>();
+            playerListSnapshot  = new ArrayList<>();
+            playersWithContexts = new HashSet<>();
 
             // Recalculate player list snapshot
             for(final ServerLevel serverWorld : FrameworkLib.getServer().getAllLevels()) {
@@ -89,8 +92,9 @@ public abstract class HoverReceiver {
 
             // Skip player if they are dead or in spectator mode or have a HUD open
             if(player.isSpectator() || player.isDeadOrDying()) continue;
-            if(Context.getOpenContext(player) != null) {
-                hudPlayers.add(player);
+            if(Hud.getActiveHUDs().containsKey(player.getUUID()) || UI.getActiveUIs().containsKey(player.getUUID())) {
+            // if(Context.getOpenContexts(player) != null) {
+                playersWithContexts.add(player);
             }
         }
 
@@ -141,7 +145,7 @@ public abstract class HoverReceiver {
 
 
         // Send hover updates to active Contexts
-        for(final Player player : hudPlayers) {
+        for(final Player player : playersWithContexts) {
             Context.forwardHoverStatic(player);
         }
 

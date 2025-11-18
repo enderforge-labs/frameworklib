@@ -1,10 +1,18 @@
 package com.snek.frameworklib.graphics.hud._elements;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import com.snek.frameworklib.graphics.Canvas;
 import com.snek.frameworklib.graphics.Context;
+import com.snek.frameworklib.graphics.ui._elements.UI;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -21,6 +29,10 @@ import net.minecraft.world.phys.Vec3;
  */
 public class Hud extends Context {
 
+    // Active HUD list
+    private static final Map<UUID, List<Hud>> activeHUDs = new HashMap<>();
+    public static Map<UUID, List<Hud>> getActiveHUDs() { return activeHUDs; }
+
 
     /**
      * Creates a new Hud.
@@ -29,16 +41,21 @@ public class Hud extends Context {
      */
     public Hud(final @NotNull Player _player) {
         super(_player);
+
+        // Update HUD list
+        activeHUDs.putIfAbsent(player.getUUID(), new ArrayList<>());
+        final @Nullable List<Hud> huds = activeHUDs.get(player.getUUID());
+        huds.add(this);
     }
 
 
-    @Override
-    protected void handlePreviousContext(final @NotNull Player _player) {
+    // @Override
+    // protected void handlePreviousContext(final @NotNull Player _player) {
 
-        // Close previous HUD if present
-        final Context oldContext = getOpenContext(_player);
-        if(oldContext instanceof Hud) Context.closeContext(_player);
-    }
+    //     // Close previous HUD if present
+    //     final Context oldContext = getOpenContext(_player);
+    //     if(oldContext instanceof Hud) Context.closeContext(_player);
+    // }
 
 
 
@@ -84,11 +101,14 @@ public class Hud extends Context {
 
 
 
-    //FIXME REMOVE
-    // public static Hud getOpenHudOrCreate(final @NotNull Player player) {
-    //     //FIXME it might be necessary to check if the open context is an HUD or not (it might be a UI or other stuff)
-    //     final Context hud = getOpenContext(player);
-    //     if(hud == null) return new Hud(player);
-    //     else return (Hud)hud;  //FIXME it might be necessary to check if the open context is an HUD or not (it might be a UI or other stuff)
-    // }
+
+    @Override
+    public void despawn(){
+        super.despawn();
+
+        // Update HUD list
+        final @Nullable List<Hud> huds = activeHUDs.get(player.getUUID());
+        huds.remove(this);
+        if(huds.isEmpty()) activeHUDs.remove(player.getUUID());
+    }
 }

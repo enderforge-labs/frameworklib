@@ -1,6 +1,13 @@
 package com.snek.frameworklib.graphics.ui._elements;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import com.snek.frameworklib.graphics.Canvas;
@@ -25,16 +32,27 @@ public class UI extends Context {
     // UI data
     protected final Vector3d spawnPos = new Vector3d();
 
+    // Active UI list
+    private static final Map<UUID, List<UI>> activeUIs = new HashMap<>();
+    public static Map<UUID, List<UI>> getActiveUIs() { return activeUIs; }
+
+
+
 
     public UI(final @NotNull Player _player) {
         super(_player);
+
+        // Update UI list
+        activeUIs.putIfAbsent(player.getUUID(), new ArrayList<>());
+        final @Nullable List<UI> uis = activeUIs.get(player.getUUID());
+        uis.add(this);
     }
 
 
-    @Override
-    protected void handlePreviousContext(final @NotNull Player _player) {
-        // No actions needed
-    }
+    // @Override
+    // protected void handlePreviousContext(final @NotNull Player _player) {
+    //     // No actions needed
+    // }
 
 
 
@@ -80,5 +98,18 @@ public class UI extends Context {
             spawnPos.set(pos);
         }
         super.spawn(pos);
+    }
+
+
+
+
+    @Override
+    public void despawn(){
+        super.despawn();
+
+        // Update UI list
+        final @Nullable List<UI> uis = activeUIs.get(player.getUUID());
+        uis.remove(this);
+        if(uis.isEmpty()) activeUIs.remove(player.getUUID());
     }
 }
