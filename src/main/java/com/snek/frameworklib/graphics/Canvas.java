@@ -254,9 +254,6 @@ public abstract class Canvas extends Div {
     @Override
     public void spawn(final @NotNull Vector3d pos) {
 
-        // Instantly rotate the canvas to face the player. This allows it to skip annoying rotation animations
-        updateRot(context.player, true);
-
         // If the background is already spawned, only spawn its children
         if(bg.isSpawned()) for(final Div c : bg.getChildren()) {
             c.spawn(pos);

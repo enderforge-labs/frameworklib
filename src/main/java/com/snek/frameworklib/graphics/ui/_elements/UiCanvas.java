@@ -2,6 +2,7 @@ package com.snek.frameworklib.graphics.ui._elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
 
 import com.snek.frameworklib.graphics.Canvas;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
@@ -68,6 +69,8 @@ public abstract class UiCanvas extends Canvas {
     }
 
 
+
+
     @Override
     public void updateRot(final @NotNull Player player, final boolean instant) {
         final Vec3 playerPos = player.getPosition(1f);                      // Get player position
@@ -76,5 +79,18 @@ public abstract class UiCanvas extends Canvas {
         final double angle = Math.toDegrees(Math.atan2(-dx, dz));           // Calculate angle from position difference
         final int targetDir = (int)Math.round((angle + 180d) / 45d) % 8;    // Convert from degrees to direction
         __updateRot(targetDir, instant);                                    // Apply animations and update the current direction if needed
+    }
+
+
+
+
+    @Override
+    public void spawn(final @NotNull Vector3d pos) {
+
+        // Instantly rotate the canvas to face the player. This allows it to skip annoying rotation animations
+        updateRot(context.getPlayer(), true);
+
+        // Call superclass spawn
+        super.spawn(pos);
     }
 }
