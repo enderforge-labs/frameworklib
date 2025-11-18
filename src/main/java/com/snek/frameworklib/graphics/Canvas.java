@@ -167,11 +167,13 @@ public abstract class Canvas extends Div {
             for(final Div c : prevCanvas.getBg().getChildren()) c.despawnNow();
             prevCanvas.getBg().clearChildren();
 
+
             // Inherit the elements
             bg     = (Elm)addChild(prevCanvas.getBg());
             back   = (Elm)addChild(prevCanvas.getBack());
             top    = (Elm)addChild(prevCanvas.getTop());
             bottom = (Elm)addChild(prevCanvas.getBottom());
+
 
             // Animate them to match the specified visual dimensions
             final Transform transformBg     = new Transform().scaleY(newHeightBg     / prevCanvas.newHeightBg    ).moveY(newPosBg     - prevCanvas.newPosBg    );
@@ -182,6 +184,29 @@ public abstract class Canvas extends Div {
             back  .applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformBack));
             top   .applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformTop));
             bottom.applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformBottom));
+
+
+            // Rotate child elements to match the previous canvas's rotation (if neeeded)
+            lastRotation = prevCanvas.getRotation();
+            //! New elements are rotated in Context.finalizeCanvasChange
+            // if(lastRotation != 0) {
+            //     final Animation animation = Canvas.calcCanvasRotationAnimation(0, lastRotation);
+            //     for(final Div c : bg.getChildren()) {
+            //         c.applyAnimationNowRecursive(animation);
+            //     }
+            // }
+            // // Set new active canvas and spawn canvas into the world
+            // activeCanvas = newCanvas;
+            // newCanvas.spawn(canvasSpawnPos);
+
+
+            // // Adjust rotation of child elements if needed
+            // if(lastRotation != 0) {
+            //     final Animation animation = Canvas.calcCanvasRotationAnimation(0, lastRotation);
+            //     for(final Div c : newCanvas.getBg().getChildren()) {
+            //         c.applyAnimationNowRecursive(animation);
+            //     }
+            // }
         }
     }
 

@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
+import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.graphics.hud._elements.Hud;
 import com.snek.frameworklib.graphics.ui._elements.UI;
 
@@ -83,6 +84,8 @@ public abstract class Context {
     }
 
 
+
+
     /**
      * Despawns the context and all of its graphic elements.
      */
@@ -96,11 +99,35 @@ public abstract class Context {
         }
     }
 
+
+
+
     public void update() {
         if(activeCanvas != null) activeCanvas.update();
     }
 
+
+
+
     public abstract void changeCanvas(final @NotNull Canvas canvas);
+    protected final void finalizeCanvasChange(final @NotNull Canvas newCanvas, final @NotNull Vector3d canvasSpawnPos) {
+        final int lastRotation = activeCanvas != null ? activeCanvas.getRotation() : 0;
+
+
+        // Set new active canvas and spawn canvas into the world
+        activeCanvas = newCanvas;
+        newCanvas.spawn(canvasSpawnPos);
+
+
+        // Adjust rotation of child elements if needed
+        //! newCanvas.lastRotation is updated when the canvas is created. In Canvas.Canvas
+        if(lastRotation != 0) {
+            final Animation animation = Canvas.calcCanvasRotationAnimation(0, lastRotation);
+            for(final Div c : newCanvas.getBg().getChildren()) {
+                c.applyAnimationNowRecursive(animation);
+            }
+        }
+    }
 
 
 
