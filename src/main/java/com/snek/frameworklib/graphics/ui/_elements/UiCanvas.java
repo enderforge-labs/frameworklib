@@ -2,25 +2,9 @@ package com.snek.frameworklib.graphics.ui._elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector2f;
-import org.joml.Vector3d;
-import org.joml.Vector3f;
-import org.joml.Vector3i;
 
-import com.snek.frameworklib.data_types.animations.Animation;
-import com.snek.frameworklib.data_types.animations.Transform;
-import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.data_types.ui.AlignmentX;
-import com.snek.frameworklib.data_types.ui.AlignmentY;
 import com.snek.frameworklib.graphics.Canvas;
-import com.snek.frameworklib.graphics.Context;
-import com.snek.frameworklib.graphics.Div;
-import com.snek.frameworklib.graphics.Elm;
-import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
-import com.snek.frameworklib.graphics.hud._elements.Hud;
-import com.snek.frameworklib.utils.Easings;
-import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
 import net.minecraft.server.level.ServerLevel;

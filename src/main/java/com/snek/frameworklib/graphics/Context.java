@@ -141,7 +141,10 @@ public abstract class Context {
     }
 
 
-    //TODO comment
+    /**
+     * Forwards a hover event to the context of the specified player.
+     * @param _player The player.
+     */
     public static void forwardHoverStatic(final @NotNull Player _player) {
         final Context context = activeContexts.get(_player.getUUID());
         if(context == null) return;

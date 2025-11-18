@@ -1,20 +1,16 @@
 package com.snek.frameworklib.graphics.hud._elements;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.Canvas;
-import com.snek.frameworklib.graphics.Context;
 import com.snek.frameworklib.graphics.Div;
 import com.snek.frameworklib.graphics.Elm;
-import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 import com.snek.frameworklib.graphics.hud._styles.HudCanvasBack_S;
 import com.snek.frameworklib.graphics.hud._styles.HudCanvasBackground_S;
-import com.snek.frameworklib.graphics.ui._elements.UiCanvas;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;

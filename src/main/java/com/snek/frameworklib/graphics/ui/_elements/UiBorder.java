@@ -23,7 +23,7 @@ public class UiBorder extends PanelElm {
 
     /**
      * Creates a new HudBorder using a custom style.
-     * @param _shop The target shop.
+     * @param _world The world to create the element in.
      * @param _style The style.
      */
     public UiBorder(final @NotNull ServerLevel _world, final @NotNull UiBorder_S _style) {
@@ -33,7 +33,7 @@ public class UiBorder extends PanelElm {
 
     /**
      * Creates a new HudBorder using the default style.
-     * @param _shop The target shop.
+     * @param _world The world to create the element in.
      */
     public UiBorder(final @NotNull ServerLevel _world) {
         this(_world, new UiBorder_S());

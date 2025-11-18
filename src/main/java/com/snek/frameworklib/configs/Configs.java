@@ -16,9 +16,14 @@ import com.snek.frameworklib.FrameworkLib;
  * A utility class that contains configuration file data.
  */
 public abstract class Configs {
+
     private Configs() {}
-    public static @NotNull UiConfig ui = null;
-    public static @NotNull PerformanceConfig perf = null;
+
+    private static @NotNull UiConfig          ui   = null;
+    private static @NotNull PerformanceConfig perf = null;
+
+    public static @NotNull UiConfig          getUi  (){ return ui;   }
+    public static @NotNull PerformanceConfig getPerf(){ return perf; }
 
 
 

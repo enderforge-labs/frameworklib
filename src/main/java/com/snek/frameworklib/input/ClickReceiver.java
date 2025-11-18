@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.frameworklib.graphics.Context;
 import com.snek.frameworklib.graphics.InteractionBlocker;
-import com.snek.frameworklib.graphics.hud._elements.Hud;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
 import net.minecraft.core.Vec3i;
@@ -39,13 +38,12 @@ public abstract class ClickReceiver {
 
 
     /**
-     * Handles left and right clicks on shop blocks before the interaction blocker is spawned.
-     * <p> Must be called on AttackBlockCallback and UseBlockCallback events.
+     * Handles left and right clicks on contexts.
      * @param world The world the player is in.
      * @param player The player.
      * @param hand The hand used.
      * @param clickType The type of click (LEFT click or RIGHT click).
-     * @return FAIL if the player clicked a shop, PASS if not.
+     * @return FAIL if the player clicked a context, PASS if not.
      */
     private static @NotNull InteractionResult onClick(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull ClickAction clickType) {
 
@@ -53,6 +51,7 @@ public abstract class ClickReceiver {
         if(player.isSpectator() || player.isDeadOrDying()) return InteractionResult.PASS;
 
 
+        //FIXME limiter is never reset
         //FIXME run this code in the hud's click event
         // Handle limiter
         RateLimiter limiter = clickLimiters.get(player.getUUID());
@@ -68,18 +67,6 @@ public abstract class ClickReceiver {
         }
 
 
-        //FIXME run this code in the hud's click event
-        // // Forward clicks to the shop if the limiter allows it. Ignore offhand events
-        // if(hand == InteractionHand.MAIN_HAND) {
-        //     final Shop targetShop = HoverReceiver.getLookedAtShop(player);
-        //     if(targetShop != null) {
-        //         if(limiter.attempt()) {
-        //             limiter.renewCooldown(1);
-        //             targetShop.onClick(player, clickType);
-        //         }
-        //         return InteractionResult.FAIL;
-        //     }
-        // }
         return InteractionResult.PASS;
     }
 
@@ -87,14 +74,14 @@ public abstract class ClickReceiver {
 
 
     /**
-     * Handles left and right clicks on shop interactions.
+     * Handles left and right clicks on contexts.
      * <p> Must be called on AttackEntityCallback and UseEntityCallback events.
      * @param world The world the player is in.
      * @param player The player.
      * @param hand The hand used.
      * @param clickType The type of click (LEFT click or RIGHT click).
      * @param entity The entity.
-     * @return FAIL if the player clicked a shop, PASS if not.
+     * @return FAIL if the player clicked a context, PASS if not.
      */
     public static @NotNull InteractionResult onClickEntity(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull ClickAction clickType, final @NotNull Entity entity) {
         if(entity instanceof Interaction && entity.hasCustomName() && entity.getCustomName().getString().equals(InteractionBlocker.ENTITY_CUSTOM_NAME)) {
@@ -107,42 +94,31 @@ public abstract class ClickReceiver {
 
 
     /**
-     * Handles left and right clicks on shop blocks before the interaction blocker is spawned.
+     * Handles left and right clicks on blocks before the interaction blocker is spawned.
      * <p> Must be called on AttackBlockCallback and UseBlockCallback events.
      * @param world The world the player is in.
      * @param player The player.
      * @param hand The hand used.
      * @param clickType The type of click (LEFT click or RIGHT click).
      * @param pos The position of the clicked block.
-     * @return FAIL if the player clicked a shop, PASS if not.
+     * @return FAIL if the player clicked a context, PASS if not.
      */
     public static @NotNull InteractionResult onClickBlock(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull ClickAction clickType, final @NotNull Vec3i pos) {
 
         // Check ray casting result
-        final InteractionResult r =  onClick(world, player, hand, clickType);
-
-
-        //FIXME run this code in the hud's click event
-        // // If the ray casting fails, check the block reported by the event.
-        // //! This is necessary due to the ray casting's low accuracy and slight delay.
-        // //! These would allow players to bypass the ray casting check by quickly clicking after changing view or by looking at the edge of the block.
-        // if(r == InteractionResult.PASS) {
-        //     return ShopManager.findShop(new BlockPos(pos.getX(), pos.getY(), pos.getZ()), world) == null ? InteractionResult.PASS : InteractionResult.FAIL;
-        // }
-        // else return InteractionResult.FAIL;
-        return r;
+        return onClick(world, player, hand, clickType);
     }
 
 
 
 
     /**
-     * Handles right clicks on shop blocks before the interaction blocker is spawned.
+     * Handles right clicks on blocks before the interaction blocker is spawned.
      * <p> Must be called on useItemCallback events.
      * @param world The world the player is in.
      * @param player The player.
      * @param hand The hand used.
-     * @return FAIL if the player clicked a shop, PASS if not.
+     * @return FAIL if the player clicked a context, PASS if not.
      */
     public static @NotNull InteractionResult onUseItem(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand) {
         return onClick(world, player, hand, ClickAction.SECONDARY);

@@ -8,8 +8,6 @@ import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.graphics.Context;
 import com.snek.frameworklib.graphics.Elm;
 import com.snek.frameworklib.graphics.InteractionBlocker;
-import com.snek.frameworklib.graphics.hud._elements.Hud;
-import com.snek.frameworklib.graphics.ui._elements.UI;
 import com.snek.frameworklib.input.ClickReceiver;
 import com.snek.frameworklib.input.HoverReceiver;
 import com.snek.frameworklib.input.MessageReceiver;
@@ -26,7 +24,6 @@ import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.inventory.ClickAction;
 
 
@@ -93,7 +90,7 @@ public class FrameworkLib implements ModInitializer {
 
 
             // Schedule UI element update loop
-            Scheduler.loop(0, com.snek.frameworklib.configs.Configs.perf.animation_refresh_time.getValue(), () -> {
+            Scheduler.loop(0, Configs.getPerf().animation_refresh_time.getValue(), () -> {
                 Elm.processUpdateQueue();
                 Context.updateActiveContexts();
             });
@@ -102,8 +99,6 @@ public class FrameworkLib implements ModInitializer {
 
 
             // Schedule hover manager loop
-            //TODO this might need some settings to make it slower?
-            //TODO or at least limit it to players with a scrollable context open
             Scheduler.loop(0, 1, HoverReceiver::tick);
 
 
@@ -120,7 +115,7 @@ public class FrameworkLib implements ModInitializer {
 
 
 
-            // Create and register block click events (shop placement + prevents early clicks going through the shop) //TODO update comment
+            // Create and register block click events
             AttackBlockCallback.EVENT.register(PHASE_ID, (player, world, hand, blockPos, direction) -> {
                 return ClickReceiver.onClickBlock(world, player, hand, ClickAction.PRIMARY, blockPos.offset(direction.getNormal()));
             });

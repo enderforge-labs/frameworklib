@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3d;
-import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import com.snek.frameworklib.data_types.animations.Animation;
@@ -12,19 +11,13 @@ import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.ui.AlignmentX;
 import com.snek.frameworklib.data_types.ui.AlignmentY;
-import com.snek.frameworklib.graphics.Div;
-import com.snek.frameworklib.graphics.Elm;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
-import com.snek.frameworklib.graphics.hud._elements.Hud;
-import com.snek.frameworklib.graphics.ui._elements.UI;
 import com.snek.frameworklib.graphics.ui._elements.UiBorder;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 
 
 
@@ -209,8 +202,6 @@ public abstract class Canvas extends Div {
 
 
 
-    //FIXME this should prob be called automatically by the framework library.
-    //FIXME NOT by the shops mod
     /**
      * Calculates the animations required to face from a specified direction to another one.
      * @param from The starting direction. 0 to 7.
@@ -218,13 +209,14 @@ public abstract class Canvas extends Div {
      * @return The canvas animation.
      */
     public static @NotNull Animation calcCanvasRotationAnimation(final int from, final int to) {
-        // final float rotation = -Math.toRadians(to * 45f - from * 45f);
-        final float rotation = (float)(-Math.toRadians(to * 45f - from * 45f)); //TODO check if this cast is needed and correct
+        final float rotation = (float)(-Math.toRadians(to * 45f - from * 45f));
         return new Animation(
             new Transition(CANVAS_ROTATION_TIME, Easings.cubicOut)
             .additiveTransform(new Transform().rotGlobalY(rotation))
         );
     }
+
+
     /**
      * Calculates the animations required to face from a specified direction to another one, without rotating the item's model.
      * @param from The starting direction. 0 to 7.

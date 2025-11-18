@@ -216,12 +216,12 @@ public abstract class Elm extends Div {
     public @NotNull Transform __calcTransform() {
         return
             style.getTransform().copy()
-            .move(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.ui.z_layer_spacing.getValue())
+            .move(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getUi().z_layer_spacing.getValue())
         ;
     }
     public @NotNull Vector3f __calcEntityVisualOrigin(final @NotNull Transform _transform){
         return
-            new Vector3f(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.ui.z_layer_spacing.getValue())
+            new Vector3f(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getUi().z_layer_spacing.getValue())
             .rotate(_transform.getGlobalRot())
             .add(entity.getPosCopy())
         ;
@@ -314,7 +314,7 @@ public abstract class Elm extends Div {
         final List<TransitionStep> animationSteps = new ArrayList<>();
         final int time = transition.getDuration();            // The duration of this transition
         final Easing e = transition.getEasing();
-        final Integer refreshTime = Configs.perf.animation_refresh_time.getValue();
+        final Integer refreshTime = Configs.getPerf().animation_refresh_time.getValue();
         for(int i = 0; i == 0 || i < time; i += refreshTime) {
             final float factor = (float)e.compute(Math.min(1d, (double)(i + refreshTime) / time));
             animationSteps.add(transition.createStep(factor));
@@ -482,7 +482,7 @@ public abstract class Elm extends Div {
             __applyTransitionStep(futureDataQueue.removeFirst());
         }
         flushStyle();
-        entity.setInterpolationDuration(Configs.perf.animation_refresh_time.getValue());
+        entity.setInterpolationDuration(Configs.getPerf().animation_refresh_time.getValue());
         entity.setStartInterpolation();
 
 
@@ -505,7 +505,7 @@ public abstract class Elm extends Div {
 
     /**
      * Processes the first step of the scheduled transitions of all the queued elements.
-     * <p> Must be called at the end of the tick every Configs.perf.animation_refresh_time ticks.
+     * <p> Must be called at the end of the tick every Configs.getPerf().animation_refresh_time ticks.
      */
     public static void processUpdateQueue() {
 

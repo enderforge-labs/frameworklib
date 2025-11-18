@@ -47,7 +47,6 @@ import net.minecraft.world.item.SplashPotionItem;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.phys.Vec3;
 
 
 
@@ -152,7 +151,7 @@ public abstract class MinecraftUtils {
     public static @NotNull String serializeItem(final @NotNull ItemStack item) {
         final var result = ItemStack.CODEC.encode(item, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).result();
         if(result.isEmpty()) {
-            throw new RuntimeException("Could not serialize shop item");
+            throw new RuntimeException("Could not serialize item stack");
         }
         return result.get().toString();
     }
@@ -168,7 +167,7 @@ public abstract class MinecraftUtils {
     public static @NotNull ItemStack deserializeItem(final @NotNull String serializedItem) {
         final var result = ItemStack.CODEC.decode(JsonOps.INSTANCE, JsonParser.parseString(serializedItem)).result();
         if(result.isEmpty()) {
-            throw new RuntimeException("Could not deserialize shop item");
+            throw new RuntimeException("Could not deserialize item stack");
         }
         return result.get().getFirst();
     }

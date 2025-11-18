@@ -40,7 +40,7 @@ public class __base_TextElm extends Elm {
 
         // Set cache to 0 if the text is empty.
         final String string = getStyle(SimpleTextElmStyle.class).getText().getString(); //TODO CACHE THIS TOO
-        if(string.length() == 0) {
+        if(string.isEmpty()) {
             entitySizeCacheX = 0f;
             return;
         }

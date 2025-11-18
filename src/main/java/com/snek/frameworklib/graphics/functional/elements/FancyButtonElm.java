@@ -115,7 +115,7 @@ public abstract class FancyButtonElm extends FancyTextElm implements __base_Butt
 
     /**
      * Updates the displayed text.
-     * @param textOverride If not null, it replaces the shop's data.
+     * @param textOverride If not null, it replaces the displayed text.
      */
     public abstract void updateDisplay(@Nullable Component textOverride);
 
