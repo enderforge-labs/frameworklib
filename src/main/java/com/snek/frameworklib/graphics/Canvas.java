@@ -18,6 +18,7 @@ import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
 
 
 
@@ -155,6 +156,10 @@ public abstract class Canvas extends Div {
             back  .applyAnimationNow(new Transition().additiveTransform(transformBack));
             top   .applyAnimationNow(new Transition().additiveTransform(transformTop));
             bottom.applyAnimationNow(new Transition().additiveTransform(transformBottom));
+
+
+            //! updateRot is called in the spawn method
+            //! This is to avoid initialization order issues
         }
 
 
@@ -187,26 +192,8 @@ public abstract class Canvas extends Div {
 
 
             // Rotate child elements to match the previous canvas's rotation (if neeeded)
-            lastRotation = prevCanvas.getRotation();
             //! New elements are rotated in Context.finalizeCanvasChange
-            // if(lastRotation != 0) {
-            //     final Animation animation = Canvas.calcCanvasRotationAnimation(0, lastRotation);
-            //     for(final Div c : bg.getChildren()) {
-            //         c.applyAnimationNowRecursive(animation);
-            //     }
-            // }
-            // // Set new active canvas and spawn canvas into the world
-            // activeCanvas = newCanvas;
-            // newCanvas.spawn(canvasSpawnPos);
-
-
-            // // Adjust rotation of child elements if needed
-            // if(lastRotation != 0) {
-            //     final Animation animation = Canvas.calcCanvasRotationAnimation(0, lastRotation);
-            //     for(final Div c : newCanvas.getBg().getChildren()) {
-            //         c.applyAnimationNowRecursive(animation);
-            //     }
-            // }
+            lastRotation = prevCanvas.getRotation();
         }
     }
 
@@ -216,10 +203,11 @@ public abstract class Canvas extends Div {
     public abstract void update();
 
 
-    public void updateRot(final int newRot) {
+    public abstract void updateRot(final @NotNull Player player, final boolean instant);
+    protected void __updateRot(final int newRot, final boolean instant) {
         if(lastRotation != newRot) {
-            applyAnimationRecursive(calcCanvasRotationAnimation(lastRotation, newRot));
-            //FIXME override this in the shop canvas to make it rotate the item as well
+            final Animation animation = calcCanvasRotationAnimation(lastRotation, newRot);
+            if(instant) applyAnimationNowRecursive(animation); else applyAnimationRecursive(animation);
             lastRotation = newRot;
         }
     }
@@ -265,6 +253,9 @@ public abstract class Canvas extends Div {
 
     @Override
     public void spawn(final @NotNull Vector3d pos) {
+
+        // Instantly rotate the canvas to face the player. This allows it to skip annoying rotation animations
+        updateRot(context.player, true);
 
         // If the background is already spawned, only spawn its children
         if(bg.isSpawned()) for(final Div c : bg.getChildren()) {

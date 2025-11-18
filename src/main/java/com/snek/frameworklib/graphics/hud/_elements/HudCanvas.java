@@ -51,8 +51,7 @@ public class HudCanvas extends Canvas implements __HudElm {
         final Player player = context.getPlayer();
 
         // Update rotation
-        final int newRot = Math.round((player.getViewYRot(1) + 180f) / 45f) % 8;
-        updateRot(newRot);
+        updateRot(player, false);
 
         // Calculate new position and position difference
         final Vector3d newPos = new Vector3d(player.getEyePosition().toVector3f());
@@ -63,6 +62,13 @@ public class HudCanvas extends Canvas implements __HudElm {
             lastPlayerEyePos = newPos;
             updatePos(this);
         }
+    }
+
+
+    @Override
+    public void updateRot(final @NotNull Player player, final boolean instant) {
+        final int newRot = Math.round((player.getViewYRot(1) + 180f) / 45f) % 8;
+        __updateRot(newRot, instant);
     }
 
 
