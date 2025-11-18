@@ -51,17 +51,17 @@ public abstract class ClickReceiver {
         if(player.isSpectator() || player.isDeadOrDying()) return InteractionResult.PASS;
 
 
-        //FIXME limiter is never reset
-        //FIXME run this code in the hud's click event
         // Handle limiter
         RateLimiter limiter = clickLimiters.get(player.getUUID());
         if(limiter == null) {
             limiter = new RateLimiter();
             clickLimiters.put(player.getUUID(), limiter);
         }
+        if(limiter.attempt()) limiter.renewCooldown(2);
+        else return InteractionResult.FAIL;
 
 
-        // Send click to Context and return if one is present
+        // Send click to the player's contexts and return if one is present
         if(Context.forwardClickStatic(player, clickType)) {
             return InteractionResult.FAIL;
         }

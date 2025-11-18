@@ -156,6 +156,7 @@ public abstract class Context {
 
     /**
      * Forwards a click event to the contexts of the specified player.
+     * Click events are sent to the contexts in order of z-order (top-most context first).
      * @param _player The player.
      * @param action The type of click.
      * @return True if any of the player's open contexts consumed the click, false otherwise.
