@@ -101,10 +101,24 @@ public abstract class HoverReceiver {
 
 
 
+
+
+        //! Debug window
+        if(DebugCheck.isDebug()) {
+            UiDebugWindow.getW().clear();
+        }
+
         // If all the batches have been processed, reset update index and finalize tick operations
         if(updateIndex >= playerListSnapshot.size()) {
             updateIndex = 0;
             finalizeTick();
+        }
+
+
+        //! Debug window update
+        if(DebugCheck.isDebug()) {
+            UiDebugWindow.getW().revalidate();
+            UiDebugWindow.getW().paintImmediately(0, 0, UiDebugWindow.getW().getWidth(), UiDebugWindow.getW().getHeight());
         }
     }
 
@@ -120,12 +134,6 @@ public abstract class HoverReceiver {
      * Called after all the ray casting batches have been processed.
      */
     public static void finalizeTick() {
-
-
-        //! Debug window
-        if(DebugCheck.isDebug()) {
-            UiDebugWindow.getW().clear();
-        }
 
 
         // Send hover events to the currently hovered elements
@@ -147,13 +155,6 @@ public abstract class HoverReceiver {
         // Send hover updates to active Contexts
         for(final Player player : playersWithContexts) {
             Context.forwardHoverStatic(player);
-        }
-
-
-        //! Debug window update
-        if(DebugCheck.isDebug()) {
-            UiDebugWindow.getW().revalidate();
-            UiDebugWindow.getW().paintImmediately(0, 0, UiDebugWindow.getW().getWidth(), UiDebugWindow.getW().getHeight());
         }
     }
 }
