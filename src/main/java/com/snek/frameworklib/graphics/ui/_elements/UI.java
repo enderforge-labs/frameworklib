@@ -5,6 +5,7 @@ import org.joml.Vector3d;
 
 import com.snek.frameworklib.graphics.Canvas;
 import com.snek.frameworklib.graphics.Context;
+import com.snek.frameworklib.graphics.hud._elements.Hud;
 
 import net.minecraft.world.entity.player.Player;
 
@@ -28,6 +29,14 @@ public class UI extends Context {
     public UI(final @NotNull Player _player) {
         super(_player);
     }
+
+
+    @Override
+    protected void handlePreviousContext(final @NotNull Player _player) {
+        // No actions needed
+    }
+
+
 
 
     @Override

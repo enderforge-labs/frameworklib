@@ -47,9 +47,20 @@ public abstract class Context {
 
 
     protected Context(final @NotNull Player _player) {
+        handlePreviousContext(_player);
+        activeContexts.put(_player.getUUID(), this);
         player = _player;
-        activeContexts.put(player.getUUID(), this);
     }
+
+
+    /**
+     * Allows subclasses to handle existing contexts before this new one is registered.
+     * NOTICE: This method MUST NOT modify or access the current instance, as it is called INSIDE OF THE SUPERCLASS'S CONSTRUCTOR.
+     * @param _player The owner of this context.
+     */
+    protected abstract void handlePreviousContext(final @NotNull Player _player);
+
+
 
 
     /**

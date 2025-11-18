@@ -21,9 +21,26 @@ import net.minecraft.world.phys.Vec3;
  */
 public class Hud extends Context {
 
+
+    /**
+     * Creates a new Hud.
+     * This automatically closes any previous Hud owned by the player.
+     * @param _player The owner of the new Hud.
+     */
     public Hud(final @NotNull Player _player) {
         super(_player);
     }
+
+
+    @Override
+    protected void handlePreviousContext(final @NotNull Player _player) {
+
+        // Close previous HUD if present
+        final Context oldContext = getOpenContext(_player);
+        if(oldContext instanceof Hud) Context.closeContext(_player);
+    }
+
+
 
 
     @Override
@@ -67,11 +84,11 @@ public class Hud extends Context {
 
 
 
-
-    public static Hud getOpenHudOrCreate(final @NotNull Player player) {
-        //FIXME it might be necessary to check if the open context is an HUD or not (it might be a UI or other stuff)
-        final Context hud = getOpenContext(player);
-        if(hud == null) return new Hud(player);
-        else return (Hud)hud;  //FIXME it might be necessary to check if the open context is an HUD or not (it might be a UI or other stuff)
-    }
+    //FIXME REMOVE
+    // public static Hud getOpenHudOrCreate(final @NotNull Player player) {
+    //     //FIXME it might be necessary to check if the open context is an HUD or not (it might be a UI or other stuff)
+    //     final Context hud = getOpenContext(player);
+    //     if(hud == null) return new Hud(player);
+    //     else return (Hud)hud;  //FIXME it might be necessary to check if the open context is an HUD or not (it might be a UI or other stuff)
+    // }
 }
