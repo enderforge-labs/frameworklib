@@ -10,10 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
-import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.graphics.Canvas;
 import com.snek.frameworklib.graphics.Context;
-import com.snek.frameworklib.graphics.ui._elements.UI;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -48,15 +46,6 @@ public class Hud extends Context {
         final @Nullable List<Hud> huds = activeHUDs.get(player.getUUID());
         huds.add(this);
     }
-
-
-    // @Override
-    // protected void handlePreviousContext(final @NotNull Player _player) {
-
-    //     // Close previous HUD if present
-    //     final Context oldContext = getOpenContext(_player);
-    //     if(oldContext instanceof Hud) Context.closeContext(_player);
-    // }
 
 
 

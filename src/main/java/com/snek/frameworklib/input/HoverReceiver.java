@@ -93,7 +93,6 @@ public abstract class HoverReceiver {
             // Skip player if they are dead or in spectator mode or have a HUD open
             if(player.isSpectator() || player.isDeadOrDying()) continue;
             if(Hud.getActiveHUDs().containsKey(player.getUUID()) || UI.getActiveUIs().containsKey(player.getUUID())) {
-            // if(Context.getOpenContexts(player) != null) {
                 playersWithContexts.add(player);
             }
         }
