@@ -1,7 +1,6 @@
 package com.snek.frameworklib.graphics;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -176,14 +175,6 @@ public abstract class Context {
     }
 
 
-    // private static boolean __forwardClickStatic(final @NotNull Player _player, final @NotNull ClickAction action, final @NotNull Context context) {
-    //     final Canvas canvas = context.activeCanvas;
-    //     if(canvas == null) return false;
-
-    //     return canvas.forwardClick(_player, action);
-    // }
-
-
 
 
     /**
@@ -199,16 +190,6 @@ public abstract class Context {
         // Send click event
         if(topMost == null) return;
         __forwardHoverStatic(_player, topMost);
-
-
-        // final List<Hud> huds = Hud.getActiveHUDs().get(_player.getUUID());
-        // if(huds != null) for(final Hud hud : huds) {
-        //     __forwardHoverStatic(_player, hud);
-        // }
-        // final List<UI> uis = UI.getActiveUIs().get(_player.getUUID());
-        // if(uis != null) for(final UI ui : uis) {
-        //     __forwardHoverStatic(_player, ui);
-        // }
     }
 
 
