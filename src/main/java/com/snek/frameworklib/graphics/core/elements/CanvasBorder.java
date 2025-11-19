@@ -1,9 +1,9 @@
-package com.snek.frameworklib.graphics.core.ui._elements;
+package com.snek.frameworklib.graphics.core.elements;
 
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
-import com.snek.frameworklib.graphics.core.ui._styles.UiBorder_S;
+import com.snek.frameworklib.graphics.core.styles.CanvasBorder_S;
 
 import net.minecraft.server.level.ServerLevel;
 
@@ -17,7 +17,7 @@ import net.minecraft.server.level.ServerLevel;
 /**
  * An element that can display a full-width, horizontally centered line of configurable color.
  */
-public class UiBorder extends PanelElm {
+public class CanvasBorder extends PanelElm {
     public static final float DEFAULT_HEIGHT = 0.02f;
 
 
@@ -26,7 +26,7 @@ public class UiBorder extends PanelElm {
      * @param _world The world to create the element in.
      * @param _style The style.
      */
-    public UiBorder(final @NotNull ServerLevel _world, final @NotNull UiBorder_S _style) {
+    public CanvasBorder(final @NotNull ServerLevel _world, final @NotNull CanvasBorder_S _style) {
         super(_world, _style);
     }
 
@@ -35,7 +35,7 @@ public class UiBorder extends PanelElm {
      * Creates a new HudBorder using the default style.
      * @param _world The world to create the element in.
      */
-    public UiBorder(final @NotNull ServerLevel _world) {
-        this(_world, new UiBorder_S());
+    public CanvasBorder(final @NotNull ServerLevel _world) {
+        this(_world, new CanvasBorder_S());
     }
 }

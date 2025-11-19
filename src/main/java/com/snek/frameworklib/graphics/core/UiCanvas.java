@@ -42,10 +42,12 @@ public non-sealed class UiCanvas extends Canvas {
 
     /**
      * Creates a new UiCanvas.
-     * @param prevCanvas The previous canvas. Used to inherit elements.
+     * @param _ui The UI context.
      * @param height The total height of the canvas.
      * @param heightTop The height of the top border.
      * @param heightBottom The height of the bottom border.
+     * @param bgStyle The style of the background element. Can be null.
+     * @param backStyle The style of the back panel element. Can be null.
      */
     protected UiCanvas(
         final @NotNull UiContext _ui,

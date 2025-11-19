@@ -13,7 +13,7 @@ import com.snek.frameworklib.data_types.ui.AlignmentX;
 import com.snek.frameworklib.data_types.ui.AlignmentY;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
-import com.snek.frameworklib.graphics.core.ui._elements.UiBorder;
+import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
 
@@ -130,8 +130,8 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
             // Create the elements
             bg     = (Elm)addChild(new PanelElm(_world, bgStyle   == null ? new PanelElmStyle() : bgStyle));
             back   = (Elm)addChild(new PanelElm(_world, backStyle == null ? new PanelElmStyle() : backStyle));
-            top    = (Elm)addChild(new UiBorder(_world));
-            bottom = (Elm)addChild(new UiBorder(_world));
+            top    = (Elm)addChild(new CanvasBorder(_world));
+            bottom = (Elm)addChild(new CanvasBorder(_world));
 
 
             // Set their size, position and alignments

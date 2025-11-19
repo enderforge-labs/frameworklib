@@ -1,14 +1,14 @@
 package com.snek.frameworklib.graphics.core;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.graphics.core.hud._styles.HudCanvasBack_S;
-import com.snek.frameworklib.graphics.core.hud._styles.HudCanvasBackground_S;
+import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -37,8 +37,21 @@ public non-sealed class HudCanvas extends Canvas {
 
 
 
-    protected HudCanvas(final @NotNull HudContext _hud, final float height, final float heightTop, final float heightBottom) {
-        super(_hud, _hud.getActiveCanvas(), (ServerLevel)(_hud.getPlayer().level()), height, heightTop, heightBottom, new HudCanvasBackground_S(), new HudCanvasBack_S());
+    /**
+     * Creates a new HudCanvas.
+     * @param _hud The HUD context.
+     * @param height The total height of the canvas.
+     * @param heightTop The height of the top border.
+     * @param heightBottom The height of the bottom border.
+     * @param bgStyle The style of the background element. Can be null.
+     * @param backStyle The style of the back panel element. Can be null.
+     */
+    protected HudCanvas(
+        final @NotNull HudContext _hud,
+        final float height, final float heightTop, final float heightBottom,
+        final @Nullable PanelElmStyle bgStyle, final @Nullable PanelElmStyle backStyle
+    ) {
+        super(_hud, _hud.getActiveCanvas(), (ServerLevel)(_hud.getPlayer().level()), height, heightTop, heightBottom, bgStyle, backStyle);
     }
 
 
