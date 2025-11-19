@@ -34,7 +34,7 @@ public class Hud extends Context {
 
     // HUD data
     private boolean playerHasSneaked = false;
-    private boolean positionRefreshRequired = false;
+    private boolean positionRefreshRequired = true;
 
 
     public boolean attemptPositionRefresh() {
