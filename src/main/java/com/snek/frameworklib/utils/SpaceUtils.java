@@ -107,6 +107,39 @@ public abstract class SpaceUtils {
 
 
     /**
+    * Calculates the distance from the line origin to the intersection point on a rectangle.
+    * @param lineOrigin The starting point of the line.
+    * @param lineDirection The direction of the line. Must be normalized.
+    * @param corners The four corners of the rectangle.
+    * @return The distance to the intersection point.
+    *     Returns a negative value if the rectangle is behind the line.
+    *     Returns Double.MAX_VALUE if no intersection.
+    */
+    public static double getLineRectangleIntersectionDistance(final @NotNull Vector3f lineOrigin,final @NotNull Vector3f lineDirection,final @NotNull Vector3f[] corners) {
+
+        // Calculate the plane normal from the first three corners
+        Vector3f edge1 = new Vector3f(corners[1]).sub(corners[0]);
+        Vector3f edge2 = new Vector3f(corners[2]).sub(corners[0]);
+        Vector3f planeNormal = new Vector3f(edge1).cross(edge2).normalize();
+
+        // Check if line is parallel to plane
+        float denominator = planeNormal.dot(lineDirection);
+        if (Math.abs(denominator) < 1e-6f) {
+            return Double.MAX_VALUE; // Line is parallel to plane
+        }
+
+        // Calculate distance to plane intersection
+        Vector3f toPlane = new Vector3f(corners[0]).sub(lineOrigin);
+        float distance = toPlane.dot(planeNormal) / denominator;
+
+        if(checkLineRectangleIntersection(lineOrigin, lineDirection, corners)) return distance;
+        else return Double.MAX_VALUE;
+    }
+
+
+
+
+    /**
      * Checks whether a point is within the quadrilateral polygon defined by the list of vertices.
      * @param point The coordinates of  the point.
      * @param quad A list of 4 vectors identifying the corners of the polygon.

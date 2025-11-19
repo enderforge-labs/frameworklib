@@ -1,5 +1,7 @@
 package com.snek.frameworklib.graphics;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -155,50 +157,58 @@ public abstract class Context {
 
 
     /**
-     * Forwards a click event to the contexts of the specified player.
-     * Click events are sent to the contexts in order of z-order (top-most context first).
+     * Forwards a click event to the top-most context of the specified player.
+     * Only one context will receive the event.
      * @param _player The player.
      * @param action The type of click.
      * @return True if any of the player's open contexts consumed the click, false otherwise.
      */
     public static boolean forwardClickStatic(final @NotNull Player _player, final @NotNull ClickAction action) {
-        final List<Hud> huds = Hud.getActiveHUDs().get(_player.getUUID());
-        if(huds != null) for(final Hud hud : huds) {
-            final boolean r = __forwardClickStatic(_player, action, hud);
-            if(r) return true;
-        }
-        final List<UI> uis = UI.getActiveUIs().get(_player.getUUID());
-        if(uis != null) for(final UI ui : uis) {
-            final boolean r = __forwardClickStatic(_player, action, ui);
-            if(r) return true;
-        }
-        return false;
-    }
 
+        // Find top most context
+        @Nullable Context topMost = getTopMostContext(_player);
 
-    private static boolean __forwardClickStatic(final @NotNull Player _player, final @NotNull ClickAction action, final @NotNull Context context) {
-        final Canvas canvas = context.activeCanvas;
+        // Send click event
+        if(topMost == null) return false;
+        final Canvas canvas = topMost.activeCanvas;
         if(canvas == null) return false;
-
         return canvas.forwardClick(_player, action);
     }
+
+
+    // private static boolean __forwardClickStatic(final @NotNull Player _player, final @NotNull ClickAction action, final @NotNull Context context) {
+    //     final Canvas canvas = context.activeCanvas;
+    //     if(canvas == null) return false;
+
+    //     return canvas.forwardClick(_player, action);
+    // }
 
 
 
 
     /**
-     * Forwards a hover event to the context of the specified player.
+     * Forwards a hover event to the top-most context of the specified player.
+     * Only one context will receive the event.
      * @param _player The player.
      */
     public static void forwardHoverStatic(final @NotNull Player _player) {
-        final List<Hud> huds = Hud.getActiveHUDs().get(_player.getUUID());
-        if(huds != null) for(final Hud hud : huds) {
-            __forwardHoverStatic(_player, hud);
-        }
-        final List<UI> uis = UI.getActiveUIs().get(_player.getUUID());
-        if(uis != null) for(final UI ui : uis) {
-            __forwardHoverStatic(_player, ui);
-        }
+
+        // Find top most context
+        @Nullable Context topMost = getTopMostContext(_player);
+
+        // Send click event
+        if(topMost == null) return;
+        __forwardHoverStatic(_player, topMost);
+
+
+        // final List<Hud> huds = Hud.getActiveHUDs().get(_player.getUUID());
+        // if(huds != null) for(final Hud hud : huds) {
+        //     __forwardHoverStatic(_player, hud);
+        // }
+        // final List<UI> uis = UI.getActiveUIs().get(_player.getUUID());
+        // if(uis != null) for(final UI ui : uis) {
+        //     __forwardHoverStatic(_player, ui);
+        // }
     }
 
 
@@ -215,5 +225,34 @@ public abstract class Context {
             if(context.targetedElm != null) context.targetedElm.updateHoverState(_player);
         }
     }
-}
 
+
+
+
+    private static Context getTopMostContext(final Player _player) {
+
+        // Get all contexts
+        final List<Hud> huds = Hud.getActiveHUDs().get(_player.getUUID());
+        final List<UI>  uis  = UI.getActiveUIs  ().get(_player.getUUID());
+
+        // Merge contexts into a single list
+        List<Context> contexts = new ArrayList<>();
+        if(huds != null) contexts.addAll(huds);
+        if(uis  != null) contexts.addAll(uis);
+
+        // Find top-most context
+        @Nullable Context topMost = null;
+        double bestDistance = Double.MAX_VALUE;
+        for(final @Nullable Context c : contexts) {
+            if(c.getActiveCanvas() == null) continue;
+            final double distance = c.getActiveCanvas().getBg().getIntersectionLength(_player);
+            if(distance > 0 && distance < bestDistance) {
+                bestDistance = distance;
+                topMost = c;
+            }
+        }
+
+        // Return found context
+        return topMost;
+    }
+}
