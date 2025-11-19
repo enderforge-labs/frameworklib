@@ -10,6 +10,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
+import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.scheduler.Scheduler;
+
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
@@ -34,10 +37,15 @@ public non-sealed class HudContext extends Context {
     private boolean positionRefreshRequired = true;
 
 
+    /**
+     * Check if the position needs to be refreshed, then sets the refresh flag to false at the end of the tick.
+     * @return Whether the position needs to be refreshed.
+     */
     public boolean attemptPositionRefresh() {
-        final boolean old = positionRefreshRequired;
-        positionRefreshRequired = false;
-        return old;
+        if(positionRefreshRequired) {
+            Scheduler.run(() -> { positionRefreshRequired = false; });
+        }
+        return positionRefreshRequired;
     }
 
 
@@ -79,9 +87,9 @@ public non-sealed class HudContext extends Context {
 
         // Send updates and teleport interaction entity if necessary
         super.update();
-        if(positionRefreshRequired && interactionBlocker != null) {
-            final Vec3 pos = player.getEyePosition();
-            interactionBlocker.teleport(new Vector3d(pos.x, pos.y - getInteractionBlockerSize() / 2f, pos.z));
+        if(attemptPositionRefresh() && interactionBlocker != null) {
+            final Vector3d pos = MinecraftUtils.getPlayerStandingEyePos(player).add(((HudCanvas)activeCanvas).__calcVisualShift());
+            interactionBlocker.teleport(pos);
         }
     }
 
