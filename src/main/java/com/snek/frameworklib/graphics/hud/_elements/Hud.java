@@ -32,6 +32,20 @@ public class Hud extends Context {
     private static final Map<UUID, List<Hud>> activeHUDs = new HashMap<>();
     public static Map<UUID, List<Hud>> getActiveHUDs() { return activeHUDs; }
 
+    // HUD data
+    private boolean playerHasSneaked = false;
+    private boolean positionRefreshRequired = false;
+
+
+    public boolean attemptPositionRefresh() {
+        final boolean old = positionRefreshRequired;
+        positionRefreshRequired = false;
+        return old;
+    }
+
+
+
+
 
     /**
      * Creates a new Hud.
@@ -58,8 +72,17 @@ public class Hud extends Context {
 
     @Override
     public void update() {
+
+        // Detect not sneaking -> sneaking transition and set refresh flag if needed
+        if(player.isShiftKeyDown() && !playerHasSneaked) {
+            positionRefreshRequired = true;
+        }
+        playerHasSneaked = player.isShiftKeyDown();
+
+
+        // Send updates and teleport interaction entity if necessary
         super.update();
-        if(interactionBlocker != null) {
+        if(positionRefreshRequired && interactionBlocker != null) {
             final Vec3 pos = player.getEyePosition();
             interactionBlocker.teleport(new Vector3d(pos.x, pos.y - getInteractionBlockerSize() / 2f, pos.z));
         }

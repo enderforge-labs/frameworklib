@@ -32,7 +32,7 @@ public class HudCanvas extends Canvas implements __HudElm {
 
     // Optimization data
     private @NotNull Vector3d lastPlayerEyePos = new Vector3d();
-    public static final double POS_UPDATE_DISTANCE = 0.1f;
+    public static final double POS_UPDATE_DISTANCE = 5f;
 
 
 
@@ -46,23 +46,34 @@ public class HudCanvas extends Canvas implements __HudElm {
     }
 
 
+
+
     @Override
     public void update() {
         final Player player = context.getPlayer();
 
-        // Update rotation
-        updateRot(player, false);
 
         // Calculate new position and position difference
         final Vector3d newPos = new Vector3d(player.getEyePosition().toVector3f());
         final Vector3d posDelta = newPos.sub(lastPlayerEyePos, new Vector3d());
 
-        // If the player moved too far since the last update, teleport the entities
-        if(posDelta.length() >= POS_UPDATE_DISTANCE) {
+
+        // Update rotation and position if needed
+        if(((Hud)context).attemptPositionRefresh()) {
             lastPlayerEyePos = newPos;
+            updateRot(player, false);
             updatePos(this);
         }
+
+
+        //FIXME replace this with a distance limit after which the UI despawns. Make it a configurable value
+        // If the player moved too far since the last update, close the HUD
+        if(posDelta.length() >= POS_UPDATE_DISTANCE) {
+            despawn();
+        }
     }
+
+
 
 
     @Override
