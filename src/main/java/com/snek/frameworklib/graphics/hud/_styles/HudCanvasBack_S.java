@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
-import com.snek.frameworklib.graphics.hud._elements.__HudElm;
 import com.snek.frameworklib.graphics.ui._styles.UiBorder_S;
 
 
@@ -14,7 +13,7 @@ import com.snek.frameworklib.graphics.ui._styles.UiBorder_S;
 
 
 
-public class HudCanvasBack_S extends PanelElmStyle implements __HudElm {
+public class HudCanvasBack_S extends PanelElmStyle {
 
     public HudCanvasBack_S() {
         super();

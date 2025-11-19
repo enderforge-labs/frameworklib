@@ -1,4 +1,4 @@
-package com.snek.frameworklib.graphics.ui._elements;
+package com.snek.frameworklib.graphics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,9 +9,6 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
-
-import com.snek.frameworklib.graphics.Canvas;
-import com.snek.frameworklib.graphics.Context;
 
 import net.minecraft.world.entity.player.Player;
 
@@ -26,24 +23,25 @@ import net.minecraft.world.entity.player.Player;
  * The root element of any UI. It contains canvases which contain the UI elements.
  * Only one canvas at a time can be displayed.
  */
-public class UI extends Context {
+public non-sealed class UiContext extends Context {
 
     // UI data
     protected final Vector3d spawnPos = new Vector3d();
+    public @NotNull Vector3d getSpawnPos() { return spawnPos; }
 
     // Active UI list
-    private static final Map<UUID, List<UI>> activeUIs = new HashMap<>();
-    public static Map<UUID, List<UI>> getActiveUIs() { return activeUIs; }
+    private static final Map<UUID, List<UiContext>> activeUIs = new HashMap<>();
+    public static Map<UUID, List<UiContext>> getActiveUIs() { return activeUIs; }
 
 
 
 
-    public UI(final @NotNull Player _player) {
+    public UiContext(final @NotNull Player _player) {
         super(_player);
 
         // Update UI list
         activeUIs.putIfAbsent(player.getUUID(), new ArrayList<>());
-        final @Nullable List<UI> uis = activeUIs.get(player.getUUID());
+        final @Nullable List<UiContext> uis = activeUIs.get(player.getUUID());
         uis.add(this);
     }
 
@@ -91,7 +89,7 @@ public class UI extends Context {
         super.despawn();
 
         // Update UI list
-        final @Nullable List<UI> uis = activeUIs.get(player.getUUID());
+        final @Nullable List<UiContext> uis = activeUIs.get(player.getUUID());
         uis.remove(this);
         if(uis.isEmpty()) activeUIs.remove(player.getUUID());
     }

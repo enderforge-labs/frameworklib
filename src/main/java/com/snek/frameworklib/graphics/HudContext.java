@@ -1,4 +1,4 @@
-package com.snek.frameworklib.graphics.hud._elements;
+package com.snek.frameworklib.graphics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,9 +9,6 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
-
-import com.snek.frameworklib.graphics.Canvas;
-import com.snek.frameworklib.graphics.Context;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -26,11 +23,11 @@ import net.minecraft.world.phys.Vec3;
 /**
  * A Context that follows its player and rotates around them
  */
-public class Hud extends Context {
+public non-sealed class HudContext extends Context {
 
     // Active HUD list
-    private static final Map<UUID, List<Hud>> activeHUDs = new HashMap<>();
-    public static Map<UUID, List<Hud>> getActiveHUDs() { return activeHUDs; }
+    private static final Map<UUID, List<HudContext>> activeHUDs = new HashMap<>();
+    public static Map<UUID, List<HudContext>> getActiveHUDs() { return activeHUDs; }
 
     // HUD data
     private boolean playerHasSneaked = false;
@@ -52,12 +49,12 @@ public class Hud extends Context {
      * This automatically closes any previous Hud owned by the player.
      * @param _player The owner of the new Hud.
      */
-    public Hud(final @NotNull Player _player) {
+    public HudContext(final @NotNull Player _player) {
         super(_player);
 
         // Update HUD list
         activeHUDs.putIfAbsent(player.getUUID(), new ArrayList<>());
-        final @Nullable List<Hud> huds = activeHUDs.get(player.getUUID());
+        final @Nullable List<HudContext> huds = activeHUDs.get(player.getUUID());
         huds.add(this);
     }
 
@@ -109,7 +106,7 @@ public class Hud extends Context {
         super.despawn();
 
         // Update HUD list
-        final @Nullable List<Hud> huds = activeHUDs.get(player.getUUID());
+        final @Nullable List<HudContext> huds = activeHUDs.get(player.getUUID());
         huds.remove(this);
         if(huds.isEmpty()) activeHUDs.remove(player.getUUID());
     }

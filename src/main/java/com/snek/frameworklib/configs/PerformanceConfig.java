@@ -1,6 +1,7 @@
 package com.snek.frameworklib.configs;
 
 import com.snek.frameworkconfig.ConfigFile;
+import com.snek.frameworkconfig.fields.ConstrainedConfigField;
 import com.snek.frameworkconfig.fields.ValueConfigField;
 
 
@@ -30,6 +31,20 @@ public class PerformanceConfig implements ConfigFile {
         },
         2
     );
+    public final ValueConfigField<Float> hud_close_distance = new ValueConfigField<>(
+        new String[] {
+            "The maximum distance from the player HUDs are allowed to be before closing automatically. Measured in blocks.",
+            "Must be >= 0.1.",
+        },
+        20f
+    );
+    public final ValueConfigField<Integer> hud_close_time = new ValueConfigField<>(
+        new String[] {
+            "The maximum allowed inactivity time before a HUD closes automatically. Measured in ticks.",
+            "Must be >= 40.",
+        },
+        200
+    );
 
 
 
@@ -48,5 +63,8 @@ public class PerformanceConfig implements ConfigFile {
         if(animation_refresh_time.getValue() < 1)  throw new IllegalStateException("Animation refresh time must be >= 1");
         if(animation_refresh_time.getValue() > 10) throw new IllegalStateException("Animation refresh time must be <= 10");
 
+        // Check HUD closing options
+        if(hud_close_distance.getValue() < 0.1) throw new IllegalStateException("HUD close distance must be >= 0.1");
+        if(hud_close_time.getValue()     < 40)  throw new IllegalStateException("HUD close time must be >= 40");
     }
 }

@@ -36,7 +36,7 @@ import net.minecraft.world.entity.player.Player;
 
 
 
-public abstract class Canvas extends Div {
+public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
 
     // Core data

@@ -8,8 +8,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import com.snek.frameworklib.data_types.animations.Animation;
-import com.snek.frameworklib.graphics.hud._elements.Hud;
-import com.snek.frameworklib.graphics.ui._elements.UI;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -22,7 +20,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-public abstract class Context {
+public abstract sealed class Context permits HudContext, UiContext {
 
     // Hud data
     protected final Player player;
@@ -123,12 +121,12 @@ public abstract class Context {
      * @param player The player.
      */
     public static void closeContexts(final @NotNull Player _player) {
-        final List<Hud> huds = Hud.getActiveHUDs().get(_player.getUUID());
-        if(huds != null) for(final Hud hud : huds) {
+        final List<HudContext> huds = HudContext.getActiveHUDs().get(_player.getUUID());
+        if(huds != null) for(final HudContext hud : huds) {
             hud.despawn();
         }
-        final List<UI> uis = UI.getActiveUIs().get(_player.getUUID());
-        if(uis != null) for(final UI ui : uis) {
+        final List<UiContext> uis = UiContext.getActiveUIs().get(_player.getUUID());
+        if(uis != null) for(final UiContext ui : uis) {
             ui.despawn();
         }
     }
@@ -140,13 +138,13 @@ public abstract class Context {
      * Updates all active contexts.
      */
     public static void updateActiveContexts() {
-        for(final List<Hud> huds : Hud.getActiveHUDs().values()) {
-            if(huds != null) for(final Hud hud : huds) {
+        for(final List<HudContext> huds : HudContext.getActiveHUDs().values()) {
+            if(huds != null) for(final HudContext hud : huds) {
                 hud.update();
             }
         }
-        for(final List<UI> uis : UI.getActiveUIs().values()) {
-            if(uis != null) for(final UI ui : uis) {
+        for(final List<UiContext> uis : UiContext.getActiveUIs().values()) {
+            if(uis != null) for(final UiContext ui : uis) {
                 ui.update();
             }
         }
@@ -213,8 +211,8 @@ public abstract class Context {
     private static Context getTopMostContext(final Player _player) {
 
         // Get all contexts
-        final List<Hud> huds = Hud.getActiveHUDs().get(_player.getUUID());
-        final List<UI>  uis  = UI.getActiveUIs  ().get(_player.getUUID());
+        final List<HudContext> huds = HudContext.getActiveHUDs().get(_player.getUUID());
+        final List<UiContext>  uis  = UiContext.getActiveUIs  ().get(_player.getUUID());
 
         // Merge contexts into a single list
         List<Context> contexts = new ArrayList<>();

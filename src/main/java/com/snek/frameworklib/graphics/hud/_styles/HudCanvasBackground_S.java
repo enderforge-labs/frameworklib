@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
-import com.snek.frameworklib.graphics.hud._elements.__HudElm;
 
 
 
@@ -13,7 +12,7 @@ import com.snek.frameworklib.graphics.hud._elements.__HudElm;
 
 
 
-public class HudCanvasBackground_S extends PanelElmStyle implements __HudElm {
+public class HudCanvasBackground_S extends PanelElmStyle {
     public static final @NotNull Vector3i COLOR = new Vector3i(3, 3, 7);
 
 

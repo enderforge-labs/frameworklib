@@ -1,14 +1,12 @@
-package com.snek.frameworklib.graphics.hud._elements;
+package com.snek.frameworklib.graphics;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
+import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.graphics.Canvas;
-import com.snek.frameworklib.graphics.Div;
-import com.snek.frameworklib.graphics.Elm;
 import com.snek.frameworklib.graphics.hud._styles.HudCanvasBack_S;
 import com.snek.frameworklib.graphics.hud._styles.HudCanvasBackground_S;
 
@@ -22,17 +20,15 @@ import net.minecraft.world.entity.player.Player;
 
 
 
-public class HudCanvas extends Canvas implements __HudElm {
+public non-sealed class HudCanvas extends Canvas {
 
-    // HUD
+    // HUD data
     public static final float HUD_DISTANCE = 1.3f;
-
-    // Canvas data
     private boolean spawned = false;
+    public @NotNull HudContext getHudContext() { return (HudContext)super.getContext(); }
 
     // Optimization data
     private @NotNull Vector3d lastPlayerEyePos = new Vector3d();
-    public static final double POS_UPDATE_DISTANCE = 5f;
 
 
 
@@ -41,7 +37,7 @@ public class HudCanvas extends Canvas implements __HudElm {
 
 
 
-    public HudCanvas(final @NotNull Hud _hud, final float height, final float heightTop, final float heightBottom) {
+    protected HudCanvas(final @NotNull HudContext _hud, final float height, final float heightTop, final float heightBottom) {
         super(_hud, _hud.getActiveCanvas(), (ServerLevel)(_hud.getPlayer().level()), height, heightTop, heightBottom, new HudCanvasBackground_S(), new HudCanvasBack_S());
     }
 
@@ -58,19 +54,22 @@ public class HudCanvas extends Canvas implements __HudElm {
         final Vector3d posDelta = newPos.sub(lastPlayerEyePos, new Vector3d());
 
 
+        //FIXME use the height of the player while they are not sneaking, not during it
         // Update rotation and position if needed
-        if(((Hud)context).attemptPositionRefresh()) {
+        if(((HudContext)context).attemptPositionRefresh()) {
             lastPlayerEyePos = newPos;
-            updateRot(player, false);
-            updatePos(this);
+            updateRot(player, false); //FIXME make it disappear and reappear instead. use instant rotations
+            updatePos(this); //FIXME make it disappear and reappear instead. use instant rotations
         }
 
 
-        //FIXME replace this with a distance limit after which the UI despawns. Make it a configurable value
         // If the player moved too far since the last update, close the HUD
-        if(posDelta.length() >= POS_UPDATE_DISTANCE) {
-            despawn();
+        if(posDelta.length() >= Configs.getPerf().hud_close_distance.getValue()) {
+            context.despawn();
         }
+
+        //TODO add inactivity timer despawn
+        //  Configs.getPerf().hud_close_time.getValue()
     }
 
 

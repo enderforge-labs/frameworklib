@@ -21,7 +21,6 @@ import com.snek.frameworklib.data_types.containers.IndexedArrayDeque;
 import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
 import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
-import com.snek.frameworklib.graphics.hud._elements.HudCanvas;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.utils.Easing;
 import com.snek.frameworklib.utils.SpaceUtils;

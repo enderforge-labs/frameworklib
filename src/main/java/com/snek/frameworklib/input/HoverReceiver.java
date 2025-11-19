@@ -16,8 +16,8 @@ import com.snek.frameworklib.debug.DebugCheck;
 import com.snek.frameworklib.debug.UiDebugWindow;
 import com.snek.frameworklib.graphics.Context;
 import com.snek.frameworklib.graphics.Elm;
-import com.snek.frameworklib.graphics.hud._elements.Hud;
-import com.snek.frameworklib.graphics.ui._elements.UI;
+import com.snek.frameworklib.graphics.HudContext;
+import com.snek.frameworklib.graphics.UiContext;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -92,7 +92,7 @@ public abstract class HoverReceiver {
 
             // Skip player if they are dead or in spectator mode or have a HUD open
             if(player.isSpectator() || player.isDeadOrDying()) continue;
-            if(Hud.getActiveHUDs().containsKey(player.getUUID()) || UI.getActiveUIs().containsKey(player.getUUID())) {
+            if(HudContext.getActiveHUDs().containsKey(player.getUUID()) || UiContext.getActiveUIs().containsKey(player.getUUID())) {
                 playersWithContexts.add(player);
             }
         }
