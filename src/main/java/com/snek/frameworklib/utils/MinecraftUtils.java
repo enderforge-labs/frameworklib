@@ -36,6 +36,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
@@ -47,6 +48,7 @@ import net.minecraft.world.item.SplashPotionItem;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.phys.Vec3;
 
 
 
@@ -499,5 +501,28 @@ public abstract class MinecraftUtils {
             pos.getY(),
             pos.getZ() + 0.5
         );
+    }
+
+
+
+
+    /**
+     * Calculates the coordinates the eyes of the player would be at if they were standing.
+     * @param player The player.
+     * @return The coordinates of the eyes.
+     */
+    public static @NotNull Vector3d getPlayerStandingEyePos(final @NotNull Player player) {
+        final @NotNull Vec3 playerPos = player.getPosition(0);
+        return new Vector3d(playerPos.x, playerPos.y + getPlayerStandingEyeHeight(player), playerPos.z);
+    }
+
+
+    /**
+     * Calculates the height the eyes of the player would be at if they were standing.
+     * @param player The player.
+     * @return The height of the eyes.
+     */
+    public static double getPlayerStandingEyeHeight(final @NotNull Player player) {
+        return player.getStandingEyeHeight(Pose.STANDING, player.getDimensions(Pose.STANDING));
     }
 }

@@ -1,7 +1,6 @@
 package com.snek.frameworklib.configs;
 
 import com.snek.frameworkconfig.ConfigFile;
-import com.snek.frameworkconfig.fields.ConstrainedConfigField;
 import com.snek.frameworkconfig.fields.ValueConfigField;
 
 

@@ -9,6 +9,7 @@ import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
+import com.snek.frameworklib.utils.MinecraftUtils;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -63,7 +64,7 @@ public non-sealed class HudCanvas extends Canvas {
 
 
         // Calculate new position and position difference
-        final Vector3d newPos = new Vector3d(player.getEyePosition().toVector3f());
+        final Vector3d newPos = MinecraftUtils.getPlayerStandingEyePos(player);
         final Vector3d posDelta = newPos.sub(lastPlayerEyePos, new Vector3d());
 
 
