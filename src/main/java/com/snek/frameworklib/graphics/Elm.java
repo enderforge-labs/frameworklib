@@ -581,8 +581,7 @@ public abstract class Elm extends Div {
         // Calculate the world coordinates of the display's origin
         //! Left rotation and scale are ignored as they doesn't affect this
         final Vector3f origin = __calcEntityVisualOrigin(t);
-        //FIXME __calcVisualShift() might be needed for HUD elements
-        //FIXME i have no idea how it's working without it
+        if(canvas instanceof HudCanvas hudCanvas) origin.add(hudCanvas.__calcVisualShift());
 
 
         // Check view intersection with the display's box
