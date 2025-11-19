@@ -10,6 +10,7 @@ import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -78,12 +79,15 @@ public non-sealed class HudCanvas extends Canvas {
 
 
         // If the player moved too far since the last update, close the HUD
+        //! Schedule despawn for the end of the current tick to avoid modifying the active contexts list while the thread is iterating it
         if(posDelta.length() >= Configs.getPerf().hud_close_distance.getValue()) {
-            context.despawn();
+            Scheduler.run(context::despawn);
         }
 
         //TODO add inactivity timer despawn
-        //  Configs.getPerf().hud_close_time.getValue()
+        //! Schedule despawn for the end of the current tick to avoid modifying the active contexts list while the thread is iterating it
+        //  onfigs.getPerf().hud_close_time.getValue()
+        // Scheduler.run(context::despawn);
     }
 
 

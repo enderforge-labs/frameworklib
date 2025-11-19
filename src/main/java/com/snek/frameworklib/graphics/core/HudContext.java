@@ -63,7 +63,7 @@ public non-sealed class HudContext extends Context {
 
     @Override
     public float getInteractionBlockerSize() {
-        return 0.5f;
+        return 1f;
     }
 
 
