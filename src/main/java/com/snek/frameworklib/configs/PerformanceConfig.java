@@ -35,7 +35,7 @@ public class PerformanceConfig implements ConfigFile {
             "The maximum distance from the player HUDs are allowed to be before closing automatically. Measured in blocks.",
             "Must be >= 0.1.",
         },
-        20f
+        10f
     );
     public final ValueConfigField<Integer> hud_close_time = new ValueConfigField<>(
         new String[] {
