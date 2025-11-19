@@ -5,9 +5,9 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.frameworkconfig.FrameworkConfig;
 import com.snek.frameworklib.configs.Configs;
-import com.snek.frameworklib.graphics.Context;
-import com.snek.frameworklib.graphics.Elm;
-import com.snek.frameworklib.graphics.InteractionBlocker;
+import com.snek.frameworklib.graphics.core.Context;
+import com.snek.frameworklib.graphics.core.Elm;
+import com.snek.frameworklib.graphics.core.InteractionBlocker;
 import com.snek.frameworklib.input.ClickReceiver;
 import com.snek.frameworklib.input.HoverReceiver;
 import com.snek.frameworklib.input.MessageReceiver;

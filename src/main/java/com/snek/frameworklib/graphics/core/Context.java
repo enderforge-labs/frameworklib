@@ -1,4 +1,4 @@
-package com.snek.frameworklib.graphics;
+package com.snek.frameworklib.graphics.core;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,9 +1,9 @@
-package com.snek.frameworklib.graphics.ui._elements;
+package com.snek.frameworklib.graphics.core.ui._elements;
 
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
-import com.snek.frameworklib.graphics.ui._styles.UiBorder_S;
+import com.snek.frameworklib.graphics.core.ui._styles.UiBorder_S;
 
 import net.minecraft.server.level.ServerLevel;
 

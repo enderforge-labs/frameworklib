@@ -7,8 +7,8 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.snek.frameworklib.graphics.Context;
-import com.snek.frameworklib.graphics.InteractionBlocker;
+import com.snek.frameworklib.graphics.core.Context;
+import com.snek.frameworklib.graphics.core.InteractionBlocker;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
 import net.minecraft.core.Vec3i;

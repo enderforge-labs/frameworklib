@@ -5,9 +5,9 @@ import org.jetbrains.annotations.NotNull;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.generated.FontSize;
-import com.snek.frameworklib.graphics.Elm;
 import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.graphics.core.Elm;
 
 import net.minecraft.server.level.ServerLevel;
 

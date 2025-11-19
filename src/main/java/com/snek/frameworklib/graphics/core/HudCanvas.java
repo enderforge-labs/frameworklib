@@ -1,4 +1,4 @@
-package com.snek.frameworklib.graphics;
+package com.snek.frameworklib.graphics.core;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
@@ -7,8 +7,8 @@ import org.joml.Vector3f;
 import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.graphics.hud._styles.HudCanvasBack_S;
-import com.snek.frameworklib.graphics.hud._styles.HudCanvasBackground_S;
+import com.snek.frameworklib.graphics.core.hud._styles.HudCanvasBack_S;
+import com.snek.frameworklib.graphics.core.hud._styles.HudCanvasBackground_S;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;

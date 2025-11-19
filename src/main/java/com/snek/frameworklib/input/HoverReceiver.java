@@ -14,10 +14,10 @@ import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.debug.DebugCheck;
 import com.snek.frameworklib.debug.UiDebugWindow;
-import com.snek.frameworklib.graphics.Context;
-import com.snek.frameworklib.graphics.Elm;
-import com.snek.frameworklib.graphics.HudContext;
-import com.snek.frameworklib.graphics.UiContext;
+import com.snek.frameworklib.graphics.core.Context;
+import com.snek.frameworklib.graphics.core.Elm;
+import com.snek.frameworklib.graphics.core.HudContext;
+import com.snek.frameworklib.graphics.core.UiContext;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -51,7 +51,7 @@ public abstract class HoverReceiver {
 
 
     // Optimization structures
-    private static @NotNull Map<@NotNull Player, com.snek.frameworklib.graphics.Elm> targetedElms = new HashMap<>();
+    private static @NotNull Map<@NotNull Player, com.snek.frameworklib.graphics.core.Elm> targetedElms = new HashMap<>();
 
 
 

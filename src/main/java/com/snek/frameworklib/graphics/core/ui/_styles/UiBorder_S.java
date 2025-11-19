@@ -1,4 +1,4 @@
-package com.snek.frameworklib.graphics.ui._styles;
+package com.snek.frameworklib.graphics.core.ui._styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
