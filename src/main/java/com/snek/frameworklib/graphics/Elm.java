@@ -21,6 +21,7 @@ import com.snek.frameworklib.data_types.containers.IndexedArrayDeque;
 import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
 import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
+import com.snek.frameworklib.graphics.hud._elements.HudCanvas;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.utils.Easing;
 import com.snek.frameworklib.utils.SpaceUtils;
@@ -577,8 +578,11 @@ public abstract class Elm extends Div {
         final Transform t = __calcTransform();
 
 
-        // Calculate the world coordinates of the display's origin. //! Left rotation and scale are ignored as they doesn't affect this
+        // Calculate the world coordinates of the display's origin
+        //! Left rotation and scale are ignored as they doesn't affect this
         final Vector3f origin = __calcEntityVisualOrigin(t);
+        //FIXME __calcVisualShift() might be needed for HUD elements
+        //FIXME i have no idea how it's working without it
 
 
         // Check view intersection with the display's box
@@ -609,8 +613,10 @@ public abstract class Elm extends Div {
         final Transform t = __calcTransform();
 
 
-        // Calculate the world coordinates of the display's origin. //! Left rotation and scale are ignored as they doesn't affect this
+        // Calculate the world coordinates of the display's origin
+        //! Left rotation and scale are ignored as they doesn't affect this
         final Vector3f origin = __calcEntityVisualOrigin(t);
+        if(canvas instanceof HudCanvas hudCanvas) origin.add(hudCanvas.__calcVisualShift());
 
 
         // Check view intersection with the display's box

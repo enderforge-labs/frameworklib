@@ -95,6 +95,11 @@ public class HudCanvas extends Canvas implements __HudElm {
             applyAnimationNowRecursive(new Transition().additiveTransform(new Transform().move(__calcVisualShift())));
         }
     }
+
+    /**
+     * Calculates the translation needed to go from the player's eye position to the desired HUD origin coordinates
+     * @return
+     */
     public @NotNull Vector3f __calcVisualShift() {
         final float rotation = (float)Math.toRadians((lastRotation + 4) % 8 * -45f);
         final Vector3f direction = new Vector3f((float)Math.sin(rotation), 0, (float)Math.cos(rotation));

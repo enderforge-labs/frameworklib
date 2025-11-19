@@ -244,8 +244,8 @@ public abstract class Context {
         @Nullable Context topMost = null;
         double bestDistance = Double.MAX_VALUE;
         for(final @Nullable Context c : contexts) {
-            if(c.getActiveCanvas() == null) continue;
-            final double distance = c.getActiveCanvas().getBg().getIntersectionLength(_player);
+            if(c.activeCanvas == null) continue;
+            final double distance = c.activeCanvas.getBg().getIntersectionLength(_player);
             if(distance > 0 && distance < bestDistance) {
                 bestDistance = distance;
                 topMost = c;

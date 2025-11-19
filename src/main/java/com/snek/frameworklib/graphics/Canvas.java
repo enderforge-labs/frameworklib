@@ -105,6 +105,7 @@ public abstract class Canvas extends Div {
         final @Nullable PanelElmStyle bgStyle, final @Nullable PanelElmStyle backStyle
     ) {
         context = _context;
+        canvas = this;
         setSize(new Vector2f(1f, 1f));
 
         // Calculate new heights
