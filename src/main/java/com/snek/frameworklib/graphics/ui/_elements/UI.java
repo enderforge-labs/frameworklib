@@ -12,7 +12,6 @@ import org.joml.Vector3d;
 
 import com.snek.frameworklib.graphics.Canvas;
 import com.snek.frameworklib.graphics.Context;
-import com.snek.frameworklib.graphics.hud._elements.Hud;
 
 import net.minecraft.world.entity.player.Player;
 
@@ -49,12 +48,6 @@ public class UI extends Context {
     }
 
 
-    // @Override
-    // protected void handlePreviousContext(final @NotNull Player _player) {
-    //     // No actions needed
-    // }
-
-
 
 
     @Override
@@ -71,22 +64,12 @@ public class UI extends Context {
 
 
     @Override
-    public void changeCanvas(final @NotNull Canvas canvas) {
-        if(!(canvas instanceof UiCanvas)) {
-            throw new IllegalArgumentException("Canvas must be a subclass of UiCanvas, but got: " + canvas.getClass().getName());
+    public void changeCanvas(final @NotNull Canvas newCanvas) {
+        if(!(newCanvas instanceof UiCanvas)) {
+            throw new IllegalArgumentException("Canvas must be a subclass of UiCanvas, but got: " + newCanvas.getClass().getName());
         }
 
-        activeCanvas = canvas;
-
-        //TODO new canvases might need something similar to this to update the rotation
-        // // Adjust rotation if needed
-        // if(lastDirection != 0) {
-        //     final Animation animation = calcCanvasRotationAnimation(0, lastDirection);
-        //     for(final Div c : canvas.getBg().getChildren()) {
-        //         c.applyAnimationNowRecursive(animation);
-        //     }
-        // }
-        canvas.spawn(spawnPos);
+        finalizeCanvasChange(newCanvas, spawnPos);
     }
 
 

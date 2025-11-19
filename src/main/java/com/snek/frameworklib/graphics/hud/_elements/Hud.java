@@ -12,7 +12,6 @@ import org.joml.Vector3d;
 
 import com.snek.frameworklib.graphics.Canvas;
 import com.snek.frameworklib.graphics.Context;
-import com.snek.frameworklib.graphics.ui._elements.UI;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -49,15 +48,6 @@ public class Hud extends Context {
     }
 
 
-    // @Override
-    // protected void handlePreviousContext(final @NotNull Player _player) {
-
-    //     // Close previous HUD if present
-    //     final Context oldContext = getOpenContext(_player);
-    //     if(oldContext instanceof Hud) Context.closeContext(_player);
-    // }
-
-
 
 
     @Override
@@ -79,24 +69,13 @@ public class Hud extends Context {
 
 
     @Override
-    public void changeCanvas(final @NotNull Canvas canvas) {
-        if(!(canvas instanceof HudCanvas)) {
-            throw new IllegalArgumentException("Canvas must be a subclass of HudCanvas, but got: " + canvas.getClass().getName());
+    public void changeCanvas(final @NotNull Canvas newCanvas) {
+        if(!(newCanvas instanceof HudCanvas)) {
+            throw new IllegalArgumentException("Canvas must be a subclass of HudCanvas, but got: " + newCanvas.getClass().getName());
         }
 
-        activeCanvas = canvas;
-        //TODO new canvases might need something similar to this to update the rotation
-        // // Adjust rotation if needed
-        // if(lastDirection != 0) {
-        //     final Animation animation = calcCanvasRotationAnimation(0, lastDirection);
-        //     for(final Div c : canvas.getBg().getChildren()) {
-        //         c.applyAnimationNowRecursive(animation);
-        //     }
-        // }
-
-        // Spawn canvas into the world and play a sound to the user
         final Vec3 pos = player.getPosition(1);
-        canvas.spawn(new Vector3d(pos.x, pos.y, pos.z));
+        finalizeCanvasChange(newCanvas, new Vector3d(pos.x, pos.y, pos.z));
     }
 
 

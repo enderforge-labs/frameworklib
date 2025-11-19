@@ -42,6 +42,7 @@ public class Div {
 
 
     // Tree data
+    protected @Nullable Canvas canvas = null;
     protected @Nullable Div parent = null;
     protected final @NotNull List<@NotNull Div> children = new ArrayList<>();
     public void setParent(final @Nullable Div _parent) { parent = _parent; }
@@ -81,6 +82,7 @@ public class Div {
      * @return elm
      */
     public Div addChild(final @NotNull Div elm) {
+        elm.canvas = canvas;
         elm.parent = this;
         elm.updateAbsPos();
         elm.updateZIndex();

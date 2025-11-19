@@ -2,6 +2,7 @@ package com.snek.frameworklib.graphics.ui._elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
 
 import com.snek.frameworklib.graphics.Canvas;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
@@ -60,16 +61,36 @@ public abstract class UiCanvas extends Canvas {
         final Player player = context.getPlayer();
         if(!canvasRotationLimiter.attempt()) return;
 
-        // Calculate target direction
         final Vec3 playerPos = player.getPosition(1f);                      // Get player position
-        if(!lastPlayerPos.closerThan(playerPos, POS_UPDATE_DISTANCE)) {     // If the player has moved enough
-            final double dx = ((UI)context).spawnPos.x - playerPos.x;           // Calculate X difference
-            final double dz = ((UI)context).spawnPos.z - playerPos.z;           // Calculate Z difference
-            final double angle = Math.toDegrees(Math.atan2(-dx, dz));           // Calculate angle from position difference
-            final int targetDir = (int)Math.round((angle + 180d) / 45d) % 8;    // Convert from degrees to direction
-
-            updateRot(targetDir);                                               // Apply animations and update the current direction if needed
-            canvasRotationLimiter.renewCooldown(CANVAS_ROTATION_TIME);          // Renew the  rotation cooldown
+        if(!lastPlayerPos.closerThan(playerPos, POS_UPDATE_DISTANCE)) {     // If the player has moved far enough
+            updateRot(player, false);                                           // Update rotation
+            canvasRotationLimiter.renewCooldown(CANVAS_ROTATION_TIME);          // Renew the rotation cooldown
         }
+    }
+
+
+
+
+    @Override
+    public void updateRot(final @NotNull Player player, final boolean instant) {
+        final Vec3 playerPos = player.getPosition(1f);                      // Get player position
+        final double dx = ((UI)context).spawnPos.x - playerPos.x;           // Calculate X difference
+        final double dz = ((UI)context).spawnPos.z - playerPos.z;           // Calculate Z difference
+        final double angle = Math.toDegrees(Math.atan2(-dx, dz));           // Calculate angle from position difference
+        final int targetDir = (int)Math.round((angle + 180d) / 45d) % 8;    // Convert from degrees to direction
+        __updateRot(targetDir, instant);                                    // Apply animations and update the current direction if needed
+    }
+
+
+
+
+    @Override
+    public void spawn(final @NotNull Vector3d pos) {
+
+        // Instantly rotate the canvas to face the player. This allows it to skip annoying rotation animations
+        updateRot(context.getPlayer(), true);
+
+        // Call superclass spawn
+        super.spawn(pos);
     }
 }

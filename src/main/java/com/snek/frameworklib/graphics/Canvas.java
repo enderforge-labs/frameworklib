@@ -18,6 +18,7 @@ import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
 
 
 
@@ -68,11 +69,12 @@ public abstract class Canvas extends Div {
     protected final @NotNull Elm bottom;
 
     // Getters
-    public @NotNull Elm getBg      () { return bg;           }
-    public @NotNull Elm getBack    () { return back;         }
-    public @NotNull Elm getTop     () { return top;          }
-    public @NotNull Elm getBottom  () { return bottom;       }
-    public @NotNull int getRotation() { return lastRotation; }
+    public @NotNull Elm     getBg      () { return bg;           }
+    public @NotNull Elm     getBack    () { return back;         }
+    public @NotNull Elm     getTop     () { return top;          }
+    public @NotNull Elm     getBottom  () { return bottom;       }
+    public @NotNull int     getRotation() { return lastRotation; }
+    public @NotNull Context getContext () { return context;      }
 
     // Height cache
     private final float newHeightBg;
@@ -104,6 +106,7 @@ public abstract class Canvas extends Div {
         final @Nullable PanelElmStyle bgStyle, final @Nullable PanelElmStyle backStyle
     ) {
         context = _context;
+        canvas = this;
         setSize(new Vector2f(1f, 1f));
 
         // Calculate new heights
@@ -155,6 +158,10 @@ public abstract class Canvas extends Div {
             back  .applyAnimationNow(new Transition().additiveTransform(transformBack));
             top   .applyAnimationNow(new Transition().additiveTransform(transformTop));
             bottom.applyAnimationNow(new Transition().additiveTransform(transformBottom));
+
+
+            //! updateRot is called in the spawn method
+            //! This is to avoid initialization order issues
         }
 
 
@@ -167,11 +174,13 @@ public abstract class Canvas extends Div {
             for(final Div c : prevCanvas.getBg().getChildren()) c.despawnNow();
             prevCanvas.getBg().clearChildren();
 
+
             // Inherit the elements
             bg     = (Elm)addChild(prevCanvas.getBg());
             back   = (Elm)addChild(prevCanvas.getBack());
             top    = (Elm)addChild(prevCanvas.getTop());
             bottom = (Elm)addChild(prevCanvas.getBottom());
+
 
             // Animate them to match the specified visual dimensions
             final Transform transformBg     = new Transform().scaleY(newHeightBg     / prevCanvas.newHeightBg    ).moveY(newPosBg     - prevCanvas.newPosBg    );
@@ -182,6 +191,11 @@ public abstract class Canvas extends Div {
             back  .applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformBack));
             top   .applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformTop));
             bottom.applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformBottom));
+
+
+            // Rotate child elements to match the previous canvas's rotation (if neeeded)
+            //! New elements are rotated in Context.finalizeCanvasChange
+            lastRotation = prevCanvas.getRotation();
         }
     }
 
@@ -191,10 +205,11 @@ public abstract class Canvas extends Div {
     public abstract void update();
 
 
-    public void updateRot(final int newRot) {
+    public abstract void updateRot(final @NotNull Player player, final boolean instant);
+    protected void __updateRot(final int newRot, final boolean instant) {
         if(lastRotation != newRot) {
-            applyAnimationRecursive(calcCanvasRotationAnimation(lastRotation, newRot));
-            //FIXME override this in the shop canvas to make it rotate the item as well
+            final Animation animation = calcCanvasRotationAnimation(lastRotation, newRot);
+            if(instant) applyAnimationNowRecursive(animation); else applyAnimationRecursive(animation);
             lastRotation = newRot;
         }
     }
