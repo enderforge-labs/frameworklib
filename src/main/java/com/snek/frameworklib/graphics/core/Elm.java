@@ -517,40 +517,40 @@ public abstract class Elm extends Div {
 
 
 
-    //TODO save the currently hovered element and only check that one + stop at the first consumed hover event instead of firing it on every single element
     /**
      * Updates the new hover state of the element and executes the specified callbacks.
      * @param player The player to check the view of. Can be null.
      */
     public void updateHoverState(final @Nullable Player player) {
-        if(this instanceof Hoverable h) {
+        if(!(this instanceof Hoverable)) return;
+        updateHoverState(player, player != null && checkIntersection(player));
+    }
 
-            // Calculate next hover state
-            final boolean hoverStateNext;
-            if(player == null) {
-                hoverStateNext = false;
+
+    /**
+     * Updates the new hover state of the element with the specified value, then executes the specified callbacks.
+     * @param player The player to check the view of. Can be null.
+     * @param hoverStateNext The new hover state to set. Can be omitted to make the function calculate it automatically.
+     */
+    public void updateHoverState(final @Nullable Player player, final boolean hoverStateNext) {
+        if(!(this instanceof Hoverable h)) return;
+
+
+        // Update current state and run hover state change callbacks if needed
+        if(isHovered != hoverStateNext && (!(this instanceof __base_ButtonElm) || hoverRateLimiter.attempt())) {
+            isHovered = hoverStateNext;
+            if(isHovered) {
+                h.onHoverEnter(player);
             }
             else {
-                hoverStateNext = checkIntersection(player);
+                h.onHoverExit(player);
             }
+        }
 
 
-            // Update current state and run hover state change callbacks if needed
-            if(isHovered != hoverStateNext && (!(this instanceof __base_ButtonElm) || hoverRateLimiter.attempt())) {
-                isHovered = hoverStateNext;
-                if(isHovered) {
-                    h.onHoverEnter(player);
-                }
-                else {
-                    h.onHoverExit(player);
-                }
-            }
-
-
-            // Call hover tick callback
-            if(player != null) {
-                if(isHovered) h.onHoverTick(player);
-            }
+        // Call hover tick callback
+        if(player != null) {
+            if(isHovered) h.onHoverTick(player);
         }
     }
     public boolean isHovered() {

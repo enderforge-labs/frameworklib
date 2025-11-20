@@ -121,11 +121,11 @@ public abstract sealed class Context permits HudContext, UiContext {
      * @param player The player.
      */
     public static void closeContexts(final @NotNull Player _player) {
-        final List<HudContext> huds = HudContext.getActiveHUDs().get(_player.getUUID());
+        final List<HudContext> huds = HudContext.getActiveHUDs().get(_player);
         if(huds != null) for(final HudContext hud : huds) {
             hud.despawn();
         }
-        final List<UiContext> uis = UiContext.getActiveUIs().get(_player.getUUID());
+        final List<UiContext> uis = UiContext.getActiveUIs().get(_player);
         if(uis != null) for(final UiContext ui : uis) {
             ui.despawn();
         }
@@ -191,16 +191,32 @@ public abstract sealed class Context permits HudContext, UiContext {
     }
 
 
+
+
     private static void __forwardHoverStatic(final @NotNull Player _player, final @NotNull Context context) {
         final Canvas canvas = context.activeCanvas;
         if(canvas == null) return;
 
+        // If a targeted element is present, update its hover state
         if(context.targetedElm != null) {
             context.targetedElm.updateHoverState(_player);
-            if(!context.targetedElm.isHovered()) context.targetedElm = null;
+
+            // If it's no longer being hovered on, check if a new element is being hovered
+            if(!context.targetedElm.isHovered()) {
+                context.targetedElm = canvas.findTargetedElement(_player);
+
+                // If said element exists, send an update to it
+                if(context.targetedElm != null) {
+                    context.targetedElm.updateHoverState(_player);
+                }
+            }
         }
+
+        // If a targeted element is not present, check if a new element is being hovered
         else {
             context.targetedElm = canvas.findTargetedElement(_player);
+
+            // If said element exists, send an update to it
             if(context.targetedElm != null) context.targetedElm.updateHoverState(_player);
         }
     }
@@ -211,8 +227,8 @@ public abstract sealed class Context permits HudContext, UiContext {
     private static Context getTopMostContext(final Player _player) {
 
         // Get all contexts
-        final List<HudContext> huds = HudContext.getActiveHUDs().get(_player.getUUID());
-        final List<UiContext>  uis  = UiContext.getActiveUIs  ().get(_player.getUUID());
+        final List<HudContext> huds = HudContext.getActiveHUDs().get(_player);
+        final List<UiContext>  uis  = UiContext.getActiveUIs  ().get(_player);
 
         // Merge contexts into a single list
         List<Context> contexts = new ArrayList<>();
@@ -235,3 +251,12 @@ public abstract sealed class Context permits HudContext, UiContext {
         return topMost;
     }
 }
+
+
+//FIXME instantly despawn the context when players disconnect or die or are dying or go in spectator mode or change dimension
+//FIXME instantly despawn the context when players disconnect or die or are dying or go in spectator mode or change dimension
+//FIXME instantly despawn the context when players disconnect or die or are dying or go in spectator mode or change dimension
+//FIXME instantly despawn the context when players disconnect or die or are dying or go in spectator mode or change dimension
+//FIXME instantly despawn the context when players disconnect or die or are dying or go in spectator mode or change dimension
+//FIXME instantly despawn the context when players disconnect or die or are dying or go in spectator mode or change dimension
+//FIXME instantly despawn the context when players disconnect or die or are dying or go in spectator mode or change dimension

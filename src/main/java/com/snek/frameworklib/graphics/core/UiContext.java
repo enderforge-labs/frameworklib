@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,8 +29,8 @@ public non-sealed class UiContext extends Context {
     public @NotNull Vector3d getSpawnPos() { return spawnPos; }
 
     // Active UI list
-    private static final Map<UUID, List<UiContext>> activeUIs = new HashMap<>();
-    public static Map<UUID, List<UiContext>> getActiveUIs() { return activeUIs; }
+    private static final Map<Player, List<UiContext>> activeUIs = new HashMap<>();
+    public static Map<Player, List<UiContext>> getActiveUIs() { return activeUIs; }
 
 
 
@@ -40,8 +39,8 @@ public non-sealed class UiContext extends Context {
         super(_player);
 
         // Update UI list
-        activeUIs.putIfAbsent(player.getUUID(), new ArrayList<>());
-        final @Nullable List<UiContext> uis = activeUIs.get(player.getUUID());
+        activeUIs.putIfAbsent(player, new ArrayList<>());
+        final @Nullable List<UiContext> uis = activeUIs.get(player);
         uis.add(this);
     }
 
@@ -89,8 +88,8 @@ public non-sealed class UiContext extends Context {
         super.despawn();
 
         // Update UI list
-        final @Nullable List<UiContext> uis = activeUIs.get(player.getUUID());
+        final @Nullable List<UiContext> uis = activeUIs.get(player);
         uis.remove(this);
-        if(uis.isEmpty()) activeUIs.remove(player.getUUID());
+        if(uis.isEmpty()) activeUIs.remove(player);
     }
 }

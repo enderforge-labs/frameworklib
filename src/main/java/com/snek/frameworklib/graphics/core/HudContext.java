@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,8 +28,8 @@ import net.minecraft.world.phys.Vec3;
 public non-sealed class HudContext extends Context {
 
     // Active HUD list
-    private static final Map<UUID, List<HudContext>> activeHUDs = new HashMap<>();
-    public static Map<UUID, List<HudContext>> getActiveHUDs() { return activeHUDs; }
+    private static final Map<Player, List<HudContext>> activeHUDs = new HashMap<>();
+    public static Map<Player, List<HudContext>> getActiveHUDs() { return activeHUDs; }
 
     // HUD data
     private boolean playerHasSneaked = false;
@@ -61,8 +60,8 @@ public non-sealed class HudContext extends Context {
         super(_player);
 
         // Update HUD list
-        activeHUDs.putIfAbsent(player.getUUID(), new ArrayList<>());
-        final @Nullable List<HudContext> huds = activeHUDs.get(player.getUUID());
+        activeHUDs.putIfAbsent(player, new ArrayList<>());
+        final @Nullable List<HudContext> huds = activeHUDs.get(player);
         huds.add(this);
     }
 
@@ -114,8 +113,8 @@ public non-sealed class HudContext extends Context {
         super.despawn();
 
         // Update HUD list
-        final @Nullable List<HudContext> huds = activeHUDs.get(player.getUUID());
+        final @Nullable List<HudContext> huds = activeHUDs.get(player);
         huds.remove(this);
-        if(huds.isEmpty()) activeHUDs.remove(player.getUUID());
+        if(huds.isEmpty()) activeHUDs.remove(player);
     }
 }
