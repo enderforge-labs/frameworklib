@@ -74,14 +74,8 @@ public abstract class HoverReceiver {
         // If this is the first iteration ever or all the batches have been processed
         if(updateIndex == 0) {
 
-
-            // Recompute player list snapshot //TODO this should be an additional generic "all active contexts" map
-            final Set<Player> hudPlayers = HudContext.getActiveHUDs().keySet();
-            final Set<Player> uiPlayers  = UiContext. getActiveUIs ().keySet();
-            final Set<Player> _playersWithContexts = new HashSet<>();
-            _playersWithContexts.addAll(hudPlayers);
-            _playersWithContexts.addAll(uiPlayers);
-            playersWithContexts = _playersWithContexts.toArray(new Player[0]);
+            // Recompute player list snapshot
+            playersWithContexts = Context.getActiveContexts().keySet().toArray(new Player[0]);
 
             // // Reset the lists
             // playerListSnapshot  = new ArrayList<>();
