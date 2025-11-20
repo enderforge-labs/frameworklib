@@ -26,7 +26,7 @@ import net.minecraft.world.inventory.ClickAction;
 /**
  * A generic button class with clicking and hovering capabilities and a configurable cooldown time.
  */
-public abstract class FancyButtonElm extends FancyTextElm implements __base_ButtonElm {
+public abstract non-sealed class FancyButtonElm extends FancyTextElm implements __base_ButtonElm {
     protected final RateLimiter clickRateLimiter       = new RateLimiter();
     protected final RateLimiter initialCooldownLimiter = new RateLimiter();
     private   final int clickCooldown;

@@ -16,7 +16,10 @@ import com.snek.frameworklib.data_types.ui.TextAlignment;
 import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.scheduler.Scheduler;
+import com.snek.frameworklib.utils.scheduler.TaskHandler;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -32,13 +35,18 @@ import net.minecraft.world.entity.Display.BillboardConstraints;
 /**
  * A text element that also has a configurable, animatable background color.
  */
-public class FancyTextElm extends __base_TextElm {
+public non-sealed class FancyTextElm extends __base_TextElm {
 
     // In-world data
     private final @NotNull CustomDisplay text;
     public  @NotNull CustomTextDisplay getFgEntity()  { return (CustomTextDisplay)text; }
     public  @NotNull CustomTextDisplay getBgEntity()  { return getEntity(CustomTextDisplay.class); }
     private @NotNull FancyTextElmStyle getThisStyle() { return getStyle(FancyTextElmStyle.class); }
+
+    // Scrolling text data
+    private TaskHandler textAutoScrollHandler = null;
+    private int currentStartIndex = 0;
+    // private float maxWidth = 0; //FIXME this might need to be updated when the text changes? if ever
 
 
 
@@ -269,12 +277,30 @@ public class FancyTextElm extends __base_TextElm {
         flushStyle();
         getFgEntity().spawn(world, pos);
 
-        // Set tracking custom name
+        // Set tracking custom name to foreground entity
         getFgEntity().setCustomNameVisible(false);
         getFgEntity().setCustomName(new Txt(SimpleTextElm.ENTITY_CUSTOM_NAME).get());
 
         // Call superclass spawn
         super.spawn(pos);
+
+
+
+
+        // // // Calculate maximum visible width //TODO
+        // // maxWidth =
+        // double maxWidth = absSize.x;
+        // double totalWidth = calcEntityWidth();
+        // double relativeWidth = curWidth / maxWidth;
+
+        // double totalPixelWidth = entitySizeCacheX;
+
+        // // Start scrolling text task if needed
+        // //TODO move to __base_TextElm
+        // //TODO check if the text fits before starting this
+        // textAutoScrollHandler = Scheduler.loop(10, 0, () -> {
+
+        // });
     }
 
 

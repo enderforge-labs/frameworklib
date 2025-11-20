@@ -14,6 +14,7 @@ import com.snek.frameworklib.data_types.ui.TextAlignment;
 import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.scheduler.TaskHandler;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -29,10 +30,15 @@ import net.minecraft.server.level.ServerLevel;
  * An element that can display text.
  * This class has transparent background. For a text element with background color, use FancyTextElm.
  */
-public class SimpleTextElm extends __base_TextElm {
-    public static final @NotNull String ENTITY_CUSTOM_NAME = FrameworkLib.LIB_ID + ".ui.displayentity";
-    private @NotNull CustomTextDisplay getThisEntity() { return getEntity(CustomTextDisplay.class); }
-    private @NotNull SimpleTextElmStyle      getThisStyle () { return getStyle (SimpleTextElmStyle     .class); }
+public non-sealed class SimpleTextElm extends __base_TextElm {
+
+    // In-world data
+    private @NotNull CustomTextDisplay  getThisEntity() { return getEntity(CustomTextDisplay.class); }
+    private @NotNull SimpleTextElmStyle getThisStyle () { return getStyle (SimpleTextElmStyle.class); }
+
+
+    // Scrolling text data
+    private TaskHandler textAutoScrollHandler = null;
 
 
 
@@ -150,9 +156,10 @@ public class SimpleTextElm extends __base_TextElm {
     public void spawn(final @NotNull Vector3d pos) {
         super.spawn(pos);
 
-        // Set tracking custom name
-        getThisEntity().setCustomNameVisible(false);
-        getThisEntity().setCustomName(new Txt(ENTITY_CUSTOM_NAME).get());
+        //TODO remove
+        // // Set tracking custom name
+        // getThisEntity().setCustomNameVisible(false);
+        // getThisEntity().setCustomName(new Txt(ENTITY_CUSTOM_NAME).get());
     }
 
 
