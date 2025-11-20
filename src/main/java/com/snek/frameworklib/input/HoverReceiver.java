@@ -51,12 +51,11 @@ public abstract class HoverReceiver {
     // Partial ray casting batch data
     private static int updateIndex = 0;
     private static @NotNull Player[] playersWithContexts = null;
-    // private static @Nullable List<Player> playerListSnapshot = null;
 
 
-    // // Optimization structures
-    // private static @NotNull Map<@NotNull Player, Elm> targetedElms = new HashMap<>();
-    // private static @NotNull HashSet<Context> contextsWithTargetedElm = new HashSet<>();
+    // Optimization structures
+    private static @NotNull HashSet<Context> updatedContexts     =  new HashSet<>();
+    private static @NotNull HashSet<Context> prevUpdatedContexts =  new HashSet<>();
 
 
 
@@ -76,6 +75,17 @@ public abstract class HoverReceiver {
 
             // Recompute player list snapshot
             playersWithContexts = Context.getActiveContexts().keySet().toArray(new Player[0]);
+
+            // Send updates to contexts that have not been hovered on in the last full batch
+            final Set<Context> diff = new HashSet<>(prevUpdatedContexts);
+            diff.removeAll(updatedContexts);
+            for(Context context : diff) {
+                context.forwardHover(context.getPlayer());
+            }
+
+            // Reset lists of contexts
+            prevUpdatedContexts = updatedContexts;
+            updatedContexts = new HashSet<>();
 
             // // Reset the lists
             // playerListSnapshot  = new ArrayList<>();
@@ -105,18 +115,18 @@ public abstract class HoverReceiver {
             // Skip player if they are dead or in spectator mode or have a HUD open //TODO this might not be needed if the contexts are killed when players dead or go in spectator or etc...
             if(player.isSpectator() || player.isDeadOrDying()) continue; //TODO this might not be needed if the contexts are killed when players dead or go in spectator or etc...
 
-            // Send hover updates
-            // if(HudContext.getActiveHUDs().containsKey(player) || UiContext.getActiveUIs().containsKey(player)) {
-            Context.forwardHoverStatic(player);
-                // playersWithContexts.add(player);
-            // }
+            // Send hover updates to the top-most context
+            @Nullable Context topMost = Context.findTopMostContext(player);
+            if(topMost != null) {
+                topMost.forwardHover(player);
+                updatedContexts.add(topMost);
+            }
         }
 
 
         // If all the batches have been processed, reset the update index
         if(updateIndex >= playersWithContexts.length) {
             updateIndex = 0;
-            // finalizeTick();
         }
 
 

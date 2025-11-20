@@ -161,77 +161,55 @@ public abstract sealed class Context permits HudContext, UiContext {
 
 
     /**
-     * Forwards a click event to the top-most context of the specified player.
-     * Only one context will receive the event.
+     * Forwards a click event.
      * @param _player The player.
      * @param action The type of click.
-     * @return True if any of the player's open contexts consumed the click, false otherwise.
+     * @return True if the context consumed the click, false otherwise.
      */
-    public static boolean forwardClickStatic(final @NotNull Player _player, final @NotNull ClickAction action) {
-
-        // Find top most context
-        @Nullable Context topMost = getTopMostContext(_player);
-
-        // Send click event
-        if(topMost == null) return false;
-        final Canvas canvas = topMost.activeCanvas;
-        if(canvas == null) return false;
-        return canvas.forwardClick(_player, action);
+    public boolean forwardClick(final @NotNull Player _player, final @NotNull ClickAction action) {
+        if(activeCanvas == null) return false;
+        return activeCanvas.forwardClick(_player, action);
     }
 
 
 
 
     /**
-     * Forwards a hover event to the top-most context of the specified player.
-     * Only one context will receive the event.
+     * Forwards a hover event to this context.
      * @param _player The player.
      */
-    public static void forwardHoverStatic(final @NotNull Player _player) {
-
-        // Find top most context
-        @Nullable Context topMost = getTopMostContext(_player);
-
-        // Send click event
-        if(topMost == null) return;
-        __forwardHoverStatic(_player, topMost);
-    }
-
-
-
-
-    private static void __forwardHoverStatic(final @NotNull Player _player, final @NotNull Context context) {
-        final Canvas canvas = context.activeCanvas;
+    public void forwardHover(final @NotNull Player _player) {
+        final Canvas canvas = activeCanvas;
         if(canvas == null) return;
 
         // If a targeted element is present, update its hover state
-        if(context.targetedElm != null) {
-            context.targetedElm.updateHoverState(_player);
+        if(targetedElm != null) {
+            targetedElm.updateHoverState(_player);
 
             // If it's no longer being hovered on, check if a new element is being hovered
-            if(!context.targetedElm.isHovered()) {
-                context.targetedElm = canvas.findTargetedElement(_player);
+            if(!targetedElm.isHovered()) {
+                targetedElm = canvas.findTargetedElement(_player);
 
                 // If said element exists, send an update to it
-                if(context.targetedElm != null) {
-                    context.targetedElm.updateHoverState(_player);
+                if(targetedElm != null) {
+                    targetedElm.updateHoverState(_player);
                 }
             }
         }
 
         // If a targeted element is not present, check if a new element is being hovered
         else {
-            context.targetedElm = canvas.findTargetedElement(_player);
+            targetedElm = canvas.findTargetedElement(_player);
 
             // If said element exists, send an update to it
-            if(context.targetedElm != null) context.targetedElm.updateHoverState(_player);
+            if(targetedElm != null) targetedElm.updateHoverState(_player);
         }
     }
 
 
 
 
-    private static Context getTopMostContext(final Player _player) {
+    public static Context findTopMostContext(final Player _player) {
 
         // Get all contexts
         List<Context> contexts = Context.getActiveContexts().get(_player);

@@ -62,8 +62,11 @@ public abstract class ClickReceiver {
 
 
         // Send click to the player's contexts and return if one is present
-        if(Context.forwardClickStatic(player, clickType)) {
-            return InteractionResult.FAIL;
+        @Nullable Context topMost = Context.findTopMostContext(player);
+        if(topMost != null) {
+            if(topMost.forwardClick(player, clickType)) {
+                return InteractionResult.FAIL;
+            }
         }
 
 
