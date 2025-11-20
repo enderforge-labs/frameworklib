@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
@@ -519,22 +518,21 @@ public abstract class Elm extends Div {
 
     /**
      * Updates the new hover state of the element and executes the specified callbacks.
-     * @param player The player to check the view of. Can be null.
+     * @param player The player to check the view of.
      */
-    public void updateHoverState(final @Nullable Player player) {
+    public void updateHoverState(final @NotNull Player player) {
         if(!(this instanceof Hoverable)) return;
-        updateHoverState(player, player != null && checkIntersection(player));
+        updateHoverState(player, checkIntersection(player));
     }
 
 
     /**
      * Updates the new hover state of the element with the specified value, then executes the specified callbacks.
-     * @param player The player to check the view of. Can be null.
+     * @param player The player to check the view of.
      * @param hoverStateNext The new hover state to set. Can be omitted to make the function calculate it automatically.
      */
-    public void updateHoverState(final @Nullable Player player, final boolean hoverStateNext) {
+    public void updateHoverState(final @NotNull Player player, final boolean hoverStateNext) {
         if(!(this instanceof Hoverable h)) return;
-
 
         // Update current state and run hover state change callbacks if needed
         if(isHovered != hoverStateNext && (!(this instanceof __base_ButtonElm) || hoverRateLimiter.attempt())) {
@@ -547,12 +545,11 @@ public abstract class Elm extends Div {
             }
         }
 
-
         // Call hover tick callback
-        if(player != null) {
-            if(isHovered) h.onHoverTick(player);
-        }
+        if(isHovered) h.onHoverTick(player);
     }
+
+
     public boolean isHovered() {
         return isHovered;
     }
