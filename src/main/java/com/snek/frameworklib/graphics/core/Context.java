@@ -209,10 +209,11 @@ public abstract sealed class Context permits HudContext, UiContext {
 
 
 
-    public static Context findTopMostContext(final Player _player) {
+    public static @Nullable Context findTopMostContext(final Player _player) {
 
         // Get all contexts
         List<Context> contexts = Context.getActiveContexts().get(_player);
+        if(contexts == null) return null;
 
         // Find top-most context
         @Nullable Context topMost = null;
