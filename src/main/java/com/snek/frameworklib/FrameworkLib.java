@@ -2,6 +2,8 @@ package com.snek.frameworklib;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.snek.frameworkconfig.FrameworkConfig;
 import com.snek.frameworklib.configs.Configs;
@@ -35,6 +37,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 public class FrameworkLib implements ModInitializer {
     public static final String LIB_ID = "frameworklib";
+    public static final @NotNull Logger LOGGER = LoggerFactory.getLogger(LIB_ID);
     public static final ResourceLocation PHASE_ID = new ResourceLocation(LIB_ID, "phase_id");
 
 
@@ -54,9 +57,6 @@ public class FrameworkLib implements ModInitializer {
 
 
 
-    private static boolean fatal = false;
-    public static void flagFatal() { fatal = true; }
-
     @Override
     public void onInitialize() {
 
@@ -74,11 +74,7 @@ public class FrameworkLib implements ModInitializer {
 
 
             // Read config files
-            if(!Configs.loadConfigs()) fatal = true;
-
-
-            // Stop if errors occurred
-            if(fatal) return;
+            Configs.loadConfigs();
         });
 
 
@@ -86,7 +82,6 @@ public class FrameworkLib implements ModInitializer {
 
         // Register post-initialization events
         ServerLifecycleEvents.SERVER_STARTED.register(PHASE_ID, server -> {
-            if(fatal) return;
 
 
             // Schedule UI element update loop
@@ -143,6 +138,6 @@ public class FrameworkLib implements ModInitializer {
 
 
         // Log library loading
-        System.out.println("FrameworkLib loaded :3");
+        LOGGER.info("FrameworkLib loaded :3");
     }
 }

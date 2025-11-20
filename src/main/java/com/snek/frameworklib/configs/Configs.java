@@ -31,9 +31,8 @@ public abstract class Configs {
     /**
      * Loads the configuration files or creates new ones if they are missing.
      */
-    public static boolean loadConfigs() {
+    public static void loadConfigs() {
         ui   = ConfigManager.loadConfig("UiConfig",    UiConfig.class,          FrameworkLib.LIB_ID);
         perf = ConfigManager.loadConfig("Performance", PerformanceConfig.class, FrameworkLib.LIB_ID);
-        return ui != null && perf != null;
     }
 }
