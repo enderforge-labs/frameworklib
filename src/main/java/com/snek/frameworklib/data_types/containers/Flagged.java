@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * A wrapper class that can track value changes of the contained object.
+ * <p> Notice: Flagged values are created as flagged. Use .unflag() if you want them to start as not flagged.
  */
 public class Flagged<T> {
     private @Nullable T value;
@@ -61,9 +62,12 @@ public class Flagged<T> {
 
     /**
      * Flags the object and returns a reference to its value.
-     * In case of immutable types, a copy is returned.
-     * This method always flags the object without checking for changes.
-     * @return The object.
+     * <p> This method always flags the object without checking for changes.
+     * <p> Note:
+     *     This returns a reference to the object, not a copy.
+     *     For immutable types (e.g., Integer, String), reassignment creates a new object
+     *     instead of modifying the internal value. You should use set() instead.
+     * @return The object reference.
      */
     public @Nullable T edit() {
         flag = true;
@@ -75,7 +79,7 @@ public class Flagged<T> {
 
     /**
      * Returns the current value of the flag.
-     * @return The flag.
+     * @return Whether the value has changed.
      */
     public boolean isFlagged() {
         return flag;
