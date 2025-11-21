@@ -13,7 +13,9 @@
         "main":[
             "com.snek.frameworklib.FrameworkLib"
         ],
-        "client":[]
+        "client":[
+            "com.snek.frameworklib.FrameworkLibClient"
+        ]
     },
     "mixins":[
         "frameworklib.mixins.json"
