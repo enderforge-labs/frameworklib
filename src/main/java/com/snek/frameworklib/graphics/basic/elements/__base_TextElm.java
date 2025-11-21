@@ -4,10 +4,11 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.displays.CustomDisplay;
-import com.snek.frameworklib.generated.FontSize;
+import com.snek.frameworklib.generated.FontData;
 import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.Elm;
+import com.snek.frameworklib.utils.FontSize;
 
 import net.minecraft.server.level.ServerLevel;
 
@@ -29,59 +30,42 @@ public sealed class __base_TextElm extends Elm permits FancyTextElm, SimpleTextE
 
     protected __base_TextElm(final @NotNull ServerLevel _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
         super(_world, _entity, _style);
-        updateEntitySizeCacheX();
-        updateEntitySizeCacheY();
+        updateEntitySizeCache();
     }
 
 
 
 
-    public void updateEntitySizeCacheX() {
+    public void updateEntitySizeCache() {
 
         // Set cache to 0 if the text is empty.
         final String string = getStyle(SimpleTextElmStyle.class).getText().getString(); //TODO CACHE THIS TOO
         if(string.isEmpty()) {
             entitySizeCacheX = 0f;
-            return;
-        }
-
-        // Retrieve the current text as a string. Set the cache to 0 if the text has no lines
-        final String[] lines = string.split("\n");
-        if(lines.length == 0) {
-            entitySizeCacheX = 0f;
-            return;
-        }
-
-        // If lines are present, find the longest one and save its length
-        float maxWidth = 0;
-        for(int i = 0; i < lines.length; ++i) {
-            final float w = FontSize.getWidth(lines[i]);
-            if(w > maxWidth) maxWidth = w;
-        }
-        entitySizeCacheX = maxWidth;
-    }
-
-
-
-
-    public void updateEntitySizeCacheY() {
-
-        // Set cache to 0 if the text is empty.
-        final String string = getStyle(SimpleTextElmStyle.class).getText().getString(); //TODO CACHE THIS TOO
-        if(string.isEmpty()) {
             entitySizeCacheY = 0f;
             return;
         }
 
         // Calculate the number of lines. Set the cache to 0 if there are none
-        final int lineNum = string.split("\n").length;
-        if(lineNum == 0) {
+        final String[] lines = string.split("\n");
+        if(lines.length == 0) {
+            entitySizeCacheX = 0f;
             entitySizeCacheY = 0f;
             return;
         }
 
-        // If lines are present, calculate the height
-        entitySizeCacheY = (lineNum == 1 ? 0f : lineNum - 1) * 2 + lineNum * FontSize.getHeight();
+        // If lines are present, find the longest one and save its length
+        double maxWidth = 0;
+        for(int i = 0; i < lines.length; ++i) {
+            final double w = FontSize.getStringWidth(lines[i]);
+            if(w > maxWidth) maxWidth = w;
+        }
+        entitySizeCacheX = (float)maxWidth;
+
+
+        // Calculate line height
+        final int lineNum = lines.length;
+        entitySizeCacheY = (lineNum == 1 ? 0f : lineNum - 1) * 2 + lineNum * (float)FontSize.getHeight();
     }
 
 
