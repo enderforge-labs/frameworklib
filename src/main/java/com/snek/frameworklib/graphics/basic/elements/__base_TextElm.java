@@ -19,7 +19,10 @@ import net.minecraft.server.level.ServerLevel;
 
 
 
-public sealed class __base_TextElm extends Elm permits FancyTextElm, SimpleTextElm {
+public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, SimpleTextElm {
+
+    // In-world data
+    public abstract @NotNull CustomTextDisplay getTextDisplay();
 
     // Entity size cache. This represents the actual size the entity has in the world when using the default transform. Measured in blocks
     protected float entitySizeCacheX = 0;
@@ -39,7 +42,8 @@ public sealed class __base_TextElm extends Elm permits FancyTextElm, SimpleTextE
     public void updateEntitySizeCache() {
 
         // Set cache to 0 if the text is empty.
-        final String string = getStyle(SimpleTextElmStyle.class).getText().getString(); //TODO CACHE THIS TOO
+        // final String string = getStyle(SimpleTextElmStyle.class).getText().getString(); //TODO remove
+        final String string = getEntity(CustomTextDisplay.class).getText().getString(); //TODO CACHE THIS TOO
         if(string.isEmpty()) {
             entitySizeCacheX = 0f;
             entitySizeCacheY = 0f;
