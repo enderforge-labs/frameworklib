@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A utility class containing a collection of common easing functions.
  */
-public abstract class Easings {
+public final class Easings extends UtilityClassBase {
     private Easings() {}
 
     public static final @NotNull Easing linear       = new Easing(Easings::_linear      );

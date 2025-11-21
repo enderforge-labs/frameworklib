@@ -22,7 +22,7 @@ import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
 import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.utils.Easing;
-import com.snek.frameworklib.utils.SpaceUtils;
+import com.snek.frameworklib.utils.GeometryUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
@@ -585,7 +585,7 @@ public abstract class Elm extends Div {
         final Vector3f corner2 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot()));
         final Vector3f corner3 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
         final Vector3f corner4 = new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
-        return SpaceUtils.checkLineRectangleIntersection(
+        return GeometryUtils.checkLineRectangleIntersection(
             player.getEyePosition().toVector3f(),
             player.getViewVector(1f).toVector3f(),
             new Vector3f[]{ corner1, corner2, corner3, corner4 }
@@ -619,7 +619,7 @@ public abstract class Elm extends Div {
         final Vector3f corner2 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot()));
         final Vector3f corner3 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
         final Vector3f corner4 = new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
-        return SpaceUtils.getLineRectangleIntersectionDistance(
+        return GeometryUtils.getLineRectangleIntersectionDistance(
             player.getEyePosition().toVector3f(),
             player.getViewVector(1f).toVector3f(),
             new Vector3f[]{ corner1, corner2, corner3, corner4 }

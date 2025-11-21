@@ -19,9 +19,9 @@ import org.joml.Vector4i;
 
 
 /**
- * A utility class that provides a collection of useful methods.
+ * A utility class that provides a collection of handy methods.
  */
-public abstract class Utils {
+public final class Utils extends UtilityClassBase {
     private Utils() {}
 
     // Formatters

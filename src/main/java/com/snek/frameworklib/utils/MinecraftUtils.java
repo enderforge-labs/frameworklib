@@ -68,9 +68,8 @@ import net.minecraft.world.phys.Vec3;
 /**
  * A utility class providing functions to handle Minecraft classes and data.
  */
-public abstract class MinecraftUtils {
+public final class MinecraftUtils extends UtilityClassBase {
     private MinecraftUtils() {}
-
     public static final @NotNull UUID HEAD_OWNER_UUID = UUID.fromString("e58d5427-a51e-4ea5-9938-20fa7bd90e52");
 
 

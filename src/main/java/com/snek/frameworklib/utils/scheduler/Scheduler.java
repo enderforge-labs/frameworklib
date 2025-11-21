@@ -5,6 +5,8 @@ import java.util.PriorityQueue;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.frameworklib.utils.UtilityClassBase;
+
 
 
 
@@ -15,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A utility class that can store tasks and execute them after a specified delay.
  */
-public abstract class Scheduler {
+public final class Scheduler extends UtilityClassBase {
     private Scheduler() {}
     private static long tickNum = 0;
     private static final @NotNull PriorityQueue<@NotNull TaskHandler> taskQueue = new PriorityQueue<>(Comparator.comparingLong(e -> e.getTargetTick()));
