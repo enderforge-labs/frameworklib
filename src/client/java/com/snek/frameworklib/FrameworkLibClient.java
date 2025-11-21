@@ -25,7 +25,7 @@ public class FrameworkLibClient implements ClientModInitializer {
     public void onInitializeClient() {
         ClientTickEvents.END_WORLD_TICK.register(client -> {
             if(!generated) {
-                FontSizeGeneration.generate();
+                FontDataGenerator.generate();
                 generated = true;
             }
         });

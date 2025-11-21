@@ -20,11 +20,11 @@ import net.minecraft.client.gui.Font;
 /**
  * A class that generates the width and height of each individual character.
  */
-public abstract class FontSizeGeneration {
-    private FontSizeGeneration() {}
-    public static final @NotNull String PACKAGE_NAME = "com.snek.framework.generated";            // The name of the "generated" package
+public abstract class FontDataGenerator {
+    private FontDataGenerator() {}
+    public static final @NotNull String PACKAGE_NAME = "com.snek.frameworklib.generated";         // The name of the "generated" package
     public static final @NotNull String PACKAGE_PATH = "frameworklib/generated";                  // The path to the "generated" package
-    public static final @NotNull String CLASS_NAME   = "FontSize";                                // The name of the generated class
+    public static final @NotNull String CLASS_NAME   = "FontData";                                // The name of the generated class
     public static final @NotNull String FILE_PATH    = PACKAGE_PATH + "/" + CLASS_NAME + ".java"; // The path to the generated class
     public static final          int    PARTS = 32;                                               // The number of methods to split the initialization into
     public static final          int    BREAK = 32;                                               // The maximum number of values to place in a single line
@@ -34,10 +34,10 @@ public abstract class FontSizeGeneration {
 
 
     /**
-     * Retrieves the width of every character in the extended ASCII and saves it in the output file.
+     * Retrieves the width of every character that fits in a Java Char and saves it in the output file.
      * <p>
-     * The output file is a ready-to-use Java class with methods that can be used to compute the width and height a String would have
-     * when rendered in-game as non-bold text through a TextDisplay with transform scale 1.0f and no shearing.
+     * The output file is a Java class that contains the widths and heights of the characters. This is not a ready-made utility class but a container for the raw values.
+     * The values represent the size a character would have if rendered in-game as non-bold text through a TextDisplay with transform scale 1.0f and no shearing. //FIXME
      */
     public static void generate() {
 
@@ -66,8 +66,11 @@ public abstract class FontSizeGeneration {
                 "    // This value identifies the amount of rendered text pixels that fit in a minecraft block\n" +
                 "    public static final int TEXT_PIXEL_BLOCK_RATIO = 40;\n" +
                 "\n"+
+                "    // Font height\n" +
+                "    public static final int HEIGHT = " + renderer.lineHeight + ";\n" +
+                "\n"+
                 "    // The list of widths\n" +
-                "    private static final int[] w = new int[" + (int)Character.MAX_VALUE + "];\n" +
+                "    public static final int[] WIDTHS = new int[" + (int)Character.MAX_VALUE + "];\n" +
                 "    static {\n"
             );
             for(int i = 0; i < PARTS; ++i) {
@@ -91,46 +94,12 @@ public abstract class FontSizeGeneration {
                 }
                 f.write(String.format(
                     "\n        };" +
-                    "\n        for(int i = 0; i < %d; ++i) w[%d + i] = a[i];\n",
+                    "\n        for(int i = 0; i < %d; ++i) WIDTHS[%d + i] = a[i];\n",
                     SECTOR_SIZE - (i == PARTS - 1 ? 1 : 0),
                     SECTOR_SIZE * i
                 ));
                 f.write("    }\n");
             }
-
-
-            // Write string length function
-            f.write("\n\n\n\n");
-            f.write(
-                """
-                    /**
-                     * Calculates the width a string would have when rendered.
-                     * <p> This includes the space between each character.
-                     */
-                    public static float getWidth(final @NotNull String s) {
-                        int r = 0;
-                        for(int i = 0; i < s.length(); ++i) {
-                            final char c = s.charAt(i);
-                            if(c >= Character.MAX_VALUE) r += 9;
-                            else r += w[c];
-                        }
-                        return (float)r / TEXT_PIXEL_BLOCK_RATIO;
-                    }
-                """
-            );
-
-
-            // Write string width function
-            f.write("\n\n\n\n");
-            f.write(
-                "    /**" +
-                "     * Returns the height a line would have when rendered.\n" +
-                "     * <p> This does NOT include the space between lines.\n" +
-                "     */\n" +
-                "    public static float getHeight() {\n" +
-                "        return " + renderer.lineHeight + "f / TEXT_PIXEL_BLOCK_RATIO;\n" +
-                "    }\n"
-            );
 
 
             f.write("}");
@@ -140,6 +109,6 @@ public abstract class FontSizeGeneration {
 
 
         // Print output notice
-        System.out.println("Character dimensions written to \"config/" + FILE_PATH + "\"");
+        FrameworkLib.LOGGER.info("Character dimensions written to \"config/" + FILE_PATH + "\"");
     }
 }
