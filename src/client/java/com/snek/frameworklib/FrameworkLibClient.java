@@ -17,7 +17,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
  * This mod is used to pre-calculate the width and height of each character of the active font.
  * This data is then used by the generated FontSize class to compute entity dimensions in runtime.
  */
-public class FancyPlayerShopsClient implements ClientModInitializer {
+public class FrameworkLibClient implements ClientModInitializer {
     private boolean generated = false;
 
 

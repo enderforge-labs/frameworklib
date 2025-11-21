@@ -22,8 +22,8 @@ import net.minecraft.client.gui.Font;
  */
 public abstract class FontSizeGeneration {
     private FontSizeGeneration() {}
-    public static final @NotNull String PACKAGE_NAME = "com.snek.framework.generated";            // The name of the "generated package"
-    public static final @NotNull String PACKAGE_PATH = "fancyplayershops/generated";              // The path to the "generated" package
+    public static final @NotNull String PACKAGE_NAME = "com.snek.framework.generated";            // The name of the "generated" package
+    public static final @NotNull String PACKAGE_PATH = "frameworklib/generated";                  // The path to the "generated" package
     public static final @NotNull String CLASS_NAME   = "FontSize";                                // The name of the generated class
     public static final @NotNull String FILE_PATH    = PACKAGE_PATH + "/" + CLASS_NAME + ".java"; // The path to the generated class
     public static final          int    PARTS = 32;                                               // The number of methods to split the initialization into
