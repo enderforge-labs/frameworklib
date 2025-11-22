@@ -10,6 +10,7 @@ import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
 import com.snek.frameworklib.data_types.ui.TextAlignment;
+import com.snek.frameworklib.data_types.ui.TextOverflowBehaviour;
 import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 
@@ -78,12 +79,21 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
     @Override
     public void flushStyle() {
 
+
         // Handle text first (transform depends on it)
         { final Flagged<Component> f = getThisStyle().getFlaggedText();
         if(f.isFlagged()) {
             //! The entity's text is set by updateOverflowBehaviour based on the specified overflow behaviour
             updateOverflowBehaviour();
             updateEntitySizeCache();
+            f.unflag();
+        }}
+
+
+        // Handle overflow behaviour
+        { final Flagged<TextOverflowBehaviour> f = getThisStyle().getFlaggedTextOverflowBehaviour();
+        if(f.isFlagged()) {
+            updateOverflowBehaviour();
             f.unflag();
         }}
 
