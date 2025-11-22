@@ -246,6 +246,9 @@ public final class Utils extends UtilityClassBase {
 
     /**
      * Converts an RGB color to HSV.
+     * <p> Red:   0 to 255
+     * <p> Green: 0 to 255
+     * <p> Blue:  0 to 255
      * <p> Hue:         0 to 360.0
      * <p> Saturation:  0 to 1.0
      * <p> Value:       0 to 1.0
@@ -302,6 +305,9 @@ public final class Utils extends UtilityClassBase {
      * <p> Red:   0 to 255
      * <p> Green: 0 to 255
      * <p> Blue:  0 to 255
+     * <p> Hue:         0 to 360.0
+     * <p> Saturation:  0 to 1.0
+     * <p> Value:       0 to 1.0
      * @param hsv The HSV color.
      * @return The color as an HSV value.
      */

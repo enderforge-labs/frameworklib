@@ -1,5 +1,8 @@
 package com.snek.frameworklib.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
@@ -23,6 +26,8 @@ import net.minecraft.network.chat.Style;
 public class Txt {
     private MutableComponent rawText;
     private Style style;
+    private int _length;
+    public int length() { return _length; }
 
 
 
@@ -32,6 +37,7 @@ public class Txt {
      */
     public Txt() {
         rawText = Component.empty();
+        _length = 0;
         style = Style.EMPTY;
     }
 
@@ -41,6 +47,7 @@ public class Txt {
      */
     public Txt(final @NotNull String s) {
         rawText = Component.literal(s);
+        _length = s.length();
         style = Style.EMPTY;
     }
 
@@ -50,6 +57,7 @@ public class Txt {
      */
     public Txt(final @NotNull MutableComponent s) {
         rawText = s.copy();
+        _length = s.getString().length();
         style = rawText.getStyle();
     }
 
@@ -59,11 +67,18 @@ public class Txt {
      */
     public Txt(final @NotNull Component s) {
         rawText = s.copy();
+        _length = s.getString().length();
         style = rawText.getStyle();
     }
 
 
 
+
+    private Txt(final @NotNull MutableComponent s, final int __length) {
+        rawText = s.copy();
+        _length = __length;
+        style = rawText.getStyle();
+    }
 
     /**
      * Creates a copy of this Txt.
@@ -71,7 +86,7 @@ public class Txt {
      */
     public @NotNull Txt copy() {
         rawText.setStyle(style);
-        return new Txt(rawText.copy());
+        return new Txt(rawText.copy(), _length);
     }
 
 
@@ -216,6 +231,7 @@ public class Txt {
      */
     public @NotNull Txt cat(final @NotNull Component s) {
         rawText.append(s);
+        _length += s.getString().length();
         return this;
     }
 
@@ -226,6 +242,7 @@ public class Txt {
      */
     public @NotNull Txt cat(final @NotNull Txt s) {
         rawText.append(s.get());
+        _length += s._length;
         return this;
     }
 
@@ -235,7 +252,9 @@ public class Txt {
      * @return This.
      */
     public @NotNull Txt cat(final @NotNull String s) {
-        return this.cat(Component.literal(s));
+        rawText.append(s);
+        _length += s.length();
+        return this;
     }
 
 
@@ -248,5 +267,105 @@ public class Txt {
     public @NotNull Component get() {
         rawText.setStyle(style);
         return rawText;
+    }
+
+    /**
+     * Returns the raw string value of this Txt.
+     * @return The Txt as a raw String.
+     */
+    public @NotNull String getString(){
+        return rawText.getString();
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Extracts a substring from a Txt, preserving styles.
+     * @param component The component.
+     * @param start Starting index (inclusive).
+     * @param end Ending index (exclusive).
+     * @return A new Txt containing the substring with preserved styling.
+     */
+    public Txt substring(final int start, final int end) {
+        if(start < 0 || end < start) {
+            throw new IllegalArgumentException("Invalid range: start=" + start + ", end=" + end);
+        }
+
+        if(start == end) {
+            return new Txt();
+        }
+
+        final List<MutableComponent> parts = new ArrayList<>();
+        extractRecursive(get(), start, end, 0, style, parts);
+
+        if(parts.isEmpty()) {
+            return new Txt();
+        }
+
+        // Build component chain
+        final MutableComponent result = parts.get(0);
+        for(int i = 1; i < parts.size(); i++) {
+            result.append(parts.get(i));
+        }
+
+        return new Txt(result);
+    }
+
+
+
+
+    /**
+     * Safe substring that clamps indices to valid range.
+     * @param component The component.
+     * @param start Starting index (inclusive).
+     * @param end Ending index (exclusive).
+     * @return A new Txt containing the substring with preserved styling.
+     */
+    public Txt substringClamped(final int start, final int end) {
+        return substring(
+            Math.max(0, Math.min(start, _length)),
+            Math.max(start, Math.min(end, _length))
+        );
+    }
+
+
+
+
+    private static int extractRecursive(final @NotNull Component comp, final int start, final int end, int pos, final @NotNull Style parentStyle, final @NotNull List<@NotNull MutableComponent> parts) {
+        // Inherit missing styles from parent
+        final @NotNull Style effectiveStyle = parentStyle.applyTo(comp.getStyle());
+
+
+        // Extract text content from component
+        final @NotNull String content = comp.getString();
+        final int contentLen = content.length();
+        final int contentEnd = pos + contentLen;
+
+
+        // Check if this component's content intersects with the target range
+        if(pos < end && contentEnd > start) {
+            final int localStart = Math.max(0, start - pos);
+            final int localEnd = Math.min(contentLen, end - pos);
+
+            if(localStart < localEnd) {
+                String substring = content.substring(localStart, localEnd);
+                parts.add(Component.literal(substring).setStyle(effectiveStyle));
+            }
+        }
+        pos = contentEnd;
+
+
+        // Process siblings
+        for(final @NotNull Component sibling : comp.getSiblings()) {
+            if(pos >= end) break;
+            pos = extractRecursive(sibling, start, end, pos, effectiveStyle, parts);
+        }
+
+        return pos;
     }
 }
