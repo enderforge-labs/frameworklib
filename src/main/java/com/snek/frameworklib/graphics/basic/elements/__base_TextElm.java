@@ -230,7 +230,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
                         currentStartIndex += SCROLL_AMOUNT;
 
                         // If the remaining text fits, stop scrolling for the specified delay and restart the cycle //TODO keep text still at the start and end
-                        if(currentStartIndex >= endSegmentWidth) {
+                        if(currentStartIndex >= text.length() - endSegmentWidth) {
                             currentStartIndex = 0;
                         }
                     });
