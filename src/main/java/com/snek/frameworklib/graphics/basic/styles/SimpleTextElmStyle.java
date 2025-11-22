@@ -51,6 +51,7 @@ public class SimpleTextElmStyle extends ElmStyle {
     @Override
     public void resetAll() {
         resetText();
+        resetTextOverflowBehaviour();
         resetTextAlignment();
         resetTextOpacity();
         super.resetAll();

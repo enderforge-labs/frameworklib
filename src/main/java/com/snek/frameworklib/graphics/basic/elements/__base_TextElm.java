@@ -1,6 +1,7 @@
 package com.snek.frameworklib.graphics.basic.elements;
 
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
 
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.displays.CustomDisplay;
@@ -50,6 +51,13 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
     protected __base_TextElm(final @NotNull ServerLevel _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
         super(_world, _entity, _style);
+    }
+
+
+
+
+    @Override
+    public void spawn(Vector3d pos) {
         updateEntitySizeCache();
     }
 
