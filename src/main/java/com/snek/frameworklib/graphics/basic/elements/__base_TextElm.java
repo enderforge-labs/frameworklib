@@ -7,6 +7,7 @@ import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
 import com.snek.frameworklib.data_types.ui.TextOverflowBehaviour;
+import com.snek.frameworklib.generated.FontData;
 import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.Elm;
@@ -191,7 +192,9 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
         // Cache data for the other cases
         else {
             final float maxWidth = absSize.x;
-            final int maxWidthPx = Math.round(maxWidth / calcForegroundTransform().getScale().x);
+            // final int maxWidthPx = Math.round(maxWidth / calcForegroundTransform().getScale().x);
+            final float pixelsInOneBlock = FontData.TEXT_PIXEL_BLOCK_RATIO / calcForegroundTransform().getScale().x;
+            final int maxWidthPx = Math.round(maxWidth * pixelsInOneBlock);
             switch(behaviour) {
 
 
