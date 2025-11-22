@@ -181,18 +181,18 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
         // Cache data
         final Txt text = new Txt(getStyle(SimpleTextElmStyle.class).getText());
         final TextOverflowBehaviour behaviour = getStyle(SimpleTextElmStyle.class).getTextOverflowBehaviour();
+        final float totWidth = calcEntityWidth();
+        final float maxWidth = absSize.x;
 
 
-        // Overflow: Reset text
-        if(behaviour == TextOverflowBehaviour.OVERFLOW) {
+        // Overflow (or the text fits): Reset text
+        if(behaviour == TextOverflowBehaviour.OVERFLOW || totWidth <= maxWidth) {
             getTextDisplay().setText(text.get());
         }
 
 
         // Cache data for the other cases
         else {
-            final float maxWidth = absSize.x;
-            // final int maxWidthPx = Math.round(maxWidth / calcForegroundTransform().getScale().x);
             final float pixelsInOneBlock = FontData.TEXT_PIXEL_BLOCK_RATIO / calcForegroundTransform().getScale().x;
             final int maxWidthPx = Math.round(maxWidth * pixelsInOneBlock);
             switch(behaviour) {
@@ -215,29 +215,24 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
                 // Scroll: Start a new scroll task if the text doesn't fit
                 case SCROLL: {
-                    final float totalWidth = calcEntityWidth();
 
-                    // Check if the text fits. If it doesn't
-                    if(totalWidth > maxWidth) {
+                    // Reset the start index
+                    currentStartIndex = 0;
 
-                        // Reset the start index
-                        currentStartIndex = 0;
+                    // Calculate the longest substring that fits, starting from the end
+                    final @NotNull String flippedString = new StringBuilder(text.getString()).reverse().toString();
+                    final int endSegmentWidth = FontSize.calcMaxStringEnd(flippedString, 0, maxWidthPx);
 
-                        // Calculate the longest substring that fits, starting from the end
-                        final @NotNull String flippedString = new StringBuilder(text.getString()).reverse().toString();
-                        final int endSegmentWidth = FontSize.calcMaxStringEnd(flippedString, 0, maxWidthPx);
+                    // Start a new scroll task that scrolls SCROLL_AMOUNT every SCROLL_DELAY
+                    textAutoScrollHandler = Scheduler.loop(0, SCROLL_DELAY, () -> {
+                        getTextDisplay().setText(text.substring(currentStartIndex, FontSize.calcMaxStringEnd(text.getString(), currentStartIndex, maxWidthPx)).get());
+                        currentStartIndex += SCROLL_AMOUNT;
 
-                        // Start a new scroll task that scrolls SCROLL_AMOUNT every SCROLL_DELAY
-                        textAutoScrollHandler = Scheduler.loop(0, SCROLL_DELAY, () -> {
-                            getTextDisplay().setText(text.substring(currentStartIndex, FontSize.calcMaxStringEnd(text.getString(), currentStartIndex, maxWidthPx)).get());
-                            currentStartIndex += SCROLL_AMOUNT;
-
-                            // If the remaining text fits, stop scrolling for the specified delay and restart the cycle //TODO
-                            if(currentStartIndex >= endSegmentWidth) {
-                                currentStartIndex = 0;
-                            }
-                        });
-                    }
+                        // If the remaining text fits, stop scrolling for the specified delay and restart the cycle //TODO keep text still at the start and end
+                        if(currentStartIndex >= endSegmentWidth) {
+                            currentStartIndex = 0;
+                        }
+                    });
                     break;
                 }
             }
