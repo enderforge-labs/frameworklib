@@ -16,10 +16,7 @@ import com.snek.frameworklib.data_types.ui.TextAlignment;
 import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
-import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Txt;
-import com.snek.frameworklib.utils.scheduler.Scheduler;
-import com.snek.frameworklib.utils.scheduler.TaskHandler;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -43,10 +40,10 @@ public non-sealed class FancyTextElm extends __base_TextElm {
     public  @NotNull CustomTextDisplay getBgEntity()  { return getEntity(CustomTextDisplay.class); }
     private @NotNull FancyTextElmStyle getThisStyle() { return getStyle(FancyTextElmStyle.class); }
 
-    // Scrolling text data
-    private TaskHandler textAutoScrollHandler = null;
-    private int currentStartIndex = 0;
-    // private float maxWidth = 0; //FIXME this might need to be updated when the text changes? if ever
+    @Override
+    public @NotNull CustomTextDisplay getTextDisplay() {
+        return getFgEntity();
+    }
 
 
 
@@ -140,8 +137,9 @@ public non-sealed class FancyTextElm extends __base_TextElm {
         { final Flagged<Component> f = getThisStyle().getFlaggedText();
         if(f.isFlagged()) {
             fg.setText(f.get());
-            updateEntitySizeCacheX();
-            updateEntitySizeCacheY();
+            //! The entity's text is set by updateOverflowBehaviour based on the specified overflow behaviour
+            updateOverflowBehaviour();
+            updateEntitySizeCache();
             f.unflag();
         }}
 
@@ -279,28 +277,10 @@ public non-sealed class FancyTextElm extends __base_TextElm {
 
         // Set tracking custom name to foreground entity
         getFgEntity().setCustomNameVisible(false);
-        getFgEntity().setCustomName(new Txt(SimpleTextElm.ENTITY_CUSTOM_NAME).get());
+        getFgEntity().setCustomName(new Txt(ENTITY_CUSTOM_NAME).get());
 
         // Call superclass spawn
         super.spawn(pos);
-
-
-
-
-        // // // Calculate maximum visible width //TODO
-        // // maxWidth =
-        // double maxWidth = absSize.x;
-        // double totalWidth = calcEntityWidth();
-        // double relativeWidth = curWidth / maxWidth;
-
-        // double totalPixelWidth = entitySizeCacheX;
-
-        // // Start scrolling text task if needed
-        // //TODO move to __base_TextElm
-        // //TODO check if the text fits before starting this
-        // textAutoScrollHandler = Scheduler.loop(10, 0, () -> {
-
-        // });
     }
 
 

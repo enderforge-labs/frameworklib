@@ -207,6 +207,11 @@ public abstract class Elm extends Div {
     }
 
 
+    //TODO this needs caching. Use a Flagged value to cache the transform and update it when any of its variables change
+    //TODO this needs caching. Use a Flagged value to cache the transform and update it when any of its variables change
+    //TODO this needs caching. Use a Flagged value to cache the transform and update it when any of its variables change
+    //TODO this needs caching. Use a Flagged value to cache the transform and update it when any of its variables change
+    //TODO all subclasses too
     /**
      * Calculates the final transform to apply to the entity.
      * <p> This takes into account the element's position, alignment options, Z-index and visual transform.
@@ -218,6 +223,7 @@ public abstract class Elm extends Div {
             .move(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getUi().z_layer_spacing.getValue())
         ;
     }
+    //TODO this and all subclasses too
     public @NotNull Vector3f __calcEntityVisualOrigin(final @NotNull Transform _transform){
         return
             new Vector3f(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getUi().z_layer_spacing.getValue())

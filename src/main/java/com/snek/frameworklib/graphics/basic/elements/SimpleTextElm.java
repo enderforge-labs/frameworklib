@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 import org.joml.Vector4i;
 
-import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.animations.InterpolatedData;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.containers.Flagged;
@@ -13,8 +12,6 @@ import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
 import com.snek.frameworklib.data_types.ui.TextAlignment;
 import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
-import com.snek.frameworklib.utils.Txt;
-import com.snek.frameworklib.utils.scheduler.TaskHandler;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -36,9 +33,10 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
     private @NotNull CustomTextDisplay  getThisEntity() { return getEntity(CustomTextDisplay.class); }
     private @NotNull SimpleTextElmStyle getThisStyle () { return getStyle (SimpleTextElmStyle.class); }
 
-
-    // Scrolling text data
-    private TaskHandler textAutoScrollHandler = null;
+    @Override
+    public @NotNull CustomTextDisplay getTextDisplay() {
+        return getThisEntity();
+    }
 
 
 
@@ -83,9 +81,9 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
         // Handle text first (transform depends on it)
         { final Flagged<Component> f = getThisStyle().getFlaggedText();
         if(f.isFlagged()) {
-            getThisEntity().setText(f.get());
-            updateEntitySizeCacheX();
-            updateEntitySizeCacheY();
+            //! The entity's text is set by updateOverflowBehaviour based on the specified overflow behaviour
+            updateOverflowBehaviour();
+            updateEntitySizeCache();
             f.unflag();
         }}
 
