@@ -60,6 +60,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
     @Override
     public void spawn(Vector3d pos) {
         updateEntitySizeCache();
+        super.spawn(pos);
     }
 
 
@@ -158,7 +159,6 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
         //! This is never actually called. __base_TextElm is a sealed class that only permits SimpleTextElm and FancyTextElm
         else throw new RuntimeException();
     }
-
 
 
 
