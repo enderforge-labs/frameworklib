@@ -241,20 +241,33 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
                             else return;
                         }
 
-                        // Scroll SCROLL_AMOUNT
+                        // Scroll by SCROLL_AMOUNT
                         getTextDisplay().setText(text.substring(currentStartIndex, FontSize.calcMaxStringEnd(text.getString(), currentStartIndex, maxWidthPx)).get());
+                        currentStartIndex += SCROLL_AMOUNT;
 
                         // If the remaining text fits, stop scrolling for the specified delay and restart the cycle
                         if(currentStartIndex > text.length() - endSegmentWidth) {
                             boundaryElapsedTicks = -SCROLL_BOUNDARY_DELAY;
                         }
-
-                        // Update start index
-                        currentStartIndex += SCROLL_AMOUNT;
                     });
                     break;
                 }
             }
         }
+    }
+
+
+
+
+    // Force refresh overflow calculations when the absolute size changes.
+    @Override
+    public void updateAbsSizeSelf() {
+        super.updateAbsSizeSelf();
+        updateOverflowBehaviour();
+    }
+    @Override
+    public void updateAbsSizeInverseSelf() {
+        super.updateAbsSizeInverseSelf();
+        updateOverflowBehaviour();
     }
 }
