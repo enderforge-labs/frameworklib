@@ -207,7 +207,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
                 // Ellipsis: Compute truncated text and add ellipsis character
                 case ELLIPSIS: {
-                    final int restrictedMaxWidthPx = maxWidthPx - FontSize.getCharWidthPx(ELLIPSIS_CHAR);
+                    final int restrictedMaxWidthPx = Math.max(0, maxWidthPx - FontSize.getCharWidthPx(ELLIPSIS_CHAR));
                     getTextDisplay().setText(text.substring(0, FontSize.calcMaxStringEnd(text.getString(), 0, restrictedMaxWidthPx)).cat(ELLIPSIS_CHAR).get());
                     break;
                 }
