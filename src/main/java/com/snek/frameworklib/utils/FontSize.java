@@ -96,7 +96,7 @@ public final class FontSize extends UtilityClassBase {
     public static int calcMaxStringEnd(final @NotNull String s, final int offset, final int maxWidth) {
 
         // Validate parameters
-        if(offset < 0 || offset >= s.length()) {
+        if(offset < 0 || offset > s.length()) {
             throw new IllegalArgumentException("Invalid offset " + offset);
         }
         if(maxWidth < 0) {
