@@ -28,10 +28,10 @@ import net.minecraft.server.level.ServerLevel;
 public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, SimpleTextElm {
 
     // Constants
-    public static final char ELLIPSIS_CHAR = '…';   // The ellipsis character to use when truncating text
-    public static final int SCROLL_DELAY = 4;       // How often to move the text by SCROLL_AMOUNT pixels, in ticks
-    // public static final int SCROLL_AMOUNT = 1;      // The number of pixels to move the text by, every iteration //TODO remove
-    public static final int SCROLL_AMOUNT = 1;      // The number of characters to move the text by, every iteration
+    public static final char ELLIPSIS_CHAR = '…';       // The ellipsis character to use when truncating text
+    public static final int SCROLL_DELAY = 4;           // How often to move the text by SCROLL_AMOUNT pixels, in ticks
+    public static final int SCROLL_AMOUNT = 1;          // The number of characters to move the text by, every iteration
+    public static final int SCROLL_BOUNDARY_DELAY = 20 / SCROLL_DELAY; // The amount of cycles to wait for before and after scrolling the text
 
 
     // In-world data
@@ -46,6 +46,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
     // Scrolling text data
     private TaskHandler textAutoScrollHandler = null;
     private int currentStartIndex = 0;
+    private int boundaryElapsedTicks = 0;
 
 
 
@@ -217,22 +218,39 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
                 // Scroll: Start a new scroll task if the text doesn't fit
                 case SCROLL: {
 
-                    // Reset the start index
+                    // Reset the start index and elapsed ticks
                     currentStartIndex = 0;
+                    boundaryElapsedTicks = 0;
 
                     // Calculate the longest substring that fits, starting from the end
                     final @NotNull String flippedString = new StringBuilder(text.getString()).reverse().toString();
                     final int endSegmentWidth = FontSize.calcMaxStringEnd(flippedString, 0, maxWidthPx);
 
-                    // Start a new scroll task that scrolls SCROLL_AMOUNT every SCROLL_DELAY
-                    textAutoScrollHandler = Scheduler.loop(0, SCROLL_DELAY, () -> {
-                        getTextDisplay().setText(text.substring(currentStartIndex, FontSize.calcMaxStringEnd(text.getString(), currentStartIndex, maxWidthPx)).get());
-                        currentStartIndex += SCROLL_AMOUNT;
 
-                        // If the remaining text fits, stop scrolling for the specified delay and restart the cycle //TODO keep text still at the start and end
-                        if(currentStartIndex >= text.length() - endSegmentWidth) {
-                            currentStartIndex = 0;
+                    // Start a new scroll task that runs every SCROLL_DELAY
+                    textAutoScrollHandler = Scheduler.loop(0, SCROLL_DELAY, () -> {
+
+                        // Update elapsed ticks and return if in delay period
+                        if(boundaryElapsedTicks < SCROLL_BOUNDARY_DELAY) {
+                            ++boundaryElapsedTicks;
+
+                            // Reset text position if end delay has passed
+                            if(boundaryElapsedTicks == 1) {
+                                currentStartIndex = 0;
+                            }
+                            else return;
                         }
+
+                        // Scroll SCROLL_AMOUNT
+                        getTextDisplay().setText(text.substring(currentStartIndex, FontSize.calcMaxStringEnd(text.getString(), currentStartIndex, maxWidthPx)).get());
+
+                        // If the remaining text fits, stop scrolling for the specified delay and restart the cycle
+                        if(currentStartIndex > text.length() - endSegmentWidth) {
+                            boundaryElapsedTicks = -SCROLL_BOUNDARY_DELAY;
+                        }
+
+                        // Update start index
+                        currentStartIndex += SCROLL_AMOUNT;
                     });
                     break;
                 }
