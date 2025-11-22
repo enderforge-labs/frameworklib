@@ -59,18 +59,19 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
     @Override
     public void spawn(Vector3d pos) {
-        updateEntitySizeCache();
+        updateTotTextSizeCache();
         super.spawn(pos);
     }
 
 
 
 
-    public void updateEntitySizeCache() {
+    public void updateTotTextSizeCache() {
+        final String string = getStyle(SimpleTextElmStyle.class).getText().getString();
 
         // Set cache to 0 if the text is empty.
         // final String string = getStyle(SimpleTextElmStyle.class).getText().getString(); //TODO remove
-        final String string = getTextDisplay().getText().getString(); //TODO CACHE THIS TOO
+        // final String string = getTextDisplay().getText().getString(); //TODO CACHE THIS TOO
         if(string.isEmpty()) {
             entitySizeCacheX = 0f;
             entitySizeCacheY = 0f;

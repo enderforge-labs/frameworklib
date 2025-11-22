@@ -137,10 +137,10 @@ public non-sealed class FancyTextElm extends __base_TextElm {
         // Handle text first (transform depends on it)
         { final Flagged<Component> f = getThisStyle().getFlaggedText();
         if(f.isFlagged()) {
-            fg.setText(f.get());
+            updateTotTextSizeCache();
+            //! ^ This takes into account the stile's text, not the actual text in the entity
             //! The entity's text is set by updateOverflowBehaviour based on the specified overflow behaviour
             updateOverflowBehaviour();
-            updateEntitySizeCache();
             f.unflag();
         }}
 
