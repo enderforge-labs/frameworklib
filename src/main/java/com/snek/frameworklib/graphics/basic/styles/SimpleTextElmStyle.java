@@ -25,9 +25,9 @@ public class SimpleTextElmStyle extends ElmStyle {
     public static final float DEFAULT_TEXT_SCALE = 0.3f;
 
     private @NotNull Flagged<@NotNull Component>             text                  = null;
+    private @NotNull Flagged<@NotNull TextOverflowBehaviour> textOverflowBehaviour = null;
     private @NotNull Flagged<@NotNull TextAlignment>         textAlignment         = null;
     private @NotNull Flagged<@NotNull Integer>               textOpacity           = null;
-    private @NotNull Flagged<@NotNull TextOverflowBehaviour> textOverflowBehaviour = null;
 
 
 
@@ -90,37 +90,37 @@ public class SimpleTextElmStyle extends ElmStyle {
 
     // Default value providers
     public @NotNull Component             getDefaultText                 () { return new Txt().get()               ; }
+    public @NotNull TextOverflowBehaviour getDefaultTextOverflowBehaviour() { return TextOverflowBehaviour.OVERFLOW; }
     public @NotNull TextAlignment         getDefaultTextAlignment        () { return TextAlignment.CENTER          ; }
     public          int                   getDefaultTextOpacity          () { return 255                           ; }
-    public @NotNull TextOverflowBehaviour getDefaultTextOverflowBehaviour() { return TextOverflowBehaviour.ELLIPSIS; }
 
 
     // Reset functions
     public void resetText                  () { text                  = Flagged.from(getDefaultText()                 ); }
+    public void resetTextOverflowBehaviour () { textOverflowBehaviour = Flagged.from(getDefaultTextOverflowBehaviour()); }
     public void resetTextAlignment         () { textAlignment         = Flagged.from(getDefaultTextAlignment()        ); }
     public void resetTextOpacity           () { textOpacity           = Flagged.from(getDefaultTextOpacity()          ); }
-    public void resetTextOverflowBehaviour () { textOverflowBehaviour = Flagged.from(getDefaultTextOverflowBehaviour()); }
 
 
     // Setters
     public void setText                 (final @NotNull Component             _text                 ) { text                 .set(_text                 ); }
+    public void setTextOverflowBehaviour(final @NotNull TextOverflowBehaviour _textOverflowBehaviour) { textOverflowBehaviour.set(_textOverflowBehaviour); }
     public void setTextAlignment        (final @NotNull TextAlignment         _textAlignment        ) { textAlignment        .set(_textAlignment        ); }
     public void setTextOpacity          (final          int                   _textOpacity          ) { textOpacity          .set(_textOpacity          ); }
-    public void setTextOverflowBehaviour(final @NotNull TextOverflowBehaviour _textOverflowBehaviour) { textOverflowBehaviour.set(_textOverflowBehaviour); }
 
 
     // Flagged getters
     public @NotNull Flagged<@NotNull Component>             getFlaggedText                 () { return text;                  }
+    public @NotNull Flagged<@NotNull TextOverflowBehaviour> getFlaggedTextOverflowBehaviour() { return textOverflowBehaviour; }
     public @NotNull Flagged<@NotNull TextAlignment>         getFlaggedTextAlignment        () { return textAlignment;         }
     public @NotNull Flagged<@NotNull Integer>               getFlaggedTextOpacity          () { return textOpacity;           }
-    public @NotNull Flagged<@NotNull TextOverflowBehaviour> getFlaggedTextOverflowBehaviour() { return textOverflowBehaviour; }
 
 
     // Getters
     public @NotNull Component             getText                 () { return text                 .get(); }
+    public @NotNull TextOverflowBehaviour getTextOverflowBehaviour() { return textOverflowBehaviour.get(); }
     public @NotNull TextAlignment         getTextAlignment        () { return textAlignment        .get(); }
     public          int                   getTextOpacity          () { return textOpacity          .get(); }
-    public @NotNull TextOverflowBehaviour getTextOverflowBehaviour() { return textOverflowBehaviour.get(); }
 
 
     // Edit getters
