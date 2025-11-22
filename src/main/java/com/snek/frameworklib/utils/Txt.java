@@ -257,6 +257,17 @@ public class Txt {
         return this;
     }
 
+    /**
+     * Concatenates a chat to this Txt.
+     * @param c The char value.
+     * @return This.
+     */
+    public @NotNull Txt cat(final char c) {
+        rawText.append(String.valueOf(c));
+        ++_length;
+        return this;
+    }
+
 
 
 
