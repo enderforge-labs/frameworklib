@@ -31,8 +31,8 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
     // Constants
     public static final char ELLIPSIS_CHAR = '…';       // The ellipsis character to use when truncating text
-    public static final int SCROLL_DELAY = 40;           // How often to move the text by SCROLL_AMOUNT pixels, in ticks //FIXME
-    public static final int SCROLL_AMOUNT = 1;          // The number of characters to move the text by, every iteration
+    public static final int SCROLL_DELAY = 8;           // How often to move the text by SCROLL_AMOUNT pixels, in ticks
+    public static final int SCROLL_AMOUNT = 2;          // The number of characters to move the text by, every iteration
     public static final float SCROLL_BOUNDARY_DELAY = 20f / SCROLL_DELAY; // The amount of cycles to wait for before and after scrolling the text
 
 
@@ -50,6 +50,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
     private int currentStartIndex = 0;
     private float boundaryElapsedIterations = 0;
     private int lastEnd = 0;
+    private int lastStartIndex = 0;
 
 
 
@@ -216,9 +217,12 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
                 // Scroll: Start a new scroll task if the text doesn't fit
                 case SCROLL: {
 
-                    // Reset the start index and elapsed ticks
+                    // Reset scroll data
                     currentStartIndex = 0;
-                    boundaryElapsedTicks = 0;
+                    boundaryElapsedIterations = 0;
+                    lastEnd = 0; //! Prob not needed since currentStartIndex==0 doesn't use lastEnd
+                    lastStartIndex = 0;
+
 
                     // Calculate the longest substring that fits, starting from the end
                     final @NotNull String flippedString = new StringBuilder(text.getString()).reverse().toString();
@@ -235,6 +239,8 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
                             // Reset text position if end delay has passed
                             if(boundaryElapsedIterations > 0) {
                                 currentStartIndex = 0;
+                                lastEnd = 0; //! Prob not needed since currentStartIndex==0 doesn't use lastEnd
+                                lastStartIndex = 0;
                             }
                             else return;
                         }
@@ -245,8 +251,8 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
                         // Create and start scrolling animation
-                        final double moveAmountL = FontSize.getCharWidth(textString.charAt(currentStartIndex));
-                        final double moveAmountR = FontSize.getStringWidth(textString.substring(lastEnd, end));
+                        final double moveAmountL = FontSize.getStringWidth(textString.substring(lastStartIndex, currentStartIndex));
+                        final double moveAmountR = currentStartIndex == 0 ? 0 : FontSize.getStringWidth(textString.substring(lastEnd, end));
                         final @NotNull Transform transform0 = new Transform().moveX((float)((+moveAmountL + moveAmountR) / 2 * xScale));
                         final @NotNull Transform transform1 = new Transform().moveX((float)((-moveAmountL - moveAmountR) / 2 * xScale));
                         applyAnimationNow(new Transition(                            ).additiveTransform(transform0));
@@ -255,6 +261,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
                         // Shift string value by SCROLL_AMOUNT
                         getTextDisplay().setText(text.substring(currentStartIndex, end).get());
+                        lastStartIndex = currentStartIndex;
                         currentStartIndex += SCROLL_AMOUNT;
 
 
@@ -264,7 +271,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
                         }
 
 
-                        // Update last end
+                        // Update last end and start index
                         lastEnd = end;
                     });
                     break;
