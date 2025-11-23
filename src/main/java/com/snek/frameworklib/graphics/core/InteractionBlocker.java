@@ -13,6 +13,7 @@ import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -49,7 +50,7 @@ public class InteractionBlocker {
             method_setWidth  = Interaction.class.getDeclaredMethod("setWidth",  float.class);
             method_setHeight = Interaction.class.getDeclaredMethod("setHeight", float.class);
         } catch(final NoSuchMethodException | SecurityException e) {
-            e.printStackTrace();
+            FrameworkLib.LOGGER.error("Couldn't initialize Interaction reflection methods", e);
         }
         method_setWidth.setAccessible(true);
         method_setHeight.setAccessible(true);
@@ -59,7 +60,11 @@ public class InteractionBlocker {
     // Entity names and command source identifier
     public static final String ENTITY_CUSTOM_NAME               = FrameworkLib.LIB_ID + ".ui.interactionblocker";
     public static final String ENTITY_CUSTOM_NAME_UNINITIALIZED = ENTITY_CUSTOM_NAME + ".uninitialized";
-    public static final String COMMAND_SOURCE_NAME              = ENTITY_CUSTOM_NAME + ".patch";
+    public static final String UPDATE_COMMAND_SOURCE_NAME       = ENTITY_CUSTOM_NAME + ".patch";
+    public static final String UPDATE_COMMAND =
+        "execute as @e[type=minecraft:interaction,name=" + ENTITY_CUSTOM_NAME_UNINITIALIZED + "] " +
+        "run data modify entity @s Air set value 1000"
+    ;
 
 
     // In-world data
@@ -126,24 +131,22 @@ public class InteractionBlocker {
         //!  │                        unable to detect player clicks until their nbt data is modified.                      //!
         //!  │                                                                                                              //!
         //!  │                                                                                                              //!
-        /*!  │    // Create the custom command source and use DUMMY as output to silence it                                 //!
+        /*!  │  // Create the custom command source and use DUMMY as output to silence it                                   //!
         /*!  │  */final MinecraftServer server = FrameworkLib.getServer();                                                  //!
-        /*!  │  */final ServerLevel world = (ServerLevel)entity.level();                                                    //!
         /*!  │  */final CommandSourceStack source = new CommandSourceStack(                                                 //!
-        /*!  │  */    CommandSource.NULL, Vec3.ZERO, Vec2.ZERO, world,                                                      //!
-        /*!  │  */    4, COMMAND_SOURCE_NAME, new Txt(COMMAND_SOURCE_NAME).get(), server, (Entity)null                      //!
+        /*!  │  */    CommandSource.NULL, Vec3.ZERO, Vec2.ZERO, (ServerLevel)entity.level(),                                //!
+        /*!  │  */    4, UPDATE_COMMAND_SOURCE_NAME, Component.literal(UPDATE_COMMAND_SOURCE_NAME), server, (Entity)null    //!
         /*!  │  */);                                                                                                        //!
         //!  │                                                                                                              //!
         //!  │                                                                                                              //!
-        /*!  │    // Execute the command using the custom command source                                                    //!
+        /*!  │  // Execute the command using the custom command source                                                      //!
         /*!  │  */try {                                                                                                     //!
-        /*!  │  */    server.getCommands().getDispatcher().execute(                                                         //!
-        /*!  │  */        "execute as @e[type=minecraft:interaction,name=" + ENTITY_CUSTOM_NAME_UNINITIALIZED + "] " +      //!
-        /*!  │  */        "run data modify entity @s Air set value 1000",                                                   //!
-        /*!  │  */        source                                                                                            //!
-        /*!  │  */    );                                                                                                    //!
+        /*!  │  */    final int result = server.getCommands().getDispatcher().execute(UPDATE_COMMAND, source);              //!
+        /*!  │  */    if (result == 0) {                                                                                    //!
+        /*!  │  */        FrameworkLib.LOGGER.warn("Interaction entity update command found no matching entities");         //!
+        /*!  │  */    }                                                                                                     //!
         /*!  │  */} catch(final CommandSyntaxException e) {                                                                 //!
-        /*!  │  */    e.printStackTrace();                                                                                  //!
+        /*!  │  */    FrameworkLib.LOGGER.error("Incorrect syntax for interaction entity update command", e);               //!
         /*!  │  */}                                                                                                         //!
         //!  │                                                                                                              //!
         //!  ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯

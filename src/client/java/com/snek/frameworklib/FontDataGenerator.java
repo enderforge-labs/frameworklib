@@ -3,6 +3,7 @@ package com.snek.frameworklib;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -44,15 +45,17 @@ public abstract class FontDataGenerator {
 
         // Retrieve text renderer from the client instance and create the generated package
         final Font renderer = Minecraft.getInstance().font;
+        final Path dirPath = FabricLoader.getInstance().getConfigDir().resolve(PACKAGE_PATH);
         try {
-            Files.createDirectories(FabricLoader.getInstance().getConfigDir().resolve(PACKAGE_PATH));
+            Files.createDirectories(dirPath);
         } catch(final IOException e) {
-            e.printStackTrace();
+            FrameworkLib.LOGGER.error("Couldn't create configuration directory \"{}\".", dirPath.toString(), e);
         }
 
 
         // Print the widths to the source file
-        try(FileWriter f = new FileWriter(FabricLoader.getInstance().getConfigDir().resolve(FILE_PATH).toString())) {
+        final Path filePath = FabricLoader.getInstance().getConfigDir().resolve(FILE_PATH);
+        try(FileWriter f = new FileWriter(filePath.toString())) {
 
 
             // Write package, imports, class, fields and static initializer
@@ -104,11 +107,11 @@ public abstract class FontDataGenerator {
 
             f.write("}");
         } catch(final IOException e) {
-            e.printStackTrace();
+            FrameworkLib.LOGGER.error("Couldn't write font data file \"{}\".", filePath, e);
         }
 
 
         // Print output notice
-        FrameworkLib.LOGGER.info("Character dimensions written to \"config/" + FILE_PATH + "\"");
+        FrameworkLib.LOGGER.info("Font data written to \"{}\".", filePath);
     }
 }

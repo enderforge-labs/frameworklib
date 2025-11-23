@@ -1,7 +1,7 @@
 package com.snek.frameworklib.graphics.core;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,8 +25,8 @@ import net.minecraft.world.inventory.ClickAction;
 public abstract sealed class Context permits HudContext, UiContext {
 
     // Active Context list
-    private static final Map<Player, List<Context>> activeContexts = new HashMap<>();
-    public static Map<Player, List<Context>> getActiveContexts() { return activeContexts; }
+    private static final Map<Player, LinkedList<Context>> activeContexts = new HashMap<>();
+    public static Map<Player, LinkedList<Context>> getActiveContexts() { return activeContexts; }
 
     // Hud data
     protected final Player player;
@@ -54,8 +54,8 @@ public abstract sealed class Context permits HudContext, UiContext {
         player = _player;
 
         // Update context list
-        activeContexts.putIfAbsent(player, new ArrayList<>());
-        final @Nullable List<Context> contexts = activeContexts.get(player);
+        activeContexts.putIfAbsent(player, new LinkedList<>());
+        final @NotNull LinkedList<Context> contexts = activeContexts.get(player);
         contexts.add(this);
     }
 
@@ -90,7 +90,7 @@ public abstract sealed class Context permits HudContext, UiContext {
         }
 
         // Update context list
-        final @Nullable List<Context> contexts = activeContexts.get(player);
+        final @Nullable LinkedList<Context> contexts = activeContexts.get(player);
         contexts.remove(this);
         if(contexts.isEmpty()) activeContexts.remove(player);
     }
@@ -137,7 +137,7 @@ public abstract sealed class Context permits HudContext, UiContext {
      * @param player The player.
      */
     public static void closeContexts(final @NotNull Player _player) {
-        final List<Context> contexts = Context.getActiveContexts().get(_player);
+        final LinkedList<Context> contexts = getActiveContexts().get(_player);
         if(contexts != null) for(final Context context : contexts) {
             context.despawn();
         }
@@ -150,7 +150,7 @@ public abstract sealed class Context permits HudContext, UiContext {
      * Updates all active contexts.
      */
     public static void updateActiveContexts() {
-        for(final List<Context> contexts : Context.getActiveContexts().values()) {
+        for(final LinkedList<Context> contexts : getActiveContexts().values()) {
             for(final Context context : contexts) {
                 context.update();
             }
@@ -212,7 +212,7 @@ public abstract sealed class Context permits HudContext, UiContext {
     public static @Nullable Context findTopMostContext(final Player _player) {
 
         // Get all contexts
-        List<Context> contexts = Context.getActiveContexts().get(_player);
+        LinkedList<Context> contexts = getActiveContexts().get(_player);
         if(contexts == null) return null;
 
         // Find top-most context

@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.Utils;
 
 import net.minecraft.world.entity.EntityType;
@@ -36,7 +37,7 @@ public class CustomItemDisplay extends CustomDisplay {
             method_setDisplayType = ItemDisplay.class.getDeclaredMethod("setItemTransform", ItemDisplayContext.class);
             method_getDisplayType = ItemDisplay.class.getDeclaredMethod("getItemTransform");
         } catch(final NoSuchMethodException | SecurityException e) {
-            e.printStackTrace();
+            FrameworkLib.LOGGER.error("Couldn't initialize ItemDisplay reflection methods", e);
         }
         method_setItemStack.setAccessible(true);
         method_setDisplayType.setAccessible(true);

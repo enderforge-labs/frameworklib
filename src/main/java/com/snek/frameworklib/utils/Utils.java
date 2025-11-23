@@ -11,6 +11,8 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.joml.Vector4i;
 
+import com.snek.frameworklib.FrameworkLib;
+
 
 
 
@@ -58,7 +60,7 @@ public final class Utils extends UtilityClassBase {
 
 
     /**
-     * Invokes a Method on the object target using the specified arguments.
+     * Invokes a Method on the target object using the specified arguments.
      * @param method The method to invoke.
      * @param target The target Object.
      * @param args The arguments to use. Can be empty.
@@ -68,7 +70,7 @@ public final class Utils extends UtilityClassBase {
         try {
             return method.invoke(target, args);
         } catch(final IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            e.printStackTrace();
+            FrameworkLib.LOGGER.error("Failed to invoke the specified method", e);
         }
         return null;
     }
@@ -83,13 +85,22 @@ public final class Utils extends UtilityClassBase {
      */
     public static void runAsync(final int delay, final @NotNull Runnable task) {
         new Thread(() -> {
+
+            // Wait for the delay
             try {
                 Thread.sleep(delay);
-            } catch(final InterruptedException e1) {
-                e1.printStackTrace();
+            } catch(final InterruptedException e) {
+                FrameworkLib.LOGGER.warn("Async task interrupted, proceeding with execution", e);
                 Thread.currentThread().interrupt();
             }
-            task.run();
+
+            // Run task
+            try {
+                task.run();
+            } catch(Exception e) {
+                FrameworkLib.LOGGER.error("Async task failed", e);
+            }
+
         }).start();
     }
 

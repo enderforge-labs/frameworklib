@@ -8,6 +8,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 import com.mojang.math.Transformation;
+import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.Utils;
 
 import net.minecraft.network.chat.Component;
@@ -65,7 +66,7 @@ public abstract class CustomDisplay {
             method_setMaxRenderHeight       = Display.class.getDeclaredMethod("setHeight",                              float.class);
             method_getMaxRenderHeight       = Display.class.getDeclaredMethod("getHeight");
         } catch(final NoSuchMethodException | SecurityException e) {
-            e.printStackTrace();
+            FrameworkLib.LOGGER.error("Couldn't initialize Display reflection methods", e);
         }
         method_setTransformation.setAccessible(true);
         method_setInterpolationDuration.setAccessible(true);

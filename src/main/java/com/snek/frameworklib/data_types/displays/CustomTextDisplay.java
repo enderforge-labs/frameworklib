@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector4i;
 
+import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.ui.TextAlignment;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
@@ -97,7 +98,7 @@ public class CustomTextDisplay extends CustomDisplay {
             method_setTextOpacity   = TextDisplay.class.getDeclaredMethod("setTextOpacity",    byte.class);
             method_setBackground    = TextDisplay.class.getDeclaredMethod("setBackgroundColor", int.class);
         } catch(final NoSuchMethodException | SecurityException e) {
-            e.printStackTrace();
+            FrameworkLib.LOGGER.error("Couldn't initialize TextDisplay reflection methods", e);
         }
         method_getText.setAccessible(true);
         method_getLineWidth.setAccessible(true);
