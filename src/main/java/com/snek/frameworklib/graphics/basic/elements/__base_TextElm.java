@@ -33,7 +33,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
     public static final char ELLIPSIS_CHAR = '…';       // The ellipsis character to use when truncating text
     public static final int SCROLL_DELAY = 40;           // How often to move the text by SCROLL_AMOUNT pixels, in ticks //FIXME
     public static final int SCROLL_AMOUNT = 1;          // The number of characters to move the text by, every iteration
-    public static final int SCROLL_BOUNDARY_DELAY = 20 / SCROLL_DELAY; // The amount of cycles to wait for before and after scrolling the text
+    public static final float SCROLL_BOUNDARY_DELAY = 20f / SCROLL_DELAY; // The amount of cycles to wait for before and after scrolling the text
 
 
     // In-world data
@@ -48,7 +48,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
     // Scrolling text data
     private TaskHandler textAutoScrollHandler = null;
     private int currentStartIndex = 0;
-    private int boundaryElapsedTicks = 0;
+    private float boundaryElapsedIterations = 0;
     private int lastEnd = 0;
 
 
@@ -229,11 +229,11 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
                     textAutoScrollHandler = Scheduler.loop(0, SCROLL_DELAY, () -> {
 
                         // Update elapsed ticks and return if in delay period
-                        if(boundaryElapsedTicks < SCROLL_BOUNDARY_DELAY) {
-                            ++boundaryElapsedTicks;
+                        if(boundaryElapsedIterations < SCROLL_BOUNDARY_DELAY) {
+                            ++boundaryElapsedIterations;
 
                             // Reset text position if end delay has passed
-                            if(boundaryElapsedTicks == 1) {
+                            if(boundaryElapsedIterations > 0) {
                                 currentStartIndex = 0;
                             }
                             else return;
@@ -251,7 +251,6 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
                         final @NotNull Transform transform1 = new Transform().moveX((float)((-moveAmountL - moveAmountR) / 2 * xScale));
                         applyAnimationNow(new Transition(                            ).additiveTransform(transform0));
                         applyAnimation   (new Transition(SCROLL_DELAY, Easings.linear).additiveTransform(transform1));
-                        //FIXME this might need to take into account the added length on top of the removed one
 
 
                         // Shift string value by SCROLL_AMOUNT
@@ -261,7 +260,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
                         // If the remaining text fits, stop scrolling for the specified delay and restart the cycle
                         if(currentStartIndex > text.length() - endSegmentWidth) {
-                            boundaryElapsedTicks = -SCROLL_BOUNDARY_DELAY;
+                            boundaryElapsedIterations = -SCROLL_BOUNDARY_DELAY;
                         }
 
 
