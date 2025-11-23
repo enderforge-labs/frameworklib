@@ -271,7 +271,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
                         }
 
 
-                        // Update last end and start index
+                        // Update last end
                         lastEnd = end;
                     });
                     break;
