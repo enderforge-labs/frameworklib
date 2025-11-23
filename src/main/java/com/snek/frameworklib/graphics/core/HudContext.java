@@ -1,8 +1,7 @@
 package com.snek.frameworklib.graphics.core;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,8 +27,8 @@ import net.minecraft.world.phys.Vec3;
 public non-sealed class HudContext extends Context {
 
     // Active HUD list
-    private static final Map<Player, List<HudContext>> activeHUDs = new HashMap<>();
-    public static Map<Player, List<HudContext>> getActiveHUDs() { return activeHUDs; }
+    private static final Map<Player, LinkedList<HudContext>> activeHUDs = new HashMap<>();
+    public static Map<Player, LinkedList<HudContext>> getActiveHUDs() { return activeHUDs; }
 
     // HUD data
     private boolean playerHasSneaked = false;
@@ -60,8 +59,8 @@ public non-sealed class HudContext extends Context {
         super(_player);
 
         // Update HUD list
-        activeHUDs.putIfAbsent(player, new ArrayList<>());
-        final @Nullable List<HudContext> huds = activeHUDs.get(player);
+        activeHUDs.putIfAbsent(player, new LinkedList<>());
+        final @Nullable LinkedList<HudContext> huds = activeHUDs.get(player);
         huds.add(this);
     }
 
@@ -113,7 +112,7 @@ public non-sealed class HudContext extends Context {
         super.despawn();
 
         // Update HUD list
-        final @Nullable List<HudContext> huds = activeHUDs.get(player);
+        final @Nullable LinkedList<HudContext> huds = activeHUDs.get(player);
         huds.remove(this);
         if(huds.isEmpty()) activeHUDs.remove(player);
     }

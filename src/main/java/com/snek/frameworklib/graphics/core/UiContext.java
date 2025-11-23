@@ -1,8 +1,7 @@
 package com.snek.frameworklib.graphics.core;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,8 +28,8 @@ public non-sealed class UiContext extends Context {
     public @NotNull Vector3d getSpawnPos() { return spawnPos; }
 
     // Active UI list
-    private static final Map<Player, List<UiContext>> activeUIs = new HashMap<>();
-    public static Map<Player, List<UiContext>> getActiveUIs() { return activeUIs; }
+    private static final Map<Player, LinkedList<UiContext>> activeUIs = new HashMap<>();
+    public static Map<Player, LinkedList<UiContext>> getActiveUIs() { return activeUIs; }
 
 
 
@@ -39,8 +38,8 @@ public non-sealed class UiContext extends Context {
         super(_player);
 
         // Update UI list
-        activeUIs.putIfAbsent(player, new ArrayList<>());
-        final @Nullable List<UiContext> uis = activeUIs.get(player);
+        activeUIs.putIfAbsent(player, new LinkedList<>());
+        final @Nullable LinkedList<UiContext> uis = activeUIs.get(player);
         uis.add(this);
     }
 
@@ -88,7 +87,7 @@ public non-sealed class UiContext extends Context {
         super.despawn();
 
         // Update UI list
-        final @Nullable List<UiContext> uis = activeUIs.get(player);
+        final @Nullable LinkedList<UiContext> uis = activeUIs.get(player);
         uis.remove(this);
         if(uis.isEmpty()) activeUIs.remove(player);
     }
