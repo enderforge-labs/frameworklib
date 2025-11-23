@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
 import com.snek.frameworklib.data_types.animations.Transform;
+import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
 import com.snek.frameworklib.data_types.ui.TextOverflowBehaviour;
@@ -11,6 +12,7 @@ import com.snek.frameworklib.generated.FontData;
 import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.Elm;
+import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.FontSize;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
@@ -29,7 +31,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
     // Constants
     public static final char ELLIPSIS_CHAR = '…';       // The ellipsis character to use when truncating text
-    public static final int SCROLL_DELAY = 4;           // How often to move the text by SCROLL_AMOUNT pixels, in ticks
+    public static final int SCROLL_DELAY = 40;           // How often to move the text by SCROLL_AMOUNT pixels, in ticks //FIXME
     public static final int SCROLL_AMOUNT = 1;          // The number of characters to move the text by, every iteration
     public static final int SCROLL_BOUNDARY_DELAY = 20 / SCROLL_DELAY; // The amount of cycles to wait for before and after scrolling the text
 
@@ -47,6 +49,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
     private TaskHandler textAutoScrollHandler = null;
     private int currentStartIndex = 0;
     private int boundaryElapsedTicks = 0;
+    private int lastEnd = 0;
 
 
 
@@ -195,14 +198,16 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
         // Cache data for the other cases
         else {
-            final float pixelsInOneBlock = FontData.TEXT_PIXEL_BLOCK_RATIO / calcForegroundTransform().getScale().x;
+            final float xScale = calcForegroundTransform().getScale().x;
+            final float pixelsInOneBlock = FontData.TEXT_PIXEL_BLOCK_RATIO / xScale;
             final int maxWidthPx = Math.round(maxWidth * pixelsInOneBlock);
+            final @NotNull String textString = text.getString();
             switch(behaviour) {
 
 
                 // Truncate: Compute truncated text
                 case OVERFLOW, TRUNCATE: {
-                    getTextDisplay().setText(text.substring(0, FontSize.calcMaxStringEnd(text.getString(), 0, maxWidthPx)).get());
+                    getTextDisplay().setText(text.substring(0, FontSize.calcMaxStringEnd(textString, 0, maxWidthPx)).get());
                     break;
                 }
 
@@ -210,9 +215,11 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
                 // Ellipsis: Compute truncated text and add ellipsis character
                 case ELLIPSIS: {
                     final int restrictedMaxWidthPx = Math.max(0, maxWidthPx - FontSize.getCharWidthPx(ELLIPSIS_CHAR));
-                    getTextDisplay().setText(text.substring(0, FontSize.calcMaxStringEnd(text.getString(), 0, restrictedMaxWidthPx)).cat(ELLIPSIS_CHAR).get());
+                    getTextDisplay().setText(text.substring(0, FontSize.calcMaxStringEnd(textString, 0, restrictedMaxWidthPx)).cat(ELLIPSIS_CHAR).get());
                     break;
                 }
+
+
 
 
                 // Scroll: Start a new scroll task if the text doesn't fit
@@ -241,14 +248,34 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
                             else return;
                         }
 
-                        // Scroll by SCROLL_AMOUNT
-                        getTextDisplay().setText(text.substring(currentStartIndex, FontSize.calcMaxStringEnd(text.getString(), currentStartIndex, maxWidthPx)).get());
+
+                        // Find new end
+                        final int end = FontSize.calcMaxStringEnd(textString, currentStartIndex, maxWidthPx);
+
+
+                        // Create and start scrolling animation
+                        final double moveAmountL = FontSize.getCharWidth(textString.charAt(currentStartIndex));
+                        final double moveAmountR = FontSize.getStringWidth(textString.substring(lastEnd, end));
+                        final @NotNull Transform transform0 = new Transform().moveX((float)((+moveAmountL + moveAmountR) / 2 * xScale));
+                        final @NotNull Transform transform1 = new Transform().moveX((float)((-moveAmountL - moveAmountR) / 2 * xScale));
+                        applyAnimationNow(new Transition(                            ).additiveTransform(transform0));
+                        applyAnimation   (new Transition(SCROLL_DELAY, Easings.linear).additiveTransform(transform1));
+                        //FIXME this might need to take into account the added length on top of the removed one
+
+
+                        // Shift string value by SCROLL_AMOUNT
+                        getTextDisplay().setText(text.substring(currentStartIndex, end).get());
                         currentStartIndex += SCROLL_AMOUNT;
+
 
                         // If the remaining text fits, stop scrolling for the specified delay and restart the cycle
                         if(currentStartIndex > text.length() - endSegmentWidth) {
                             boundaryElapsedTicks = -SCROLL_BOUNDARY_DELAY;
                         }
+
+
+                        // Update last end
+                        lastEnd = end;
                     });
                     break;
                 }
