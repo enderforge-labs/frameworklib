@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.mojang.brigadier.ParseResults;
+import com.snek.frameworklib.FrameworkLib;
 
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -46,7 +47,11 @@ public class CommandsMixin {
         CommandSourceStack source,
         Exception exception
     ) {
-        System.out.println("Command \"" + command + "\" from \"" + source.getTextName() + "\" threw: " + exception.getMessage());
-        exception.printStackTrace();
+        FrameworkLib.LOGGER.error(
+            "Command \"{}\" from \"{}\" threw an exception:",
+            command,
+            source.getTextName(),
+            exception
+        );
     }
 }
