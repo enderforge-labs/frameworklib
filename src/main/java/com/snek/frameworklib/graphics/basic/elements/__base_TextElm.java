@@ -61,15 +61,6 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
 
-    @Override
-    public void spawn(Vector3d pos) {
-        updateTotTextSizeCache();
-        super.spawn(pos);
-    }
-
-
-
-
     public void updateTotTextSizeCache() {
         final String string = getStyle(SimpleTextElmStyle.class).getText().getString();
 
@@ -296,5 +287,22 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
     public void updateAbsSizeInverseSelf() {
         super.updateAbsSizeInverseSelf();
         updateOverflowBehaviour();
+    }
+
+
+
+
+    @Override
+    public void spawn(Vector3d pos) {
+        updateTotTextSizeCache();
+        super.spawn(pos);
+    }
+
+    @Override
+    public void despawn() {
+        super.despawn();
+        if(textAutoScrollHandler != null) {
+            textAutoScrollHandler.cancel();
+        }
     }
 }
