@@ -57,11 +57,6 @@ public non-sealed class HudContext extends Context {
      */
     public HudContext(final @NotNull Player _player) {
         super(_player);
-
-        // Update HUD list
-        activeHUDs.putIfAbsent(player, new LinkedList<>());
-        final @Nullable LinkedList<HudContext> huds = activeHUDs.get(player);
-        huds.add(this);
     }
 
 
@@ -108,12 +103,29 @@ public non-sealed class HudContext extends Context {
 
 
     @Override
-    public void despawn(){
-        super.despawn();
+    public void spawn(Vector3d pos){
+        if(!spawned) {
 
-        // Update HUD list
-        final @Nullable LinkedList<HudContext> huds = activeHUDs.get(player);
-        huds.remove(this);
-        if(huds.isEmpty()) activeHUDs.remove(player);
+            // Update HudContext list
+            activeHUDs.putIfAbsent(player, new LinkedList<>());
+            final @Nullable LinkedList<HudContext> huds = activeHUDs.get(player);
+            huds.add(this);
+        }
+        super.spawn(pos);
+    }
+
+
+
+
+    @Override
+    public void despawn(){
+        if(spawned) {
+
+            // Update HudContext list
+            final @Nullable LinkedList<HudContext> huds = activeHUDs.get(player);
+            huds.remove(this);
+            if(huds.isEmpty()) activeHUDs.remove(player);
+        }
+        super.despawn();
     }
 }

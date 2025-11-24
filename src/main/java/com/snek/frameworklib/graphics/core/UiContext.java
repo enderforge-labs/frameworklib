@@ -36,11 +36,6 @@ public non-sealed class UiContext extends Context {
 
     public UiContext(final @NotNull Player _player) {
         super(_player);
-
-        // Update UI list
-        activeUIs.putIfAbsent(player, new LinkedList<>());
-        final @Nullable LinkedList<UiContext> uis = activeUIs.get(player);
-        uis.add(this);
     }
 
 
@@ -75,6 +70,11 @@ public non-sealed class UiContext extends Context {
     public void spawn(Vector3d pos) {
         if(!spawned) {
             spawnPos.set(pos);
+
+            // Update UiContext list
+            activeUIs.putIfAbsent(player, new LinkedList<>());
+            final @Nullable LinkedList<UiContext> uis = activeUIs.get(player);
+            uis.add(this);
         }
         super.spawn(pos);
     }
@@ -84,11 +84,13 @@ public non-sealed class UiContext extends Context {
 
     @Override
     public void despawn(){
-        super.despawn();
+        if(spawned) {
 
-        // Update UI list
-        final @Nullable LinkedList<UiContext> uis = activeUIs.get(player);
-        uis.remove(this);
-        if(uis.isEmpty()) activeUIs.remove(player);
+            // Update UiContext list
+            final @Nullable LinkedList<UiContext> uis = activeUIs.get(player);
+            uis.remove(this);
+            if(uis.isEmpty()) activeUIs.remove(player);
+        }
+        super.despawn();
     }
 }

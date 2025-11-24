@@ -52,11 +52,6 @@ public abstract sealed class Context permits HudContext, UiContext {
 
     protected Context(final @NotNull Player _player) {
         player = _player;
-
-        // Update context list
-        activeContexts.putIfAbsent(player, new LinkedList<>());
-        final @NotNull LinkedList<Context> contexts = activeContexts.get(player);
-        contexts.add(this);
     }
 
 
@@ -72,6 +67,11 @@ public abstract sealed class Context permits HudContext, UiContext {
             if(activeCanvas != null) activeCanvas.spawn(pos);
             interactionBlocker = new InteractionBlocker(player.level(), size, size);
             interactionBlocker.spawn(pos);
+
+            // Update context list
+            activeContexts.putIfAbsent(player, new LinkedList<>());
+            final @NotNull LinkedList<Context> contexts = activeContexts.get(player);
+            contexts.add(this);
         }
     }
 
@@ -87,12 +87,12 @@ public abstract sealed class Context permits HudContext, UiContext {
             if(activeCanvas != null) activeCanvas.despawn();
             interactionBlocker.despawn();
             interactionBlocker = null;
-        }
 
-        // Update context list
-        final @Nullable LinkedList<Context> contexts = activeContexts.get(player);
-        contexts.remove(this);
-        if(contexts.isEmpty()) activeContexts.remove(player);
+            // Update context list
+            final @Nullable LinkedList<Context> contexts = activeContexts.get(player);
+            contexts.remove(this);
+            if(contexts.isEmpty()) activeContexts.remove(player);
+        }
     }
 
 
