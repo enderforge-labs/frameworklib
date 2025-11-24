@@ -69,12 +69,11 @@ public non-sealed class HudCanvas extends Canvas {
         final Vector3d posDelta = newPos.sub(lastPlayerEyePos, new Vector3d());
 
 
-        //FIXME use the height of the player while they are not sneaking, not during it
         // Update rotation and position if needed
         if(((HudContext)context).attemptPositionRefresh()) {
             lastPlayerEyePos = newPos;
-            updateRot(player, false); //FIXME make it disappear and reappear instead. use instant rotations
-            updatePos(this); //FIXME make it disappear and reappear instead. use instant rotations
+            updateRot(player, true); //FIXME make it disappear and reappear instead
+            updatePos(this); //FIXME make it disappear and reappear instead
         }
 
 
@@ -84,7 +83,6 @@ public non-sealed class HudCanvas extends Canvas {
             Scheduler.run(() -> context.despawn(true));
         }
 
-        //TODO add inactivity timer despawn
         //! Schedule despawn for the end of the current tick to avoid modifying the active contexts list while the thread is iterating it
         //  onfigs.getPerf().hud_close_time.getValue()
         // Scheduler.run(context::despawn);
