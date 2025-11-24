@@ -6,6 +6,7 @@ import org.joml.Vector3d;
 
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
+import com.snek.frameworklib.graphics.core.HudCanvas;
 import com.snek.frameworklib.graphics.functional.styles.SimpleButtonElmStyle;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
@@ -109,6 +110,13 @@ public abstract non-sealed class SimpleButtonElm extends PanelElm implements __b
         if(!clickRateLimiter.attempt()) return false;
         clickRateLimiter.renewCooldown(clickCooldown);
         return checkIntersection(player);
+    }
+
+    @Override
+    public void onClick(@NotNull Player player, @NotNull ClickAction click) {
+        if(canvas instanceof HudCanvas hud) {
+            hud.resetInactivityTimer();
+        }
     }
 
 

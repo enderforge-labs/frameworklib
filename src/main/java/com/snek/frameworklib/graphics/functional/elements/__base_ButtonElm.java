@@ -7,5 +7,5 @@ import com.snek.frameworklib.graphics.interfaces.Hoverable;
 
 
 public sealed interface __base_ButtonElm extends Hoverable, Clickable permits FancyButtonElm, SimpleButtonElm {
-    //Empty
+    // Empty
 }

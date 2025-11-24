@@ -14,6 +14,7 @@ import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
 
 
 
@@ -29,8 +30,9 @@ public non-sealed class HudCanvas extends Canvas {
     private boolean spawned = false;
     public @NotNull HudContext getHudContext() { return (HudContext)super.getContext(); }
 
-    // Optimization data
+    // Despawn detection
     private @NotNull Vector3d lastPlayerEyePos = new Vector3d();
+    private long lastInputTime = Long.MAX_VALUE;
 
 
 
@@ -77,15 +79,21 @@ public non-sealed class HudCanvas extends Canvas {
         }
 
 
-        // If the player moved too far since the last update, close the HUD
+        // Close the HUD if the player moved too far since the last update or it has been inactive for longer than the configured time
         //! Schedule despawn for the end of the current tick to avoid modifying the active contexts list while the thread is iterating it
-        if(posDelta.length() >= Configs.getPerf().hud_close_distance.getValue()) {
+        if(
+            posDelta.length() >= Configs.getPerf().hud_close_distance.getValue() ||
+            Scheduler.getTickNum() > lastInputTime + Configs.getPerf().hud_close_time.getValue()
+        ) {
             Scheduler.run(() -> context.despawn(true));
         }
+    }
 
-        //! Schedule despawn for the end of the current tick to avoid modifying the active contexts list while the thread is iterating it
-        //  onfigs.getPerf().hud_close_time.getValue()
-        // Scheduler.run(context::despawn);
+
+
+
+    public void resetInactivityTimer(){
+        lastInputTime = Scheduler.getTickNum();
     }
 
 
@@ -115,7 +123,10 @@ public non-sealed class HudCanvas extends Canvas {
         if(!spawned) {
             spawned = true;
             super.spawn(pos);
+
+            // Setup data
             lastPlayerEyePos = new Vector3d(pos);
+            resetInactivityTimer();
 
             // Move displays away from the player's center
             applyAnimationNowRecursive(new Transition().additiveTransform(new Transform().move(__calcVisualShift())));

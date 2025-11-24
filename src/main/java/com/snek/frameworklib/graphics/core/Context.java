@@ -235,8 +235,3 @@ public abstract sealed class Context permits HudContext, UiContext {
 
 //FIXME instantly despawn the context when players disconnect or die or are dying or go in spectator mode or change dimension
 //FIXME instantly despawn the context when players disconnect or die or are dying or go in spectator mode or change dimension
-//FIXME instantly despawn the context when players disconnect or die or are dying or go in spectator mode or change dimension
-//FIXME instantly despawn the context when players disconnect or die or are dying or go in spectator mode or change dimension
-//FIXME instantly despawn the context when players disconnect or die or are dying or go in spectator mode or change dimension
-//FIXME instantly despawn the context when players disconnect or die or are dying or go in spectator mode or change dimension
-//FIXME instantly despawn the context when players disconnect or die or are dying or go in spectator mode or change dimension

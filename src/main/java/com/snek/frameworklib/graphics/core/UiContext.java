@@ -8,6 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
+import com.snek.frameworklib.configs.Configs;
+import com.snek.frameworklib.utils.scheduler.Scheduler;
+
 import net.minecraft.world.entity.player.Player;
 
 
@@ -44,12 +47,6 @@ public non-sealed class UiContext extends Context {
     @Override
     public float getInteractionBlockerSize() {
         return 1;
-    }
-
-
-    @Override
-    public void update() {
-        if(activeCanvas != null) activeCanvas.update();
     }
 
 
