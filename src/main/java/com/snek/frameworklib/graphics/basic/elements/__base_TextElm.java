@@ -305,8 +305,8 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
     }
 
     @Override
-    public void despawn() {
-        super.despawn();
+    public void despawn(final boolean animate) {
+        super.despawn(animate);
         if(textAutoScrollHandler != null) {
             textAutoScrollHandler.cancel();
             textAutoScrollHandler = null;

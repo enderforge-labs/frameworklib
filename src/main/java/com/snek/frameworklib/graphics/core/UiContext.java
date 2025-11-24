@@ -83,7 +83,7 @@ public non-sealed class UiContext extends Context {
 
 
     @Override
-    public void despawn(){
+    public void despawn(final boolean animate) {
         if(spawned) {
 
             // Update UiContext list
@@ -91,6 +91,6 @@ public non-sealed class UiContext extends Context {
             uis.remove(this);
             if(uis.isEmpty()) activeUIs.remove(player);
         }
-        super.despawn();
+        super.despawn(animate);
     }
 }

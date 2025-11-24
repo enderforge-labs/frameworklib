@@ -411,55 +411,32 @@ public abstract class Elm extends Div {
 
     @Override
     public void spawn(final @NotNull Vector3d pos) {
-        if(isSpawned) return;
+        if(!isSpawned) {
 
-        // Flush previous changes to the entity to avoid bad interpolations and spawn the entity into the world
-        flushStyle();
-        final Animation primerAnimation = style.getPrimerAnimation();
-        if(primerAnimation != null) {
-            applyAnimationNow(primerAnimation);
-        }
-        entity.spawn(world, pos);
-
-
-        // Set tracking custom name
-        entity.setCustomNameVisible(false);
-        entity.setCustomName(new Txt(ENTITY_CUSTOM_NAME).get());
+            // Flush previous changes to the entity to avoid bad interpolations and spawn the entity into the world
+            flushStyle();
+            final Animation primerAnimation = style.getPrimerAnimation();
+            if(primerAnimation != null) {
+                applyAnimationNow(primerAnimation);
+            }
+            entity.spawn(world, pos);
 
 
-        // Handle animations
-        final Animation animation = style.getSpawnAnimation();
-        if(animation != null) {
-            applyAnimation(animation);
-        }
+            // Set tracking custom name
+            entity.setCustomNameVisible(false);
+            entity.setCustomName(new Txt(ENTITY_CUSTOM_NAME).get());
 
 
-        // Call superclass spawn and set spawned flag to true
-        super.spawn(pos);
-        isSpawned = true;
-    }
+            // Handle animations
+            final Animation animation = style.getSpawnAnimation();
+            if(animation != null) {
+                applyAnimation(animation);
+            }
 
 
-
-
-    @Override
-    public void despawn() {
-        if(!isSpawned) return;
-
-        // Call superclass spawn and set spawned flag to false
-        super.despawn();
-        isSpawned = false;
-
-        // Handle animations
-        final Animation animation = style.getDespawnAnimation();
-        if(animation != null) {
-            applyAnimation(animation);
-
-            // Remove entity from the world after a delay
-            Scheduler.schedule(animation.getTotalDuration(), this::despawnNow);
-        }
-        else {
-            despawnNow();
+            // Call superclass spawn and set spawned flag to true
+            super.spawn(pos);
+            isSpawned = true;
         }
     }
 
@@ -467,10 +444,25 @@ public abstract class Elm extends Div {
 
 
     @Override
-    public void despawnNow() {
-        super.despawnNow();
-        isSpawned = false;
-        entity.despawn();
+    public void despawn(final boolean animate) {
+        if(isSpawned) {
+
+            // Call superclass spawn and set spawned flag to false
+            super.despawn(animate);
+            isSpawned = false;
+
+            // Handle animations
+            final Animation animation = style.getDespawnAnimation();
+            if(animate && animation != null) {
+                applyAnimation(animation);
+
+                // Remove entity from the world after a delay
+                Scheduler.schedule(animation.getTotalDuration(), entity::despawn);
+            }
+            else {
+                entity.despawn();
+            }
+        }
     }
 
 

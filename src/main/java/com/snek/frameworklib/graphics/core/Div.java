@@ -265,22 +265,11 @@ public class Div {
 
     /**
      * Removes the element and its associated entities from the world.
+     * @param animate Whether to display despawn animations. Using {@code animate=false} will despawn the entities immediately.
      */
-    public void despawn() {
+    public void despawn(final boolean animate) {
         for(final Div elm : children) {
-            elm.despawn();
-        }
-    }
-
-
-
-
-    /**
-     * Instantly removes the entities associated with this element from the world.
-     */
-    public void despawnNow() {
-        for(final Div elm : children) {
-            elm.despawnNow();
+            elm.despawn(animate);
         }
     }
 

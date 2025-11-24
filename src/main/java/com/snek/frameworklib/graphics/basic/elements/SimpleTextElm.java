@@ -164,17 +164,12 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
     @Override
     public void spawn(final @NotNull Vector3d pos) {
         super.spawn(pos);
-
-        //TODO remove
-        // // Set tracking custom name
-        // getThisEntity().setCustomNameVisible(false);
-        // getThisEntity().setCustomName(new Txt(ENTITY_CUSTOM_NAME).get());
     }
 
 
     @Override
-    public void despawn() {
-        super.despawn();
+    public void despawn(final boolean animate) {
+        super.despawn(animate);
     }
 
 

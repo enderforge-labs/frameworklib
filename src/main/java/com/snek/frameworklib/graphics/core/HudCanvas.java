@@ -81,7 +81,7 @@ public non-sealed class HudCanvas extends Canvas {
         // If the player moved too far since the last update, close the HUD
         //! Schedule despawn for the end of the current tick to avoid modifying the active contexts list while the thread is iterating it
         if(posDelta.length() >= Configs.getPerf().hud_close_distance.getValue()) {
-            Scheduler.run(context::despawn);
+            Scheduler.run(() -> context.despawn(true));
         }
 
         //TODO add inactivity timer despawn
@@ -138,10 +138,10 @@ public non-sealed class HudCanvas extends Canvas {
 
 
     @Override
-    public void despawn() {
+    public void despawn(final boolean animate) {
         if(spawned) {
             spawned = false;
-            super.despawn();
+            super.despawn(animate);
         }
     }
 }

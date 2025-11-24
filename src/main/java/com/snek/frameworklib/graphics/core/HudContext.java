@@ -118,7 +118,7 @@ public non-sealed class HudContext extends Context {
 
 
     @Override
-    public void despawn(){
+    public void despawn(final boolean animate) {
         if(spawned) {
 
             // Update HudContext list
@@ -126,6 +126,6 @@ public non-sealed class HudContext extends Context {
             huds.remove(this);
             if(huds.isEmpty()) activeHUDs.remove(player);
         }
-        super.despawn();
+        super.despawn(animate);
     }
 }

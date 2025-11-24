@@ -81,10 +81,10 @@ public abstract sealed class Context permits HudContext, UiContext {
     /**
      * Despawns the context and all of its graphic elements.
      */
-    public void despawn() {
+    public void despawn(final boolean animate) {
         if(spawned) {
             spawned = false;
-            if(activeCanvas != null) activeCanvas.despawn();
+            if(activeCanvas != null) activeCanvas.despawn(animate);
             interactionBlocker.despawn();
             interactionBlocker = null;
 
@@ -139,7 +139,7 @@ public abstract sealed class Context permits HudContext, UiContext {
     public static void closeContexts(final @NotNull Player _player) {
         final LinkedList<Context> contexts = getActiveContexts().get(_player);
         if(contexts != null) for(final Context context : contexts) {
-            context.despawn();
+            context.despawn(true);
         }
     }
 

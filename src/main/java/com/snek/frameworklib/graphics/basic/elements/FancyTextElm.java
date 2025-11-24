@@ -296,14 +296,8 @@ public non-sealed class FancyTextElm extends __base_TextElm {
 
 
     @Override
-    public void despawn() {
-        super.despawn();
-    }
-
-
-    @Override
-    public void despawnNow() {
-        super.despawnNow();
+    public void despawn(final boolean animate) {
+        super.despawn(animate);
         getFgEntity().despawn();
     }
 

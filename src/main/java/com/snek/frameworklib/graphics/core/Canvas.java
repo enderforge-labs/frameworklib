@@ -171,7 +171,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
         else {
 
             // Instantly despawn and remove previous children of the background element
-            for(final Div c : prevCanvas.getBg().getChildren()) c.despawnNow();
+            for(final Div c : prevCanvas.getBg().getChildren()) c.despawn(false);
             prevCanvas.getBg().clearChildren();
 
 
@@ -265,13 +265,5 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
         else {
             super.spawn(pos);
         }
-    }
-
-
-
-
-    @Override
-    public void despawn() {
-        super.despawn();
     }
 }
