@@ -94,7 +94,7 @@ public non-sealed class HudCanvas extends Canvas {
 
 
 
-    public void resetInactivityTimer(){
+    public void resetInactivityTimer() {
         lastInputTime = Scheduler.getTickNum();
     }
 

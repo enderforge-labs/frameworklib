@@ -284,7 +284,7 @@ public class Txt {
      * Returns the raw string value of this Txt.
      * @return The Txt as a raw String.
      */
-    public @NotNull String getString(){
+    public @NotNull String getString() {
         return rawText.getString();
     }
 

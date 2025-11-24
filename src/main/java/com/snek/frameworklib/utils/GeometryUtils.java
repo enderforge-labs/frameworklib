@@ -124,7 +124,7 @@ public final class GeometryUtils extends UtilityClassBase {
 
         // Check if line is parallel to plane
         float denominator = planeNormal.dot(lineDirection);
-        if (Math.abs(denominator) < 1e-6f) {
+        if(Math.abs(denominator) < 1e-6f) {
             return Double.MAX_VALUE; // Line is parallel to plane
         }
 

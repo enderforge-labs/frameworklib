@@ -105,7 +105,7 @@ public non-sealed class HudContext extends Context {
 
 
     @Override
-    public void spawn(Vector3d pos){
+    public void spawn(Vector3d pos) {
         if(!spawned) {
 
             // Update HudContext list

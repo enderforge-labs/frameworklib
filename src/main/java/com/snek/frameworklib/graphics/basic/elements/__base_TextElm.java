@@ -166,7 +166,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
     /**
      * //TODO
      */
-    protected void updateOverflowBehaviour(){
+    protected void updateOverflowBehaviour() {
 
         // Cancel previous scroll task
         if(textAutoScrollHandler != null) {

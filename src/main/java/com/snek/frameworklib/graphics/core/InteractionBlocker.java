@@ -142,7 +142,7 @@ public class InteractionBlocker {
         /*!  │  // Execute the command using the custom command source                                                      //!
         /*!  │  */try {                                                                                                     //!
         /*!  │  */    final int result = server.getCommands().getDispatcher().execute(UPDATE_COMMAND, source);              //!
-        /*!  │  */    if (result == 0) {                                                                                    //!
+        /*!  │  */    if(result == 0) {                                                                                    //!
         /*!  │  */        FrameworkLib.LOGGER.warn("Interaction entity update command found no matching entities");         //!
         /*!  │  */    }                                                                                                     //!
         /*!  │  */} catch(final CommandSyntaxException e) {                                                                 //!

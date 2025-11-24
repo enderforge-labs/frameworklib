@@ -11,7 +11,7 @@ import com.snek.frameworklib.generated.FontData;
 
 
 public final class FontSize extends UtilityClassBase {
-    private FontSize(){}
+    private FontSize() {}
 
 
 

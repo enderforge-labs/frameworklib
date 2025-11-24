@@ -22,8 +22,8 @@ public abstract class Configs {
     private static @NotNull UiConfig          ui   = null;
     private static @NotNull PerformanceConfig perf = null;
 
-    public static @NotNull UiConfig          getUi  (){ return ui;   }
-    public static @NotNull PerformanceConfig getPerf(){ return perf; }
+    public static @NotNull UiConfig          getUi  () { return ui;   }
+    public static @NotNull PerformanceConfig getPerf() { return perf; }
 
 
 
