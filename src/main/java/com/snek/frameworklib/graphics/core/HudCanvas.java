@@ -76,15 +76,17 @@ public non-sealed class HudCanvas extends Canvas {
             lastPlayerEyePos = newPos;
             updateRot(player, true); //FIXME make it disappear and reappear instead
             updatePos(this); //FIXME make it disappear and reappear instead
+            resetInactivityTimer();
         }
 
 
         // Close the HUD if the player moved too far since the last update or it has been inactive for longer than the configured time
-        //! Schedule despawn for the end of the current tick to avoid modifying the active contexts list while the thread is iterating it
-        if(
+        //! This else makes it skip calculations when the HUD moves
+        else if(
             posDelta.length() >= Configs.getPerf().hud_close_distance.getValue() ||
             Scheduler.getTickNum() > lastInputTime + Configs.getPerf().hud_close_time.getValue()
         ) {
+            //! Schedule despawn for the end of the current tick to avoid modifying the active contexts list while the thread is iterating it
             Scheduler.run(() -> context.despawn(true));
         }
     }
