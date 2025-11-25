@@ -72,7 +72,7 @@ import net.minecraft.world.phys.Vec3;
 public final class MinecraftUtils extends UtilityClassBase {
     private MinecraftUtils() {}
     public static final @NotNull UUID HEAD_OWNER_UUID  = UUID.fromString("e58d5427-a51e-4ea5-9938-20fa7bd90e52");
-    public static final @NotNull String UNWEARABLE_TAG = FrameworkLib.LIB_ID + ".unequippable";
+    public static final @NotNull String UNWEARABLE_TAG = FrameworkLib.LIB_ID + ".PlayerHeadItem.unwearable";
 
 
 
@@ -252,7 +252,7 @@ public final class MinecraftUtils extends UtilityClassBase {
     /**
      * Returns an ItemStack containing a player head with texture the specified skin ID.
      * @param skin The Base-64 skin ID.
-     * @param wearable Whether the item stack should be wearable in the helmet slot.
+     * @param wearable Whether the item stack should be equippable in the helmet slot.
      * @return The head as an ItemStack of count 1.
      */
     public static @NotNull ItemStack createCustomHead(final @NotNull String skin, final boolean wearable) {
@@ -420,7 +420,7 @@ public final class MinecraftUtils extends UtilityClassBase {
 
 
         // Spawners
-        if(item.getItem() == Items.SPAWNER && item.hasTag()) {
+        if(item.is(Items.SPAWNER) && item.hasTag()) {
             final CompoundTag nbt = item.getTag();
             if(nbt.contains("BlockEntityTag", Tag.TAG_COMPOUND)) {
                 final CompoundTag blockTag = nbt.getCompound("BlockEntityTag");

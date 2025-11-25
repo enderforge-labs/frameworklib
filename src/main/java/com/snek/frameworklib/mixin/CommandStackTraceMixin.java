@@ -24,7 +24,7 @@ import net.minecraft.commands.CommandSourceStack;
  * This mixin intercepts exceptions and prints their stack trace in the console to make debugging it easier.
  */
 @Mixin(Commands.class)
-public class CommandsMixin {
+public class CommandStackTraceMixin {
 
 
     @Inject(

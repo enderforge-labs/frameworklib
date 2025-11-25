@@ -3,7 +3,8 @@
     "package": "com.snek.frameworklib.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
-        "CommandsMixin"
+        "CommandStackTraceMixin",
+        "UnwearableHeadItemMixin"
     ],
     "injectors": {
         "defaultRequire": 1
