@@ -4,13 +4,19 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.snek.frameworklib.utils.MinecraftUtils;
 
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Equipable;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.PlayerHeadItem;
+import net.minecraft.world.level.gameevent.GameEvent;
 
 
 
@@ -25,9 +31,9 @@ import net.minecraft.world.item.Items;
 @Mixin(LivingEntity.class)
 public class UnwearableHeadItemMixin {
 
-    @Inject(method = "setItemSlot", at = @At("HEAD"), cancellable = true)
-    private void preventEquip(EquipmentSlot slot, ItemStack stack, CallbackInfo ci) {
-        if(slot == EquipmentSlot.HEAD && stack.is(Items.PLAYER_HEAD) && MinecraftUtils.hasTag(stack, MinecraftUtils.UNWEARABLE_TAG)) {
+    @Inject(method = "onEquipItem", at = @At("HEAD"), cancellable = true)
+    private void preventHeadEquip(EquipmentSlot slot, ItemStack oldItem, ItemStack newItem, CallbackInfo ci) {
+        if(slot == EquipmentSlot.HEAD && newItem.is(Items.PLAYER_HEAD) && MinecraftUtils.hasTag(newItem, MinecraftUtils.UNWEARABLE_TAG)) {
             ci.cancel();
         }
     }
