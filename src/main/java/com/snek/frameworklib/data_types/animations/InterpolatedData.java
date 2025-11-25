@@ -15,15 +15,42 @@ import com.snek.frameworklib.utils.Utils;
 
 /**
  * A collection of data that can be interpolated by Minecraft's client.
+ * <p>
  * This is used to pre-calculate animations.
  */
 public class InterpolatedData {
+
+    // Data
     private @Nullable Transform transform;
     private @Nullable Transform transformFg;
     private @Nullable Transform transformBg;
     private @Nullable Vector3i  bgColor;
     private @Nullable Integer   bgAlpha;
     private @Nullable Integer   opacity;
+
+    // Checks
+    public boolean hasTransformFg() { return transformFg != null; }
+    public boolean hasTransformBg() { return transformBg != null; }
+    public boolean hasTransform  () { return transform   != null; }
+    public boolean hasBgColor    () { return bgColor     != null; }
+    public boolean hasBgAlpha    () { return bgAlpha     != null; }
+    public boolean hasOpacity    () { return opacity     != null; }
+
+    // Setters
+    public void setTransformFg(final @Nullable Transform _transformFg) { transformFg = _transformFg; }
+    public void setTransformBg(final @Nullable Transform _transformBg) { transformBg = _transformBg; }
+    public void setTransform  (final @Nullable Transform _transform  ) { transform   = _transform;   }
+    public void setBgColor    (final @Nullable Vector3i  _bgColor    ) { bgColor     = _bgColor;     }
+    public void setBgAlpha    (final @Nullable Integer   _bgAlpha    ) { bgAlpha     = _bgAlpha;     }
+    public void setOpacity    (final @Nullable Integer   _opacity    ) { opacity     = _opacity;     }
+
+    // Getters
+    public @Nullable Transform getTransformFg() { return transformFg; }
+    public @Nullable Transform getTransformBg() { return transformBg; }
+    public @Nullable Transform getTransform  () { return transform;   }
+    public @Nullable Vector3i  getBgColor    () { return bgColor;     }
+    public @Nullable Integer   getBgAlpha    () { return bgAlpha;     }
+    public @Nullable Integer   getOpacity    () { return opacity;     }
 
 
 
@@ -100,30 +127,4 @@ public class InterpolatedData {
             opacity = Utils.interpolateI(opacity, s.d.getOpacity(), s.getFactor());
         }
     }
-
-
-
-    // Checks
-    public boolean hasTransformFg() { return transformFg != null; }
-    public boolean hasTransformBg() { return transformBg != null; }
-    public boolean hasTransform  () { return transform   != null; }
-    public boolean hasBgColor    () { return bgColor     != null; }
-    public boolean hasBgAlpha    () { return bgAlpha     != null; }
-    public boolean hasOpacity    () { return opacity     != null; }
-
-    // Setters
-    public void setTransformFg(final @Nullable Transform _transformFg) { transformFg = _transformFg; }
-    public void setTransformBg(final @Nullable Transform _transformBg) { transformBg = _transformBg; }
-    public void setTransform  (final @Nullable Transform _transform  ) { transform   = _transform;   }
-    public void setBgColor    (final @Nullable Vector3i  _bgColor    ) { bgColor     = _bgColor;     }
-    public void setBgAlpha    (final @Nullable Integer   _bgAlpha    ) { bgAlpha     = _bgAlpha;     }
-    public void setOpacity    (final @Nullable Integer   _opacity    ) { opacity     = _opacity;     }
-
-    // Getters
-    public @Nullable Transform getTransformFg() { return transformFg; }
-    public @Nullable Transform getTransformBg() { return transformBg; }
-    public @Nullable Transform getTransform  () { return transform;   }
-    public @Nullable Vector3i  getBgColor    () { return bgColor;     }
-    public @Nullable Integer   getBgAlpha    () { return bgAlpha;     }
-    public @Nullable Integer   getOpacity    () { return opacity;     }
 }

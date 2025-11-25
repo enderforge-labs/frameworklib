@@ -10,6 +10,9 @@ import com.snek.frameworkconfig.fields.ValueConfigField;
 
 
 
+/**
+ * Configuration data for the graphics system.
+ */
 public class UiConfig implements ConfigFile {
     public final ValueConfigField<Float> z_layer_spacing = new ValueConfigField<>(
         new String[] {
@@ -18,10 +21,6 @@ public class UiConfig implements ConfigFile {
         },
         0.001f
     );
-
-
-
-
 
 
 

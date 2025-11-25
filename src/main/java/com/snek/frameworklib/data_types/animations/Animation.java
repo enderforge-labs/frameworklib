@@ -14,11 +14,11 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * This class identifies an animation expressed as a list of Transitions.
+ * An animation expressed as a list of Transitions.
  */
 public class Animation {
     private final @NotNull List<@NotNull Transition> transitions = new ArrayList<>();
-    private int totalDuration = 0;
+    private final int totalDuration;
 
 
     /**
@@ -26,10 +26,13 @@ public class Animation {
      * @param _transitions One or more transitions.
      */
     public Animation(final @NotNull Transition... _transitions) {
+        int _totalDuration = 0;
         for(final Transition t : _transitions) {
             transitions.add(t);
-            totalDuration += t.getDuration();
+            _totalDuration += t.getDuration();
         }
+
+        totalDuration = _totalDuration;
     }
 
 

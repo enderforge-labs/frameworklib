@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.frameworkconfig.ConfigManager;
 import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.utils.UtilityClassBase;
 
 
 
@@ -15,13 +16,14 @@ import com.snek.frameworklib.FrameworkLib;
 /**
  * A utility class that contains configuration file data.
  */
-public abstract class Configs {
-
+public final class Configs extends UtilityClassBase {
     private Configs() {}
 
+    // Data
     private static @NotNull UiConfig          ui   = null;
     private static @NotNull PerformanceConfig perf = null;
 
+    // Getters
     public static @NotNull UiConfig          getUi  () { return ui;   }
     public static @NotNull PerformanceConfig getPerf() { return perf; }
 

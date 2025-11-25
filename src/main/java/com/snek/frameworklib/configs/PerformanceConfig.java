@@ -10,6 +10,9 @@ import com.snek.frameworkconfig.fields.ValueConfigField;
 
 
 
+/**
+ * Configuration data for runtime performance.
+ */
 public class PerformanceConfig implements ConfigFile {
 
     public final ValueConfigField<Integer> ray_casting_batches = new ValueConfigField<>(
@@ -44,10 +47,6 @@ public class PerformanceConfig implements ConfigFile {
         },
         200
     );
-
-
-
-
 
 
 

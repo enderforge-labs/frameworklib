@@ -16,16 +16,21 @@ import com.snek.frameworklib.utils.Easings;
 
 /**
  * A single interpolated transition.
+ * <p>
+ * This specifies how fast and with what easing a transition should be applied to an element.
  */
 public class Transition {
 
     // Transition data
     private final int duration;
     private final @NotNull Easing easing;
-
-    // Optional data
     private boolean additive;
     public final @NotNull InterpolatedData d;
+
+    // Getters
+    public          int     getDuration() { return duration; }
+    public @NotNull Easing  getEasing  () { return easing;   }
+    public          boolean isAdditive () { return additive; }
 
 
 
@@ -55,7 +60,7 @@ public class Transition {
 
 
     /**
-     * Specifies that the transform of the element this transition is applied to needs to reach a certain value.
+     * Specifies that the transform of the element needs to reach a certain value.
      * @param _transform The transform value.
      * @return This transition.
      */
@@ -65,7 +70,7 @@ public class Transition {
         return this;
     }
     /**
-     * Specifies that a certain transform value has to be applied to the transform of the element this transition is applied to.
+     * Specifies that a certain transform value has to be applied to the transform of the element.
      * @param _transform The transform value.
      * @return This transition.
      */
@@ -77,7 +82,7 @@ public class Transition {
 
 
     /**
-     * Specifies that the foreground transform of the element this transition is applied to needs to reach a certain value.
+     * Specifies that the foreground transform of the element needs to reach a certain value.
      * @param _transform The transform value.
      * @return This transition.
      */
@@ -87,7 +92,7 @@ public class Transition {
         return this;
     }
     /**
-     * Specifies that a certain transform value has to be applied to the foreground transform of the element this transition is applied to.
+     * Specifies that a certain transform value has to be applied to the foreground transform of the element.
      * @param _transform The transform value.
      * @return This transition.
      */
@@ -99,7 +104,7 @@ public class Transition {
 
 
     /**
-     * Specifies that the background transform of the element this transition is applied to needs to reach a certain value.
+     * Specifies that the background transform of the element needs to reach a certain value.
      * @param _transform The transform value.
      * @return This transition.
      */
@@ -109,7 +114,7 @@ public class Transition {
         return this;
     }
     /**
-     * Specifies that a certain transform value has to be applied to the background transform of the element this transition is applied to.
+     * Specifies that a certain transform value has to be applied to the background transform of the element.
      * @param _transform The transform value.
      * @return This transition.
      */
@@ -121,7 +126,7 @@ public class Transition {
 
 
     /**
-     * Specifies that the background color of the element this transition is applied to needs to reach a certain value.
+     * Specifies that the background color of the element needs to reach a certain value.
      * @param _color The background color value.
      * @return This transition.
      */
@@ -132,7 +137,7 @@ public class Transition {
 
 
     /**
-     * Specifies that the background transparency of the element this transition is applied to needs to reach a certain value.
+     * Specifies that the background transparency of the element needs to reach a certain value.
      * @param _alpha The background transparency value.
      * @return This transition.
      */
@@ -156,19 +161,11 @@ public class Transition {
 
 
     /**
-     * Creates an animation step from this transition based on the interpolation factor.
+     * Creates a transition step from this transition based on the interpolation factor.
      * @param factor The interpolation factor.
-     * @return The animation step.
+     * @return The transition step.
      */
     public @NotNull TransitionStep createStep(final float factor) {
         return new TransitionStep(factor, additive, d);
     }
-
-
-
-
-    // Getters
-    public          int     getDuration() { return duration; }
-    public @NotNull Easing  getEasing  () { return easing;   }
-    public          boolean isAdditive () { return additive; }
 }

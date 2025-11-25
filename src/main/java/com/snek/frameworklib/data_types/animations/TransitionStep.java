@@ -18,6 +18,11 @@ public class TransitionStep {
     public  final @NotNull InterpolatedData d;
 
 
+    // Getters
+    public float   getFactor () { return factor; }
+    public boolean isAdditive() { return additive; }
+
+
     /**
      * Creates a new TransitionStep.
      * @param _factor The interpolation factor.
@@ -29,9 +34,4 @@ public class TransitionStep {
         additive = _additive;
         d = _d;
     }
-
-
-    // Getters
-    public float   getFactor () { return factor; }
-    public boolean isAdditive() { return additive; }
 }
