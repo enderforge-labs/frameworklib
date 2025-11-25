@@ -17,6 +17,7 @@ import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.serialization.JsonOps;
+import com.snek.frameworklib.FrameworkLib;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
@@ -70,7 +71,8 @@ import net.minecraft.world.phys.Vec3;
  */
 public final class MinecraftUtils extends UtilityClassBase {
     private MinecraftUtils() {}
-    public static final @NotNull UUID HEAD_OWNER_UUID = UUID.fromString("e58d5427-a51e-4ea5-9938-20fa7bd90e52");
+    public static final @NotNull UUID HEAD_OWNER_UUID  = UUID.fromString("e58d5427-a51e-4ea5-9938-20fa7bd90e52");
+    public static final @NotNull String UNWEARABLE_TAG = FrameworkLib.LIB_ID + ".unequippable";
 
 
 
@@ -198,11 +200,62 @@ public final class MinecraftUtils extends UtilityClassBase {
 
 
     /**
+     * Checks if the item stack has the specified boolean tag set to {@code true}.
+     * @param stack The stack to check.
+     * @param tagKey The key of the tag to add.
+     * @return True if the item stack has the tag and it's set to {@code true}, false otherwise.
+     */
+    public static boolean hasTag(final @NotNull ItemStack stack, final @NotNull String tagKey) {
+        CompoundTag nbt = stack.getTag();
+        return nbt != null && nbt.getBoolean(tagKey);
+    }
+
+
+    /**
+     * Adds a boolean tag with value {@code true} to an item stack.
+     * <p>
+     * Notice: this function modifies the original item stack. If that's not what you want, make a copy first.
+     * @param stack The item stack.
+     * @param tagKey The key of the tag to add.
+     * @return The modified item stack.
+     */
+    public static @NotNull ItemStack addTag(final @NotNull ItemStack stack, final @NotNull String tagKey) {
+        final CompoundTag nbt = stack.getOrCreateTag();
+        nbt.putBoolean(tagKey, true);
+        return stack;
+    }
+
+
+    /**
+     * Removes a tag from an item stack.
+     * <p>
+     * Notice: this function modifies the original item stack. If that's not what you want, make a copy first.
+     * @param stack The item stack.
+     * @param tagKey The key of the tag to add.
+     * @return The modified item stack.
+     */
+    public static @NotNull ItemStack removeTag(final @NotNull ItemStack stack, final @NotNull String tagKey) {
+        final CompoundTag nbt = stack.getTag();
+        if(nbt != null) {
+            nbt.remove(tagKey);
+        }
+        return stack;
+    }
+
+
+
+
+
+
+
+
+    /**
      * Returns an ItemStack containing a player head with texture the specified skin ID.
      * @param skin The Base-64 skin ID.
+     * @param wearable Whether the item stack should be wearable in the helmet slot.
      * @return The head as an ItemStack of count 1.
      */
-    public static @NotNull ItemStack createCustomHead(final @NotNull String skin) {
+    public static @NotNull ItemStack createCustomHead(final @NotNull String skin, final boolean wearable) {
 
         // Create the texture list NBT using the provided Base64 texture ID
         final CompoundTag NBT_texture = new CompoundTag();
@@ -220,12 +273,18 @@ public final class MinecraftUtils extends UtilityClassBase {
         NBT_skullOwner.putUUID("Id", HEAD_OWNER_UUID);
         NBT_skullOwner.put("Properties", NBT_properties);
 
-        // Create the ItemStack and return it
+        // Create the ItemStack
         final ItemStack head = new ItemStack(Items.PLAYER_HEAD, 1);
         head.getOrCreateTag().put("SkullOwner", NBT_skullOwner);
+
+        // Make it unwearable if needed
+        if(!wearable) {
+            addTag(head, UNWEARABLE_TAG);
+        }
+
+        // Return the item stack
         return head;
     }
-
 
 
 
