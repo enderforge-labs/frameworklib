@@ -3,7 +3,7 @@ package com.snek.frameworklib.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.snek.frameworklib.utils.MinecraftUtils;
 
@@ -23,12 +23,14 @@ import net.minecraft.world.item.Items;
  * This mixin stops living entities from equipping player heads if they have the {@link MinecraftUtils#UNWEARABLE_TAG} tag.
  */
 @Mixin(LivingEntity.class)
-public class UnwearableHeadItemMixin {
+public abstract class UnwearableHeadItemMixin {
 
-    @Inject(method = "onEquipItem", at = @At("HEAD"), cancellable = true)
-    private void preventHeadEquip(EquipmentSlot slot, ItemStack oldItem, ItemStack newItem, CallbackInfo ci) {
-        if(slot == EquipmentSlot.HEAD && newItem.is(Items.PLAYER_HEAD) && MinecraftUtils.hasTag(newItem, MinecraftUtils.UNWEARABLE_TAG)) {
-            ci.cancel();
+    @Inject(method = "getEquipmentSlotForItem", at = @At("HEAD"), cancellable = true)
+    private static void _getEquipmentSlotForItem(ItemStack item, CallbackInfoReturnable<EquipmentSlot> cir) {
+
+        // If the item is not wearable, reset the head item
+        if(item.is(Items.PLAYER_HEAD) && MinecraftUtils.hasTag(item, MinecraftUtils.UNWEARABLE_TAG)) {
+            cir.setReturnValue(EquipmentSlot.MAINHAND);
         }
     }
 }
