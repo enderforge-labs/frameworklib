@@ -19,7 +19,14 @@ import net.minecraft.client.gui.Font;
 
 
 /**
- * A class that generates the width and height of each individual character.
+ * A class that calculates and writes the in-game width and height of each individual character that fits in a {@code char}.
+ * <p>
+ * These dimensions are based on the current active resource pack stack.
+ * <p>
+ * The values represent the number of pixels the character occupies on each axis.
+ * <p>
+ * TEXT_PIXEL_BLOCK_RATIO represents the amount of pixels that fit in a minecraft block when rendered through a text display.
+ * This assumes the text display has scale (1, 1) and no shearing.
  */
 public abstract class FontDataGenerator {
     private FontDataGenerator() {}
@@ -35,10 +42,10 @@ public abstract class FontDataGenerator {
 
 
     /**
-     * Retrieves the width of every character that fits in a Java Char and saves it in the output file.
+     * Retrieves the width of every character that fits in a Java {@code char} and saves it in the output file.
      * <p>
-     * The output file is a Java class that contains the widths and heights of the characters. This is not a ready-made utility class but a container for the raw values.
-     * The values represent the size a character would have if rendered in-game as non-bold text through a TextDisplay with transform scale 1.0f and no shearing. //FIXME
+     * The output file is a Java class that contains the widths and heights of the characters.
+     * This is not a ready-made utility class but a container for the raw values.
      */
     public static void generate() {
 
