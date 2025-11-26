@@ -14,6 +14,7 @@ import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
+import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
 

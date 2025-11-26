@@ -9,6 +9,7 @@ import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
+import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
 

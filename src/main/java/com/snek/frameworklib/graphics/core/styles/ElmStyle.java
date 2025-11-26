@@ -1,4 +1,4 @@
-package com.snek.frameworklib.graphics.basic.styles;
+package com.snek.frameworklib.graphics.core.styles;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -7,7 +7,6 @@ import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import net.minecraft.world.entity.Display.BillboardConstraints;
-
 
 
 

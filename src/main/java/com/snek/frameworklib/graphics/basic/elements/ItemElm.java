@@ -11,9 +11,9 @@ import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.data_types.displays.CustomItemDisplay;
-import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
-import com.snek.frameworklib.graphics.core.Elm;
+import com.snek.frameworklib.graphics.core.elements.Elm;
+import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;

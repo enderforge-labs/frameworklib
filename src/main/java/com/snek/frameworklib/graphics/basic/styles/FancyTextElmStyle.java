@@ -8,6 +8,7 @@ import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
+import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.utils.Easings;
 
 

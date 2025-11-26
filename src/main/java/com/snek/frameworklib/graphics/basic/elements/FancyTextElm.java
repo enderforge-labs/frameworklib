@@ -14,9 +14,9 @@ import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
-import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.network.chat.Component;

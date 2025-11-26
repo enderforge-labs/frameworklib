@@ -1,4 +1,4 @@
-package com.snek.frameworklib.graphics.core;
+package com.snek.frameworklib.graphics.core.elements;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,9 @@ import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.containers.IndexedArrayDeque;
 import com.snek.frameworklib.data_types.displays.CustomDisplay;
-import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
+import com.snek.frameworklib.graphics.core.Div;
+import com.snek.frameworklib.graphics.core.HudCanvas;
+import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.utils.Easing;
