@@ -29,9 +29,9 @@ public class Triplet<F, S, T> {
     public @Nullable T getThird () { return third;  }
 
     // Setters
-    public void setFirst (final @Nullable F _first ) { first  = _first;  }
-    public void setSecond(final @Nullable S _second) { second = _second; }
-    public void setThird (final @Nullable T _third ) { third  = _third;  }
+    public void setFirst (final @Nullable F first ) { this.first  = first;  }
+    public void setSecond(final @Nullable S second) { this.second = second; }
+    public void setThird (final @Nullable T third ) { this.third  = third;  }
 
 
 
@@ -48,14 +48,14 @@ public class Triplet<F, S, T> {
 
     /**
      * Creates a new Triplet using the specified values.
-     * @param _first The first value.
-     * @param _second The second value.
-     * @param _third The third value.
+     * @param first The first value.
+     * @param second The second value.
+     * @param third The third value.
      */
-    public Triplet(final @Nullable F _first, final @Nullable S _second, final @Nullable T _third) {
-        first  = _first;
-        second = _second;
-        third  = _third;
+    public Triplet(final @Nullable F first, final @Nullable S second, final @Nullable T third) {
+        this.first  = first;
+        this.second = second;
+        this.third  = third;
     }
 
 
@@ -64,12 +64,12 @@ public class Triplet<F, S, T> {
      * @param <F> The type of the first value.
      * @param <S> The type of the second value.
      * @param <T> The type of the third value.
-     * @param _first The first value.
-     * @param _second The second value.
-     * @param _third The third value.
+     * @param first The first value.
+     * @param second The second value.
+     * @param third The third value.
      * @return The newly created Triplet.
      */
-    public static <F, S, T> @NotNull Triplet<@Nullable F, @Nullable S, @Nullable T> from(final @Nullable F _first, final @Nullable S _second, final @Nullable T _third) {
-        return new Triplet<>(_first, _second, _third);
+    public static <F, S, T> @NotNull Triplet<@Nullable F, @Nullable S, @Nullable T> from(final @Nullable F first, final @Nullable S second, final @Nullable T third) {
+        return new Triplet<>(first, second, third);
     }
 }

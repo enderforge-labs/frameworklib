@@ -58,46 +58,46 @@ public class InterpolatedData {
     /**
      * Creates a new InterpolatedData.
      * <p>
-     * Notice: {@code _transformFg} and {@code _transformBg} are only used by elements that have distinct background and foreground.
-     * Single-layer element use only {@code _transform}.
-     * @param _transform The transform.
-     * @param _bgColor The background color.
-     * @param _bgAlpha The background transparency.
-     * @param _opacity The foreground text opacity.
-     * @param _transformFg The transform applied exclusively to the foreground of the element.
-     * @param _transformBg The transform applied exclusively to the background of the element.
+     * Notice: {@code transformFg} and {@code transformBg} are only used by elements that have distinct background and foreground.
+     * Single-layer element use only {@code transform}.
+     * @param transform The transform.
+     * @param bgColor The background color.
+     * @param bgAlpha The background transparency.
+     * @param opacity The foreground text opacity.
+     * @param transformFg The transform applied exclusively to the foreground of the element.
+     * @param transformBg The transform applied exclusively to the background of the element.
      */
     public InterpolatedData(
-        final @Nullable Transform _transform,
-        final @Nullable Vector3i  _bgColor,
-        final @Nullable Integer   _bgAlpha,
-        final @Nullable Integer   _opacity,
-        final @Nullable Transform _transformFg,
-        final @Nullable Transform _transformBg
+        final @Nullable Transform transform,
+        final @Nullable Vector3i  bgColor,
+        final @Nullable Integer   bgAlpha,
+        final @Nullable Integer   opacity,
+        final @Nullable Transform transformFg,
+        final @Nullable Transform transformBg
     ) {
-        transform   = _transform;
-        bgColor     = _bgColor;
-        bgAlpha     = _bgAlpha;
-        opacity     = _opacity;
-        transformFg = _transformFg;
-        transformBg = _transformBg;
+        this.transform   = transform;
+        this.bgColor     = bgColor;
+        this.bgAlpha     = bgAlpha;
+        this.opacity     = opacity;
+        this.transformFg = transformFg;
+        this.transformBg = transformBg;
     }
 
 
     /**
      * Creates a new InterpolatedData.
-     * @param _transform The transform.
-     * @param _bgColor The background color.
-     * @param _bgAlpha The background transparency.
-     * @param _opacity The foreground text opacity.
+     * @param transform The transform.
+     * @param bgColor The background color.
+     * @param bgAlpha The background transparency.
+     * @param opacity The foreground text opacity.
      */
     public InterpolatedData(
-        final @Nullable Transform _transform,
-        final @Nullable Vector3i  _bgColor,
-        final @Nullable Integer   _bgAlpha,
-        final @Nullable Integer   _opacity
+        final @Nullable Transform transform,
+        final @Nullable Vector3i  bgColor,
+        final @Nullable Integer   bgAlpha,
+        final @Nullable Integer   opacity
     ) {
-        this(_transform, _bgColor, _bgAlpha, _opacity, null, null);
+        this(transform, bgColor, bgAlpha, opacity, null, null);
     }
 
 

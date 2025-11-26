@@ -25,13 +25,13 @@ public class TransitionStep {
 
     /**
      * Creates a new TransitionStep.
-     * @param _factor The interpolation factor.
-     * @param _additive Whether the transform is additive.
-     * @param _d The interpolated data.
+     * @param factor The interpolation factor.
+     * @param additive Whether the transform is additive.
+     * @param d The interpolated data.
      */
-    public TransitionStep(final float _factor, final boolean _additive, final @NotNull InterpolatedData _d) {
-        factor     = _factor;
-        additive = _additive;
-        d = _d;
+    public TransitionStep(final float factor, final boolean additive, final @NotNull InterpolatedData d) {
+        this.factor   = factor;
+        this.additive = additive;
+        this.d        = d;
     }
 }

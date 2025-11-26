@@ -24,10 +24,10 @@ public class Flagged<T> {
 
     /**
      * Creates a new Flagged value.
-     * @param _value The initial value.
+     * @param value The initial value.
      */
-    private Flagged(final @Nullable T _value) {
-        this.value = _value;
+    private Flagged(final @Nullable T value) {
+        this.value = value;
     }
 
     /**
@@ -55,12 +55,12 @@ public class Flagged<T> {
     /**
      * Sets a new value.
      * <p>
-     * Flags the object if {@code !this.get().equals(_value)}.
-     * @param _value The new value.
+     * Flags the object if {@code !this.get().equals(value)}.
+     * @param value The new value.
      */
-    public void set(final @Nullable T _value) {
-        if(!Objects.equals(value, _value)) flag = true;
-        value = _value;
+    public void set(final @Nullable T value) {
+        if(!Objects.equals(this.value, value)) flag = true;
+        this.value = value;
     }
 
 
@@ -72,7 +72,7 @@ public class Flagged<T> {
      * Notice:
      *     This returns a reference to the object, not a copy.
      *     For immutable types (e.g., Integer, String), reassignment creates a new object
-     *     instead of modifying the internal value. You should use set() instead.
+     *     instead of modifying the internal value. You should use {@link #set(T)} instead.
      * @return The object reference.
      */
     public @Nullable T edit() {

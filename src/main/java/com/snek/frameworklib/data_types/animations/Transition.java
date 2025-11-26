@@ -37,12 +37,12 @@ public class Transition {
 
     /**
      * Creates a new Transition.
-     * @param _duration The total duration of the transition.
-     * @param _easing The type of easing to use.
+     * @param duration The total duration of the transition.
+     * @param easing The type of easing to use.
      */
-    public Transition(final int _duration, final @NotNull Easing _easing) {
-        duration  = _duration;
-        easing    = _easing;
+    public Transition(final int duration, final @NotNull Easing easing) {
+        this.duration  = duration;
+        this.easing    = easing;
 
         additive   = false;
         d = new InterpolatedData(null, null, null, null);
@@ -61,21 +61,21 @@ public class Transition {
 
     /**
      * Specifies that the transform of the element needs to reach a certain value.
-     * @param _transform The transform value.
+     * @param transform The transform value.
      * @return This transition.
      */
-    public @NotNull Transition targetTransform(final @Nullable Transform _transform) {
-        d.setTransform(_transform);
+    public @NotNull Transition targetTransform(final @Nullable Transform transform) {
+        d.setTransform(transform);
         additive = false;
         return this;
     }
     /**
      * Specifies that a certain transform value has to be applied to the transform of the element.
-     * @param _transform The transform value.
+     * @param transform The transform value.
      * @return This transition.
      */
-    public @NotNull Transition additiveTransform(final @Nullable Transform _transform) {
-        d.setTransform(_transform);
+    public @NotNull Transition additiveTransform(final @Nullable Transform transform) {
+        d.setTransform(transform);
         additive = true;
         return this;
     }
@@ -83,21 +83,21 @@ public class Transition {
 
     /**
      * Specifies that the foreground transform of the element needs to reach a certain value.
-     * @param _transform The transform value.
+     * @param transform The transform value.
      * @return This transition.
      */
-    public @NotNull Transition targetTransformFg(final @Nullable Transform _transform) {
-        d.setTransformFg(_transform);
+    public @NotNull Transition targetTransformFg(final @Nullable Transform transform) {
+        d.setTransformFg(transform);
         additive = false;
         return this;
     }
     /**
      * Specifies that a certain transform value has to be applied to the foreground transform of the element.
-     * @param _transform The transform value.
+     * @param transform The transform value.
      * @return This transition.
      */
-    public @NotNull Transition additiveTransformFg(final @Nullable Transform _transform) {
-        d.setTransformFg(_transform);
+    public @NotNull Transition additiveTransformFg(final @Nullable Transform transform) {
+        d.setTransformFg(transform);
         additive = true;
         return this;
     }
@@ -105,21 +105,21 @@ public class Transition {
 
     /**
      * Specifies that the background transform of the element needs to reach a certain value.
-     * @param _transform The transform value.
+     * @param transform The transform value.
      * @return This transition.
      */
-    public @NotNull Transition targetTransformBg(final @Nullable Transform _transform) {
-        d.setTransformBg(_transform);
+    public @NotNull Transition targetTransformBg(final @Nullable Transform transform) {
+        d.setTransformBg(transform);
         additive = false;
         return this;
     }
     /**
      * Specifies that a certain transform value has to be applied to the background transform of the element.
-     * @param _transform The transform value.
+     * @param transform The transform value.
      * @return This transition.
      */
-    public @NotNull Transition additiveTransformBg(final @Nullable Transform _transform) {
-        d.setTransformBg(_transform);
+    public @NotNull Transition additiveTransformBg(final @Nullable Transform transform) {
+        d.setTransformBg(transform);
         additive = true;
         return this;
     }
@@ -127,33 +127,33 @@ public class Transition {
 
     /**
      * Specifies that the background color of the element needs to reach a certain value.
-     * @param _color The background color value.
+     * @param color The background color value.
      * @return This transition.
      */
-    public @NotNull Transition targetBgColor(final @Nullable Vector3i _bgColor) {
-        d.setBgColor(_bgColor);
+    public @NotNull Transition targetBgColor(final @Nullable Vector3i bgColor) {
+        d.setBgColor(bgColor);
         return this;
     }
 
 
     /**
      * Specifies that the background transparency of the element needs to reach a certain value.
-     * @param _alpha The background transparency value.
+     * @param alpha The background transparency value.
      * @return This transition.
      */
-    public @NotNull Transition targetBgAlpha(final @Nullable Integer _bgAlpha) {
-        d.setBgAlpha(_bgAlpha);
+    public @NotNull Transition targetBgAlpha(final @Nullable Integer bgAlpha) {
+        d.setBgAlpha(bgAlpha);
         return this;
     }
 
 
     /**
      * Specifies that the text opacity of the element this transition is applied to needs to reach a certain value.
-     * @param _opacity The text opacity value.
+     * @param opacity The text opacity value.
      * @return This transition.
      */
-    public @NotNull Transition targetOpacity(final @Nullable Integer _opacity) {
-        d.setOpacity(_opacity);
+    public @NotNull Transition targetOpacity(final @Nullable Integer opacity) {
+        d.setOpacity(opacity);
         return this;
     }
 

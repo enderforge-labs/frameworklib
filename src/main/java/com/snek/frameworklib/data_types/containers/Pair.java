@@ -26,8 +26,8 @@ public class Pair<F, S> {
     public @Nullable S getSecond() { return second; }
 
     // Setters
-    public void setFirst (final @Nullable F _first ) { first  = _first;  }
-    public void setSecond(final @Nullable S _second) { second = _second; }
+    public void setFirst (final @Nullable F first ) { this.first  = first;  }
+    public void setSecond(final @Nullable S second) { this.second = second; }
 
 
 
@@ -43,12 +43,12 @@ public class Pair<F, S> {
 
     /**
      * Creates a new Pair using the specified values.
-     * @param _first The first value.
-     * @param _second The second value.
+     * @param first The first value.
+     * @param second The second value.
      */
-    public Pair(final @Nullable F _first, final @Nullable S _second) {
-        first  = _first;
-        second = _second;
+    public Pair(final @Nullable F first, final @Nullable S second) {
+        this.first  = first;
+        this.second = second;
     }
 
 
@@ -56,11 +56,11 @@ public class Pair<F, S> {
      * Creates a new Pair using the specified values.
      * @param <F> The type of the first value.
      * @param <S> The type of the second value.
-     * @param _first The first value.
-     * @param _second The second value.
+     * @param first The first value.
+     * @param second The second value.
      * @return The newly created Pair.
      */
-    public static <F, S> @NotNull Pair<@Nullable F, @Nullable S> from(final @Nullable F _first, final @Nullable S _second) {
-        return new Pair<>(_first, _second);
+    public static <F, S> @NotNull Pair<@Nullable F, @Nullable S> from(final @Nullable F first, final @Nullable S second) {
+        return new Pair<>(first, second);
     }
 }

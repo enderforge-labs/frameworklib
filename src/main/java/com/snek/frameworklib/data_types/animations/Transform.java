@@ -76,16 +76,16 @@ public class Transform {
 
     /**
      * Creates a new Transform.
-     * @param __pos The translation.
-     * @param __lrot The local rotation.
-     * @param __scale The scale.
-     * @param __gRot The global rotation
+     * @param pos The translation.
+     * @param lrot The local rotation.
+     * @param scale The scale.
+     * @param gRot The global rotation
      */
-    public Transform(final @NotNull Vector3f __pos, final @NotNull Quaternionf __lrot, final @NotNull Vector3f __scale, final @NotNull Quaternionf __gRot) {
-        _pos   = new Vector3f(__pos);
-        _lrot  = new Quaternionf(__lrot);
-        _scale = new Vector3f(__scale);
-        _grot  = new Quaternionf(__gRot);
+    public Transform(final @NotNull Vector3f pos, final @NotNull Quaternionf lrot, final @NotNull Vector3f scale, final @NotNull Quaternionf gRot) {
+        _pos   = new Vector3f   (pos);
+        _lrot  = new Quaternionf(lrot);
+        _scale = new Vector3f   (scale);
+        _grot  = new Quaternionf(gRot);
     }
 
 
@@ -95,9 +95,9 @@ public class Transform {
      */
     public Transform copy() {
         return new Transform(
-            new Vector3f(_pos),
+            new Vector3f   (_pos),
             new Quaternionf(_lrot),
-            new Vector3f(_scale),
+            new Vector3f   (_scale),
             new Quaternionf(_grot)
         );
     }

@@ -23,16 +23,16 @@ public class Animation {
 
     /**
      * Creates a new Animation.
-     * @param _transitions One or more transitions.
+     * @param transitions One or more transitions.
      */
-    public Animation(final @NotNull Transition... _transitions) {
+    public Animation(final @NotNull Transition... transitions) {
         int _totalDuration = 0;
-        for(final Transition t : _transitions) {
-            transitions.add(t);
+        for(final Transition t : transitions) {
+            this.transitions.add(t);
             _totalDuration += t.getDuration();
         }
 
-        totalDuration = _totalDuration;
+        this.totalDuration = _totalDuration;
     }
 
 

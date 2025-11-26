@@ -46,17 +46,17 @@ public class IndexedArrayDeque<E> extends AccessibleArrayDeque<E> {
      * <p>
      * If the element is not present, new elements are added to the queue until the desired size is reached.
      * @param index The index of the element to return.
-     * @param f The supplier function used to create new elements.
+     * @param supplier The supplier function used to create new elements.
      * @return The element at index {@code index}.
      * @throws IndexOutOfBoundsException if {@code index} is out of range
      *     ({@code index < 0})
      */
-    public @Nullable E getOrAdd(final int index, final @NotNull Supplier<E> f) {
+    public @Nullable E getOrAdd(final int index, final @NotNull Supplier<E> supplier) {
         if(index < 0) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
         }
 
-        while(index >= size()) add(f.get());
+        while(index >= size()) add(supplier.get());
         return get(index);
     }
 
