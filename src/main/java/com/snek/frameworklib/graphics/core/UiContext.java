@@ -8,9 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
-import com.snek.frameworklib.configs.Configs;
-import com.snek.frameworklib.utils.scheduler.Scheduler;
-
 import net.minecraft.world.entity.player.Player;
 
 
@@ -21,8 +18,9 @@ import net.minecraft.world.entity.player.Player;
 
 
 /**
- * The root element of any UI. It contains canvases which contain the UI elements.
- * Only one canvas at a time can be displayed.
+ * A Context that is bound to a block and rotates to face the player.
+ * <p>
+ * Unlike HUDs, UIs don't despawn automatically. They also cannot move.
  */
 public non-sealed class UiContext extends Context {
 
@@ -36,9 +34,12 @@ public non-sealed class UiContext extends Context {
 
 
 
-
-    public UiContext(final @NotNull Player _player) {
-        super(_player);
+    /**
+     * Creates a new UiContext.
+     * @param player The owner of the new UiContext.
+    */
+    public UiContext(final @NotNull Player player) {
+        super(player);
     }
 
 
@@ -64,7 +65,7 @@ public non-sealed class UiContext extends Context {
 
 
     @Override
-    public void spawn(Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos) {
         if(!spawned) {
             spawnPos.set(pos);
 

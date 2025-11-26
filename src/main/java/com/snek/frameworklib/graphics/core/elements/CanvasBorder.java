@@ -15,7 +15,9 @@ import net.minecraft.server.level.ServerLevel;
 
 
 /**
- * An element that can display a full-width, horizontally centered line of configurable color.
+ * An element used to display a full-width, horizontally centered line of configurable color.
+ * <p>
+ * This is mainly used to draw the top and bottom borders of canvases, but it can be extended by mods freely or used for other purposes.
  */
 public class CanvasBorder extends PanelElm {
     public static final float DEFAULT_HEIGHT = 0.02f;
@@ -23,19 +25,19 @@ public class CanvasBorder extends PanelElm {
 
     /**
      * Creates a new HudBorder using a custom style.
-     * @param _world The world to create the element in.
-     * @param _style The style.
+     * @param world The world to create the element in.
+     * @param style The style.
      */
-    public CanvasBorder(final @NotNull ServerLevel _world, final @NotNull CanvasBorder_S _style) {
-        super(_world, _style);
+    public CanvasBorder(final @NotNull ServerLevel world, final @NotNull CanvasBorder_S style) {
+        super(world, style);
     }
 
 
     /**
      * Creates a new HudBorder using the default style.
-     * @param _world The world to create the element in.
+     * @param world The world to create the element in.
      */
-    public CanvasBorder(final @NotNull ServerLevel _world) {
-        this(_world, new CanvasBorder_S());
+    public CanvasBorder(final @NotNull ServerLevel world) {
+        this(world, new CanvasBorder_S());
     }
 }

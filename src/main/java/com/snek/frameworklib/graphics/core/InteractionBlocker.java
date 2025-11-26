@@ -33,8 +33,10 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * A special interaction entity that is used to block unwanted players interactions.
- * <p> This stops client-side clicks on blocks and entities behind the targeted UI
- * <p> and client-side item use events, preventing annoying UI flashes and visual artifacts.
+ * <p>
+ * This stops client-side clicks on blocks and entities behind the targeted UI
+ * <p>
+ * and client-side item use events, preventing annoying UI flashes and visual artifacts.
  */
 public class InteractionBlocker {
 
@@ -76,10 +78,10 @@ public class InteractionBlocker {
 
     /**
      * Creates a new InteractionBlocker.
-     * @param _world The world to create this interaction in.
+     * @param world The world to create this interaction in.
      */
-    public InteractionBlocker(final @NotNull Level _world, final float w, final float h) {
-        world = _world;
+    public InteractionBlocker(final @NotNull Level world, final float w, final float h) {
+        this.world = world;
         entity = new Interaction(EntityType.INTERACTION, world);
         Utils.invokeSafe(method_setWidth,  entity, w);
         Utils.invokeSafe(method_setHeight, entity, h);
@@ -90,7 +92,8 @@ public class InteractionBlocker {
 
     /**
      * Checks for stray interaction entities and purges them.
-     * <p> Must be called on entity load event.
+     * <p>
+     * Must be called on entity load event.
      * @param entity The entity.
      */
     public static void onEntityLoad(@NotNull Entity entity) {

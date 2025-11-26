@@ -19,7 +19,7 @@ import com.snek.frameworklib.utils.Easings;
 
 
 /**
- * The default style of the generic {@link FancyTextElm} UI element.
+ * The default style of the generic {@link FancyTextElm} element.
  */
 public class FancyTextElmStyle extends SimpleTextElmStyle {
     private @NotNull Flagged<@NotNull Vector3i>  bgColor     = null;

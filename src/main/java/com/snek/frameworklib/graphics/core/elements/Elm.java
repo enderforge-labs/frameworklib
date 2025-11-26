@@ -52,7 +52,9 @@ import net.minecraft.world.entity.player.Player;
 
 
 /**
- * An abstract class that represents a visible UI Element.
+ * The base class of every visible graphic element.
+ * <p>
+ * This implements automatic entity management, animation support and hover detection on top of the {@link Div} base class.
  */
 public abstract class Elm extends Div {
     public static final @NotNull String ENTITY_CUSTOM_NAME = FrameworkLib.LIB_ID + ".ui.displayentity";
@@ -96,10 +98,12 @@ public abstract class Elm extends Div {
     public CustomDisplay getEntity() {
         return entity;
     }
+
     /**
      * Retrieves the custom display held by this element as the specified subclass.
      * @param type The sublass to cast the custom display to.
      * @return The custom display casted to the specified class.
+     * @throw ClassCastException if the display cannot be cast to the specified class.
      */
     public <T> @NotNull T getEntity(final @NotNull Class<T> type) {
         if(type.isInstance(entity)) return type.cast(entity);
@@ -114,10 +118,12 @@ public abstract class Elm extends Div {
     public ElmStyle getStyle() {
         return style;
     }
+
     /**
      * Retrieves the style used by this element as the specified subclass.
      * @param type The sublass to cast the style to.
      * @return The style casted to the specified class.
+     * @throw ClassCastException if the style cannot be cast to the specified class.
      */
     public <T> @NotNull T getStyle(final @NotNull Class<T> type) {
         if(type.isInstance(style)) return type.cast(style);
@@ -133,16 +139,16 @@ public abstract class Elm extends Div {
 
     /**
      * Creates a new Elm using an existing CustomDisplay and a custom style.
-     * @param _world The world in which to place the element.
-     * @param _entity The display entity.
-     * @param _style The custom style.
+     * @param world The world in which to place the element.
+     * @param entity The display entity.
+     * @param style The custom style.
      */
-    protected Elm(final @NotNull ServerLevel _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
+    protected Elm(final @NotNull ServerLevel world, final @NotNull CustomDisplay entity, final @NotNull ElmStyle style) {
         super();
-        world  = _world;
-        entity = _entity;
-        style  = _style;
-        style.resetAll();
+        this.world  = world;
+        this.entity = entity;
+        this.style  = style;
+        this.style.resetAll();
     }
 
 
@@ -150,6 +156,7 @@ public abstract class Elm extends Div {
 
     /**
      * Flushes changeable style values to the entity.
+     * <p>
      * This does not start an interpolation.
      */
     protected void flushStyle() {
@@ -215,7 +222,8 @@ public abstract class Elm extends Div {
     //TODO all subclasses too
     /**
      * Calculates the final transform to apply to the entity.
-     * <p> This takes into account the element's position, alignment options, Z-index and visual transform.
+     * <p>
+     * This takes into account the element's position, alignment options, Z-index and visual transform.
      * @return The transform.
      */
     public @NotNull Transform __calcTransform() {
@@ -242,7 +250,8 @@ public abstract class Elm extends Div {
 
     /**
      * Instantly calculates animation steps and adds this element to the update queue.
-     * <p> Partial steps at the end of the animation are expanded to cover the entire step.
+     * <p>
+     * Partial steps at the end of the animation are expanded to cover the entire step.
      * @param animation The animation to apply.
      */
     @Override
@@ -279,7 +288,8 @@ public abstract class Elm extends Div {
 
     /**
      * Helper function.
-     * <p> Instantly calculates the result of a single transition and applies it to the element.
+     * <p>
+     * Instantly calculates the result of a single transition and applies it to the element.
      * @param t The transition to apply.
      */
     protected void __applyAnimationTransitionNow(final @NotNull Transition t) {
@@ -308,7 +318,8 @@ public abstract class Elm extends Div {
 
     /**
      * Helper function.
-     * <p> Instantly calculates the steps of a single transition and adds them to this element's future data.
+     * <p>
+     * Instantly calculates the steps of a single transition and adds them to this element's future data.
      * @param transition The transition to apply.
      * @param shift the amount of future data to skip before applying this transition.
      * @return The amount of future data this transition affected.
@@ -360,7 +371,8 @@ public abstract class Elm extends Div {
 
     /**
      * Helper function.
-     * <p> Applies a single future data to the element.
+     * <p>
+     * Applies a single future data to the element.
      * @param d The future data value.
      */
     protected void __applyTransitionStep(final @NotNull InterpolatedData d) {
@@ -370,7 +382,8 @@ public abstract class Elm extends Div {
 
     /**
      * Helper function.
-     * <p> Generates a base future data from the current values of the element.
+     * <p>
+     * Generates a base future data from the current values of the element.
      * @return The generated future data.
      */
     protected @NotNull InterpolatedData __generateInterpolatedData() {
@@ -383,7 +396,8 @@ public abstract class Elm extends Div {
     }
     /**
      * Helper function.
-     * <p> Generates a base future data from the values stored in an element of the future data queue.
+     * <p>
+     * Generates a base future data from the values stored in an element of the future data queue.
      * @param index The index of the element to read values from.
      * @return The generated future data.
      */
@@ -503,7 +517,8 @@ public abstract class Elm extends Div {
 
     /**
      * Processes the first step of the scheduled transitions of all the queued elements.
-     * <p> Must be called at the end of the tick every Configs.getPerf().animation_refresh_time ticks.
+     * <p>
+     * Must be called at the end of the tick every {@code Configs.getPerf().animation_refresh_time} ticks.
      */
     public static void processUpdateQueue() {
 
@@ -564,8 +579,9 @@ public abstract class Elm extends Div {
 
     /**
      * Checks if a player is looking at this element.
-     * <p> More specifically, it checks if the view vector of the player intersects
-     *     with the bounding box of this UI element, from any direction or distance.
+     * <p>
+     * More specifically, it checks if the view vector of the player intersects
+     * with the bounding box of this UI element, from any direction or distance.
      * @param player The player.
      * @return true if the player is looking at this element, false otherwise.
      *     Returns false if the element is not using FIXED billboard mode.
@@ -630,9 +646,22 @@ public abstract class Elm extends Div {
 
 
 
+    /**
+     * A special method that can be used to override the width of an element.
+     * <p>
+     * This specifies the distance from the center of the element to its left edge.
+     * By default, this is equivalent to {@code getAbsSize().x / 2f}
+     */
     public float getInteractionSizeLeft() {
         return getAbsSize().x / 2f;
     }
+
+    /**
+     * A special method that can be used to override the width of an element.
+     * <p>
+     * This specifies the distance from the center of the element to its right edge.
+     * By default, this is equivalent to {@code getAbsSize().x / 2f}
+     */
     public float getInteractionSizeRight() {
         return getAbsSize().x / 2f;
     }
@@ -646,7 +675,8 @@ public abstract class Elm extends Div {
 
     /**
      * Checks for stray displays and purges them.
-     * <p> Must be called on entity load event.
+     * <p>
+     * Must be called on entity load event.
      * @param entity The entity.
      */
     public static void onEntityLoad(final @NotNull Entity entity) {

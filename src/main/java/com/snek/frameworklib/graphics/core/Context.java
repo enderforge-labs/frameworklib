@@ -2,7 +2,6 @@ package com.snek.frameworklib.graphics.core;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +22,22 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
+
+
+
+
+
+
+
+/**
+ * The base class for contexts.
+ * <p>
+ * A context is the main container for any graphic interface.
+ * It contains canvases, which contain elements.
+ * <p>
+ * This is sealed as HudContext and UiContext are the only possible types of contexts.
+ * Specialized types but inherit from either of them.
+ */
 public abstract sealed class Context permits HudContext, UiContext {
 
     // Active Context list
@@ -51,8 +66,12 @@ public abstract sealed class Context permits HudContext, UiContext {
 
 
 
-    protected Context(final @NotNull Player _player) {
-        player = _player;
+    /**
+     * Creates a new context for the specified player.
+     * @param player The owner of the context.
+     */
+    protected Context(final @NotNull Player player) {
+        this.player = player;
     }
 
 
@@ -61,7 +80,7 @@ public abstract sealed class Context permits HudContext, UiContext {
      * @param pos The coordinates to spawn the context at.
      *     This defines the the center of the context's hitbox.
      */
-    public void spawn(Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos) {
         if(!spawned) {
             spawned = true;
             final float size = getInteractionBlockerSize();
@@ -99,6 +118,9 @@ public abstract sealed class Context permits HudContext, UiContext {
 
 
 
+    /**
+     * Updates the active canvas.
+     */
     public void update() {
         if(activeCanvas != null) activeCanvas.update();
     }
@@ -134,11 +156,12 @@ public abstract sealed class Context permits HudContext, UiContext {
 
     /**
      * Closes all the contexts of the specified player.
-     *     Does nothing if the player doesn't have any context open.
+     * <p>
+     * Does nothing if the player doesn't have any context open.
      * @param player The player.
      */
-    public static void closeContexts(final @NotNull Player _player) {
-        final LinkedList<Context> contexts = getActiveContexts().get(_player);
+    public static void closeContexts(final @NotNull Player player) {
+        final LinkedList<Context> contexts = getActiveContexts().get(player);
         if(contexts != null) for(final Context context : contexts) {
             context.despawn(true);
         }
@@ -148,7 +171,7 @@ public abstract sealed class Context permits HudContext, UiContext {
 
 
     /**
-     * Updates all active contexts.
+     * Updates all active contexts of every player.
      */
     public static void updateActiveContexts() {
         for(final LinkedList<Context> contexts : getActiveContexts().values()) {
@@ -162,14 +185,14 @@ public abstract sealed class Context permits HudContext, UiContext {
 
 
     /**
-     * Forwards a click event.
-     * @param _player The player.
+     * Forwards a click event to this context.
+     * @param player The player.
      * @param action The type of click.
      * @return True if the context consumed the click, false otherwise.
      */
-    public boolean forwardClick(final @NotNull Player _player, final @NotNull ClickAction action) {
+    public boolean forwardClick(final @NotNull Player player, final @NotNull ClickAction action) {
         if(activeCanvas == null) return false;
-        return activeCanvas.forwardClick(_player, action);
+        return activeCanvas.forwardClick(player, action);
     }
 
 
@@ -177,43 +200,56 @@ public abstract sealed class Context permits HudContext, UiContext {
 
     /**
      * Forwards a hover event to this context.
-     * @param _player The player.
+     * @param player The player.
      */
-    public void forwardHover(final @NotNull Player _player) {
+    public void forwardHover(final @NotNull Player player) {
         final Canvas canvas = activeCanvas;
         if(canvas == null) return;
 
         // If a targeted element is present, update its hover state
         if(targetedElm != null) {
-            targetedElm.updateHoverState(_player);
+            targetedElm.updateHoverState(player);
 
             // If it's no longer being hovered on, check if a new element is being hovered
             if(!targetedElm.isHovered()) {
-                targetedElm = canvas.findTargetedElement(_player);
+                targetedElm = canvas.findTargetedElement(player);
 
                 // If said element exists, send an update to it
                 if(targetedElm != null) {
-                    targetedElm.updateHoverState(_player);
+                    targetedElm.updateHoverState(player);
                 }
             }
         }
 
         // If a targeted element is not present, check if a new element is being hovered
         else {
-            targetedElm = canvas.findTargetedElement(_player);
+            targetedElm = canvas.findTargetedElement(player);
 
             // If said element exists, send an update to it
-            if(targetedElm != null) targetedElm.updateHoverState(_player);
+            if(targetedElm != null) targetedElm.updateHoverState(player);
         }
     }
 
 
 
 
-    public static @Nullable Context findTopMostContext(final Player _player) {
+    /**
+     * Finds the top-most context from the player's point of view.
+     * <p>
+     * More specifically, this is the context that's above all other contexts when projected onto the player's view.
+     * This only includes contexts that are directly under the crossair.
+     * <p>
+     * This method correctly handles intersecting contexts at any orientation.
+     * <p>
+     * Notice: The Z-Index of the individual elements contained by the context is not taken into account.
+     * Abnormally high Z-Layer values can result in noticibly incorrect context detection.
+     * @param player The player.
+     * @return The top-most context, or null if the player isn't directly looking at any context.
+     */
+    public static @Nullable Context findTopMostContext(final Player player) {
 
         // Get all contexts
-        LinkedList<Context> contexts = getActiveContexts().get(_player);
+        LinkedList<Context> contexts = getActiveContexts().get(player);
         if(contexts == null) return null;
 
         // Find top-most context
@@ -221,7 +257,7 @@ public abstract sealed class Context permits HudContext, UiContext {
         double bestDistance = Double.MAX_VALUE;
         for(final @Nullable Context c : contexts) {
             if(c.activeCanvas == null) continue;
-            final double distance = c.activeCanvas.getBg().getIntersectionLength(_player);
+            final double distance = c.activeCanvas.getBg().getIntersectionLength(player);
             if(distance > 0 && distance < bestDistance) {
                 bestDistance = distance;
                 topMost = c;

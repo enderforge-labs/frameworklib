@@ -7,7 +7,6 @@ import org.joml.Vector3d;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
@@ -27,6 +26,9 @@ import net.minecraft.world.phys.Vec3;
 
 
 
+/**
+ * A canvas that can be used to create UIs.
+ */
 public non-sealed class UiCanvas extends Canvas {
 
     // UI data
@@ -42,7 +44,7 @@ public non-sealed class UiCanvas extends Canvas {
 
     /**
      * Creates a new UiCanvas.
-     * @param _ui The UI context.
+     * @param context The UI context.
      * @param height The total height of the canvas.
      * @param heightTop The height of the top border.
      * @param heightBottom The height of the bottom border.
@@ -50,11 +52,11 @@ public non-sealed class UiCanvas extends Canvas {
      * @param backStyle The style of the back panel element. Can be null.
      */
     protected UiCanvas(
-        final @NotNull UiContext _ui,
-        final @Nullable UiCanvas prevCanvas, final @NotNull ServerLevel _world, final float height, final float heightTop, final float heightBottom,
+        final @NotNull UiContext context,
+        final float height, final float heightTop, final float heightBottom,
         final @Nullable PanelElmStyle bgStyle, final @Nullable PanelElmStyle backStyle
     ) {
-        super(_ui, prevCanvas, _world, height, heightTop, heightBottom, bgStyle, backStyle);
+        super(context, height, heightTop, heightBottom, bgStyle, backStyle);
     }
 
 
@@ -67,7 +69,7 @@ public non-sealed class UiCanvas extends Canvas {
 
         final Vec3 playerPos = player.getPosition(1f);                      // Get player position
         if(!lastPlayerPos.closerThan(playerPos, POS_UPDATE_DISTANCE)) {     // If the player has moved far enough
-            updateRot(player, false);                                           // Update rotation
+            updateRot(false);                                                   // Update rotation
             canvasRotationLimiter.renewCooldown(CANVAS_ROTATION_TIME);          // Renew the rotation cooldown
         }
     }
@@ -76,13 +78,13 @@ public non-sealed class UiCanvas extends Canvas {
 
 
     @Override
-    public void updateRot(final @NotNull Player player, final boolean instant) {
-        final Vec3 playerPos = player.getPosition(1f);                      // Get player position
+    public void updateRot(final boolean instant) {
+        final Vec3 playerPos = context.getPlayer().getPosition(1f);                // Get player position
         final double dx = ((UiContext)context).getSpawnPos().x - playerPos.x;      // Calculate X difference
         final double dz = ((UiContext)context).getSpawnPos().z - playerPos.z;      // Calculate Z difference
-        final double angle = Math.toDegrees(Math.atan2(-dx, dz));           // Calculate angle from position difference
-        final int targetDir = (int)Math.round((angle + 180d) / 45d) % 8;    // Convert from degrees to direction
-        __updateRot(targetDir, instant);                                    // Apply animations and update the current direction if needed
+        final double angle = Math.toDegrees(Math.atan2(-dx, dz));                   // Calculate angle from position difference
+        final int targetDir = (int)Math.round((angle + 180d) / 45d) % 8;            // Convert from degrees to direction
+        __updateRot(targetDir, instant);                                            // Apply animations and update the current direction if needed
     }
 
 
@@ -92,7 +94,7 @@ public non-sealed class UiCanvas extends Canvas {
     public void spawn(final @NotNull Vector3d pos) {
 
         // Instantly rotate the canvas to face the player. This allows it to skip annoying rotation animations
-        updateRot(context.getPlayer(), true);
+        updateRot(true);
 
         // Call superclass spawn
         super.spawn(pos);

@@ -22,7 +22,10 @@ import net.minecraft.world.phys.Vec3;
 
 
 /**
- * A Context that follows its player and rotates around them
+ * A Context that follows its player and rotates around them.
+ * <p>
+ * Unlike UIs, HUDs can be stacked and despawn when the player walks away or stops interacting with it.
+ * They are also not bound to a block and can move freely.
  */
 public non-sealed class HudContext extends Context {
 
@@ -51,12 +54,11 @@ public non-sealed class HudContext extends Context {
 
 
     /**
-     * Creates a new Hud.
-     * This automatically closes any previous Hud owned by the player.
-     * @param _player The owner of the new Hud.
+     * Creates a new HudContext.
+     * @param player The owner of the new HudContext.
      */
-    public HudContext(final @NotNull Player _player) {
-        super(_player);
+    public HudContext(final @NotNull Player player) {
+        super(player);
     }
 
 
@@ -105,7 +107,7 @@ public non-sealed class HudContext extends Context {
 
 
     @Override
-    public void spawn(Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos) {
         if(!spawned) {
 
             // Update HudContext list

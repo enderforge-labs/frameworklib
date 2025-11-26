@@ -13,9 +13,7 @@ import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
 
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ClickAction;
 
 
 
@@ -24,6 +22,9 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
+/**
+ * A canvas that can be used to create HUDs.
+ */
 public non-sealed class HudCanvas extends Canvas {
 
     // HUD data
@@ -44,7 +45,7 @@ public non-sealed class HudCanvas extends Canvas {
 
     /**
      * Creates a new HudCanvas.
-     * @param _hud The HUD context.
+     * @param hud The HUD context.
      * @param height The total height of the canvas.
      * @param heightTop The height of the top border.
      * @param heightBottom The height of the bottom border.
@@ -52,11 +53,11 @@ public non-sealed class HudCanvas extends Canvas {
      * @param backStyle The style of the back panel element. Can be null.
      */
     protected HudCanvas(
-        final @NotNull HudContext _hud,
+        final @NotNull HudContext hud,
         final float height, final float heightTop, final float heightBottom,
         final @Nullable PanelElmStyle bgStyle, final @Nullable PanelElmStyle backStyle
     ) {
-        super(_hud, _hud.getActiveCanvas(), (ServerLevel)(_hud.getPlayer().level()), height, heightTop, heightBottom, bgStyle, backStyle);
+        super(hud, height, heightTop, heightBottom, bgStyle, backStyle);
     }
 
 
@@ -75,7 +76,7 @@ public non-sealed class HudCanvas extends Canvas {
         // Update rotation and position if needed
         if(((HudContext)context).attemptPositionRefresh()) {
             lastPlayerEyePos = newPos;
-            updateRot(player, true); //FIXME make it disappear and reappear instead
+            updateRot(true); //FIXME make it disappear and reappear instead
             updatePos(this); //FIXME make it disappear and reappear instead
             resetInactivityTimer();
         }
@@ -95,6 +96,10 @@ public non-sealed class HudCanvas extends Canvas {
 
 
 
+    /**
+     * Sets the inactivity timer back to 0.
+     * This should be called when an input is detected.
+     */
     public void resetInactivityTimer() {
         lastInputTime = Scheduler.getTickNum();
     }
@@ -103,8 +108,8 @@ public non-sealed class HudCanvas extends Canvas {
 
 
     @Override
-    public void updateRot(final @NotNull Player player, final boolean instant) {
-        final int newRot = Math.round((player.getViewYRot(1) + 180f) / 45f) % 8;
+    public void updateRot(final boolean instant) {
+        final int newRot = Math.round((context.getPlayer().getViewYRot(1) + 180f) / 45f) % 8;
         __updateRot(newRot, instant);
     }
 
@@ -136,8 +141,9 @@ public non-sealed class HudCanvas extends Canvas {
         }
     }
 
+
     /**
-     * Calculates the translation needed to go from the player's eye position to the desired HUD origin coordinates
+     * Calculates the translation needed to go from the player's eye position to the desired HUD origin coordinates.
      * @return
      */
     public @NotNull Vector3f __calcVisualShift() {

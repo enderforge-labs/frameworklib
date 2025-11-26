@@ -23,7 +23,7 @@ import net.minecraft.network.chat.Component;
 
 
 /**
- * The default style of the generic {@link FancyTextElm} UI element.
+ * The default style of the generic {@link FancyTextElm} element.
  */
 public class SimpleTextElmStyle extends ElmStyle {
     public static final float DEFAULT_TEXT_SCALE = 0.3f;

@@ -20,7 +20,7 @@ import com.snek.frameworklib.utils.Easings;
 
 
 /**
- * The default style of the generic {@link PanelElm} UI element.
+ * The default style of the generic {@link PanelElm} element.
  */
 public class PanelElmStyle extends ElmStyle {
     private @NotNull Flagged<@NotNull Vector3i> color = null;

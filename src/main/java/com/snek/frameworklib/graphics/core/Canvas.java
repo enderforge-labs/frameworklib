@@ -19,7 +19,6 @@ import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.player.Player;
 
 
 
@@ -36,7 +35,15 @@ import net.minecraft.world.entity.player.Player;
 
 
 
-
+/**
+ * The base class for canvases.
+ * <p>
+ * A canvas is the main container for graphic elements.
+ * Each menu screen should have its own canvas.
+ * <p>
+ * This is sealed as {@link HudCanvas} and {@link UiCanvas} are the only possible types of canvases.
+ * Specialized types but inherit from either of them.
+ */
 public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
 
@@ -96,17 +103,19 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
     /**
      * Creates a new Canvas.
-     * @param prevCanvas The previous canvas. Used to inherit elements.
+     * @param context The context to assign this canvas to.
      * @param height The total height of the canvas.
      * @param heightTop The height of the top border.
      * @param heightBottom The height of the bottom border.
+     * @param bgStyle The style of the default background element.
+     * @param bgStyle The style of the default back panel element.
      */
     protected Canvas(
-        final @NotNull Context _context,
-        final @Nullable Canvas prevCanvas, final @NotNull ServerLevel _world, final float height, final float heightTop, final float heightBottom,
+        final @NotNull Context context,
+        final float height, final float heightTop, final float heightBottom,
         final @Nullable PanelElmStyle bgStyle, final @Nullable PanelElmStyle backStyle
     ) {
-        context = _context;
+        this.context = context;
         canvas = this;
         setSize(new Vector2f(1f, 1f));
 
@@ -122,6 +131,10 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
         newPosTop    = 1 - heightTop;
         newPosBottom = 1 - height;
 
+        // Cache data for element transfer/creation
+        final @Nullable Canvas prevCanvas = context.getActiveCanvas();
+        final @NotNull ServerLevel world = (ServerLevel)context.getPlayer().level();
+
 
 
 
@@ -129,10 +142,10 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
         if(prevCanvas == null) {
 
             // Create the elements
-            bg     = (Elm)addChild(new PanelElm(_world, bgStyle   == null ? new PanelElmStyle() : bgStyle));
-            back   = (Elm)addChild(new PanelElm(_world, backStyle == null ? new PanelElmStyle() : backStyle));
-            top    = (Elm)addChild(new CanvasBorder(_world));
-            bottom = (Elm)addChild(new CanvasBorder(_world));
+            bg     = (Elm)addChild(new PanelElm(world, bgStyle   == null ? new PanelElmStyle() : bgStyle));
+            back   = (Elm)addChild(new PanelElm(world, backStyle == null ? new PanelElmStyle() : backStyle));
+            top    = (Elm)addChild(new CanvasBorder(world));
+            bottom = (Elm)addChild(new CanvasBorder(world));
 
 
             // Set their size, position and alignments
@@ -203,14 +216,31 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
 
 
+    /**
+     * Updates the canvas.
+     */
     public abstract void update();
 
 
-    public abstract void updateRot(final @NotNull Player player, final boolean instant);
+
+
+    /**
+     * Updates the rotation of the canvas.
+     * @param instant Whether the rotation should be instantaneous or animated.
+     */
+    public abstract void updateRot(final boolean instant);
+
+    /**
+     * Helper function.
+     * <p>
+     * Updates the rotation of the canvas.
+     * @param newRot The new rotation, in eighths.
+     * @param instant Whether the rotation should be instantaneous or animated.
+     */
     protected void __updateRot(final int newRot, final boolean instant) {
         if(lastRotation != newRot) {
             final Animation animation = calcCanvasRotationAnimation(lastRotation, newRot);
-            if(instant) applyAnimationNowRecursive(animation); else applyAnimationRecursive(animation);
+            if(instant) applyAnimationNowRecursive(animation); else applyAnimationRecursive(animation); //TODO replace with a single applyAnimationRecursive
             lastRotation = newRot;
         }
     }

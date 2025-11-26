@@ -17,7 +17,7 @@ import net.minecraft.world.item.Items;
 
 
 /**
- * The default style of the generic {@link ItemElm} UI element.
+ * The default style of the generic {@link ItemElm} element.
  */
 public class ItemElmStyle extends ElmStyle {
     private @NotNull Flagged<@NotNull ItemStack> item = null;
