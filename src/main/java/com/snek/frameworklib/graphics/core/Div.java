@@ -10,8 +10,8 @@ import org.joml.Vector3d;
 
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.data_types.ui.AlignmentX;
-import com.snek.frameworklib.data_types.ui.AlignmentY;
+import com.snek.frameworklib.data_types.graphics.AlignmentX;
+import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 

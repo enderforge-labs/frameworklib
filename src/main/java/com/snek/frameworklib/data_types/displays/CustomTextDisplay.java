@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector4i;
 
 import com.snek.frameworklib.FrameworkLib;
-import com.snek.frameworklib.data_types.ui.TextAlignment;
+import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
 import com.snek.frameworklib.utils.scheduler.Scheduler;

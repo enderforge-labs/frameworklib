@@ -9,8 +9,8 @@ import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
-import com.snek.frameworklib.data_types.ui.TextAlignment;
-import com.snek.frameworklib.data_types.ui.TextOverflowBehaviour;
+import com.snek.frameworklib.data_types.graphics.TextAlignment;
+import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 

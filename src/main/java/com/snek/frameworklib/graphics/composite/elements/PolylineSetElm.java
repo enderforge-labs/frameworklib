@@ -8,7 +8,7 @@ import org.joml.Vector2f;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
-import com.snek.frameworklib.data_types.ui.PolylineData;
+import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.graphics.core.Div;
 import com.snek.frameworklib.utils.Easings;
 

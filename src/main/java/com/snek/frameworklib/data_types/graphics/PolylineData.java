@@ -1,4 +1,4 @@
-package com.snek.frameworklib.data_types.ui;
+package com.snek.frameworklib.data_types.graphics;
 
 import java.util.ArrayList;
 import java.util.Collections;
