@@ -13,7 +13,9 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * A wrapper class that can track value changes of the contained object.
- * <p> Notice: Flagged values are created as flagged. Use .unflag() if you want them to start as not flagged.
+ * <p>
+ * Notice: Flagged values are created as flagged. Use {@link #unflag()} if you want them to start as not flagged.
+ * @param <T> The type of the object to store.
  */
 public class Flagged<T> {
     private @Nullable T value;
@@ -30,6 +32,7 @@ public class Flagged<T> {
 
     /**
      * Creates a new Flagged value.
+     * @param <T> The type of the object to store.
      * @param value The initial value.
      * @return The newly created Flagged object.
      */
@@ -51,7 +54,8 @@ public class Flagged<T> {
 
     /**
      * Sets a new value.
-     * Flags the object if !this.get().equals(_value).
+     * <p>
+     * Flags the object if {@code !this.get().equals(_value)}.
      * @param _value The new value.
      */
     public void set(final @Nullable T _value) {
@@ -62,8 +66,10 @@ public class Flagged<T> {
 
     /**
      * Flags the object and returns a reference to its value.
-     * <p> This method always flags the object without checking for changes.
-     * <p> Note:
+     * <p>
+     * This method always flags the object without checking for changes.
+     * <p>
+     * Notice:
      *     This returns a reference to the object, not a copy.
      *     For immutable types (e.g., Integer, String), reassignment creates a new object
      *     instead of modifying the internal value. You should use set() instead.

@@ -11,9 +11,14 @@ import org.jetbrains.annotations.Nullable;
 
 
 /**
- * A simple collection of three objects of different types.
+ * A simple container for three objects of different types.
+ * @param <F> The type of the first value.
+ * @param <S> The type of the second value.
+ * @param <T> The type of the third value.
  */
 public class Triplet<F, S, T> {
+
+    // Values
     private @Nullable F first;
     private @Nullable S second;
     private @Nullable T third;
@@ -32,8 +37,7 @@ public class Triplet<F, S, T> {
 
 
     /**
-     * Creates a new Triplet.
-     * Both elements are set to null.
+     * Creates a new Triplet, setting all elements to {@code null}.
      */
     public Triplet() {
         first  = null;
@@ -57,6 +61,9 @@ public class Triplet<F, S, T> {
 
     /**
      * Creates a new Triplet using the specified values.
+     * @param <F> The type of the first value.
+     * @param <S> The type of the second value.
+     * @param <T> The type of the third value.
      * @param _first The first value.
      * @param _second The second value.
      * @param _third The third value.

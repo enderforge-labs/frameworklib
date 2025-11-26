@@ -57,12 +57,15 @@ public class InterpolatedData {
 
     /**
      * Creates a new InterpolatedData.
+     * <p>
+     * Notice: {@code _transformFg} and {@code _transformBg} are only used by elements that have distinct background and foreground.
+     * Single-layer element use only {@code _transform}.
      * @param _transform The transform.
      * @param _bgColor The background color.
      * @param _bgAlpha The background transparency.
      * @param _opacity The foreground text opacity.
-     * @param _transformFg The transform applied to the foreground of FancyTextElm.
-     * @param _transformBg The transform applied to the background of FancyTextElm.
+     * @param _transformFg The transform applied exclusively to the foreground of the element.
+     * @param _transformBg The transform applied exclusively to the background of the element.
      */
     public InterpolatedData(
         final @Nullable Transform _transform,
@@ -101,7 +104,7 @@ public class InterpolatedData {
 
 
     /**
-     * Applies a transition step to this data collection.
+     * Applies a transition step to this InterpolatedData.
      * @param s The step to apply.
      */
     public void apply(final @NotNull TransitionStep s) {
