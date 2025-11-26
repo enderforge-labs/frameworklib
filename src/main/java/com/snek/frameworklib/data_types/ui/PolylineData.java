@@ -16,7 +16,7 @@ import org.joml.Vector3i;
 
 
 /**
- * This class identifies a single polyline.
+ * Represents the data of a multi-segment line.
  */
 public class PolylineData {
 
@@ -38,34 +38,34 @@ public class PolylineData {
 
 
     /**
-     * Creates a new PolylineData.
-     * @param _color The color of the line.
-     * @param _alpha The opacity of the line.
-     * @param _width The width of the line.
-     * @param _edge  The additional width to add on each end of each line
-     * @param _point1 The list of points that defines the line's segments (first point).
-     * @param _point2 The list of points that defines the line's segments (second point).
-     * @param _points The list of points that defines the line's segments (additional points, optional).
+     * Creates a new PolylineData using the specified values.
+     * @param color The color of the line.
+     * @param alpha The opacity of the line.
+     * @param width The width of the line.
+     * @param edge  The additional width to add on each end of each line
+     * @param point1 The coordinates of the first point of the line.
+     * @param point2 The coordinates of the second point of the line.
+     * @param points An optional list of coordinates for additional points.
      */
-    public PolylineData(final @NotNull Vector3i _color, final int _alpha, final float _width, final float _edge, final @NotNull Vector2f _point1, final @NotNull Vector2f _point2, final @NotNull Vector2f... _points) {
+    public PolylineData(final @NotNull Vector3i color, final int alpha, final float width, final float edge, final @NotNull Vector2f point1, final @NotNull Vector2f point2, final @NotNull Vector2f... points) {
 
         // Save basic data
-        color = _color;
-        alpha = _alpha;
-        width = _width;
-        edge = _edge;
+        this.color = color;
+        this.alpha = alpha;
+        this.width = width;
+        this.edge  = edge;
 
         // Save points
-        points = new ArrayList<>(_points.length + 2);
-        points.add(_point1);
-        points.add(_point2);
-        Collections.addAll(points, _points);
+        this.points = new ArrayList<>(points.length + 2);
+        this.points.add(point1);
+        this.points.add(point2);
+        Collections.addAll(this.points, points);
 
         // Calculate total length
-        float _totLen = 0;
-        for(int i = 0; i < points.size() - 1; ++i) {
-            _totLen += points.get(i).distance(points.get(i + 1));
+        float totLen = 0;
+        for(int i = 0; i < this.points.size() - 1; ++i) {
+            totLen += this.points.get(i).distance(this.points.get(i + 1));
         }
-        totLen = _totLen;
+        this.totLen = totLen;
     }
 }

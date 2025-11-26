@@ -21,7 +21,8 @@ import net.minecraft.world.level.Level;
 
 /**
  * A wrapper for Minecraft's ItemDisplayEntity.
- * <p> This class allows for better customization and more readable code.
+ * <p>
+ * This class allows for better customization and more readable code.
  */
 public class CustomItemDisplay extends CustomDisplay {
     public @NotNull ItemDisplay getRawDisplay() { return (ItemDisplay)heldEntity; }
@@ -49,18 +50,18 @@ public class CustomItemDisplay extends CustomDisplay {
 
     /**
      * Creates a new CustomItemDisplay using an existing ItemDisplayEntity.
-     * @param _rawDisplay The display entity.
+     * @param rawDisplay The display entity.
      */
-    public CustomItemDisplay(final @NotNull ItemDisplay _rawDisplay) {
-        super(_rawDisplay);
+    public CustomItemDisplay(final @NotNull ItemDisplay rawDisplay) {
+        super(rawDisplay);
     }
 
     /**
      * Creates a new CustomItemDisplay in the specified world.
-     * @param _world The world.
+     * @param world The world.
      */
-    public CustomItemDisplay(final @NotNull Level _world) {
-        super(new ItemDisplay(EntityType.ITEM_DISPLAY, _world));
+    public CustomItemDisplay(final @NotNull Level world) {
+        super(new ItemDisplay(EntityType.ITEM_DISPLAY, world));
     }
 
 
@@ -68,7 +69,8 @@ public class CustomItemDisplay extends CustomDisplay {
 
     /**
      * Sets a new item stack value to the entity.
-     * <p> This is equivalent to changing the entity's "item" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "item" NBT.
      * @param itemStack The new value.
      */
     public void setItemStack(final @NotNull ItemStack itemStack) {
@@ -78,7 +80,8 @@ public class CustomItemDisplay extends CustomDisplay {
 
     /**
      * Sets a new display type value to the entity.
-     * <p> This is equivalent to changing the entity's "item_display" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "item_display" NBT.
      * @param displayType The new value.
      */
     public void setDisplayType(final @NotNull ItemDisplayContext displayType) {

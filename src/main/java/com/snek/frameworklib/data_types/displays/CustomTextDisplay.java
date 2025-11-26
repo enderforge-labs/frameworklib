@@ -25,7 +25,8 @@ import net.minecraft.world.level.Level;
 
 /**
  * A wrapper for Minecraft's TextDisplay.
- * <p> This class allows for better customization and more readable code.
+ * <p>
+ * This class allows for better customization and more readable code.
  */
 public class CustomTextDisplay extends CustomDisplay {
     public @NotNull TextDisplay getRawDisplay() { return (TextDisplay)heldEntity; }
@@ -42,19 +43,19 @@ public class CustomTextDisplay extends CustomDisplay {
     private final @NotNull int[] lastAlpha = new int[3];
     private long lastAlphaUpdate = 0;
     private boolean lastAlphaInitialized = false;
-    private void shiftLastAlpha(final int _new) {
+    private void shiftLastAlpha(final int newAlpha) {
         if(lastAlphaUpdate >= Scheduler.getTickNum()) return;
 
         if(!lastAlphaInitialized) {
             lastAlphaInitialized = true;
             lastAlpha[2] = 0;
             lastAlpha[1] = 0;
-            lastAlpha[0] = _new;
+            lastAlpha[0] = newAlpha;
         }
         else {
             lastAlpha[2] = lastAlpha[1];
             lastAlpha[1] = lastAlpha[0];
-            lastAlpha[0] = _new;
+            lastAlpha[0] = newAlpha;
         }
     }
 
@@ -62,7 +63,8 @@ public class CustomTextDisplay extends CustomDisplay {
     /**
      * This method flushes the opacity cache and ensures the displayed text doesn't remain
      * in an incorrect state after safety delays performed during short animations.
-     * <p> Must be called at the end of each animation tick. //FIXME this can cause issues if the transition ticks are not aligned wit the step size.
+     * <p>
+     * Must be called at the end of each animation tick. //FIXME this can cause issues if the transition ticks are not aligned wit the step size.
      */
     public void tick() {
         shiftLastAlpha(getTextOpacity());
@@ -115,41 +117,43 @@ public class CustomTextDisplay extends CustomDisplay {
 
     /**
      * Creates a new CustomTextDisplay using an existing TextDisplay.
-     * @param _rawDisplay The display entity.
-     * @param _noTextUnderA26 Whether the text should not be rendered when the opacity is lower than 26,
+     * @param rawDisplay The display entity.
+     * @param noTextUnderA26 Whether the text should not be rendered when the opacity is lower than {@code 26},
      *     as opposed to forcing a minimum opacity value.
      */
-    public CustomTextDisplay(final @NotNull TextDisplay _rawDisplay, final boolean _noTextUnderA26) {
-        super(_rawDisplay);
-        noTextUnderA26 = _noTextUnderA26;
+    public CustomTextDisplay(final @NotNull TextDisplay rawDisplay, final boolean noTextUnderA26) {
+        super(rawDisplay);
+        this.noTextUnderA26 = noTextUnderA26;
     }
+
 
     /**
      * Creates a new CustomTextDisplay in the specified world.
-     * @param _world The world.
-     * @param _noTextUnderA26 Whether the text should not be rendered when the opacity is lower than 26,
+     * @param world The world.
+     * @param noTextUnderA26 Whether the text should not be rendered when the opacity is lower than {@code 26},
      *     as opposed to forcing a minimum opacity value.
      */
-    public CustomTextDisplay(final @NotNull Level _world, final boolean _noTextUnderA26) {
-        super(new TextDisplay(EntityType.TEXT_DISPLAY, _world));
-        noTextUnderA26 = _noTextUnderA26;
+    public CustomTextDisplay(final @NotNull Level world, final boolean noTextUnderA26) {
+        super(new TextDisplay(EntityType.TEXT_DISPLAY, world));
+        this.noTextUnderA26 = noTextUnderA26;
     }
 
 
     /**
      * Creates a new CustomTextDisplay using an existing TextDisplay.
-     * @param _rawDisplay The display entity.
+     * @param rawDisplay The display entity.
      */
-    public CustomTextDisplay(final @NotNull TextDisplay _rawDisplay) {
-        this(_rawDisplay, true);
+    public CustomTextDisplay(final @NotNull TextDisplay rawDisplay) {
+        this(rawDisplay, true);
     }
+
 
     /**
      * Creates a new CustomTextDisplay in the specified world.
-     * @param _world The world.
+     * @param world The world.
      */
-    public CustomTextDisplay(final @NotNull Level _world) {
-        this(_world, true);
+    public CustomTextDisplay(final @NotNull Level world) {
+        this(world, true);
     }
 
 
@@ -157,7 +161,8 @@ public class CustomTextDisplay extends CustomDisplay {
 
     /**
      * Sets a new text value to the entity.
-     * <p> This is equivalent to changing the entity's "text" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "text" NBT.
      * @param text The new value.
      */
     public void setText(final @NotNull Component text) {
@@ -173,7 +178,8 @@ public class CustomTextDisplay extends CustomDisplay {
 
     /**
      * Sets a new line width value to the entity.
-     * <p> This is equivalent to changing the entity's "line_width" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "line_width" NBT.
      * @param width The new value.
      */
     public void setLineWidth(final int width) {
@@ -201,7 +207,7 @@ public class CustomTextDisplay extends CustomDisplay {
 
     /**
      * Returns the actual text the entity is displaying, as opposed to the cached value, meaning that
-     * this method returns an empty Component when noTextUnderA26 is set to true and the opacity is less than 26.
+     * this method returns an empty Component when {@code noTextUnderA26} is set to true and the opacity is less than {@code 26}.
      * @return The text value.
      */
     public @NotNull Component getTrueText() {
@@ -214,11 +220,13 @@ public class CustomTextDisplay extends CustomDisplay {
     /**
      * Sets the alpha value of the rendered text.
      * @param a The alpha value.
-     *  <p> Values smaller than 26 are converted to 26 unless noTextUnderA26 is set to true, in which case the text is not rendered at all.
-     *  <p> This is done because minecraft ignores these values and usually makes the text fully opaque instead of fully transparent, rendering animations jittery.
-     *  <p> NOTICE:
-     *  <p> Interpolation is broken. Opacity values are NOT converted back to 0-255 range
-     *  <p> before interpolating, but the raw byte value (0 to 127, -128 to -1) is used instead.
+     *  <p>
+     * Values smaller than {@code 26} are converted to {@code 26} unless {@code noTextUnderA26} is set to {@code true}, in which case the text is not rendered at all.
+     *  This is done because minecraft ignores these values and usually makes the text fully opaque instead of fully transparent, rendering animations jittery.
+     *  <p>
+     * Notice:
+     *  Interpolation is broken. Opacity values are NOT converted back to {@code 0-255} range
+     *  before interpolating, but the raw byte value ({@code 0 to 127}, {@code -128 to -1}) is used instead.
      */
     public void setTextOpacity(int a) {
         shiftLastAlpha(a);
@@ -252,7 +260,8 @@ public class CustomTextDisplay extends CustomDisplay {
 
     /**
      * Sets a new background color value to the entity.
-     * <p> This is equivalent to changing the entity's "background" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "background" NBT.
      * @param argb The new value.
      */
     public void setBackground(final @NotNull Vector4i argb) {
@@ -272,7 +281,8 @@ public class CustomTextDisplay extends CustomDisplay {
 
     /**
      * Sets a new text alignment value to the entity.
-     * <p> This is equivalent to changing the entity's "text alignment" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "text alignment" NBT.
      * @param alignment The new value.
      */
     public void setTextAlignment(final @NotNull TextAlignment alignment) {

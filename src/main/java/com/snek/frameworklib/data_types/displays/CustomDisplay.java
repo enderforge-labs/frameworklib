@@ -27,7 +27,8 @@ import net.minecraft.world.level.Level;
 
 /**
  * An abstract wrapper for Minecraft's Display Entities.
- * <p> This class allows for better customization and more readable code.
+ * <p>
+ * This class allows for better customization and more readable code.
  */
 public abstract class CustomDisplay {
     protected @NotNull Display heldEntity;
@@ -149,7 +150,8 @@ public abstract class CustomDisplay {
 
     /**
      * Sets a new transformation value to the entity.
-     * <p> This is equivalent to changing the entity's "transformation" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "transformation" NBT.
      * @param transformation The new value.
      */
     public void setTransformation(final @NotNull Transformation transformation) {
@@ -159,7 +161,8 @@ public abstract class CustomDisplay {
 
     /**
      * Sets a new interpolation duration value to the entity.
-     * <p> This is equivalent to changing the entity's "interpolation_duration" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "interpolation_duration" NBT.
      * @param duration The new value, measured in ticks
      */
     public void setInterpolationDuration(final int duration) {
@@ -169,7 +172,8 @@ public abstract class CustomDisplay {
 
     /**
      * Starts the interpolation at the end of the current tick.
-     * <p> This is equivalent to setting the entity's "start_interpolation" NBT to 0.
+     * <p>
+     * This is equivalent to setting the entity's "start_interpolation" NBT to {@code 0}.
      */
     public void setStartInterpolation() {
         Utils.invokeSafe(method_setStartInterpolation, heldEntity, 0);
@@ -178,7 +182,8 @@ public abstract class CustomDisplay {
 
     /**
      * Sets a new billboard mode value to the entity.
-     * <p> This is equivalent to changing the entity's "billboard" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "billboard" NBT.
      * @param billboardMode The new value.
      */
     public void setBillboardMode(final @NotNull BillboardConstraints billboardMode) {
@@ -197,8 +202,10 @@ public abstract class CustomDisplay {
 
     /**
      * Sets a new view range value to the entity.
-     * <p> This is equivalent to changing the entity's "view_range" NBT.
-     * <p> The maximum distance the entity is visible at is (view_range * 64) blocks.
+     * <p>
+     * This is equivalent to changing the entity's "view_range" NBT.
+     * <p>
+     * The maximum distance the entity is visible at is {@code (view_range * 64)} blocks.
      * @param viewRange The new value.
      */
     public void setViewRange(final float viewRange) {
@@ -208,7 +215,8 @@ public abstract class CustomDisplay {
 
     /**
      * Retrieves the entity's view range.
-     * <p> The maximum distance the entity is visible at is (view_range * 64) blocks.
+     * <p>
+     * The maximum distance the entity is visible at is {@code (view_range * 64)} blocks.
      * @return The current view range.
      */
     public float getViewRange() {
@@ -218,7 +226,8 @@ public abstract class CustomDisplay {
 
     /**
      * Sets a new brightness value to the entity.
-     * <p> This is equivalent to changing the entity's "brightness" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "brightness" NBT.
      * @param brightness
      */
     public void setBrightness(final @NotNull Brightness brightness) {
@@ -237,7 +246,8 @@ public abstract class CustomDisplay {
 
     /**
      * Sets a new custom name value to the entity.
-     * <p> This is equivalent to changing the entity's "custom_name" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "custom_name" NBT.
      * @param name The new value.
      */
     public void setCustomName(final @NotNull Component name) {
@@ -247,7 +257,8 @@ public abstract class CustomDisplay {
 
     /**
      * Sets a new custom name visible value to the entity.
-     * <p> This is equivalent to changing the entity's "custom_name_visible" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "custom_name_visible" NBT.
      * @param name The new value.
      */
     public void setCustomNameVisible(final boolean nameVisible) {
@@ -286,8 +297,10 @@ public abstract class CustomDisplay {
 
     /**
      * Sets a new maximum render width to the entity.
-     * <p> This is equivalent to changing the entity's "width" NBT.
-     * <p> NOTICE: This property seems to be very buggy in 1.20.1 and often has no effect.
+     * <p>
+     * This is equivalent to changing the entity's "width" NBT.
+     * <p>
+     * Notice: This property seems to be very buggy in 1.20.1 and often has no effect.
      * @param n The new value.
      */
     public void setMaxRenderWidth(final float n) {
@@ -306,8 +319,10 @@ public abstract class CustomDisplay {
 
     /**
      * Sets a new maximum render height to the entity.
-     * <p> This is equivalent to changing the entity's "height" NBT.
-     * <p> NOTICE: This property seems to be very buggy in 1.20.1 and often has no effect.
+     * <p>
+     * This is equivalent to changing the entity's "height" NBT.
+     * <p>
+     * Notice: This property seems to be very buggy in 1.20.1 and often has no effect.
      * @param n The new value.
      */
     public void setMaxRenderHeight(final float n) {
