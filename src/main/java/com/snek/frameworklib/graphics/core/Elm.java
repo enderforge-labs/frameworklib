@@ -64,6 +64,7 @@ public abstract class Elm extends Div {
     private boolean isQueued = false;                                               // Whether this instance is queued for updates. Updated manually
     private int queueLingerTicks = 0;
 
+
     // Forced imperceptible changes applied to the entity's interpolated data.
     //! Minecraft's display entity rendering system repeats ticks if the new value doesn't differ from the old one.
     //! EPSILON is either added or subtracted from the target value intermittently in order to minimize error build ups and prevent visual tick duplicates.
@@ -207,8 +208,6 @@ public abstract class Elm extends Div {
     }
 
 
-    //TODO this needs caching. Use a Flagged value to cache the transform and update it when any of its variables change
-    //TODO this needs caching. Use a Flagged value to cache the transform and update it when any of its variables change
     //TODO this needs caching. Use a Flagged value to cache the transform and update it when any of its variables change
     //TODO this needs caching. Use a Flagged value to cache the transform and update it when any of its variables change
     //TODO all subclasses too

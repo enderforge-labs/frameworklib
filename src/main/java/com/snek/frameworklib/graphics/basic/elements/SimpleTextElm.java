@@ -26,7 +26,8 @@ import net.minecraft.server.level.ServerLevel;
 
 /**
  * An element that can display text.
- * This class has transparent background. For a text element with background color, use FancyTextElm.
+ * <p>
+ * This class has transparent background. For a text element with background color, use {@link FancyTextElm}.
  */
 public non-sealed class SimpleTextElm extends __base_TextElm {
 
@@ -44,12 +45,12 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
 
     /**
      * Creates a new SimpleTextElm using an existing entity and a custom style.
-     * @param _world The world in which to place the element.
-     * @param _entity The display entity.
-     * @param _style The custom style.
+     * @param world The world in which to place the element.
+     * @param entity The display entity.
+     * @param style The custom style.
      */
-    protected SimpleTextElm(final @NotNull ServerLevel _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
-        super(_world, _entity, _style);
+    protected SimpleTextElm(final @NotNull ServerLevel world, final @NotNull CustomDisplay entity, final @NotNull ElmStyle style) {
+        super(world, entity, style);
         getThisEntity().setBackground(new Vector4i(0, 0, 0, 0));
         getThisEntity().setLineWidth(Integer.MAX_VALUE);
     }
@@ -57,20 +58,20 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
 
     /**
      * Creates a new SimpleTextElm using a custom style.
-     * @param _world The world in which to place the element.
-     * @param _style The custom style.
+     * @param world The world in which to place the element.
+     * @param style The custom style.
      */
-    protected SimpleTextElm(final @NotNull ServerLevel _world, final @NotNull ElmStyle _style) {
-        this(_world, new CustomTextDisplay(_world), _style);
+    protected SimpleTextElm(final @NotNull ServerLevel world, final @NotNull ElmStyle style) {
+        this(world, new CustomTextDisplay(world), style);
     }
 
 
     /**
      * Creates a new SimpleTextElm using the default style.
-     * @param _world The world in which to place the element.
+     * @param world The world in which to place the element.
      */
-    public SimpleTextElm(final @NotNull ServerLevel _world) {
-        this(_world, new CustomTextDisplay(_world), new SimpleTextElmStyle());
+    public SimpleTextElm(final @NotNull ServerLevel world) {
+        this(world, new CustomTextDisplay(world), new SimpleTextElmStyle());
     }
 
 
@@ -148,7 +149,7 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
         );
     }
     @Override
-    protected @NotNull InterpolatedData __generateInterpolatedData(int index) {
+    protected @NotNull InterpolatedData __generateInterpolatedData(final int index) {
         final InterpolatedData fd = futureDataQueue.get(index);
         return new InterpolatedData(
             fd.getTransform().copy(),

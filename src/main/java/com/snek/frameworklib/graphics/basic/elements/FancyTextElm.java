@@ -55,14 +55,14 @@ public non-sealed class FancyTextElm extends __base_TextElm {
 
     /**
      * Creates a new FancyTextElm using a custom style.
-     * @param _world The world in which to place the element.
-     * @param _style The custom style.
+     * @param world The world in which to place the element.
+     * @param style The custom style.
      */
-    public FancyTextElm(final @NotNull ServerLevel _world, final @NotNull ElmStyle _style) {
+    public FancyTextElm(final @NotNull ServerLevel world, final @NotNull ElmStyle style) {
 
         // Create element and background element
-        super(_world, new CustomTextDisplay(_world), _style);
-        text = new CustomTextDisplay(_world);
+        super(world, new CustomTextDisplay(world), style);
+        text = new CustomTextDisplay(world);
 
         // Initialize permanent entity values
         getBgEntity().setText(new Txt().get());
@@ -73,10 +73,10 @@ public non-sealed class FancyTextElm extends __base_TextElm {
 
     /**
      * Creates a new FancyTextElm using the default style.
-     * @param _world The world in which to place the element.
+     * @param world The world in which to place the element.
      */
-    public FancyTextElm(final @NotNull ServerLevel _world) {
-        this(_world, new FancyTextElmStyle());
+    public FancyTextElm(final @NotNull ServerLevel world) {
+        this(world, new FancyTextElmStyle());
     }
 
 
@@ -89,8 +89,10 @@ public non-sealed class FancyTextElm extends __base_TextElm {
     /**
      * Helper function. Calculates the final transformation that is applied to the foreground entity.
      * @param initialTransform The value to start from.
-     * <p> This is usually the transform shared between background and foreground.
-     * <p> The shared transform is returned by __calcTransform().
+     * <p>
+     * This is usually the transform shared between background and foreground.
+     * <p>
+     * The shared transform is returned by {@link #__calcTransform()}.
      * @return The final transformation.
      */
     public @NotNull Transform __calcTransformFg(final @NotNull Transform initialTransform) {
@@ -106,7 +108,7 @@ public non-sealed class FancyTextElm extends __base_TextElm {
      * Helper function. Calculates the final transformation that is applied to the background entity.
      * @param initialTransform The value to start from.
      * <p> This is usually the transform shared between background and foreground.
-     * <p> The shared transform is returned by __calcTransform().
+     * <p> The shared transform is returned by {@link #__calcTransform()}.
      * @return The final transformation.
      */
     public @NotNull Transform __calcTransformBg(final @NotNull Transform initialTransform) {

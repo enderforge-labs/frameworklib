@@ -86,32 +86,32 @@ public class ItemElm extends Elm {
 
     /**
      * Creates a new ItemElm using an existing entity and a custom style.
-     * @param _world The world in which to place the element.
-     * @param _entity The display entity.
-     * @param _style The custom style.
+     * @param world The world in which to place the element.
+     * @param entity The display entity.
+     * @param style The custom style.
      */
-    protected ItemElm(final @NotNull ServerLevel _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
-        super(_world, _entity, _style);
+    protected ItemElm(final @NotNull ServerLevel world, final @NotNull CustomDisplay entity, final @NotNull ElmStyle style) {
+        super(world, entity, style);
         getThisEntity().setDisplayType(ItemDisplayContext.NONE);
     }
 
 
     /**
      * Creates a new ItemElm using a custom style.
-     * @param _world The world in which to place the element.
-     * @param _style The custom style.
+     * @param world The world in which to place the element.
+     * @param style The custom style.
      */
-    protected ItemElm(final @NotNull ServerLevel _world, final @NotNull ElmStyle _style) {
-        this(_world, new CustomItemDisplay(_world), _style);
+    protected ItemElm(final @NotNull ServerLevel world, final @NotNull ElmStyle style) {
+        this(world, new CustomItemDisplay(world), style);
     }
 
 
     /**
      * Creates a new ItemElm using the default style.
-     * @param _world The world in which to place the element.
+     * @param world The world in which to place the element.
      */
-    public ItemElm(final @NotNull ServerLevel _world) {
-        this(_world, new CustomItemDisplay(_world), new ItemElmStyle());
+    public ItemElm(final @NotNull ServerLevel world) {
+        this(world, new CustomItemDisplay(world), new ItemElmStyle());
     }
 
 

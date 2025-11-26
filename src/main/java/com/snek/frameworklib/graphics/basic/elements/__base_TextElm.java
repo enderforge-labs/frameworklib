@@ -27,12 +27,17 @@ import net.minecraft.server.level.ServerLevel;
 
 
 
+/**
+ * The base class of {@link FancyTextElm} and {@link SimpleTextElm}.
+ * <p>
+ * This class is sealed as the two subclasses are handled differently throughout the library's codebase.
+ */
 public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, SimpleTextElm {
 
     // Constants
-    public static final char ELLIPSIS_CHAR = '…';       // The ellipsis character to use when truncating text
-    public static final int SCROLL_DELAY = 4;           // How often to move the text by SCROLL_AMOUNT pixels, in ticks
-    public static final int SCROLL_AMOUNT = 1;          // The number of characters to move the text by, every iteration
+    public static final char ELLIPSIS_CHAR = '…';   // The ellipsis character to use when truncating text
+    public static final int  SCROLL_DELAY  = 4;     // How often to move the text by SCROLL_AMOUNT pixels, in ticks
+    public static final int  SCROLL_AMOUNT = 1;     // The number of characters to move the text by, every iteration
     public static final float SCROLL_BOUNDARY_DELAY = 20f / SCROLL_DELAY; // The amount of cycles to wait for before and after scrolling the text
 
 
@@ -55,8 +60,14 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
 
-    protected __base_TextElm(final @NotNull ServerLevel _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
-        super(_world, _entity, _style);
+    /**
+     * Creates a new __base_TextElm using the specified entity.
+     * @param world The world to create the element in.
+     * @param entity The entity to use for the new element.
+     * @param style The style to use.
+     */
+    protected __base_TextElm(final @NotNull ServerLevel world, final @NotNull CustomDisplay entity, final @NotNull ElmStyle style) {
+        super(world, entity, style);
     }
 
 
@@ -66,8 +77,6 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
         final String string = getStyle(SimpleTextElmStyle.class).getText().getString();
 
         // Set cache to 0 if the text is empty.
-        // final String string = getStyle(SimpleTextElmStyle.class).getText().getString(); //TODO remove
-        // final String string = getTextDisplay().getText().getString(); //TODO CACHE THIS TOO
         if(string.isEmpty()) {
             entitySizeCacheX = 0f;
             entitySizeCacheY = 0f;
@@ -84,8 +93,8 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
         // If lines are present, find the longest one and save its length
         double maxWidth = 0;
-        for(int i = 0; i < lines.length; ++i) {
-            final double w = FontSize.getStringWidth(lines[i]);
+        for(String line : lines) {
+            final double w = FontSize.getStringWidth(line);
             if(w > maxWidth) maxWidth = w;
         }
         entitySizeCacheX = (float)maxWidth;
@@ -105,12 +114,13 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
     //TODO this might need to be cached
     //TODO this might need to be cached
-    //TODO this might need to be cached
     //TODO check subclasses too
     /**
      * Calculates the in-world height of the TextDisplay entity associated with a TextDisplay or FancyTextDisplay.
-     * <p> NOTICE: The height can be inaccurate as a lot of assumptions are made to calculate it. The returned value is the best possible approximation.
-     * <p> NOTICE: Wrapped lines are counted as one.
+     * <p>
+     * Notice: The height can be inaccurate as a lot of assumptions are made to calculate it. The returned value is the best possible approximation.
+     * <p>
+     * Notice: Wrapped lines are counted as one.
      * @return The height in blocks.
      */
     public float calcEntityHeight() {
@@ -129,12 +139,13 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
     //TODO this might need to be cached
     //TODO this might need to be cached
-    //TODO this might need to be cached
     //TODO check subclasses too
     /**
      * Calculates the in-world width of the TextDisplay entity associated with a TextDisplay or FancyTextDisplay.
-     * <p> NOTICE: The width can be inaccurate as a lot of assumptions are made to calculate it. The returned value is the best possible approximation.
-     * <p> NOTICE: Wrapped lines are counted as one.
+     * <p>
+     * Notice: The width can be inaccurate as a lot of assumptions are made to calculate it. The returned value is the best possible approximation.
+     * <p>
+     * Notice: Wrapped lines are counted as one.
      * @return The width in blocks.
      */
     public float calcEntityWidth() {
@@ -164,7 +175,9 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
     /**
-     * //TODO
+     * Updates the overflow behaviour.
+     * <p>
+     * This automatically handles scrolling tasks and resets the text when needed.
      */
     protected void updateOverflowBehaviour() {
 

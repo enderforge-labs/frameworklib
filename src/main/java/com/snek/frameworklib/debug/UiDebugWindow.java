@@ -67,7 +67,6 @@ public class UiDebugWindow extends JPanel {
             g.drawPolygon(new int[]{ x1, x2, x3, x4 }, new int[] { y1, y2, y3, y4 }, 4);
         }
 
-
         // Draw center
         g.setColor(Color.WHITE);
         g.drawLine(centerX, 0, centerX, height);

@@ -25,7 +25,8 @@ import net.minecraft.server.level.ServerLevel;
 
 /**
  * A simple UI element with a background color and animations.
- * <p> Panels default to a 1x1 blocks size.
+ * <p>
+ * Panels default to a 1x1 blocks size.
  */
 public class PanelElm extends Elm {
     private @NotNull CustomTextDisplay getThisEntity() { return getEntity(CustomTextDisplay.class); }
@@ -45,32 +46,32 @@ public class PanelElm extends Elm {
 
     /**
      * Creates a new PanelElm using an existing entity and a custom style.
-     * @param _world The world in which to place the element.
-     * @param _entity The display entity.
-     * @param _style The custom style.
+     * @param world The world in which to place the element.
+     * @param entity The display entity.
+     * @param style The custom style.
      */
-    protected PanelElm(final @NotNull ServerLevel _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
-        super(_world, _entity, _style);
+    protected PanelElm(final @NotNull ServerLevel world, final @NotNull CustomDisplay entity, final @NotNull ElmStyle style) {
+        super(world, entity, style);
         getThisEntity().setText(new Txt().get());
     }
 
 
     /**
      * Creates a new PanelElm using a custom style.
-     * @param _world The world in which to place the element.
-     * @param _style The custom style.
+     * @param world The world in which to place the element.
+     * @param style The custom style.
      */
-    public PanelElm(final @NotNull ServerLevel _world, final @NotNull ElmStyle _style) {
-        this(_world, new CustomTextDisplay(_world), _style);
+    public PanelElm(final @NotNull ServerLevel world, final @NotNull ElmStyle style) {
+        this(world, new CustomTextDisplay(world), style);
     }
 
 
     /**
      * Creates a new PanelElm using the default style.
-     * @param _world The world in which to place the element.
+     * @param world The world in which to place the element.
      */
-    public PanelElm(final @NotNull ServerLevel _world) {
-        this(_world, new CustomTextDisplay(_world), new PanelElmStyle());
+    public PanelElm(final @NotNull ServerLevel world) {
+        this(world, new CustomTextDisplay(world), new PanelElmStyle());
     }
 
 
