@@ -37,7 +37,7 @@ public class SimpleTextElmStyle extends ElmStyle {
 
 
     /**
-     * Creates a new default TextElmStyle.
+     * Creates a new SimpleTextElmStyle.
      */
     public SimpleTextElmStyle() {
         super();

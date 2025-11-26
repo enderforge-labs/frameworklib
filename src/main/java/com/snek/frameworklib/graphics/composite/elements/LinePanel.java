@@ -15,12 +15,15 @@ import net.minecraft.server.level.ServerLevel;
 
 
 
+/**
+ * A special {@link PanelElm} used to draw lines in graphic contexts.
+ */
 public final class LinePanel extends PanelElm {
     final Vector2f absPosOg = new Vector2f();
 
 
-    public LinePanel(final @NotNull ServerLevel _world) {
-        super(_world, new LinePanelStyle());
+    public LinePanel(final @NotNull ServerLevel world) {
+        super(world, new LinePanelStyle());
     }
 
 
