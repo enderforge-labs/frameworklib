@@ -1,0 +1,90 @@
+package com.snek.frameworklib.utils;
+
+import com.mojang.datafixers.types.Func;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
+
+public class Result<T, E> {
+    private final Option<T> innerOption;
+    private final Option<E> err;
+    // innerOption and err can never both be None or both be Some. if they are, the object is invalid, and someone is a spoon.
+
+    private Result(T object) {
+        this.innerOption = Option.Some(object);
+        this.err = Option.None();
+    }
+    private Result(E err, boolean ignored) { // This is because java doesn't allow you to have identical constructors with different definitions.
+        this.innerOption = Option.None();
+        this.err = Option.Some(err);
+    }
+    public static <T,E> Result<T,E> Ok(T obj) {
+        return new Result<>(obj);
+    }
+    public static <T,E> Result<T,E> Err(E err) {
+        return new Result<>(err,false); // boolean is ignored. it must be there because java is mildly annoying.
+    }
+
+    public boolean is_ok() {
+        return innerOption.is_some();
+    }
+    public boolean is_ok_and(Function<T,Boolean> function) {
+        return innerOption.is_some_and(function);
+    }
+    public boolean is_err() {
+        return err.is_some();
+    }
+    public boolean is_err_and(Function<E,Boolean> function) {
+        return err.is_some_and(function);
+    }
+    public Option<T> ok() {
+        return innerOption;
+    }
+    public Option<E> err() {
+        return err;
+    }
+    public T unwrap() {
+        return this.innerOption.unwrap();
+    }
+    public T expect(String msg) {
+        return this.innerOption.expect(msg);
+    }
+    public T unwrap_or(T default_value) {
+        return this.innerOption.unwrap_or(default_value);
+    }
+    public T unwrap_or_else(Function<E,T> function) {
+        if (this.is_ok()) {return this.unwrap();}
+        return function.apply(this.err.unwrap());
+    }
+    public E expect_err(String msg) {
+        return this.err.expect(msg);
+    }
+    public E unwrap_err() {
+        return this.err.unwrap();
+    }
+
+    public <U> Result<U,E> map(Function<T,U> function) {
+        if (this.is_err()) {return Result.Err(err.unwrap());}
+        return Result.Ok(this.ok().map(function).unwrap());
+    }
+    public <U> U map_or(Function<T,U> function, U default_value) {
+        return this.ok().map_or(function,default_value);
+    }
+    public <U> U map_or_else(Function<T,U> function, Function<E,U> default_function) {
+        if (this.is_ok()) {return this.ok().map(function).unwrap();}
+        return this.err().map(default_function).unwrap();
+    }
+    public <F> Result<T,F> map_err(Function<E,F> function) {
+        if (this.is_ok()) {return Result.Ok(this.unwrap());}
+        return Result.Err(this.err().map(function).unwrap());
+    }
+    public Result<T,E> inspect(Consumer<T> consumer) {
+        this.ok().inspect(consumer);
+        return this;
+    }
+    public Result<T,E> inspect_err(Consumer<E> consumer) {
+        this.err().inspect(consumer);
+        return this;
+    }
+
+}
