@@ -22,6 +22,9 @@ import net.minecraft.network.chat.Component;
 
 
 
+/**
+ * The default style of the generic {@link FancyTextElm} UI element.
+ */
 public class SimpleTextElmStyle extends ElmStyle {
     public static final float DEFAULT_TEXT_SCALE = 0.3f;
 
@@ -33,19 +36,19 @@ public class SimpleTextElmStyle extends ElmStyle {
 
 
 
-    @Override
-    public @NotNull Transform getDefaultTransform () {
-        return new Transform().scale(DEFAULT_TEXT_SCALE);
-    }
-
-
-
-
     /**
      * Creates a new default TextElmStyle.
      */
     public SimpleTextElmStyle() {
         super();
+    }
+
+
+
+
+    @Override
+    public @NotNull Transform getDefaultTransform () {
+        return new Transform().scale(DEFAULT_TEXT_SCALE);
     }
 
 
@@ -105,10 +108,10 @@ public class SimpleTextElmStyle extends ElmStyle {
 
 
     // Setters
-    public void setText                 (final @NotNull Component             _text                 ) { text                 .set(_text                 ); }
-    public void setTextOverflowBehaviour(final @NotNull TextOverflowBehaviour _textOverflowBehaviour) { textOverflowBehaviour.set(_textOverflowBehaviour); }
-    public void setTextAlignment        (final @NotNull TextAlignment         _textAlignment        ) { textAlignment        .set(_textAlignment        ); }
-    public void setTextOpacity          (final          int                   _textOpacity          ) { textOpacity          .set(_textOpacity          ); }
+    public void setText                 (final @NotNull Component             text                 ) { this.text                 .set(text                 ); }
+    public void setTextOverflowBehaviour(final @NotNull TextOverflowBehaviour textOverflowBehaviour) { this.textOverflowBehaviour.set(textOverflowBehaviour); }
+    public void setTextAlignment        (final @NotNull TextAlignment         textAlignment        ) { this.textAlignment        .set(textAlignment        ); }
+    public void setTextOpacity          (final          int                   textOpacity          ) { this.textOpacity          .set(textOpacity          ); }
 
 
     // Flagged getters

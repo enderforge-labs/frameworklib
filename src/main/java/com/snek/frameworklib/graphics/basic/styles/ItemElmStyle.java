@@ -3,6 +3,7 @@ package com.snek.frameworklib.graphics.basic.styles;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.frameworklib.data_types.containers.Flagged;
+import com.snek.frameworklib.graphics.basic.elements.ItemElm;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 
 import net.minecraft.world.item.ItemStack;
@@ -16,7 +17,7 @@ import net.minecraft.world.item.Items;
 
 
 /**
- * The default style of the generic ItemElm UI element.
+ * The default style of the generic {@link ItemElm} UI element.
  */
 public class ItemElmStyle extends ElmStyle {
     private @NotNull Flagged<@NotNull ItemStack> item = null;
@@ -43,7 +44,7 @@ public class ItemElmStyle extends ElmStyle {
 
     public @NotNull ItemStack getDefaultItem() { return Items.AIR.getDefaultInstance(); }
     public void resetItem() { item = Flagged.from(getDefaultItem()); }
-    public void setItem(final @NotNull ItemStack _item) { item.set(_item); }
+    public void setItem(final @NotNull ItemStack item) { this.item.set(item); }
     public @NotNull Flagged<@NotNull ItemStack> getFlaggedItem() { return item; }
     public @NotNull ItemStack getItem() { return item.get(); }
     public @NotNull ItemStack editItem() { return item.edit(); }

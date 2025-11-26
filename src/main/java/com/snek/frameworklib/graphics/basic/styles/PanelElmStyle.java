@@ -8,6 +8,7 @@ import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
+import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.utils.Easings;
 
@@ -19,7 +20,7 @@ import com.snek.frameworklib.utils.Easings;
 
 
 /**
- * The default style of the generic PanelElm UI element.
+ * The default style of the generic {@link PanelElm} UI element.
  */
 public class PanelElmStyle extends ElmStyle {
     private @NotNull Flagged<@NotNull Vector3i> color = null;
@@ -91,8 +92,8 @@ public class PanelElmStyle extends ElmStyle {
     public void resetAlpha() { alpha = Flagged.from(getDefaultAlpha()); }
 
 
-    public void setColor(final @NotNull Vector3i _color ) { color.set(_color); }
-    public void setAlpha(final          int      _alpha ) { alpha.set(_alpha); }
+    public void setColor(final @NotNull Vector3i color ) { this.color.set(color); }
+    public void setAlpha(final          int      alpha ) { this.alpha.set(alpha); }
 
 
     public @NotNull Flagged<@NotNull Vector3i> getFlaggedColor() { return color; }

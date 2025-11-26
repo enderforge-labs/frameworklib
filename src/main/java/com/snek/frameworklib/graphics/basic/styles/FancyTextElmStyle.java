@@ -19,7 +19,7 @@ import com.snek.frameworklib.utils.Easings;
 
 
 /**
- * The default style of the generic FancyTextElm UI element.
+ * The default style of the generic {@link FancyTextElm} UI element.
  */
 public class FancyTextElmStyle extends SimpleTextElmStyle {
     private @NotNull Flagged<@NotNull Vector3i>  bgColor     = null;
@@ -97,10 +97,10 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
     public void resetTransformBg () { transformBg = Flagged.from(getDefaultTransformBg()); }
 
 
-    public void setBgColor     (final @NotNull Vector3i  _bgColor    ) { bgColor    .set(_bgColor    ); }
-    public void setBgAlpha     (final          int       _bgAlpha    ) { bgAlpha    .set(_bgAlpha    ); }
-    public void setTransformFg (final @NotNull Transform _transformFg) { transformFg.set(_transformFg); }
-    public void setTransformBg (final @NotNull Transform _transformBg) { transformBg.set(_transformBg); }
+    public void setBgColor     (final @NotNull Vector3i  bgColor    ) { this.bgColor    .set(bgColor    ); }
+    public void setBgAlpha     (final          int       bgAlpha    ) { this.bgAlpha    .set(bgAlpha    ); }
+    public void setTransformFg (final @NotNull Transform transformFg) { this.transformFg.set(transformFg); }
+    public void setTransformBg (final @NotNull Transform transformBg) { this.transformBg.set(transformBg); }
 
 
     public @NotNull Flagged<@NotNull Vector3i>  getFlaggedBgColor    () { return bgColor; }
