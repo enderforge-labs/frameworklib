@@ -1,9 +1,10 @@
-package com.snek.frameworklib.utils;
-
-import com.mojang.datafixers.types.Func;
+package com.snek.frameworklib.data_types.containers;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+
+
 
 public class Result<T, E> {
     private final Option<T> innerOption;
@@ -14,7 +15,7 @@ public class Result<T, E> {
         this.innerOption = Option.Some(object);
         this.err = Option.None();
     }
-    private Result(E err, boolean ignored) { // This is because java doesn't allow you to have identical constructors with different definitions.
+    private Result(E err, Void ignored) { // This is because java doesn't allow you to have identical constructors with different definitions.
         this.innerOption = Option.None();
         this.err = Option.Some(err);
     }
@@ -22,7 +23,7 @@ public class Result<T, E> {
         return new Result<>(obj);
     }
     public static <T,E> Result<T,E> Err(E err) {
-        return new Result<>(err,false); // boolean is ignored. it must be there because java is mildly annoying.
+        return new Result<>(err,null); // null is ignored. it must be there because java is mildly annoying.
     }
 
     public boolean is_ok() {
@@ -86,5 +87,4 @@ public class Result<T, E> {
         this.err().inspect(consumer);
         return this;
     }
-
 }

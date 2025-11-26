@@ -1,4 +1,4 @@
-package com.snek.frameworklib.utils;
+package com.snek.frameworklib.data_types.containers;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -6,8 +6,11 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+
+
+
 public class Option<T> {
-    /// Rust-Like wrapper of Optional, can also convert to Result, and will never return null.
+    // Rust-Like wrapper of Optional, can also convert to Result, and will never return null.
     private final Optional<T> innerOptional;
     private Option(T object) {
         innerOptional = Optional.of(object);
@@ -118,7 +121,4 @@ public class Option<T> {
         if (this.is_some()) {return this;}
         return function.get();
     }
-
-
-
 }
