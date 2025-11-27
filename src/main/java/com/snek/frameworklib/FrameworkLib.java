@@ -35,6 +35,11 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
+/**
+ * The main class and entry point of Framework Lib.
+ * <p>
+ * This class registers all the event callbacks and contains the library's ID, the logger, the phase ID and utility methods.
+ */
 public class FrameworkLib implements ModInitializer {
     public static final String LIB_ID = "frameworklib";
     public static final @NotNull Logger LOGGER = LoggerFactory.getLogger(LIB_ID);
