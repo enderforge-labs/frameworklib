@@ -11,7 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * A class that lets you control scheduled tasks.
- * <p> Instances of this class are returned by the Scheduler's methods.
+ * <p>
+ * Instances of this class are returned by the Scheduler's methods.
  */
 public class TaskHandler {
     private long targetTick;
@@ -25,18 +26,19 @@ public class TaskHandler {
 
     /**
      * Creates a new TaskHandler.
-     * @param _targetTick The tick the task is scheduled for.
-     * @param _task The task to execute.
+     * @param targetTick The tick the task is scheduled for.
+     * @param task The task to execute.
      */
-    public TaskHandler(final long _targetTick, final @NotNull Runnable _task) {
-        targetTick = _targetTick;
-        task = _task;
+    public TaskHandler(final long targetTick, final @NotNull Runnable task) {
+        this.targetTick = targetTick;
+        this.task = task;
     }
 
 
     /**
      * Marks the task as cancelled.
-     * <p> Calling .exec() on cancelled tasks doesn't run them.
+     * <p>
+     * Calling .exec() on cancelled tasks doesn't run them.
      */
     public void cancel() {
         cancelled = true;
@@ -45,7 +47,8 @@ public class TaskHandler {
 
     /**
      * Marks the task as scheduled.
-     * <p> This undos any previous calls to .cancel()
+     * <p>
+     * This undos any previous calls to .cancel()
      */
     public void schedule() {
         cancelled = false;

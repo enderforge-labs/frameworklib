@@ -4,7 +4,9 @@ package com.snek.frameworklib.utils;
 
 
 /**
- * A class that throws an assertion error when instantiated.
+ * A simple class that throws an assertion error when instantiated.
+ * <p>
+ * This is meant for utility classes.
  */
 public class UtilityClassBase {
     protected UtilityClassBase() {

@@ -11,7 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * A class that lets you control scheduled loop tasks.
- * <p> Instances of this class are returned by the Scheduler's methods.
+ * <p>
+ * Instances of this class are returned by the Scheduler's methods.
  */
 public class LoopTaskHandler extends TaskHandler {
     private final long interval;
@@ -20,12 +21,12 @@ public class LoopTaskHandler extends TaskHandler {
 
     /**
      * Creates a new LoopTaskHandler.
-     * @param _targetTick The tick the first iteration of this task is scheduled for, measures in ticks.
-     * @param _interval The interval between iterations, measures in ticks.
-     * @param _task The task to execute.
+     * @param targetTick The tick the first iteration of this task is scheduled for, measures in ticks.
+     * @param interval The interval between iterations, measures in ticks.
+     * @param task The task to execute.
      */
-    public LoopTaskHandler(final long _targetTick, final long _interval, final @NotNull Runnable _task) {
-        super(_targetTick, _task);
-        interval = _interval;
+    public LoopTaskHandler(final long targetTick, final long interval, final @NotNull Runnable task) {
+        super(targetTick, task);
+        this.interval = interval;
     }
 }

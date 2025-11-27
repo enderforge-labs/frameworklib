@@ -15,7 +15,9 @@ import com.snek.frameworklib.utils.UtilityClassBase;
 
 
 /**
- * A utility class that can store tasks and execute them after a specified delay.
+ * A utility class that can store tasks and execute them after a specified number of server ticks.
+ * <p>
+ * This scheduler also supports looping and cancelling tasks.
  */
 public final class Scheduler extends UtilityClassBase {
     private Scheduler() {}
@@ -35,7 +37,8 @@ public final class Scheduler extends UtilityClassBase {
 
     /*
      * The tick function of the scheduler.
-     * <p> Must be called exactly one time at the end of every server tick.
+     * <p>
+     * Must be called exactly one time at the end of every server tick.
      */
     public static void tick() {
 

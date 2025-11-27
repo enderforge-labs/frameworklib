@@ -26,7 +26,8 @@ public final class GeometryUtils extends UtilityClassBase {
 
     /**
      * Applies a rotation to a 2d vector.
-     * <p> The original vector object is not modified. Instead, the rotation is performed on a copy.
+     * <p>
+     * The original vector object is not modified. Instead, the rotation is performed on a copy.
      * @param v The vector to rotate.
      * @param angle The angle in radians.
      * @return The rotated vector.
@@ -45,7 +46,8 @@ public final class GeometryUtils extends UtilityClassBase {
 
     /**
      * Checks whether a line intersects a sphere.
-     * <p> The line is assumed to be infinite in both directions, regardless of its length.
+     * <p>
+     * The line is assumed to be infinite in both directions, regardless of its length.
      * @param lineOrigin The starting point of the line.
      * @param lineDirection The direction of the line. Must be normalized.
      * @param targetCenter The center of the target sphere.
@@ -70,6 +72,7 @@ public final class GeometryUtils extends UtilityClassBase {
 
     /**
      * Checks whether a line intersects a rectangle in a 3D space.
+     * <p>
      * The line is assumed to be infinite in both directions, regardless of its length.
      * @param lineOrigin The starting point of the line.
      * @param lineDirection The direction of the line. Must be normalized.
@@ -125,7 +128,7 @@ public final class GeometryUtils extends UtilityClassBase {
         // Check if line is parallel to plane
         float denominator = planeNormal.dot(lineDirection);
         if(Math.abs(denominator) < 1e-6f) {
-            return Double.MAX_VALUE; // Line is parallel to plane
+            return Double.MAX_VALUE; //! Line is parallel to plane
         }
 
         // Calculate distance to plane intersection

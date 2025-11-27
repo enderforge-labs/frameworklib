@@ -24,11 +24,12 @@ public class RateLimiter {
 
     /**
      * Sets the remaining cooldown time since the current tick.
-     *     If the previous remaining cooldown is shorter than the new one, the call will have no effect.
-     * @param _cooldown The cooldown, expressed in ticks.
+     * <p>
+     * If the previous remaining cooldown is shorter than the new one, the call will have no effect.
+     * @param cooldown The cooldown, expressed in ticks.
      */
-    public void renewCooldown(final long _cooldown) {
-        final long cooldownEndNew = Scheduler.getTickNum() + _cooldown;
+    public void renewCooldown(final long cooldown) {
+        final long cooldownEndNew = Scheduler.getTickNum() + cooldown;
         if(cooldownEnd < cooldownEndNew) {
             cooldownEnd = cooldownEndNew;
         }

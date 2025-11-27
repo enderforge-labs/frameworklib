@@ -117,8 +117,9 @@ public final class MinecraftUtils extends UtilityClassBase {
 
     /**
      * Calculates the UUID of an ItemStack.
-     * <p> This can be used to identify item stacks that can merge. Mergeable stacks always have the same UUID,
-     *     while those that cannot be merged have a different one.
+     * <p>
+     * This can be used to identify item stacks that can merge. Mergeable stacks always have the same UUID,
+     * while those that cannot be merged have a different one.
      * @param stack The item stack.
      * @return The UUID.
      */
@@ -185,7 +186,7 @@ public final class MinecraftUtils extends UtilityClassBase {
      * Attempts to give an item to a player.
      * @param player The player.
      * @param item The item to give.
-     * <p> Partial insertions modify the count of the item stack to indicate the amount of items that didn't fit in the inventory.
+     *     Partial insertions modify the count of the item stack to indicate the amount of items that didn't fit in the inventory.
      * @return True if all of the items could be given to the player, false othersise (not enough space in inventory).
      */
     public static boolean attemptGive(final @NotNull Player player, final @NotNull ItemStack item) {
@@ -294,7 +295,8 @@ public final class MinecraftUtils extends UtilityClassBase {
 
     /**
      * Returns an ItemStack containing a player head with owner the player that matches the specified UUID.
-     * <p> The player can be offline, as long as they have joined the server at least once in the past.
+     * <p>
+     * The player can be offline, as long as they have joined the server at least once in the past.
      * @param uuid The player's UUID.
      * @param server The server instance.
      * @return The player's head as an ItemStack of count 1, or null if the player never joined this server.
@@ -340,7 +342,8 @@ public final class MinecraftUtils extends UtilityClassBase {
 
     /**
      * Returns the name of the player that matches the specified UUID.
-     * <p> The player can be offline, as long as they have joined the server at least once in the past.
+     * <p>
+     * The player can be offline, as long as they have joined the server at least once in the past.
      * @param uuid The player's UUID.
      * @param server The server instance.
      * @return The player's name as a string, or null if the player never joined this server.
@@ -360,7 +363,8 @@ public final class MinecraftUtils extends UtilityClassBase {
 
     /**
      * Plays a sound on the client of the specified player.
-     * <p> Other players won't be able to hear it.
+     * <p>
+     * Other players won't be able to hear it.
      * @param player The player.
      * @param sound The sound to play.
      * @param volume The sound's volume.
@@ -405,9 +409,12 @@ public final class MinecraftUtils extends UtilityClassBase {
 
     /**
      * Returns the custom name of an item. If the item has no custom name, the default name is returned.
-     * <p> Potions and Tipped Arrows include the first of their effects.
-     * <p> Enchanted Books include the first of their enchantments.
-     * <p> Music Discs, Banner Patterns, Monster Spawners and Smithing templates show their type.
+     * <p>
+     * Potions and Tipped Arrows include the first of their effects.
+     * <p>
+     * Enchanted Books include the first of their enchantments.
+     * <p>
+     * Music Discs, Banner Patterns, Monster Spawners and Smithing templates show their type.
      * @param item The item.
      * @return The name of the item.
      */

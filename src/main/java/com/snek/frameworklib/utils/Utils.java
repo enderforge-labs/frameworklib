@@ -35,7 +35,8 @@ public final class Utils extends UtilityClassBase {
 
     /**
      * Checks if a double value is within a certain threshold from a target value.
-     * <p> This is used to avoid precision related problems when comparing double values.
+     * <p>
+     * This is used to avoid precision related problems when comparing double values.
      * @param n The value to check
      * @param target The target value
      * @param threshold The threshold to use
@@ -48,7 +49,8 @@ public final class Utils extends UtilityClassBase {
 
     /**
      * Checks if a float value is within a certain threshold from a target value.
-     * <p> This is used to avoid precision related problems when comparing float values.
+     * <p>
+     * This is used to avoid precision related problems when comparing float values.
      * @param n The value to check
      * @param target The target value
      * @param threshold The threshold to use
@@ -284,9 +286,7 @@ public final class Utils extends UtilityClassBase {
             s = delta / max;
         }
         else {
-            s = 0;
-            h = -1;
-            return new Vector3f(h, s, v);
+            return new Vector3f(-1, 0, v);
         }
 
         if(delta == 0) {

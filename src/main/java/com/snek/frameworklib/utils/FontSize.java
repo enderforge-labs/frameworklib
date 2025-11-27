@@ -10,6 +10,11 @@ import com.snek.frameworklib.generated.FontData;
 
 
 
+/**
+ * A utility class that can calculate the width and height of strings and characters.
+ * <p>
+ * This relies on the font dimensions defined in {@link FontData}.
+ */
 public final class FontSize extends UtilityClassBase {
     private FontSize() {}
 
@@ -18,7 +23,8 @@ public final class FontSize extends UtilityClassBase {
 
     /**
      * Calculates the width a string would have when rendered in-game, in texture pixels.
-     * <p> This includes the empty space between each character.
+     * <p>
+     * This includes the empty space between each character.
      * @return The width of the string in pixels.
      */
     public static int getStringWidthPx(final @NotNull String s) {
@@ -30,7 +36,8 @@ public final class FontSize extends UtilityClassBase {
     }
     /**
      * Calculates the width a string would have when rendered in-game.
-     * <p> This includes the empty space between each character.
+     * <p>
+     * This includes the empty space between each character.
      * @return The width of the string in blocks.
      */
     public static double getStringWidth(final @NotNull String s) {
@@ -42,7 +49,8 @@ public final class FontSize extends UtilityClassBase {
 
     /**
      * Calculates the width a character would have when rendered in-game, in texture pixels.
-     * <p> This includes the empty space between the characters of a string.
+     * <p>
+     * This includes the empty space between the characters of a string.
      * @return The width of the character in pixels.
      */
     public static int getCharWidthPx(final char c) {
@@ -53,7 +61,8 @@ public final class FontSize extends UtilityClassBase {
     }
     /**
      * Calculates the width a character would have when rendered in-game.
-     * <p> This includes the empty space between the characters of a string.
+     * <p>
+     * This includes the empty space between the characters of a string.
      * @return The width of the character in blocks.
      */
     public static double getCharWidth(final char c) {
@@ -65,7 +74,8 @@ public final class FontSize extends UtilityClassBase {
 
     /**
      * Returns the height a line would have when rendered, in texture pixels.
-     * <p> This does NOT include the space between lines.
+     * <p>
+     * This does NOT include the space between lines.
      * @return The height of a line in pixels.
      */
     public static int getHeightPx() {
@@ -74,7 +84,8 @@ public final class FontSize extends UtilityClassBase {
 
     /**
      * Returns the height a line would have when rendered.
-     * <p> This does NOT include the space between lines.
+     * <p>
+     * This does NOT include the space between lines.
      * @return The height of a line in blocks.
      */
     public static double getHeight() {
@@ -88,10 +99,10 @@ public final class FontSize extends UtilityClassBase {
      * Finds the end of  the longest substring of s that strarts at index offset and fits in maxWidth pixels.
      * @param s The full string value.
      * @param offset The character offset from the start of the string. This specifies where the substring starts.
-     *     Must be >= 0 and < s.length()
      * @param maxWidth The maximum allowed width of the returned substring, in pixels.
-     *     Must be >= 0
      * @return The calculated EXCLUSIVE end index.
+     * @throws IllegalArgumentException if {@code offset < 0} or {@code offset > s.length()}
+     * @throws IllegalArgumentException if {@code maxWidth < 0}
      */
     public static int calcMaxStringEnd(final @NotNull String s, final int offset, final int maxWidth) {
 

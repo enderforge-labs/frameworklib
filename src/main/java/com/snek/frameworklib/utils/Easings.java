@@ -99,8 +99,8 @@ public final class Easings extends UtilityClassBase {
 
 
     // Exponential
-    private static double _expOut  (final double x) { return  Utils.doubleEquals(x, 1, 0.001) ? 1 : 1 - Math.pow(2, -10 *  x     ); }
     private static double _expIn   (final double x) { return  Utils.doubleEquals(x, 0, 0.001) ? 0 :     Math.pow(2, +10 * (x - 1)); }
+    private static double _expOut  (final double x) { return  Utils.doubleEquals(x, 1, 0.001) ? 1 : 1 - Math.pow(2, -10 *  x     ); }
     private static double _expInOut(final double x) {
         if(Utils.doubleEquals(x, 0, 0.001)) return 0;
         if(Utils.doubleEquals(x, 1, 0.001)) return 1;

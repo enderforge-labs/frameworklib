@@ -20,8 +20,10 @@ import net.minecraft.network.chat.Style;
 
 /**
  * A simpler but more readable minecraft.text.MutableText.
- * This version also implements a .substring() method that preserves the style and a cached .length(), on top of extra color constants.
- * <p> Use .get() to create a MutableText from this object's data.
+ * <p>
+ * This version also implements a {@link #substring()} method that preserves the style and a cached {@link #length()}, on top of extra color constants.
+ * <p>
+ * Use {@link #get()} to create a MutableText from this object's data.
  */
 public class Txt {
     private MutableComponent rawText;
@@ -74,9 +76,9 @@ public class Txt {
 
 
 
-    private Txt(final @NotNull MutableComponent s, final int __length) {
+    private Txt(final @NotNull MutableComponent s, final int length) {
         rawText = s.copy();
-        _length = __length;
+        _length = length;
         style = rawText.getStyle();
     }
 
@@ -211,11 +213,13 @@ public class Txt {
 
 
 
+    // Basic formatting
     public @NotNull Txt bold           () { style = style.withBold         (true); return this; }
     public @NotNull Txt italic         () { style = style.withItalic       (true); return this; }
     public @NotNull Txt obfuscated     () { style = style.withObfuscated   (true); return this; }
     public @NotNull Txt strikethrough  () { style = style.withStrikethrough(true); return this; }
 
+    // Remove basic formatting
     public @NotNull Txt noBold         () { style = style.withBold         (false); return this; }
     public @NotNull Txt noItalic       () { style = style.withItalic       (false); return this; }
     public @NotNull Txt noObfuscated   () { style = style.withObfuscated   (false); return this; }
@@ -301,6 +305,7 @@ public class Txt {
      * @param start Starting index (inclusive).
      * @param end Ending index (exclusive).
      * @return A new Txt containing the substring with preserved styling.
+     * @throws IllegalArgumentException if {@code start < 0} or {@code end < start}
      */
     public Txt substring(final int start, final int end) {
         if(start < 0 || end < start) {
