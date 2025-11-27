@@ -13,7 +13,8 @@ import net.minecraft.world.entity.player.Player;
 
 /**
  * An interface for elements that can be scrolled using the mouse wheel.
- * It provides a scroll callback method.
+ * <p>
+ * It provides a scroll handling and callback methods.
  */
 public interface Scrollable {
 
