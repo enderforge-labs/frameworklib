@@ -49,6 +49,7 @@ public class Div {
     protected final @NotNull List<@NotNull Div> children = new ArrayList<>();
     public void setParent(final @Nullable Div _parent) { parent = _parent; }
     public @Nullable Div getParent() { return parent; }
+    public @NotNull Canvas getCanvas() { return canvas; }
 
 
 

@@ -4,15 +4,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
-import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
-import com.snek.frameworklib.graphics.core.HudCanvas;
 import com.snek.frameworklib.graphics.functional.styles.SimpleButtonElmStyle;
-import com.snek.frameworklib.utils.MinecraftUtils;
-import com.snek.frameworklib.utils.scheduler.RateLimiter;
+import com.snek.frameworklib.graphics.interfaces.Clickable;
+import com.snek.frameworklib.graphics.interfaces.Hoverable;
 
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -26,35 +23,31 @@ import net.minecraft.world.inventory.ClickAction;
 /**
  * A generic button class with clicking and hovering capabilities and a configurable cooldown time.
  */
-public abstract non-sealed class SimpleButtonElm extends PanelElm implements __base_ButtonElm {
-    protected final RateLimiter clickRateLimiter       = new RateLimiter();
-    protected final RateLimiter initialCooldownLimiter = new RateLimiter();
-    private   final int clickCooldown;
-
-    public static final int INITIAL_COOLDOWN = 10;
+public abstract class SimpleButtonElm extends PanelElm implements Clickable, Hoverable {
+    __base_ButtonElm base;
 
 
 
 
     /**
      * Creates a new SimpleButtonElm using a custom style.
-     * @param _world The world in which to place the element.
+     * @param world The world in which to place the element.
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
-     * @param _style The custom style.
+     * @param style The custom style.
      */
-    protected SimpleButtonElm(final @NotNull ServerLevel _world, final int _clickCooldown, final SimpleButtonElmStyle _style) {
-        super(_world, _style);
-        clickCooldown = _clickCooldown;
+    protected SimpleButtonElm(final @NotNull ServerLevel world, final int clickCooldown, final SimpleButtonElmStyle style) {
+        super(world, style);
+        base = new __base_ButtonElm(clickCooldown);
     }
 
 
     /**
      * Creates a new SimpleButtonElm using the default style.
-     * @param _world The world in which to place the element.
-     * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
+     * @param world The world in which to place the element.
+     * @param lickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      */
-    protected SimpleButtonElm(final @NotNull ServerLevel _world, final int _clickCooldown) {
-        this(_world, _clickCooldown, new SimpleButtonElmStyle());
+    protected SimpleButtonElm(final @NotNull ServerLevel world, final int clickCooldown) {
+        this(world, clickCooldown, new SimpleButtonElmStyle());
     }
 
 
@@ -62,12 +55,8 @@ public abstract non-sealed class SimpleButtonElm extends PanelElm implements __b
 
     @Override
     public void spawn(final @NotNull Vector3d pos) {
-        initialCooldownLimiter.renewCooldown(INITIAL_COOLDOWN);
         super.spawn(pos);
-        final Animation animation = getStyle(SimpleButtonElmStyle.class).getHoverPrimerAnimation();
-        if(animation != null) {
-            applyAnimationNow(animation);
-        }
+        base.spawn(this, getStyle(SimpleButtonElmStyle.class).getHoverPrimerAnimation());
     }
 
 
@@ -75,30 +64,17 @@ public abstract non-sealed class SimpleButtonElm extends PanelElm implements __b
 
     @Override
     public void onHoverEnter(final @NotNull Player player) {
-        final Animation animation = getStyle(SimpleButtonElmStyle.class).getHoverEnterAnimation();
-        if(animation != null) {
-            applyAnimation(animation);
-        }
+        base.onHoverEnter(this, getStyle(SimpleButtonElmStyle.class).getHoverEnterAnimation());
     }
-
-
-
 
     @Override
     public void onHoverTick(final @NotNull Player player) {
-        // Empty
+        base.onHoverTick(this);
     }
-
-
-
 
     @Override
     public void onHoverExit(final @Nullable Player player) {
-        final Animation animation = getStyle(SimpleButtonElmStyle.class).getHoverLeaveAnimation();
-        if(animation != null) {
-            applyAnimation(animation);
-            hoverRateLimiter.renewCooldown(animation.getTotalDuration());
-        }
+        base.onHoverExit(this, getStyle(SimpleButtonElmStyle.class).getHoverLeaveAnimation());
     }
 
 
@@ -106,27 +82,11 @@ public abstract non-sealed class SimpleButtonElm extends PanelElm implements __b
 
     @Override
     public boolean attemptClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        if(!initialCooldownLimiter.attempt()) return false;
-        if(!clickRateLimiter.attempt()) return false;
-        clickRateLimiter.renewCooldown(clickCooldown);
-        return checkIntersection(player);
+        return base.attemptClick(this, player);
     }
 
     @Override
     public void onClick(@NotNull Player player, @NotNull ClickAction click) {
-        if(canvas instanceof HudCanvas hud) {
-            hud.resetInactivityTimer();
-        }
-    }
-
-
-
-
-    /**
-     * Plays the button click sound to the specified player.
-     * @param player The player to play the sound to.
-     */
-    public static void playButtonSound(final @NotNull Player player) {
-        MinecraftUtils.playSoundClient(player, SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON, 2, 1.5f);
+        base.onClick(this);
     }
 }

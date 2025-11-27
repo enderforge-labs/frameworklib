@@ -36,7 +36,7 @@ import net.minecraft.world.inventory.ClickAction;
  * It contains canvases, which contain elements.
  * <p>
  * This is sealed as HudContext and UiContext are the only possible types of contexts.
- * Specialized types but inherit from either of them.
+ * Specialized types must inherit from either of them.
  */
 public abstract sealed class Context permits HudContext, UiContext {
 

@@ -42,7 +42,7 @@ import net.minecraft.server.level.ServerLevel;
  * Each menu screen should have its own canvas.
  * <p>
  * This is sealed as {@link HudCanvas} and {@link UiCanvas} are the only possible types of canvases.
- * Specialized types but inherit from either of them.
+ * Specialized types must inherit from either of them.
  */
 public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 

@@ -18,9 +18,11 @@ import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.containers.IndexedArrayDeque;
 import com.snek.frameworklib.data_types.displays.CustomDisplay;
+import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.Div;
 import com.snek.frameworklib.graphics.core.HudCanvas;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
+import com.snek.frameworklib.graphics.functional.elements.FancyButtonElm;
 import com.snek.frameworklib.graphics.functional.elements.__base_ButtonElm;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.utils.Easing;
@@ -86,7 +88,7 @@ public abstract class Elm extends Div {
     protected       boolean isSpawned = false;        // Whether the element has been spawned into the world
     private         boolean isHovered = false;        // Whether the element is being hovered on by a player's crosshair. //! Only valid in Hoverable instances
     public          boolean isSpawned() { return isSpawned; }
-    protected final RateLimiter hoverRateLimiter = new RateLimiter();
+    public final RateLimiter hoverRateLimiter = new RateLimiter();
 
 
 
@@ -549,7 +551,7 @@ public abstract class Elm extends Div {
         if(!(this instanceof Hoverable h)) return;
 
         // Update current state and run hover state change callbacks if needed
-        if(isHovered != hoverStateNext && (!(this instanceof __base_ButtonElm) || hoverRateLimiter.attempt())) {
+        if(isHovered != hoverStateNext && hoverRateLimiter.attempt()) {
             isHovered = hoverStateNext;
             if(isHovered) {
                 h.onHoverEnter(player);

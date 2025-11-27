@@ -4,16 +4,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
-import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.graphics.basic.elements.FancyTextElm;
-import com.snek.frameworklib.graphics.core.HudCanvas;
 import com.snek.frameworklib.graphics.functional.styles.FancyButtonElmStyle;
-import com.snek.frameworklib.utils.MinecraftUtils;
-import com.snek.frameworklib.utils.scheduler.RateLimiter;
+import com.snek.frameworklib.graphics.interfaces.Clickable;
+import com.snek.frameworklib.graphics.interfaces.Hoverable;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -27,33 +24,31 @@ import net.minecraft.world.inventory.ClickAction;
 /**
  * A generic button class with clicking and hovering capabilities and a configurable cooldown time.
  */
-public abstract non-sealed class FancyButtonElm extends FancyTextElm implements __base_ButtonElm {
-    protected final RateLimiter clickRateLimiter       = new RateLimiter();
-    protected final RateLimiter initialCooldownLimiter = new RateLimiter();
-    private   final int clickCooldown;
+public abstract class FancyButtonElm extends FancyTextElm implements Clickable, Hoverable {
+    __base_ButtonElm base;
 
 
 
 
     /**
-     * Creates a new ButtonElm using a custom style.
-     * @param _world The world in which to place the element.
+     * Creates a new FancyButtonElm using a custom style.
+     * @param world The world in which to place the element.
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
-     * @param _style The custom style.
+     * @param style The custom style.
      */
-    protected FancyButtonElm(final @NotNull ServerLevel _world, final int _clickCooldown, final FancyButtonElmStyle _style) {
-        super(_world, _style);
-        clickCooldown = _clickCooldown;
+    protected FancyButtonElm(final @NotNull ServerLevel world, final int clickCooldown, final FancyButtonElmStyle style) {
+        super(world, style);
+        base = new __base_ButtonElm(clickCooldown);
     }
 
 
     /**
-     * Creates a new ButtonElm using the default style.
-     * @param _world The world in which to place the element.
-     * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
+     * Creates a new FancyButtonElm using the default style.
+     * @param world The world in which to place the element.
+     * @param lickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      */
-    protected FancyButtonElm(final @NotNull ServerLevel _world, final int _clickCooldown) {
-        this(_world, _clickCooldown, new FancyButtonElmStyle());
+    protected FancyButtonElm(final @NotNull ServerLevel world, final int clickCooldown) {
+        this(world, clickCooldown, new FancyButtonElmStyle());
     }
 
 
@@ -61,12 +56,8 @@ public abstract non-sealed class FancyButtonElm extends FancyTextElm implements 
 
     @Override
     public void spawn(final @NotNull Vector3d pos) {
-        initialCooldownLimiter.renewCooldown(SimpleButtonElm.INITIAL_COOLDOWN);
         super.spawn(pos);
-        final Animation animation = getStyle(FancyButtonElmStyle.class).getHoverPrimerAnimation();
-        if(animation != null) {
-            applyAnimationNow(animation);
-        }
+        base.spawn(this, getStyle(FancyButtonElmStyle.class).getHoverPrimerAnimation());
     }
 
 
@@ -74,30 +65,17 @@ public abstract non-sealed class FancyButtonElm extends FancyTextElm implements 
 
     @Override
     public void onHoverEnter(final @NotNull Player player) {
-        final Animation animation = getStyle(FancyButtonElmStyle.class).getHoverEnterAnimation();
-        if(animation != null) {
-            applyAnimation(animation);
-        }
+        base.onHoverEnter(this, getStyle(FancyButtonElmStyle.class).getHoverEnterAnimation());
     }
-
-
-
 
     @Override
     public void onHoverTick(final @NotNull Player player) {
-        // Empty
+        base.onHoverTick(this);
     }
-
-
-
 
     @Override
     public void onHoverExit(final @Nullable Player player) {
-        final Animation animation = getStyle(FancyButtonElmStyle.class).getHoverLeaveAnimation();
-        if(animation != null) {
-            applyAnimation(animation);
-            hoverRateLimiter.renewCooldown(animation.getTotalDuration());
-        }
+        base.onHoverExit(this, getStyle(FancyButtonElmStyle.class).getHoverLeaveAnimation());
     }
 
 
@@ -105,17 +83,12 @@ public abstract non-sealed class FancyButtonElm extends FancyTextElm implements 
 
     @Override
     public boolean attemptClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        if(!initialCooldownLimiter.attempt()) return false;
-        if(!clickRateLimiter.attempt()) return false;
-        clickRateLimiter.renewCooldown(clickCooldown);
-        return checkIntersection(player);
+        return base.attemptClick(this, player);
     }
 
     @Override
     public void onClick(@NotNull Player player, @NotNull ClickAction click) {
-        if(canvas instanceof HudCanvas hud) {
-            hud.resetInactivityTimer();
-        }
+        base.onClick(this);
     }
 
 
@@ -126,15 +99,4 @@ public abstract non-sealed class FancyButtonElm extends FancyTextElm implements 
      * @param textOverride If not null, it replaces the displayed text.
      */
     public abstract void updateDisplay(@Nullable Component textOverride);
-
-
-
-
-    /**
-     * Plays the button click sound to the specified player.
-     * @param player The player to play the sound to.
-     */
-    public static void playButtonSound(final @NotNull Player player) {
-        MinecraftUtils.playSoundClient(player, SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON, 2, 1.5f);
-    }
 }
