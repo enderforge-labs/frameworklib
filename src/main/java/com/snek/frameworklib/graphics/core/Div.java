@@ -25,11 +25,6 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
-//TODO
-//TODO
-//TODO
-//TODO
-//TODO
 
 
 
@@ -40,9 +35,10 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 /**
- * The most basic UI element. It can contain and manage any amount of UI elements.
- * <p> By default, divs are invisible and don't exist in the minecraft world nor on the client.
- *     They have a 2D size, a 2D position and alignment options.
+ * The most basic graphic element. It can contain and manage any amount of elements.
+ * <p>
+ * By default, divs are invisible and don't exist in the minecraft world nor on the client.
+ * They have a 2D size, a 2D position and alignment options.
  */
 public class Div {
 
@@ -57,7 +53,7 @@ public class Div {
 
 
 
-    // UI data
+    // Element data
     protected final @NotNull Vector2f   localSize  = new Vector2f(1, 1);
     protected final @NotNull Vector2f   localPos   = new Vector2f(0, 0);
 
@@ -85,7 +81,7 @@ public class Div {
     /**
      * Adds a child to this Div.
      * @param elm The new element.
-     * @return elm
+     * @return {@code elm}
      */
     public Div addChild(final @NotNull Div elm) {
         elm.canvas = canvas;
@@ -99,7 +95,7 @@ public class Div {
     /**
      * Removes a child from this Div.
      * @param elm The removed element.
-     * @return elm
+     * @return {@code elm}
      */
     public Div removeChild(final @NotNull Div elm) {
         elm.parent = null;
@@ -134,7 +130,8 @@ public class Div {
 
     /**
      * Applies an animation to this element.
-     * <p> Partial steps at the end of the animation are expanded to cover the entire step.
+     * <p>
+     * Partial steps at the end of the animation are expanded to cover the entire step.
      * @param animation The animation to apply.
      */
     public void applyAnimation(final @NotNull Animation animation) {
@@ -142,7 +139,8 @@ public class Div {
     }
     /**
      * Applies a transition to this element.
-     * <p> Partial steps at the end of the transition are expanded to cover the entire step.
+     * <p>
+     * Partial steps at the end of the transition are expanded to cover the entire step.
      * @param transition The transition to apply.
      */
     public final void applyAnimation(final @NotNull Transition transition) {
@@ -172,7 +170,8 @@ public class Div {
 
     /**
      * Applies an animation to this element and all of its children.
-     * <p> Partial steps at the end of the animation are expanded to cover the entire step.
+     * <p>
+     * Partial steps at the end of the animation are expanded to cover the entire step.
      * @param animation The animation to apply.
      */
     public final void applyAnimationRecursive(final @NotNull Animation animation) {
@@ -183,7 +182,8 @@ public class Div {
     }
     /**
      * Applies a transition to this element and all of its children.
-     * <p> Partial steps at the end of the transition are expanded to cover the entire step.
+     * <p>
+     * Partial steps at the end of the transition are expanded to cover the entire step.
      * @param transition The transition to apply.
      */
     public final void applyAnimationRecursive(final @NotNull Transition transition) {
@@ -216,7 +216,8 @@ public class Div {
 
     /**
      * Forwards a click to this element and all its children.
-     * <p> This method stops at the first clickable element that consumes a click.
+     * <p>
+     * This method stops at the first clickable element that consumes a click.
      * @param player The player that clicked.
      * @param clickType The type of click.
      * @return Whether the click was accepted by this element.
@@ -238,7 +239,8 @@ public class Div {
 
     /**
      * Finds the element that the player is looking at.
-     * <p> This method skips non-Elm elements and elements that are both not hoverable and not clickable.
+     * <p>
+     * This method skips non-Elm elements and elements that are both not hoverable and not clickable.
      * @param player The player.
      * @return The element being looked at, or null if the player isnt looking at any of the elements.
      */
@@ -317,52 +319,6 @@ public class Div {
     public void updateAbsSizeInverse() {
         updateAbsSizeInverseSelf();
         for(final Div c : children) c.updateAbsSize();
-    }
-
-
-    public void setSize(final @NotNull Vector2f _size) {
-        localSize.set(_size);
-        updateAbsSize();
-    }
-
-    public void setSizeX(final float x) {
-        localSize.x = x;
-        updateAbsSize();
-    }
-
-    public void setSizeY(final float y) {
-        localSize.y = y;
-        updateAbsSize();
-    }
-
-    public void setAbsSize(final @NotNull Vector2f _size) {
-        absSize.set(_size);
-        updateAbsSizeInverse();
-    }
-
-    public void setAbsSizeX(final float x) {
-        absSize.x = x;
-        updateAbsSizeInverse();
-    }
-
-    public void setAbsSizeY(final float y) {
-        absSize.y = y;
-        updateAbsSizeInverse();
-    }
-
-    public void scale(final @NotNull Vector2f _size) {
-        localSize.mul(_size);
-        updateAbsSize();
-    }
-
-    public void scaleX(final float x) {
-        localSize.x *= x;
-        updateAbsSize();
-    }
-
-    public void scaleY(final float y) {
-        localSize.y *= y;
-        updateAbsSize();
     }
 
 
@@ -445,35 +401,28 @@ public class Div {
     }
 
 
-    public void setPos(final @NotNull Vector2f _pos) {
-        localPos.set(_pos);
-        updateAbsPos();
-    }
 
-    public void setPosX(final float x) {
-        localPos.x = x;
-        updateAbsPos();
-    }
 
-    public void setPosY(final float y) {
-        localPos.y = y;
-        updateAbsPos();
-    }
 
-    public void move(final @NotNull Vector2f _pos) {
-        localPos.add(_pos);
-        updateAbsPos();
-    }
 
-    public void moveX(final float x) {
-        localPos.x += x;
-        updateAbsPos();
-    }
+    // Setters
 
-    public void moveY(final float y) {
-        localPos.y += y;
-        updateAbsPos();
-    }
+    public void setSize    (final @NotNull Vector2f size) { localSize.set(size); updateAbsSize       (); }
+    public void setAbsSize (final @NotNull Vector2f size) { absSize  .set(size); updateAbsSizeInverse(); }
+    public void scale      (final @NotNull Vector2f size) { localSize.mul(size); updateAbsSize       (); }
+    public void setPos     (final @NotNull Vector2f _pos) { localPos .set(_pos); updateAbsPos        (); }
+    public void move       (final @NotNull Vector2f _pos) { localPos .add(_pos); updateAbsPos        (); }
+
+    public void setSizeX   (final float x) { localSize.x  = x; updateAbsSize       (); }
+    public void setSizeY   (final float y) { localSize.y  = y; updateAbsSize       (); }
+    public void setAbsSizeX(final float x) { absSize  .x  = x; updateAbsSizeInverse(); }
+    public void setAbsSizeY(final float y) { absSize  .y  = y; updateAbsSizeInverse(); }
+    public void scaleX     (final float x) { localSize.x *= x; updateAbsSize       (); }
+    public void scaleY     (final float y) { localSize.y *= y; updateAbsSize       (); }
+    public void setPosX    (final float x) { localPos .x  = x; updateAbsPos        (); }
+    public void setPosY    (final float y) { localPos .y  = y; updateAbsPos        (); }
+    public void moveX      (final float x) { localPos .x += x; updateAbsPos        (); }
+    public void moveY      (final float y) { localPos .y += y; updateAbsPos        (); }
 
 
 
