@@ -5,28 +5,18 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
 
 import com.snek.frameworklib.data_types.animations.Animation;
-import com.snek.frameworklib.data_types.animations.Transform;
-import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
-import com.snek.frameworklib.utils.Easings;
 
 
 
 
 
 
-//TODO continue from here
-//TODO continue from here
-//TODO continue from here
-//TODO continue from here
-//TODO continue from here
-//TODO continue from here
-//TODO continue from here
 
 
 /**
- * The style of the generic ButtonElm UI element.
+ * The default style of the generic {@Link ButtonElm} element.
  */
 public class FancyButtonElmStyle extends FancyTextElmStyle {
     private @Nullable Flagged<Animation> hoverPrimerAnimation = null;
@@ -59,35 +49,29 @@ public class FancyButtonElmStyle extends FancyTextElmStyle {
 
     @Override
     public @NotNull Vector3i getDefaultBgColor() {
-        return new Vector3i(SimpleButtonElmStyle.HOVER_COLOR);
+        return new Vector3i(__base_ButtonElmStyle.HOVER_COLOR);
     }
 
     @Override
     public int getDefaultBgAlpha() {
-        return 255;
+        return __base_ButtonElmStyle.DEFAULT_BG_ALPHA;
     }
+
 
 
 
     // Default value providers
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
-        return new Animation(
-            new Transition()
-            .additiveTransformBg(new Transform().scaleX(SimpleButtonElmStyle.HIDDEN_W))
-        );
+        return __base_ButtonElmStyle.DEFAULT_HOVER_PRIMER_ANIMATION;
     }
     public @Nullable Animation getDefaultHoverEnterAnimation () {
-        return new Animation(
-            new Transition(SimpleButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(1f / SimpleButtonElmStyle.HIDDEN_W))
-        );
+        return __base_ButtonElmStyle.DEFAULT_HOVER_ENTER_ANIMATION;
     }
     public @Nullable Animation getDefaultHoverLeaveAnimation () {
-        return new Animation(
-            new Transition(SimpleButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(SimpleButtonElmStyle.HIDDEN_W))
-        );
+        return __base_ButtonElmStyle.DEFAULT_HOVER_LEAVE_ANIMATION;
     }
+
+
 
 
     // Reset functions

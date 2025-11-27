@@ -22,7 +22,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 /**
- * A generic text input class that allows the user to enter a chat input after clicking the element.
+ * A generic text input class that allows the user to enter a string input through the chat after clicking the element.
  */
 public abstract class TextInputElm extends FancyButtonElm {
     public static final int CURSOR_TOGGLE_DELAY = 10;
@@ -37,23 +37,23 @@ public abstract class TextInputElm extends FancyButtonElm {
 
     /**
      * Creates a new TextInputElm using a custom style.
-     * @param _world The world in which to place the element.
-     * @param _clickFeedbackMessage The message to show to the player when they click the element.
-     * @param _style The custom style.
+     * @param world The world in which to place the element.
+     * @param clickFeedbackMessage The message to show to the player when they click the element.
+     * @param style The custom style.
      */
-    protected TextInputElm(final @NotNull ServerLevel _world, final @Nullable Component _clickFeedbackMessage, final @NotNull TextInputElmStyle _style) {
-        super(_world, 1, _style);
-        clickFeedbackMessage = _clickFeedbackMessage;
+    protected TextInputElm(final @NotNull ServerLevel world, final @Nullable Component clickFeedbackMessage, final @NotNull TextInputElmStyle style) {
+        super(world, 1, style);
+        this.clickFeedbackMessage = clickFeedbackMessage;
     }
 
 
     /**
      * Creates a new TextInputElm using the default style.
-     * @param _world The world in which to place the element.
-     * @param _clickFeedbackMessage The message to show to the player when they click the element.
+     * @param world The world in which to place the element.
+     * @param clickFeedbackMessage The message to show to the player when they click the element.
      */
-    protected TextInputElm(final @NotNull ServerLevel _world, final @Nullable Component _clickFeedbackMessage) {
-        this(_world, _clickFeedbackMessage, new TextInputElmStyle());
+    protected TextInputElm(final @NotNull ServerLevel world, final @Nullable Component clickFeedbackMessage) {
+        this(world, clickFeedbackMessage, new TextInputElmStyle());
     }
 
 
@@ -63,7 +63,7 @@ public abstract class TextInputElm extends FancyButtonElm {
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
         if(!inputState) {
             enterInputState();
-            playButtonSound(player);
+            __base_ButtonElm.playButtonSound(player);
         }
         if(clickFeedbackMessage != null) player.displayClientMessage(clickFeedbackMessage, true);
         MessageReceiver.setCallback(player, this::__internal_messageCallback);
@@ -72,7 +72,8 @@ public abstract class TextInputElm extends FancyButtonElm {
 
     /**
      * Enters the input state.
-     * <p> This hides the text to show a blinking cursor.
+     * <p>
+     * This hides the text to show a blinking cursor.
      */
     protected void enterInputState() {
         if(!inputState) {
@@ -88,7 +89,8 @@ public abstract class TextInputElm extends FancyButtonElm {
 
     /**
      * Exists the input state.
-     * <p> This stops the blinking animation, hides the cursor and shows the text.
+     * <p>
+     * This stops the blinking animation, hides the cursor and shows the text.
      */
     protected void exitInputState() {
         if(inputState) {

@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
 
 import com.snek.frameworklib.data_types.animations.Animation;
-import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
@@ -20,13 +19,9 @@ import com.snek.frameworklib.utils.Easings;
 
 
 /**
- * The style of the generic SimpleButtonElm UI element.
+ * The default tyle of the generic {@Link SimpleButtonElm} element.
  */
 public class SimpleButtonElmStyle extends PanelElmStyle {
-    public static final @NotNull Vector3i HOVER_COLOR          = new Vector3i(220, 220, 220);
-    public static final          float    HIDDEN_W             = 0.00001f;
-    public static final          int      HOVER_ANIMATION_TIME = 10;
-
     private @Nullable Flagged<Animation> hoverPrimerAnimation = null;
     private @Nullable Flagged<Animation> hoverEnterAnimation  = null;
     private @Nullable Flagged<Animation> hoverLeaveAnimation  = null;
@@ -57,40 +52,32 @@ public class SimpleButtonElmStyle extends PanelElmStyle {
 
     @Override
     public @NotNull Vector3i getDefaultColor() {
-        return new Vector3i(HOVER_COLOR);
+        return new Vector3i(__base_ButtonElmStyle.HOVER_COLOR);
     }
 
     @Override
     public int getDefaultAlpha() {
-        return 255;
+        return __base_ButtonElmStyle.DEFAULT_BG_ALPHA;
     }
+
 
 
 
     // Default value providers
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
-        return new Animation(
-            new Transition()
-            .additiveTransform(new Transform().scaleX(HIDDEN_W))
-        );
+        return __base_ButtonElmStyle.DEFAULT_HOVER_PRIMER_ANIMATION;
     }
     public @Nullable Animation getDefaultHoverEnterAnimation () {
-        return new Animation(
-            new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransform(new Transform().scaleX(1f / HIDDEN_W))
-        );
+        return __base_ButtonElmStyle.DEFAULT_HOVER_ENTER_ANIMATION;
     }
     public @Nullable Animation getDefaultHoverLeaveAnimation () {
-        return new Animation(
-            new Transition(HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransform(new Transform().scaleX(HIDDEN_W))
-        );
+        return __base_ButtonElmStyle.DEFAULT_HOVER_LEAVE_ANIMATION;
     }
 
 
 
 
-    @Override //TODO
+    @Override
     public @Nullable Animation getDefaultPrimerAnimation() {
         return new Animation(
             new Transition(ElmStyle.D_TIME, Easings.sineOut)
@@ -98,7 +85,7 @@ public class SimpleButtonElmStyle extends PanelElmStyle {
             .targetOpacity(0)
         );
     }
-    @Override //TODO
+    @Override
     public @Nullable Animation getDefaultSpawnAnimation() {
         return new Animation(
             new Transition(ElmStyle.S_TIME, Easings.sineOut)
@@ -106,7 +93,7 @@ public class SimpleButtonElmStyle extends PanelElmStyle {
             .targetOpacity(255)
         );
     }
-    @Override //TODO
+    @Override
     public @Nullable Animation getDefaultDespawnAnimation() {
         return new Animation(
             new Transition(ElmStyle.D_TIME, Easings.sineOut)

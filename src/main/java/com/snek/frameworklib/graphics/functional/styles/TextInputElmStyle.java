@@ -39,14 +39,14 @@ public class TextInputElmStyle extends FancyButtonElmStyle {
     @Override
     public @Nullable Animation getDefaultHoverEnterAnimation () {
         return new Animation(
-            new Transition(SimpleButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+            new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
             .additiveTransformBg(new Transform().scaleX(1f / UNHOVERED_W))
         );
     }
     @Override
     public @Nullable Animation getDefaultHoverLeaveAnimation () {
         return new Animation(
-            new Transition(SimpleButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+            new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
             .additiveTransformBg(new Transform().scaleX(UNHOVERED_W))
         );
     }
