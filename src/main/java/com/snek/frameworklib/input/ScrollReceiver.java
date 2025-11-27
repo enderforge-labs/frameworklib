@@ -10,7 +10,7 @@ import net.minecraft.world.entity.player.Player;
 
 
 
-
+//TODO this might not be necessary if we don't use mouse scrolling
 public abstract class ScrollReceiver {
     private ScrollReceiver() {}
 

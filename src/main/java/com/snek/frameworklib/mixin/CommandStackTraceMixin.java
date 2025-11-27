@@ -20,7 +20,7 @@ import net.minecraft.commands.CommandSourceStack;
 
 
 /**
- * By default, when an in-game command generates an exception, Minecraft only prints the exception error in chat.
+ * By default, when an in-game command generates an exception, Minecraft only prints the exception message in chat.
  * This mixin intercepts exceptions and prints their stack trace in the console to make debugging it easier.
  */
 @Mixin(Commands.class)

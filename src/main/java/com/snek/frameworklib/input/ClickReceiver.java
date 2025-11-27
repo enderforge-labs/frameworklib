@@ -29,6 +29,8 @@ import net.minecraft.world.level.Level;
 
 /**
  * A utility class that handles clicks from players.
+ * <p>
+ * This is responsible for sending click events to contexts.
  */
 public abstract class ClickReceiver {
     private static final @NotNull Map<@NotNull UUID, @Nullable RateLimiter> clickLimiters = new HashMap<>();
@@ -78,7 +80,8 @@ public abstract class ClickReceiver {
 
     /**
      * Handles left and right clicks on contexts.
-     * <p> Must be called on AttackEntityCallback and UseEntityCallback events.
+     * <p>
+     * Must be called on AttackEntityCallback and UseEntityCallback events.
      * @param world The world the player is in.
      * @param player The player.
      * @param hand The hand used.
@@ -98,7 +101,8 @@ public abstract class ClickReceiver {
 
     /**
      * Handles left and right clicks on blocks before the interaction blocker is spawned.
-     * <p> Must be called on AttackBlockCallback and UseBlockCallback events.
+     * <p>
+     * Must be called on AttackBlockCallback and UseBlockCallback events.
      * @param world The world the player is in.
      * @param player The player.
      * @param hand The hand used.
@@ -117,7 +121,8 @@ public abstract class ClickReceiver {
 
     /**
      * Handles right clicks on blocks before the interaction blocker is spawned.
-     * <p> Must be called on useItemCallback events.
+     * <p>
+     * Must be called on useItemCallback events.
      * @param world The world the player is in.
      * @param player The player.
      * @param hand The hand used.

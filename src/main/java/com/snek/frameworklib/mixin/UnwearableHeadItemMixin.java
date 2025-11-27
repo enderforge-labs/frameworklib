@@ -24,11 +24,16 @@ import net.minecraft.world.item.Items;
  */
 @Mixin(LivingEntity.class)
 public class UnwearableHeadItemMixin {
+    private UnwearableHeadItemMixin() {}
 
+
+    /**
+     * Inject getEquipmentSlotForItem in order to return MAINHAND as the intended slot for unwearable heads.
+     * This makes Minecraft cancel the equip action, avoiding duplication issues.
+     * The client is sent update packets automatically.
+     */
     @Inject(method = "getEquipmentSlotForItem", at = @At("HEAD"), cancellable = true)
     private static void _getEquipmentSlotForItem(ItemStack item, CallbackInfoReturnable<EquipmentSlot> cir) {
-
-        // If the item is not wearable, reset the head item
         if(item.is(Items.PLAYER_HEAD) && MinecraftUtils.hasTag(item, MinecraftUtils.UNWEARABLE_TAG)) {
             cir.setReturnValue(EquipmentSlot.MAINHAND);
         }

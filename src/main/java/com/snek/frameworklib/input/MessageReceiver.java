@@ -19,7 +19,7 @@ import net.minecraft.world.entity.player.Player;
 
 
 /**
- * A utility class that can detect player messages and execute callbacks based on the sender.
+ * A utility class that detects player messages and executes callbacks based on the sender.
  */
 public abstract class MessageReceiver {
     private MessageReceiver() {}
@@ -28,7 +28,8 @@ public abstract class MessageReceiver {
 
     /**
      * Removes the callback for the specified player.
-     * <p> Future messages from this player will not be detected nor blocked.
+     * <p>
+     * Future messages from this player will not be detected nor blocked.
      * @param player The player.
      */
     public static void removeCallback(final @NotNull Player player) {
@@ -38,7 +39,8 @@ public abstract class MessageReceiver {
 
     /**
      * Sets a callback that is fired the next time the player sends a message in chat.
-     * <p> Commands are ignored.
+     * <p>
+     * Commands are ignored.
      * @param player The player.
      * @param callback The callback function. It must take a String and return a boolean.
      *     The return value controls whether the message is blocked.

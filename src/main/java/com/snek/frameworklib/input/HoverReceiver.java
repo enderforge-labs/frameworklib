@@ -29,7 +29,9 @@ import net.minecraft.world.entity.player.Player;
 
 
 /**
- * Utility class containing methods to detect what players are looking at and handle hover events.
+ * Utility class that detects what players are looking at and handles hover events.
+ * <p>
+ * This is responsible for sending hover events to contexts.
  */
 public abstract class HoverReceiver {
     private HoverReceiver() {}
