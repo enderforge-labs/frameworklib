@@ -67,6 +67,9 @@ public class Div {
 
     protected int zIndex = 0;
 
+    protected boolean isSpawned = false;        // Whether the element has been spawned into the world
+    public boolean isSpawned() { return isSpawned; }
+
 
 
 
@@ -265,8 +268,11 @@ public class Div {
      * @param pos The position of the spawned entities.
      */
     public void spawn(final @NotNull Vector3d pos) {
-        for(final Div elm : children) {
-            elm.spawn(pos);
+        if(!isSpawned) {
+            for(final Div elm : children) {
+                elm.spawn(pos);
+            }
+            isSpawned = true;
         }
     }
 
@@ -278,8 +284,11 @@ public class Div {
      * @param animate Whether to display despawn animations. Using {@code animate=false} will despawn the entities immediately.
      */
     public void despawn(final boolean animate) {
-        for(final Div elm : children) {
-            elm.despawn(animate);
+        if(isSpawned) {
+            for(final Div elm : children) {
+                elm.despawn(animate);
+            }
+            isSpawned = false;
         }
     }
 

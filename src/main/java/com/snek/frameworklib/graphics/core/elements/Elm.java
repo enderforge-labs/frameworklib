@@ -82,9 +82,7 @@ public abstract class Elm extends Div {
     protected final @NotNull ServerLevel   world;     // The world this Elm will be spawned in
     private   final @NotNull CustomDisplay entity;    // The display entity held by this element
     private   final @NotNull ElmStyle      style;     // The style of the element
-    protected       boolean isSpawned = false;        // Whether the element has been spawned into the world
     private         boolean isHovered = false;        // Whether the element is being hovered on by a player's crosshair. //! Only valid in Hoverable instances
-    public          boolean isSpawned() { return isSpawned; }
     public final RateLimiter hoverRateLimiter = new RateLimiter();
 
 
@@ -448,9 +446,8 @@ public abstract class Elm extends Div {
             }
 
 
-            // Call superclass spawn and set spawned flag to true
+            // Call superclass spawn
             super.spawn(pos);
-            isSpawned = true;
         }
     }
 
@@ -461,9 +458,8 @@ public abstract class Elm extends Div {
     public void despawn(final boolean animate) {
         if(isSpawned) {
 
-            // Call superclass spawn and set spawned flag to false
+            // Call superclass spawn
             super.despawn(animate);
-            isSpawned = false;
 
             // Handle animations
             final Animation animation = style.getDespawnAnimation();
