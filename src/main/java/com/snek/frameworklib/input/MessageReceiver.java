@@ -8,6 +8,8 @@ import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.snek.frameworklib.utils.UtilityClassBase;
+
 import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.world.entity.player.Player;
 
@@ -21,7 +23,7 @@ import net.minecraft.world.entity.player.Player;
 /**
  * A utility class that detects player messages and executes callbacks based on the sender.
  */
-public abstract class MessageReceiver {
+public final class MessageReceiver extends UtilityClassBase {
     private MessageReceiver() {}
     private static final @NotNull Map<@NotNull UUID, @Nullable Predicate<@NotNull String>> callbacks = new HashMap<>();
 

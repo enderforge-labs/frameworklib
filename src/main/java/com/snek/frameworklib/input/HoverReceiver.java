@@ -1,6 +1,8 @@
 package com.snek.frameworklib.input;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +12,7 @@ import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.debug.DebugCheck;
 import com.snek.frameworklib.debug.UiDebugWindow;
 import com.snek.frameworklib.graphics.core.Context;
+import com.snek.frameworklib.utils.UtilityClassBase;
 
 import net.minecraft.world.entity.player.Player;
 
@@ -33,7 +36,7 @@ import net.minecraft.world.entity.player.Player;
  * <p>
  * This is responsible for sending hover events to contexts.
  */
-public abstract class HoverReceiver {
+public final class HoverReceiver extends UtilityClassBase {
     private HoverReceiver() {}
 
 
@@ -43,8 +46,13 @@ public abstract class HoverReceiver {
 
 
     // Optimization structures
-    private static @NotNull HashSet<Context> updatedContexts     =  new HashSet<>();
-    private static @NotNull HashSet<Context> prevUpdatedContexts =  new HashSet<>();
+    private static @NotNull Map<Player, Context> targetedContexts    =  new HashMap<>();
+    private static @NotNull HashSet<Context>     updatedContexts     =  new HashSet<>();
+    private static @NotNull HashSet<Context>     prevUpdatedContexts =  new HashSet<>();
+
+    public static Context getTargetedContext(final @NotNull Player player) {
+        return targetedContexts.get(player);
+    }
 
 
 
@@ -96,6 +104,7 @@ public abstract class HoverReceiver {
             // Send hover updates to the top-most context
             @Nullable Context topMost = Context.findTopMostContext(player);
             if(topMost != null) {
+                targetedContexts.put(player, topMost);
                 topMost.forwardHover(player);
                 updatedContexts.add(topMost);
             }

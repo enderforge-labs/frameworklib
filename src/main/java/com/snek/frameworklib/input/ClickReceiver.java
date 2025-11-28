@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.core.InteractionBlocker;
+import com.snek.frameworklib.utils.UtilityClassBase;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
 import net.minecraft.core.Vec3i;
@@ -32,7 +33,7 @@ import net.minecraft.world.level.Level;
  * <p>
  * This is responsible for sending click events to contexts.
  */
-public abstract class ClickReceiver {
+public final class ClickReceiver extends UtilityClassBase {
     private static final @NotNull Map<@NotNull UUID, @Nullable RateLimiter> clickLimiters = new HashMap<>();
     private ClickReceiver() {}
 
@@ -64,9 +65,10 @@ public abstract class ClickReceiver {
 
 
         // Send click to the player's contexts and return if one is present
-        @Nullable Context topMost = Context.findTopMostContext(player);
-        if(topMost != null) {
-            if(topMost.forwardClick(player, clickType)) {
+        // @Nullable Context topMost = Context.findTopMostContext(player); //TODO
+        @Nullable Context context = HoverReceiver.getTargetedContext(player);
+        if(context != null) {
+            if(context.forwardClick(player, clickType)) {
                 return InteractionResult.FAIL;
             }
         }
