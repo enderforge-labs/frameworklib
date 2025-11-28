@@ -290,6 +290,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
         // If the background is already spawned, only spawn its children
         if(bg.isSpawned()) for(final Div c : bg.getChildren()) {
+            isSpawned = true;
             c.spawn(pos);
         }
 
