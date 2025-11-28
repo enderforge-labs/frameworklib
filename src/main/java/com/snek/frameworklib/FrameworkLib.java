@@ -13,6 +13,7 @@ import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.input.ClickReceiver;
 import com.snek.frameworklib.input.HoverReceiver;
 import com.snek.frameworklib.input.MessageReceiver;
+import com.snek.frameworklib.input.ScrollReceiver;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 import net.fabricmc.api.ModInitializer;
@@ -100,6 +101,9 @@ public class FrameworkLib implements ModInitializer {
 
             // Schedule hover manager loop
             Scheduler.loop(0, 1, HoverReceiver::tick);
+
+            // Schedule scroll receiver loop
+            Scheduler.loop(0, 1, ScrollReceiver::tick);
 
 
 
