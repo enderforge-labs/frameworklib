@@ -61,6 +61,7 @@ public abstract sealed class Context permits HudContext, UiContext {
 
     // Optimization structures
     private @Nullable Elm targetedElm = null;
+    public @Nullable Elm getTargetedElm() { return targetedElm; }
 
 
 
