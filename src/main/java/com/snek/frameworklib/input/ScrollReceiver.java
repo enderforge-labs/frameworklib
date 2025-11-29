@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.graphics.core.Context;
+import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.utils.UtilityClassBase;
 
 import net.minecraft.world.entity.player.Player;
@@ -55,9 +56,11 @@ public final class ScrollReceiver extends UtilityClassBase {
         final @Nullable Context context = HoverReceiver.getTargetedContext(player);
         final float scrollAmount = (cur - last) / 8f; //FIXME out of bounds edge cases
 
+        // Send scroll event if the context is scrollable
         if(context != null) {
-            //TODO
-            System.err.println("scroll: " + scrollAmount);
+            if(context instanceof Scrollable s) {
+                s.
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ import org.joml.Vector3d;
 
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.graphics.core.elements.Elm;
+import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.graphics.layout.Div;
 
 import net.minecraft.world.entity.player.Player;
@@ -194,6 +195,22 @@ public abstract sealed class Context permits HudContext, UiContext {
     public boolean forwardClick(final @NotNull Player player, final @NotNull ClickAction action) {
         if(activeCanvas == null) return false;
         return activeCanvas.forwardClick(player, action);
+    }
+
+
+
+
+    /**
+     * Forwards a scroll event to this context.
+     * @param player The player.
+     * @param action The amount of scroll.
+     */
+    public void forwardScroll(final @NotNull Player player, final float scrollAmount) {
+        if(activeCanvas == null) return;
+
+        if(targetedElm != null && targetedElm instanceof Scrollable s) {
+            s.onScroll(player, scrollAmount);
+        }
     }
 
 

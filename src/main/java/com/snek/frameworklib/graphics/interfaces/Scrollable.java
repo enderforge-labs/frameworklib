@@ -21,7 +21,7 @@ public interface Scrollable {
     /**
      * Called when a player scrolls while looking at this element.
      * @param player The player that scrolled.
-     * @param amount The amount of steps scrolled. Negative values mean that the player scrolled down instead of up.
+     * @param amount The amount of scrolling, in blocks. Negative values mean that the player scrolled down instead of up.
      */
-    public void onScroll(@NotNull Player player, int amount);
+    public void onScroll(@NotNull Player player, float amount);
 }
