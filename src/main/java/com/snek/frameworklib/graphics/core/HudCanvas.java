@@ -30,7 +30,6 @@ public non-sealed class HudCanvas extends Canvas {
 
     // HUD data
     public static final float HUD_DISTANCE = 1.3f;
-    private boolean spawned = false;
     public @NotNull HudContext getHudContext() { return (HudContext)super.getContext(); }
 
     // Despawn detection
@@ -127,8 +126,7 @@ public non-sealed class HudCanvas extends Canvas {
 
     @Override
     public void spawn(Vector3d pos) {
-        if(!spawned) {
-            spawned = true;
+        if(!isSpawned) {
             super.spawn(pos);
 
             // Setup data
@@ -137,6 +135,8 @@ public non-sealed class HudCanvas extends Canvas {
 
             // Move displays away from the player's center
             applyAnimationNowRecursive(new Transition().additiveTransform(new Transform().move(__calcVisualShift())));
+
+            isSpawned = true;
         }
     }
 
@@ -156,9 +156,9 @@ public non-sealed class HudCanvas extends Canvas {
 
     @Override
     public void despawn(final boolean animate) {
-        if(spawned) {
-            spawned = false;
+        if(isSpawned) {
             super.despawn(animate);
+            isSpawned = false;
         }
     }
 }
