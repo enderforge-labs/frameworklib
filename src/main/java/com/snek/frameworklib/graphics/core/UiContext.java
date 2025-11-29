@@ -26,7 +26,6 @@ public non-sealed class UiContext extends Context {
 
     // UI data
     protected final Vector3d spawnPos = new Vector3d();
-    public @NotNull Vector3d getSpawnPos() { return spawnPos; }
 
     // Active UI list
     private static final Map<Player, LinkedList<UiContext>> activeUIs = new HashMap<>();
@@ -51,6 +50,12 @@ public non-sealed class UiContext extends Context {
     }
 
 
+    @Override
+    public @NotNull Vector3d getSpawnPos() {
+        return spawnPos;
+    }
+
+
 
     @Override
     public void changeCanvas(final @NotNull Canvas newCanvas) {
@@ -58,7 +63,7 @@ public non-sealed class UiContext extends Context {
             throw new IllegalArgumentException("Canvas must be a subclass of UiCanvas, but got: " + newCanvas.getClass().getName());
         }
 
-        finalizeCanvasChange(newCanvas, spawnPos);
+        finalizeCanvasChange(newCanvas, getSpawnPos());
     }
 
 

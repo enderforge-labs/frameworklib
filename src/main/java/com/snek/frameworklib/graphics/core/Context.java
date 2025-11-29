@@ -57,6 +57,7 @@ public abstract sealed class Context permits HudContext, UiContext {
     public @Nullable Canvas             getActiveCanvas          () { return activeCanvas; }
     public @Nullable InteractionBlocker getInteractionBlocker    () { return interactionBlocker; }
     public abstract float getInteractionBlockerSize();
+    public abstract @NotNull Vector3d getSpawnPos();
 
     // Optimization structures
     private @Nullable Elm targetedElm = null;

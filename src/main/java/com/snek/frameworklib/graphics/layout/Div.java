@@ -98,7 +98,7 @@ public class Div {
     }
 
     /**
-     * Removes a child from this Div.
+     * Removes a child from this Div, without despawning it.
      * @param elm The removed element.
      * @return {@code elm}
      */
@@ -111,7 +111,7 @@ public class Div {
     }
 
     /**
-     * Removes all children from this Div.
+     * Removes all children from this Div, without despawning them.
      */
     public void clearChildren() {
         for(final Div elm : children) {

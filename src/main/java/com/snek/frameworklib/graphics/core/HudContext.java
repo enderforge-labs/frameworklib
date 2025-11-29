@@ -70,6 +70,12 @@ public non-sealed class HudContext extends Context {
     }
 
 
+    @Override
+    public @NotNull Vector3d getSpawnPos() {
+        return MinecraftUtils.getPlayerStandingEyePos(player);
+    }
+
+
 
 
     @Override
@@ -99,8 +105,7 @@ public non-sealed class HudContext extends Context {
             throw new IllegalArgumentException("Canvas must be a subclass of HudCanvas, but got: " + newCanvas.getClass().getName());
         }
 
-        final Vec3 pos = player.getPosition(1);
-        finalizeCanvasChange(newCanvas, new Vector3d(pos.x, pos.y, pos.z));
+        finalizeCanvasChange(newCanvas, getSpawnPos());
     }
 
 

@@ -34,7 +34,7 @@ public non-sealed class HudCanvas extends Canvas {
     public @NotNull HudContext getHudContext() { return (HudContext)super.getContext(); }
 
     // Despawn detection
-    private @NotNull Vector3d lastPlayerEyePos = new Vector3d();
+    private @NotNull Vector3d lastSpawnPos = new Vector3d();
     private long lastInputTime = Long.MAX_VALUE;
 
 
@@ -66,17 +66,15 @@ public non-sealed class HudCanvas extends Canvas {
 
     @Override
     public void update() {
-        final Player player = context.getPlayer();
-
 
         // Calculate new position and position difference
-        final Vector3d newPos = MinecraftUtils.getPlayerStandingEyePos(player);
-        final Vector3d posDelta = newPos.sub(lastPlayerEyePos, new Vector3d());
+        final Vector3d newPos = context.getSpawnPos();
+        final Vector3d posDelta = newPos.sub(lastSpawnPos, new Vector3d());
 
 
         // Update rotation and position if needed
         if(((HudContext)context).attemptPositionRefresh()) {
-            lastPlayerEyePos = newPos;
+            lastSpawnPos = newPos;
             updateRot(true); //FIXME make it disappear and reappear instead
             updatePos(this); //FIXME make it disappear and reappear instead
             resetInactivityTimer();
@@ -117,7 +115,7 @@ public non-sealed class HudCanvas extends Canvas {
 
     public void updatePos(final @NotNull Div div) {
         if(div instanceof Elm e) {
-            e.getEntity().teleport(lastPlayerEyePos);
+            e.getEntity().teleport(lastSpawnPos);
         }
         for(Div c : div.getChildren()) {
             updatePos(c);
@@ -134,7 +132,7 @@ public non-sealed class HudCanvas extends Canvas {
             super.spawn(pos);
 
             // Setup data
-            lastPlayerEyePos = new Vector3d(pos);
+            lastSpawnPos = new Vector3d(pos);
             resetInactivityTimer();
 
             // Move displays away from the player's center
