@@ -12,6 +12,7 @@ import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.input.HoverReceiver;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -116,6 +117,9 @@ public abstract sealed class Context permits HudContext, UiContext {
             final @Nullable LinkedList<Context> contexts = activeContexts.get(player);
             contexts.remove(this);
             if(contexts.isEmpty()) activeContexts.remove(player);
+
+            // Force-update targeted context for the player
+            HoverReceiver.updateTargetedContext(player);
         }
     }
 

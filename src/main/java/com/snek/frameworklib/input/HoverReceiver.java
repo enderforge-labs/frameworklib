@@ -101,12 +101,11 @@ public final class HoverReceiver extends UtilityClassBase {
             // Skip player if they are dead or in spectator mode or have a HUD open //TODO this might not be needed if the contexts are killed when players dead or go in spectator or etc...
             if(player.isSpectator() || player.isDeadOrDying()) continue; //TODO this might not be needed if the contexts are killed when players dead or go in spectator or etc...
 
-            // Send hover updates to the top-most context
-            @Nullable Context topMost = Context.findTopMostContext(player);
-            if(topMost != null) {
-                targetedContexts.put(player, topMost);
-                topMost.forwardHover(player);
-                updatedContexts.add(topMost);
+            // Find targeted context and send hover updates
+            final @Nullable Context targetedContext = updateTargetedContext(player);
+            if(targetedContext != null) {
+                targetedContext.forwardHover(player);
+                updatedContexts.add(targetedContext);
             }
         }
 
@@ -122,5 +121,18 @@ public final class HoverReceiver extends UtilityClassBase {
             UiDebugWindow.getW().revalidate();
             UiDebugWindow.getW().paintImmediately(0, 0, UiDebugWindow.getW().getWidth(), UiDebugWindow.getW().getHeight());
         }
+    }
+
+    public static @Nullable Context updateTargetedContext(final @NotNull Player player) {
+
+        @Nullable Context topMost = Context.findTopMostContext(player);
+        if(topMost != null) {
+            targetedContexts.put(player, topMost);
+        }
+        else {
+            targetedContexts.remove(player);
+        }
+
+        return topMost;
     }
 }
