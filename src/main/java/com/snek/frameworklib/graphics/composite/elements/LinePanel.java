@@ -30,7 +30,7 @@ public final class LinePanel extends PanelElm {
 
 
     @Override
-    protected final void updateAbsPosSelf() {
+    public final void updateAbsPosSelf() {
 
         // Calculate unrestricted position
         final Vector2f p = parent == null ? new Vector2f(0, 0) : parent.getAbsPos();

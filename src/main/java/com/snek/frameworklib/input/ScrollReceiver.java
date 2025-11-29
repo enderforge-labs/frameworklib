@@ -59,7 +59,7 @@ public final class ScrollReceiver extends UtilityClassBase {
         // Send scroll event if the context is scrollable
         if(context != null) {
             if(context instanceof Scrollable s) {
-                s.
+                s.onScroll(player, scrollAmount);
             }
         }
     }

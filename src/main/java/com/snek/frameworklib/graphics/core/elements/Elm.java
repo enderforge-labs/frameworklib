@@ -185,7 +185,7 @@ public abstract class Elm extends Div {
 
 
     @Override
-    protected void updateAbsPosSelf() {
+    public void updateAbsPosSelf() {
         final Vector2f oldPos = new Vector2f(getAbsPos());
         super.updateAbsPosSelf();
         if(!getAbsPos().equals(oldPos)) {
@@ -197,7 +197,7 @@ public abstract class Elm extends Div {
 
 
     @Override
-    protected void updateZIndexSelf() {
+    public void updateZIndexSelf() {
         final int oldZIndex = getZIndex();
         super.updateZIndexSelf();
         if(getZIndex() != oldZIndex) {

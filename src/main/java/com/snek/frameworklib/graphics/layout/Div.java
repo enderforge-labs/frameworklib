@@ -339,7 +339,7 @@ public class Div {
      * Updates the Z-index value of this element
      * using the parent's Z-index and Z-layer count.
      */
-    protected void updateZIndexSelf() {
+    public void updateZIndexSelf() {
         zIndex = parent == null ? 0 : parent.zIndex + parent.getLayerCount();
     }
 
@@ -347,7 +347,7 @@ public class Div {
      * Updates the Z-index value of this element and its children, recursively,
      * using the parent's Z-index and Z-layer count.
      */
-    protected void updateZIndex() {
+    public void updateZIndex() {
         updateZIndexSelf();
         for(final Div c : children) c.updateZIndex();
     }
@@ -375,7 +375,7 @@ public class Div {
      * Updates the absolute position of this element
      * using the parent's absolute position and the element's local position and alignment.
      */
-    protected void updateAbsPosSelf() {
+    public void updateAbsPosSelf() {
 
         // Calculate unrestricted position
         final Vector2f p = parent == null ? new Vector2f(0, 0) : parent.getAbsPos();
@@ -406,7 +406,7 @@ public class Div {
      * Updates the absolute position of this element and its children, recursively,
      * using the parent's absolute position and the element's local position and alignment.
      */
-    protected void updateAbsPos() {
+    public void updateAbsPos() {
         updateAbsPosSelf();
         for(Div c : children) c.updateAbsPos();
     }
