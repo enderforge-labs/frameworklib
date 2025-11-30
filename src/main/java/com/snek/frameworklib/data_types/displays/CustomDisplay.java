@@ -9,6 +9,7 @@ import org.joml.Vector3f;
 
 import com.mojang.math.Transformation;
 import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Utils;
 
 import net.minecraft.network.chat.Component;
@@ -123,12 +124,7 @@ public abstract class CustomDisplay {
     public void spawn(final @NotNull Level world, final @NotNull Vector3d pos) {
         if(!spawned) {
             spawned = true;
-
-            // Renew entity if it was previously removed
-            // if(heldEntity.isRemoved()) {
-                // heldEntity = new TextDisplay()
-            // }
-
+            heldEntity = MinecraftUtils.renewDisplayEntity(heldEntity);
             heldEntity.setPos(pos.x, pos.y, pos.z);
             world.addFreshEntity(heldEntity);
         }
