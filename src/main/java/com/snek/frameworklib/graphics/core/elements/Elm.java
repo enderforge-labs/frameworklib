@@ -461,15 +461,23 @@ public abstract class Elm extends Div {
             // Call superclass spawn
             super.despawn(animate);
 
+
             // Handle animations
             final Animation animation = style.getDespawnAnimation();
             if(animate && animation != null) {
                 applyAnimation(animation);
 
-                // Remove entity from the world after a delay
-                Scheduler.schedule(animation.getTotalDuration(), entity::despawn);
+                // Reset tracking name and remove entity from the world after a delay
+                Scheduler.schedule(animation.getTotalDuration(), () -> {
+                    entity.setCustomName(new Txt("removed").get());
+                    entity.despawn();
+                });
             }
+
+
+            // If animations are off, reset tracking name and remove entity from the world
             else {
+                entity.setCustomName(new Txt("removed").get());
                 entity.despawn();
             }
         }

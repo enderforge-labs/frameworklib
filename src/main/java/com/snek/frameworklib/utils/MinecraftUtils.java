@@ -31,6 +31,7 @@ import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -614,13 +615,13 @@ public final class MinecraftUtils extends UtilityClassBase {
         // Create a new display of the same type
         Display newDisplay = null; //! Never actually null. Only these 3 types of displays exist
         if(display instanceof TextDisplay) {
-            newDisplay = EntityType.TEXT_DISPLAY.create(display.level());
+            newDisplay = new TextDisplay(EntityType.TEXT_DISPLAY, display.level());
         }
         else if(display instanceof ItemDisplay) {
-            newDisplay = EntityType.ITEM_DISPLAY.create(display.level());
+            newDisplay = new ItemDisplay(EntityType.ITEM_DISPLAY, display.level());
         }
         else if(display instanceof BlockDisplay) {
-            newDisplay = EntityType.BLOCK_DISPLAY.create(display.level());
+            newDisplay = new BlockDisplay(EntityType.BLOCK_DISPLAY, display.level());
         }
 
 
@@ -628,6 +629,7 @@ public final class MinecraftUtils extends UtilityClassBase {
         final CompoundTag nbt = new CompoundTag();
         display.saveWithoutId(nbt);
         newDisplay.load(nbt);
+        newDisplay.setUUID(UUID.randomUUID());
         newDisplay.setPos(display.position());
 
 
