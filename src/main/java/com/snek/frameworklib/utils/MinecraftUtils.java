@@ -36,8 +36,12 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.Display.BlockDisplay;
+import net.minecraft.world.entity.Display.ItemDisplay;
+import net.minecraft.world.entity.Display.TextDisplay;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
@@ -589,5 +593,45 @@ public final class MinecraftUtils extends UtilityClassBase {
      */
     public static double getPlayerStandingEyeHeight(final @NotNull Player player) {
         return player.getStandingEyeHeight(Pose.STANDING, player.getDimensions(Pose.STANDING));
+    }
+
+
+
+
+    /**
+     * Creates a copy of display entities marked as removed.
+     * <p>
+     * The new display entity will have the same NBTs and position as {@code display}, but different UUID.
+     * <p>
+     * The entity is not spawned automatically.
+     * @param display The display entity to renew.
+     * @return The new Display entity if {@code display} is marked as removed. Returns {@code display} otherwise.
+     */
+    public static Display renewDisplayEntity(final @NotNull Display display) {
+        if(!display.isRemoved()) return display;
+
+
+        // Create a new display of the same type
+        Display newDisplay = null; //! Never actually null. Only these 3 types of displays exist
+        if(display instanceof TextDisplay) {
+            newDisplay = EntityType.TEXT_DISPLAY.create(display.level());
+        }
+        else if(display instanceof ItemDisplay) {
+            newDisplay = EntityType.ITEM_DISPLAY.create(display.level());
+        }
+        else if(display instanceof BlockDisplay) {
+            newDisplay = EntityType.BLOCK_DISPLAY.create(display.level());
+        }
+
+
+        // Copy NBT data and position
+        final CompoundTag nbt = new CompoundTag();
+        display.saveWithoutId(nbt);
+        newDisplay.load(nbt);
+        newDisplay.setPos(display.position());
+
+
+        // Return entity
+        return newDisplay;
     }
 }
