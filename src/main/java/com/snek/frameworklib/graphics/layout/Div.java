@@ -16,6 +16,7 @@ import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
+import com.snek.frameworklib.graphics.interfaces.Scrollable;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -250,7 +251,7 @@ public class Div {
      * @return The element being looked at, or null if the player isnt looking at any of the elements.
      */
     public @Nullable Elm findTargetedElement(final @NotNull Player player) {
-        if((this instanceof Hoverable || this instanceof Clickable) && this instanceof Elm e) {
+        if((this instanceof Hoverable || this instanceof Clickable || this instanceof Scrollable) && this instanceof Elm e) {
             if(e.checkIntersection(player)) return e;
         }
         for(final Div elm : children) {

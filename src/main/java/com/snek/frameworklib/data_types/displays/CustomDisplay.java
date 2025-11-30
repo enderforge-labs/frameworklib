@@ -16,6 +16,7 @@ import net.minecraft.util.Brightness;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Display.BillboardConstraints;
+import net.minecraft.world.entity.Display.TextDisplay;
 import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.level.Level;
 
@@ -122,6 +123,12 @@ public abstract class CustomDisplay {
     public void spawn(final @NotNull Level world, final @NotNull Vector3d pos) {
         if(!spawned) {
             spawned = true;
+
+            // Renew entity if it was previously removed
+            // if(heldEntity.isRemoved()) {
+                // heldEntity = new TextDisplay()
+            // }
+
             heldEntity.setPos(pos.x, pos.y, pos.z);
             world.addFreshEntity(heldEntity);
         }
