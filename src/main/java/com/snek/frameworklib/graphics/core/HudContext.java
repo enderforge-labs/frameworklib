@@ -36,6 +36,7 @@ public non-sealed class HudContext extends Context {
     // HUD data
     private boolean playerHasSneaked = false;
     private boolean positionRefreshRequired = true;
+    private @NotNull Vector3d lastSpawnPos = new Vector3d();
 
 
     /**
@@ -72,7 +73,11 @@ public non-sealed class HudContext extends Context {
 
     @Override
     public @NotNull Vector3d getSpawnPos() {
-        return MinecraftUtils.getPlayerStandingEyePos(player);
+        return lastSpawnPos;
+    }
+    public void setSpawnPos(final @NotNull Vector3d newPos) {
+        //FIXME this might need to be native to HudContext. the whole position update thing
+        lastSpawnPos.set(newPos);
     }
 
 
