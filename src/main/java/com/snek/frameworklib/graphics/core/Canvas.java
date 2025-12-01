@@ -248,6 +248,24 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
 
 
+    /**
+     * Normalizes the transform of the element.
+     * <p>
+     * This means applying the translations and rotations needed to align it with the canvas's current position and orientation.
+     * <p>
+     * Only elements that have never been spawned before are affected.
+     * Calling this method on one that has already been spawned will have no effect.
+     * @param elm The element to modify.
+     */
+    public void normalizeTransform(final @NotNull Div elm) {
+        if(elm.isNew()) {
+            if(canvas instanceof HudCanvas hud) {
+                elm.applyAnimationNowRecursive(new Transition().additiveTransform(new Transform().move(hud.__calcVisualShift())));
+            }
+            elm.applyAnimationNowRecursive(Canvas.calcCanvasRotationAnimation(0, canvas.getRotation()));
+        }
+    }
+
 
     /**
      * Calculates the animations required to face from a specified direction to another one.

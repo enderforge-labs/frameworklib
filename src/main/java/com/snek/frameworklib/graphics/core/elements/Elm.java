@@ -425,8 +425,14 @@ public abstract class Elm extends Div {
     public void spawn(final @NotNull Vector3d pos) {
         if(!isSpawned) {
 
-            // Flush previous changes to the entity to avoid bad interpolations and spawn the entity into the world
+            // Flush previous changes to the entity to avoid bad interpolations
             flushStyle();
+
+
+            // Normalize transform and apply the primer animation, then spawn the entity into the world
+            if(canvas != null) {
+                canvas.normalizeTransform(this);
+            }
             final Animation primerAnimation = style.getPrimerAnimation();
             if(primerAnimation != null) {
                 applyAnimationNow(primerAnimation);
@@ -435,11 +441,12 @@ public abstract class Elm extends Div {
 
 
             // Set tracking custom name
+            //! Must be done after spawning as entities that load in with the tracking name are purged
             entity.setCustomNameVisible(false);
             entity.setCustomName(new Txt(ENTITY_CUSTOM_NAME).get());
 
 
-            // Handle animations
+            // Handle spawn animations
             final Animation animation = style.getSpawnAnimation();
             if(animation != null) {
                 applyAnimation(animation);

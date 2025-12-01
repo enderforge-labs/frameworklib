@@ -130,8 +130,10 @@ public non-sealed class HudCanvas extends Canvas {
             ((HudContext)context).setSpawnPos(pos);
             resetInactivityTimer();
 
-            // Move displays away from the player's center
-            applyAnimationNowRecursive(new Transition().additiveTransform(new Transform().move(__calcVisualShift())));
+            //TODO check if this was needed.
+            //TODO this should be handled by Canva's built in transform normalization, now
+            // // Move displays away from the player's center
+            // applyAnimationNowRecursive(new Transition().additiveTransform(new Transform().move(__calcVisualShift())));
 
             isSpawned = true;
         }

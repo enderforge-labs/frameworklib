@@ -68,8 +68,30 @@ public class Div {
 
     protected int zIndex = 0;
 
-    protected boolean isSpawned = false;        // Whether the element has been spawned into the world
-    public boolean isSpawned() { return isSpawned; }
+
+    /**
+     * Checks if this element is currently spawend.
+     * @return True if the element is currently spawned, false otherwise.
+     */
+    public boolean isSpawned() {
+        return isSpawned;
+    }
+    protected boolean isSpawned = false;
+
+
+    /**
+     * Checks if this element has been spawned at least once.
+     * Despawned elements count as not new.
+     * @return True if the element has never been spawned before, false otherwise.
+     */
+    public boolean isNew() {
+        return isNew;
+    }
+    protected boolean isNew = true;
+
+
+
+
 
 
 
@@ -117,6 +139,7 @@ public class Div {
         return elm;
     }
 
+
     /**
      * Removes a child from this Div, without despawning it.
      * @param elm The removed element.
@@ -130,6 +153,7 @@ public class Div {
         return elm;
     }
 
+
     /**
      * Removes all children from this Div, without despawning them.
      */
@@ -141,6 +165,7 @@ public class Div {
         }
         children.clear();
     }
+
 
     /**
      * Returns the list of children.
@@ -293,6 +318,7 @@ public class Div {
                 elm.spawn(pos);
             }
             isSpawned = true;
+            isNew = false;
         }
     }
 
