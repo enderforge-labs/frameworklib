@@ -131,8 +131,9 @@ public class Div {
      * @param elm The new element.
      * @return {@code elm}
      */
-    public Div addChild(final @NotNull Div elm) {
+    public @NotNull Div addChild(final @NotNull Div elm) {
         elm.parent = this;
+        elm.setCanvas(canvas);
         elm.updateAbsPos();
         elm.updateZIndex();
         children.add(elm);
@@ -145,7 +146,7 @@ public class Div {
      * @param elm The removed element.
      * @return {@code elm}
      */
-    public Div removeChild(final @NotNull Div elm) {
+    public @NotNull Div removeChild(final @NotNull Div elm) {
         elm.parent = null;
         elm.updateAbsPos();
         elm.updateZIndex();
