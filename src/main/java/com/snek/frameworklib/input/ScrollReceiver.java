@@ -20,7 +20,6 @@ import net.minecraft.world.entity.player.Player;
 
 
 
-//TODO this might not be necessary if we don't use mouse scrolling
 public final class ScrollReceiver extends UtilityClassBase {
     private ScrollReceiver() {}
 
@@ -33,14 +32,13 @@ public final class ScrollReceiver extends UtilityClassBase {
         for(Player player : FrameworkLib.getServer().getPlayerList().getPlayers()) {
 
             // Get last and current selected slots
-            final int last = lastSlots.getOrDefault(player, 0);
+            final int last = lastSlots.getOrDefault(player, -1);
             final int cur  = player.getInventory().selected;
 
-            //TODO account for last == 0. don't scroll that
             // Update map and call callback if the slot has changed
             if(cur != last) {
                 lastSlots.put(player, cur);
-                onSelectedSlotChange(player, last, cur);
+                if(last > -1) onSelectedSlotChange(player, last, cur);
             }
         }
     }
@@ -55,7 +53,11 @@ public final class ScrollReceiver extends UtilityClassBase {
 
         // Find active context and calculate the amount of scrolling
         final @Nullable Context context = HoverReceiver.getTargetedContext(player);
-        final float scrollAmount = (cur - last) / 8f; //FIXME out of bounds edge cases
+        float diff = (float)cur - last;
+        if(diff > +4) diff -= 9;
+        if(diff < -4) diff += 9;
+        final float scrollAmount = diff / 9f;
+
 
         // Send scroll event if the context is scrollable
         if(context != null) {
@@ -70,4 +72,3 @@ public final class ScrollReceiver extends UtilityClassBase {
         }
     }
 }
-//TODO detect scrolls (if player has a ui open) and call this
