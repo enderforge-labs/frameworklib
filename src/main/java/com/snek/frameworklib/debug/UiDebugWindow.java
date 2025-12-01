@@ -25,7 +25,7 @@ public class UiDebugWindow extends JPanel {
     static {
         if(DebugCheck.isDebug()) {
             w = new UiDebugWindow();
-            final JFrame frame = new JFrame("Ui Debug Window by UwU_Snek");
+            final JFrame frame = new JFrame("FrameworkLib - Graphics debug window");
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             frame.setSize(400, 300);
             frame.add(w);
