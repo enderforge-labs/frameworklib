@@ -85,12 +85,31 @@ public class Div {
 
 
     /**
+     * Sets the reference to the parent canvas of this element and all of its children.
+     * <p>
+     * This method entirely skips branches whose root already has {@code canvas} as canvas.
+     * It assumes all the children of an element share the same canvas.
+     * This is not a problem unless the canvas reference is modified externally without changing the children, which is NOT allowed and should never happen.
+     */
+    public void setCanvas(final @Nullable Canvas canvas) {
+        setCanvasSelf(canvas);
+        for(final @NotNull Div c : children) {
+            if(c.canvas != canvas) {
+                c.setCanvas(canvas);
+            }
+        }
+    }
+    private void setCanvasSelf(final @Nullable Canvas canvas) {
+        this.canvas = canvas;
+    }
+
+
+    /**
      * Adds a child to this Div.
      * @param elm The new element.
      * @return {@code elm}
      */
     public Div addChild(final @NotNull Div elm) {
-        elm.canvas = canvas;
         elm.parent = this;
         elm.updateAbsPos();
         elm.updateZIndex();
