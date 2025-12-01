@@ -556,11 +556,15 @@ public abstract class Elm extends Div {
             isHovered = hoverStateNext;
             if(isHovered) {
                 h.onHoverEnter(player);
-                if(canvas instanceof HudCanvas hud) hud.resetInactivityTimer();
+                if(canvas instanceof HudCanvas hud) {
+                    hud.resetInactivityTimer();
+                }
             }
             else {
                 h.onHoverExit(player);
-                if(canvas instanceof HudCanvas hud) hud.resetInactivityTimer();
+                if(canvas instanceof HudCanvas hud) {
+                    hud.resetInactivityTimer();
+                }
             }
         }
 

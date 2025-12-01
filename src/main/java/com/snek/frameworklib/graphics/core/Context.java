@@ -200,7 +200,12 @@ public abstract sealed class Context permits HudContext, UiContext {
      */
     public boolean forwardClick(final @NotNull Player player, final @NotNull ClickAction action) {
         if(activeCanvas == null) return false;
-        return activeCanvas.forwardClick(player, action);
+
+        final boolean r = activeCanvas.forwardClick(player, action);
+        if(r && activeCanvas instanceof HudCanvas hud) {
+            hud.resetInactivityTimer();
+        }
+        return r;
     }
 
 

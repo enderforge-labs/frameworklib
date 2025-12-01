@@ -98,9 +98,7 @@ public final class __base_ButtonElm {
      * Shared override of onClick from Clickable
      */
     public void onClick(final @NotNull Elm _this) {
-        if(_this.getCanvas() instanceof HudCanvas hud) {
-            hud.resetInactivityTimer();
-        }
+        //Empty
     }
 
 
