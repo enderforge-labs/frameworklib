@@ -27,6 +27,7 @@ import com.snek.frameworklib.utils.GeometryUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
+import com.snek.frameworklib.utils.scheduler.TaskHandler;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Display;
@@ -84,6 +85,7 @@ public abstract class Elm extends Div {
     private   final @NotNull ElmStyle      style;     // The style of the element
     private         boolean isHovered = false;        // Whether the element is being hovered on by a player's crosshair. //! Only valid in Hoverable instances
     public final RateLimiter hoverRateLimiter = new RateLimiter();
+    private boolean isTransformNormalized = true;
 
 
 
@@ -422,16 +424,17 @@ public abstract class Elm extends Div {
 
 
     @Override
-    public void spawn(final @NotNull Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         if(!isSpawned) {
 
             // Flush previous changes to the entity to avoid bad interpolations
             flushStyle();
 
 
-            // Normalize transform and apply the primer animation, then spawn the entity into the world
-            if(canvas != null) {
-                canvas.normalizeTransform(this);
+            // Denormalize transform and apply the primer animation, then spawn the entity into the world
+            if(canvas != null && isTransformNormalized) {
+                canvas.denormalizeTransform(this);
+                isTransformNormalized = false;
             }
             final Animation primerAnimation = style.getPrimerAnimation();
             if(primerAnimation != null) {
@@ -474,17 +477,27 @@ public abstract class Elm extends Div {
             if(animate && animation != null) {
                 applyAnimation(animation);
 
-                // Reset tracking name and remove entity from the world after a delay
+                // Wait for the animation to finish. Reset tracking name and normalize transform, then remove the entity from the world
                 Scheduler.schedule(animation.getTotalDuration(), () -> {
-                    entity.setCustomName(new Txt("removed").get());
-                    entity.despawn();
+                    if(isSpawned) {
+                        entity.setCustomName(new Txt("removed").get());
+                        if(canvas != null && !isTransformNormalized) {
+                            canvas.normalizeTransform(this);
+                            isTransformNormalized = false;
+                        }
+                        entity.despawn();
+                    }
                 });
             }
 
 
-            // If animations are off, reset tracking name and remove entity from the world
+            // If animations are off, reset tracking name and normalize transform, then remove the entity from the world
             else {
                 entity.setCustomName(new Txt("removed").get());
+                if(canvas != null && !isTransformNormalized) {
+                    canvas.normalizeTransform(this);
+                    isTransformNormalized = false;
+                }
                 entity.despawn();
             }
         }

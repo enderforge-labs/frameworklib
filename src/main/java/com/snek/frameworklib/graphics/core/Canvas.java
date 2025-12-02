@@ -249,21 +249,32 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
 
     /**
-     * Normalizes the transform of the element.
+     * Denormalizes the transform of the element.
      * <p>
      * This means applying the translations and rotations needed to align it with the canvas's current position and orientation.
+     * @param elm The element to modify.
+     */
+    public void denormalizeTransform(final @NotNull Div elm) {
+        if(canvas instanceof HudCanvas hud) {
+            elm.applyAnimationNow(new Transition().additiveTransform(new Transform().move(hud.__calcVisualShift())));
+        }
+        elm.applyAnimationNow(Canvas.calcCanvasRotationAnimation(0, canvas.getRotation()));
+    }
+
+
+    /**
+     * Normalizes the transform of the element.
      * <p>
-     * Only elements that have never been spawned before are affected.
-     * Calling this method on one that has already been spawned will have no effect.
+     * This means applying the translations and rotations needed to go from the canvas's current position and orientation to the default ones.
+     * <p>
+     * This method only applies the transform to the provided element. Not its children.
      * @param elm The element to modify.
      */
     public void normalizeTransform(final @NotNull Div elm) {
-        if(elm.isNew()) {
-            if(canvas instanceof HudCanvas hud) {
-                elm.applyAnimationNowRecursive(new Transition().additiveTransform(new Transform().move(hud.__calcVisualShift())));
-            }
-            elm.applyAnimationNowRecursive(Canvas.calcCanvasRotationAnimation(0, canvas.getRotation()));
+        if(canvas instanceof HudCanvas hud) {
+            elm.applyAnimationNow(new Transition().additiveTransform(new Transform().move(hud.__calcVisualShift().mul(-1))));
         }
+        elm.applyAnimationNow(Canvas.calcCanvasRotationAnimation(canvas.getRotation(), 0));
     }
 
 
