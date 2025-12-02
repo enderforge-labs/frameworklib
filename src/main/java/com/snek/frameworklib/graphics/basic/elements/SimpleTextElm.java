@@ -163,8 +163,8 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
 
 
     @Override
-    public void spawn(final @NotNull Vector3d pos) {
-        super.spawn(pos);
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
+        super.spawn(pos, animate);
     }
 
 

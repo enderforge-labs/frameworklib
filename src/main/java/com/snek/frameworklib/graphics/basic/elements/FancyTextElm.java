@@ -281,7 +281,7 @@ public non-sealed class FancyTextElm extends __base_TextElm {
 
 
     @Override
-    public void spawn(final @NotNull Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
 
         flushStyle();
         getFgEntity().spawn(world, pos);
@@ -291,7 +291,7 @@ public non-sealed class FancyTextElm extends __base_TextElm {
         getFgEntity().setCustomName(new Txt(ENTITY_CUSTOM_NAME).get());
 
         // Call superclass spawn
-        super.spawn(pos);
+        super.spawn(pos, animate);
     }
 
 

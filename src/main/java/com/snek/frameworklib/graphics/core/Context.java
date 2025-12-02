@@ -85,11 +85,11 @@ public abstract sealed class Context permits HudContext, UiContext {
      * @param pos The coordinates to spawn the context at.
      *     This defines the the center of the context's hitbox.
      */
-    public void spawn(final @NotNull Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         if(!spawned) {
             spawned = true;
             final float size = getInteractionBlockerSize();
-            if(activeCanvas != null) activeCanvas.spawn(pos);
+            if(activeCanvas != null) activeCanvas.spawn(pos, animate);
             interactionBlocker = new InteractionBlocker(player.level(), size, size);
             interactionBlocker.spawn(pos);
 
@@ -143,7 +143,7 @@ public abstract sealed class Context permits HudContext, UiContext {
 
         // Set new active canvas and spawn canvas into the world
         activeCanvas = newCanvas;
-        newCanvas.spawn(canvasSpawnPos);
+        newCanvas.spawn(canvasSpawnPos, true);
 
 
         // Adjust rotation of child elements if needed

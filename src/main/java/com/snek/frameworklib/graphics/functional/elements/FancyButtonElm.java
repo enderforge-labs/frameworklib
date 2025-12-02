@@ -55,8 +55,8 @@ public abstract class FancyButtonElm extends FancyTextElm implements Clickable, 
 
 
     @Override
-    public void spawn(final @NotNull Vector3d pos) {
-        super.spawn(pos);
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
+        super.spawn(pos, animate);
         base.spawn(this, getStyle(FancyButtonElmStyle.class).getHoverPrimerAnimation());
     }
 

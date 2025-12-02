@@ -312,9 +312,9 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
     @Override
-    public void spawn(Vector3d pos) {
+    public void spawn(Vector3d pos, final boolean animate) {
         updateTotTextSizeCache();
-        super.spawn(pos);
+        super.spawn(pos, animate);
     }
 
     @Override

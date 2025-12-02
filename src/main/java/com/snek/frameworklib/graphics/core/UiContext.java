@@ -70,7 +70,7 @@ public non-sealed class UiContext extends Context {
 
 
     @Override
-    public void spawn(final @NotNull Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         if(!spawned) {
             spawnPos.set(pos);
 
@@ -79,7 +79,7 @@ public non-sealed class UiContext extends Context {
             final @Nullable LinkedList<UiContext> uis = activeUIs.get(player);
             uis.add(this);
         }
-        super.spawn(pos);
+        super.spawn(pos, animate);
     }
 
 

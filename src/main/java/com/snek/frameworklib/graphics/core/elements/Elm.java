@@ -452,12 +452,13 @@ public abstract class Elm extends Div {
             // Handle spawn animations
             final Animation animation = style.getSpawnAnimation();
             if(animation != null) {
-                applyAnimation(animation);
+                if(animate) applyAnimation(animation);
+                else applyAnimationNow(animation);
             }
 
 
             // Call superclass spawn
-            super.spawn(pos);
+            super.spawn(pos, animate);
         }
     }
 

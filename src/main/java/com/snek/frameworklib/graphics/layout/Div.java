@@ -313,10 +313,10 @@ public class Div {
      * Spawns the element and its associated entities into the world.
      * @param pos The position of the spawned entities.
      */
-    public void spawn(final @NotNull Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         if(!isSpawned) {
             for(final Div elm : children) {
-                elm.spawn(pos);
+                elm.spawn(pos, animate);
             }
             isSpawned = true;
             isNew = false;

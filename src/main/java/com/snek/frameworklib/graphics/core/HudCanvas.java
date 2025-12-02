@@ -122,9 +122,9 @@ public non-sealed class HudCanvas extends Canvas {
 
 
     @Override
-    public void spawn(Vector3d pos) {
+    public void spawn(Vector3d pos, final boolean animate) {
         if(!isSpawned) {
-            super.spawn(pos);
+            super.spawn(pos, animate);
 
             // Setup data
             ((HudContext)context).setSpawnPos(pos);

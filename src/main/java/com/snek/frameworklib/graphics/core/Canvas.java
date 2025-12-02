@@ -315,17 +315,17 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
 
     @Override
-    public void spawn(final @NotNull Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
 
         // If the background is already spawned, only spawn its children
         if(bg.isSpawned()) for(final Div c : bg.getChildren()) {
             isSpawned = true;
-            c.spawn(pos);
+            c.spawn(pos, animate);
         }
 
         // If not, spawn everything
         else {
-            super.spawn(pos);
+            super.spawn(pos, animate);
         }
     }
 }

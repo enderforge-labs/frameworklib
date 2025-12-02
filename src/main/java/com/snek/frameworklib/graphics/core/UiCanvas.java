@@ -91,12 +91,12 @@ public non-sealed class UiCanvas extends Canvas {
 
 
     @Override
-    public void spawn(final @NotNull Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
 
         // Instantly rotate the canvas to face the player. This allows it to skip annoying rotation animations
         updateRot(true);
 
         // Call superclass spawn
-        super.spawn(pos);
+        super.spawn(pos, animate);
     }
 }

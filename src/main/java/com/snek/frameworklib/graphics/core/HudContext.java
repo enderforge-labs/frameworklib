@@ -117,7 +117,7 @@ public non-sealed class HudContext extends Context {
 
 
     @Override
-    public void spawn(final @NotNull Vector3d pos) {
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         if(!spawned) {
 
             // Update HudContext list
@@ -125,7 +125,7 @@ public non-sealed class HudContext extends Context {
             final @Nullable LinkedList<HudContext> huds = activeHUDs.get(player);
             huds.add(this);
         }
-        super.spawn(pos);
+        super.spawn(pos, animate);
     }
 
 
