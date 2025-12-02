@@ -483,7 +483,7 @@ public abstract class Elm extends Div {
                         entity.setCustomName(new Txt("removed").get());
                         if(canvas != null && !isTransformNormalized) {
                             canvas.normalizeTransform(this);
-                            isTransformNormalized = false;
+                            isTransformNormalized = true;
                         }
                         entity.despawn();
                     }
@@ -496,7 +496,7 @@ public abstract class Elm extends Div {
                 entity.setCustomName(new Txt("removed").get());
                 if(canvas != null && !isTransformNormalized) {
                     canvas.normalizeTransform(this);
-                    isTransformNormalized = false;
+                    isTransformNormalized = true;
                 }
                 entity.despawn();
             }
