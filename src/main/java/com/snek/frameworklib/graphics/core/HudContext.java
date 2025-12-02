@@ -96,7 +96,7 @@ public non-sealed class HudContext extends Context {
         // Send updates and teleport interaction entity if necessary
         super.update();
         if(attemptPositionRefresh() && interactionBlocker != null) {
-            final Vector3d pos = MinecraftUtils.getPlayerStandingEyePos(player).add(((HudCanvas)activeCanvas).__calcVisualShift());
+            final Vector3d pos = MinecraftUtils.getPlayerStandingEyePos(player).add(((HudCanvas)activeCanvas).__calcVisualShiftGlobal());
             interactionBlocker.teleport(pos);
         }
     }

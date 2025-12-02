@@ -622,7 +622,7 @@ public abstract class Elm extends Div {
         // Calculate the world coordinates of the display's origin
         //! Left rotation and scale are ignored as they doesn't affect this
         final Vector3f origin = __calcEntityVisualOrigin(t);
-        if(canvas instanceof HudCanvas hudCanvas) origin.add(hudCanvas.__calcVisualShift());
+        if(canvas instanceof HudCanvas hudCanvas) origin.add(hudCanvas.__calcVisualShiftGlobal());
 
 
         // Check view intersection with the display's box
@@ -656,7 +656,7 @@ public abstract class Elm extends Div {
         // Calculate the world coordinates of the display's origin
         //! Left rotation and scale are ignored as they doesn't affect this
         final Vector3f origin = __calcEntityVisualOrigin(t);
-        if(canvas instanceof HudCanvas hudCanvas) origin.add(hudCanvas.__calcVisualShift());
+        if(canvas instanceof HudCanvas hudCanvas) origin.add(hudCanvas.__calcVisualShiftGlobal());
 
 
         // Check view intersection with the display's box

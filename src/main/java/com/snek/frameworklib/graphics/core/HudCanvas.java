@@ -124,7 +124,6 @@ public non-sealed class HudCanvas extends Canvas {
     @Override
     public void spawn(Vector3d pos, final boolean animate) {
         if(!isSpawned) {
-            super.spawn(pos, animate);
 
             // Setup data
             ((HudContext)context).setSpawnPos(pos);
@@ -133,8 +132,9 @@ public non-sealed class HudCanvas extends Canvas {
             //TODO check if this was needed.
             //TODO this should be handled by Canva's built in transform normalization, now
             // // Move displays away from the player's center
-            // applyAnimationNowRecursive(new Transition().additiveTransform(new Transform().move(__calcVisualShift())));
+            // applyAnimationNowRecursive(new Transition().additiveTransform(new Transform().move(__calcVisualShiftGlobal())));
 
+            super.spawn(pos, animate);
             isSpawned = true;
         }
     }
@@ -142,12 +142,22 @@ public non-sealed class HudCanvas extends Canvas {
 
     /**
      * Calculates the translation needed to go from the player's eye position to the desired HUD origin coordinates.
-     * @return
+     * @return The translation calculated in the global frame.
      */
-    public @NotNull Vector3f __calcVisualShift() {
+    public @NotNull Vector3f __calcVisualShiftGlobal() {
         final float rotation = (float)Math.toRadians((lastRotation + 4) % 8 * -45f);
         final Vector3f direction = new Vector3f((float)Math.sin(rotation), 0, (float)Math.cos(rotation));
         return direction.mul(HUD_DISTANCE).sub(0, 0.5f, 0);
+    }
+
+
+    /**
+     * Calculates the translation needed to go from the player's eye position to the desired HUD origin coordinates.
+     * <p>
+     * @return The translation calculated in the local frame.
+     */
+    public @NotNull Vector3f __calcVisualShiftLocal() {
+        return new Vector3f(0, -0.5f, -HUD_DISTANCE);
     }
 
 

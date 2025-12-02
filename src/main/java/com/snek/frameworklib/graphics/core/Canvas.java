@@ -256,7 +256,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      */
     public void denormalizeTransform(final @NotNull Div elm) {
         if(canvas instanceof HudCanvas hud) {
-            elm.applyAnimationNow(new Transition().additiveTransform(new Transform().move(hud.__calcVisualShift())));
+            elm.applyAnimationNow(new Transition().additiveTransform(new Transform().move(hud.__calcVisualShiftLocal())));
         }
         elm.applyAnimationNow(Canvas.calcCanvasRotationAnimation(0, canvas.getRotation()));
     }
@@ -272,7 +272,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      */
     public void normalizeTransform(final @NotNull Div elm) {
         if(canvas instanceof HudCanvas hud) {
-            elm.applyAnimationNow(new Transition().additiveTransform(new Transform().move(hud.__calcVisualShift().mul(-1))));
+            elm.applyAnimationNow(new Transition().additiveTransform(new Transform().move(hud.__calcVisualShiftLocal().mul(-1))));
         }
         elm.applyAnimationNow(Canvas.calcCanvasRotationAnimation(canvas.getRotation(), 0));
     }
