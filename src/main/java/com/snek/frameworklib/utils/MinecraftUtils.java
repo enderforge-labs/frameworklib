@@ -598,42 +598,42 @@ public final class MinecraftUtils extends UtilityClassBase {
 
 
 
-
-    /**
-     * Creates a copy of display entities marked as removed.
-     * <p>
-     * The new display entity will have the same NBTs and position as {@code display}, but different UUID.
-     * <p>
-     * The entity is not spawned automatically.
-     * @param display The display entity to renew.
-     * @return The new Display entity if {@code display} is marked as removed. Returns {@code display} otherwise.
-     */
-    public static Display renewDisplayEntity(final @NotNull Display display) {
-        if(!display.isRemoved()) return display;
-
-
-        // Create a new display of the same type
-        Display newDisplay = null; //! Never actually null. Only these 3 types of displays exist
-        if(display instanceof TextDisplay) {
-            newDisplay = new TextDisplay(EntityType.TEXT_DISPLAY, display.level());
-        }
-        else if(display instanceof ItemDisplay) {
-            newDisplay = new ItemDisplay(EntityType.ITEM_DISPLAY, display.level());
-        }
-        else if(display instanceof BlockDisplay) {
-            newDisplay = new BlockDisplay(EntityType.BLOCK_DISPLAY, display.level());
-        }
+//TODO remove if unused
+    // /**
+    //  * Creates a copy of display entities marked as removed.
+    //  * <p>
+    //  * The new display entity will have the same NBTs and position as {@code display}, but different UUID.
+    //  * <p>
+    //  * The entity is not spawned automatically.
+    //  * @param display The display entity to renew.
+    //  * @return The new Display entity if {@code display} is marked as removed. Returns {@code display} otherwise.
+    //  */
+    // public static Display renewDisplayEntity(final @NotNull Display display) {
+    //     if(!display.isRemoved()) return display;
 
 
-        // Copy NBT data and position
-        final CompoundTag nbt = new CompoundTag();
-        display.saveWithoutId(nbt);
-        newDisplay.load(nbt);
-        newDisplay.setUUID(UUID.randomUUID());
-        newDisplay.setPos(display.position());
+    //     // Create a new display of the same type
+    //     Display newDisplay = null; //! Never actually null. Only these 3 types of displays exist
+    //     if(display instanceof TextDisplay) {
+    //         newDisplay = new TextDisplay(EntityType.TEXT_DISPLAY, display.level());
+    //     }
+    //     else if(display instanceof ItemDisplay) {
+    //         newDisplay = new ItemDisplay(EntityType.ITEM_DISPLAY, display.level());
+    //     }
+    //     else if(display instanceof BlockDisplay) {
+    //         newDisplay = new BlockDisplay(EntityType.BLOCK_DISPLAY, display.level());
+    //     }
 
 
-        // Return entity
-        return newDisplay;
-    }
+    //     // Copy NBT data and position
+    //     final CompoundTag nbt = new CompoundTag();
+    //     display.saveWithoutId(nbt);
+    //     newDisplay.load(nbt);
+    //     newDisplay.setUUID(UUID.randomUUID());
+    //     newDisplay.setPos(display.position());
+
+
+    //     // Return entity
+    //     return newDisplay;
+    // }
 }
