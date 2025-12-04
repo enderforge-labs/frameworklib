@@ -129,7 +129,7 @@ public non-sealed class FancyTextElm extends __base_TextElm {
 
 
     @Override
-    public void flushStyle() {
+    public void flushStyle(final boolean force) {
 
         // Alias entities
         final @NotNull CustomTextDisplay fg = getFgEntity();
@@ -138,7 +138,7 @@ public non-sealed class FancyTextElm extends __base_TextElm {
 
         // Handle text first (transform depends on it)
         { final Flagged<Component> f = getThisStyle().getFlaggedText();
-        if(f.isFlagged()) {
+        if(force || f.isFlagged()) {
             updateTotTextSizeCache();
             //! ^ This takes into account the stile's text, not the actual text in the entity
             //! The entity's text is set by updateOverflowBehaviour based on the specified overflow behaviour
@@ -149,7 +149,7 @@ public non-sealed class FancyTextElm extends __base_TextElm {
 
         // Handle overflow behaviour
         { final Flagged<TextOverflowBehaviour> f = getThisStyle().getFlaggedTextOverflowBehaviour();
-        if(f.isFlagged()) {
+        if(force || f.isFlagged()) {
             updateOverflowBehaviour();
             f.unflag();
         }}
@@ -160,8 +160,8 @@ public non-sealed class FancyTextElm extends __base_TextElm {
             final Flagged<Transform> f   = getThisStyle().getFlaggedTransform();
             final Flagged<Transform> fFg = getThisStyle().getFlaggedTransformFg();
             final Flagged<Transform> fBg = getThisStyle().getFlaggedTransformBg();
-            final boolean fgNeedsUpdate = f.isFlagged() || fFg.isFlagged() || getThisStyle().getFlaggedTextAlignment().isFlagged() || getThisStyle().getFlaggedText().isFlagged();
-            final boolean bgNeedsUpdate = f.isFlagged() || fBg.isFlagged();
+            final boolean fgNeedsUpdate = force || f.isFlagged() || fFg.isFlagged() || getThisStyle().getFlaggedTextAlignment().isFlagged() || getThisStyle().getFlaggedText().isFlagged();
+            final boolean bgNeedsUpdate = force || f.isFlagged() || fBg.isFlagged();
             if(f.isFlagged()) f.unflag();
 
 
@@ -189,13 +189,13 @@ public non-sealed class FancyTextElm extends __base_TextElm {
 
         // Handle the other Elm values normally, applying them to both entities
         { final Flagged<Float> f = getThisStyle().getFlaggedViewRange();
-        if(f.isFlagged()) {
+        if(force || f.isFlagged()) {
             fg.setViewRange(f.get());
             bg.setViewRange(f.get());
             f.unflag();
         }}
         { final Flagged<BillboardConstraints> f = getThisStyle().getFlaggedBillboardMode();
-        if(f.isFlagged()) {
+        if(force || f.isFlagged()) {
             fg.setBillboardMode(f.get());
             bg.setBillboardMode(f.get());
             f.unflag();
@@ -209,14 +209,14 @@ public non-sealed class FancyTextElm extends __base_TextElm {
             f.unflag();
         }
         { final Flagged<TextAlignment> f = getThisStyle().getFlaggedTextAlignment();
-        if(f.isFlagged()) {
+        if(force || f.isFlagged()) {
             fg.setTextAlignment(f.get());
             f.unflag();
         }}
         {
             final Flagged<Vector3i> fc = getThisStyle().getFlaggedBgColor();
             final Flagged<Integer>  fa = getThisStyle().getFlaggedBgAlpha();
-            if(fc.isFlagged() || fa.isFlagged()) {
+            if(force || fc.isFlagged() || fa.isFlagged()) {
                 final Vector3i color = fc.get();
                 bg.setBackground(new Vector4i(fa.get(), color.x, color.y, color.z));
                 fa.unflag();
@@ -226,7 +226,7 @@ public non-sealed class FancyTextElm extends __base_TextElm {
 
 
         // Transform, view range and billboard mode are already unflagged
-        super.flushStyle();
+        super.flushStyle(force);
     }
 
 
@@ -283,10 +283,11 @@ public non-sealed class FancyTextElm extends __base_TextElm {
     @Override
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
 
-        flushStyle();
+        flushStyle(false);
         getFgEntity().spawn(world, pos);
 
         // Set tracking custom name to foreground entity
+        //! Name must be set after spawning as entities that load in with the tracking name are purged
         getFgEntity().setCustomNameVisible(false);
         getFgEntity().setCustomName(new Txt(ENTITY_CUSTOM_NAME).get());
 

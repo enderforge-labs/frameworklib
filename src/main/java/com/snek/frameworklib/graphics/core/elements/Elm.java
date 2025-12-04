@@ -157,27 +157,29 @@ public abstract class Elm extends Div {
      * Flushes changeable style values to the entity.
      * <p>
      * This does not start an interpolation.
+     * @param force Whether to force all updates. Using {@code force=false} only updates
+     *     values that have been modified since the last call to {@link #flushStyle}.
      */
-    protected void flushStyle() {
+    public void flushStyle(final boolean force) {
         epsilonPolarity *= -1;
 
         // Apply transform
         { final Flagged<Transform> f = style.getFlaggedTransform();
-        if(f.isFlagged()) {
+        if(force || f.isFlagged()) {
             entity.setTransformation(__calcTransform().moveZ(EPSILON * epsilonPolarity).toMinecraftTransform());
             f.unflag();
         }}
 
         // Apply view range
         { final Flagged<Float> f = style.getFlaggedViewRange();
-        if(f.isFlagged()) {
+        if(force || f.isFlagged()) {
             entity.setViewRange(f.get());
             f.unflag();
         }}
 
         // Apply billboard mode
         { final Flagged<BillboardConstraints> f = style.getFlaggedBillboardMode();
-        if(f.isFlagged()) {
+        if(force || f.isFlagged()) {
             entity.setBillboardMode(f.get());
             f.unflag();
         }}
@@ -192,7 +194,7 @@ public abstract class Elm extends Div {
         super.updateAbsPosSelf();
         if(!getAbsPos().equals(oldPos)) {
             style.editTransform();
-            flushStyle();
+            flushStyle(false);
         }
         //! This check's sole purpose is to prevent unneeded transform updates and comparisons
     }
@@ -204,7 +206,7 @@ public abstract class Elm extends Div {
         super.updateZIndexSelf();
         if(getZIndex() != oldZIndex) {
             style.editTransform();
-            flushStyle();
+            flushStyle(false);
         }
         //! This check's sole purpose is to prevent unneeded transform updates and comparisons
     }
@@ -298,7 +300,7 @@ public abstract class Elm extends Div {
         final InterpolatedData data = __generateInterpolatedData();
         data.apply(step);
         __applyTransitionStep(data);
-        flushStyle();
+        flushStyle(false);
 
         // Update existing future data if present. Instantly start the interpolation otherwise
         if(futureDataQueue.isEmpty()) {
@@ -423,33 +425,33 @@ public abstract class Elm extends Div {
 
 
 
+
+
+
+
     @Override
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         if(!isSpawned) {
 
             // Flush previous changes to the entity to avoid bad interpolations
-            flushStyle();
+            flushStyle(false);
 
 
-            // Denormalize transform and apply the primer animation, then spawn the entity into the world
+            // Denormalize transform and apply the primer animation
             if(canvas != null && isTransformNormalized) {
                 canvas.denormalizeTransform(this);
                 isTransformNormalized = false;
             }
-            final Animation primerAnimation = style.getPrimerAnimation();
-            if(primerAnimation != null) {
-                applyAnimationNow(primerAnimation);
-            }
-            entity.spawn(world, pos);
 
 
-            // Set tracking custom name
-            //! Must be done after spawning as entities that load in with the tracking name are purged
-            entity.setCustomNameVisible(false);
-            entity.setCustomName(new Txt(ENTITY_CUSTOM_NAME).get());
+            // Handle primer and spawn animations (after a delay)
 
-
-            // Handle spawn animations
+            // if(!entity.isRemoved()) {
+                final Animation primerAnimation = style.getPrimerAnimation();
+                if(primerAnimation != null) {
+                    applyAnimationNow(primerAnimation);
+                }
+            // }
             final Animation animation = style.getSpawnAnimation();
             if(animation != null) {
                 if(animate) applyAnimation(animation);
@@ -457,7 +459,21 @@ public abstract class Elm extends Div {
             }
 
 
-            // Call superclass spawn
+            // Spawn the entity and refresh the style if needed
+            final boolean respawning = entity.isRemoved();
+            entity.spawn(world, pos);
+            if(respawning) {
+                flushStyle(true);
+                flushStyle(true); //TODO remove
+                flushStyle(true); //TODO remove
+                flushStyle(true); //TODO remove
+            }
+
+
+            // Set the tracking custom name and call Div's spawn
+            //! Name must be set after spawning as entities that load in with the tracking name are purged
+            entity.setCustomNameVisible(false);
+            entity.setCustomName(new Txt(ENTITY_CUSTOM_NAME).get());
             super.spawn(pos, animate);
         }
     }
@@ -475,25 +491,39 @@ public abstract class Elm extends Div {
 
             // Handle animations
             final Animation animation = style.getDespawnAnimation();
-            if(animate && animation != null) {
-                applyAnimation(animation);
+            if(animation != null) {
+                if(animate) {
+                    applyAnimation(animation);
 
-                // Wait for the animation to finish. Reset tracking name and normalize transform, then remove the entity from the world
-                Scheduler.schedule(animation.getTotalDuration(), () -> {
-                    if(isSpawned) {
-                        entity.setCustomName(new Txt("removed").get());
-                        if(canvas != null && !isTransformNormalized) {
-                            canvas.normalizeTransform(this);
-                            isTransformNormalized = true;
+                    //FIXME merge into one function
+                    // Wait for the animation to finish. Reset tracking name and normalize transform, then remove the entity from the world
+                    Scheduler.schedule(animation.getTotalDuration(), () -> {
+                        if(isSpawned) {
+                            entity.setCustomName(new Txt("removed").get());
+                            if(canvas != null && !isTransformNormalized) {
+                                canvas.normalizeTransform(this);
+                                isTransformNormalized = true;
+                            }
+                            entity.despawn();
                         }
-                        entity.despawn();
+                    });
+                }
+                else {
+                    //FIXME merge into one function
+                    applyAnimationNow(animation);
+                    entity.setCustomName(new Txt("removed").get());
+                    if(canvas != null && !isTransformNormalized) {
+                        canvas.normalizeTransform(this);
+                        isTransformNormalized = true;
                     }
-                });
+                    entity.despawn();
+                }
             }
 
 
-            // If animations are off, reset tracking name and normalize transform, then remove the entity from the world
+            // If animations are , reset tracking name and normalize transform, then remove the entity from the world
             else {
+                //FIXME merge into one function
                 entity.setCustomName(new Txt("removed").get());
                 if(canvas != null && !isTransformNormalized) {
                     canvas.normalizeTransform(this);
@@ -503,6 +533,10 @@ public abstract class Elm extends Div {
             }
         }
     }
+
+
+
+
 
 
 
@@ -517,7 +551,7 @@ public abstract class Elm extends Div {
         if(!futureDataQueue.isEmpty()) {
             __applyTransitionStep(futureDataQueue.removeFirst());
         }
-        flushStyle();
+        flushStyle(false);
         entity.setInterpolationDuration(Configs.getPerf().animation_refresh_time.getValue());
         entity.setStartInterpolation();
 

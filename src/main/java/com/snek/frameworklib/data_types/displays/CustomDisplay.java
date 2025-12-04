@@ -16,7 +16,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Brightness;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Display.BillboardConstraints;
+import net.minecraft.world.entity.Display.BlockDisplay;
+import net.minecraft.world.entity.Display.ItemDisplay;
 import net.minecraft.world.entity.Display.TextDisplay;
 import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.level.Level;
@@ -124,7 +127,23 @@ public abstract class CustomDisplay {
     public void spawn(final @NotNull Level world, final @NotNull Vector3d pos) {
         if(!spawned) {
             spawned = true;
-            heldEntity = MinecraftUtils.renewDisplayEntity(heldEntity);
+            // heldEntity = MinecraftUtils.renewDisplayEntity(heldEntity);
+
+
+            // Renew Minecraft entity if needed
+            if(heldEntity.isRemoved()) {
+                if(heldEntity instanceof TextDisplay) {
+                    heldEntity = new TextDisplay(EntityType.TEXT_DISPLAY, world);
+                }
+                else if(heldEntity instanceof ItemDisplay) {
+                    heldEntity = new ItemDisplay(EntityType.ITEM_DISPLAY, world);
+                }
+                else if(heldEntity instanceof BlockDisplay) {
+                    heldEntity = new BlockDisplay(EntityType.BLOCK_DISPLAY, world);
+                }
+            }
+
+            // Set position and add entity to the world
             heldEntity.setPos(pos.x, pos.y, pos.z);
             world.addFreshEntity(heldEntity);
         }

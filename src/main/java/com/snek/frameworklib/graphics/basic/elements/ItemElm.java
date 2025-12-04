@@ -118,11 +118,11 @@ public class ItemElm extends Elm {
 
 
     @Override
-    public void flushStyle() {
+    public void flushStyle(final boolean force) {
 
         // Apply item stack
         { final Flagged<ItemStack> f = getThisStyle().getFlaggedItem();
-        if(f.isFlagged()) {
+        if(force || f.isFlagged()) {
             getThisEntity().setItemStack(f.get());
             f.unflag();
         }}
@@ -131,7 +131,7 @@ public class ItemElm extends Elm {
         // Handle transform calculations separately
         {
             final Flagged<Transform> f = getThisStyle().getFlaggedTransform();
-            if(f.isFlagged()) {
+            if(force || f.isFlagged()) {
                 final Transform t = __calcTransform();
                 t.moveY(t.getScale().y / 2f);
                 getThisEntity().setTransformation(t.moveZ(EPSILON * epsilonPolarity).toMinecraftTransform());
@@ -141,7 +141,7 @@ public class ItemElm extends Elm {
 
 
         // Handle the other inherited values normally
-        super.flushStyle();
+        super.flushStyle(force);
     }
 
 
