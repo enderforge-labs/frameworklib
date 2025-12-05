@@ -141,6 +141,8 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
         // If the elements don't exist yet
         if(prevCanvas == null) {
+            lastRotation = calcRot();
+
 
             // Create the elements
             bg     = (Elm)addChild(new PanelElm(world, bgStyle   == null ? new PanelElmStyle() : bgStyle));
@@ -175,8 +177,9 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
             bottom.applyAnimationNow(new Transition().additiveTransform(transformBottom));
 
 
-            //! updateRot is called in the spawn method
-            //! This is to avoid initialization order issues
+            // lastRotation = prevCanvas.getRotation(); //TODO REMOVE
+            // //! updateRot is called in the spawn method //TODO remove comment idk
+            // //! This is to avoid initialization order issues //TODO remove comment idk
         }
 
 
@@ -184,6 +187,8 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
         // If the elements already exist
         else {
+            lastRotation = prevCanvas.getRotation();
+
 
             // Instantly despawn and remove previous children of the background element
             for(final Div c : prevCanvas.getBg().getChildren()) c.despawn(false);
@@ -208,9 +213,9 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
             bottom.applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformBottom));
 
 
-            // Rotate child elements to match the previous canvas's rotation (if neeeded)
-            //! New elements are rotated in Context.finalizeCanvasChange
-            lastRotation = prevCanvas.getRotation();
+            // // Rotate child elements to match the previous canvas's rotation (if neeeded) //TODO Remove
+            // //! New elements are rotated in Context.finalizeCanvasChange //TODO remove comment idk
+            // lastRotation = prevCanvas.getRotation(); //TODO Remove
         }
     }
 
@@ -229,22 +234,16 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      * Updates the rotation of the canvas.
      * @param instant Whether the rotation should be instantaneous or animated.
      */
-    public abstract void updateRot(final boolean instant);
-
-    /**
-     * Helper function.
-     * <p>
-     * Updates the rotation of the canvas.
-     * @param newRot The new rotation, in eighths.
-     * @param instant Whether the rotation should be instantaneous or animated.
-     */
-    protected void __updateRot(final int newRot, final boolean instant) {
+    protected void updateRot(final boolean instant) {
+        final int newRot = calcRot();
         if(lastRotation != newRot) {
             final Animation animation = calcCanvasRotationAnimation(lastRotation, newRot);
             if(instant) applyAnimationNowRecursive(animation); else applyAnimationRecursive(animation); //TODO replace with a single applyAnimationRecursive
             lastRotation = newRot;
         }
     }
+    public abstract int calcRot();
+
 
 
 

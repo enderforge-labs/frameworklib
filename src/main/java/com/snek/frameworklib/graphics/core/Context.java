@@ -8,10 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
-import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
-import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.input.HoverReceiver;
 
 import net.minecraft.world.entity.player.Player;
@@ -138,7 +136,6 @@ public abstract sealed class Context permits HudContext, UiContext {
 
     public abstract void changeCanvas(final @NotNull Canvas canvas);
     protected final void finalizeCanvasChange(final @NotNull Canvas newCanvas, final @NotNull Vector3d canvasSpawnPos) {
-        final int lastRotation = activeCanvas != null ? activeCanvas.getRotation() : 0;
 
 
         // Set new active canvas and spawn canvas into the world
@@ -146,14 +143,14 @@ public abstract sealed class Context permits HudContext, UiContext {
         newCanvas.spawn(canvasSpawnPos, true);
 
 
-        // Adjust rotation of child elements if needed
-        //! newCanvas.lastRotation is updated when the canvas is created. In Canvas.Canvas
-        if(lastRotation != 0) {
-            final Animation animation = Canvas.calcCanvasRotationAnimation(0, lastRotation);
-            for(final Div c : newCanvas.getBg().getChildren()) {
-                c.applyAnimationNowRecursive(animation);
-            }
-        }
+        // // Adjust rotation of child elements if needed
+        // //! newCanvas.lastRotation is updated when the canvas is created. In Canvas.Canvas
+        // if(lastRotation != 0) {
+        //     final Animation animation = Canvas.calcCanvasRotationAnimation(0, lastRotation);
+        //     for(final Div c : newCanvas.getBg().getChildren()) {
+        //         c.applyAnimationNowRecursive(animation);
+        //     }
+        // }
     }
 
 

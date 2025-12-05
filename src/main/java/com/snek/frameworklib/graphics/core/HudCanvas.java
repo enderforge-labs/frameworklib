@@ -103,9 +103,8 @@ public non-sealed class HudCanvas extends Canvas {
 
 
     @Override
-    public void updateRot(final boolean instant) {
-        final int newRot = Math.round((context.getPlayer().getViewYRot(1) + 180f) / 45f) % 8;
-        __updateRot(newRot, instant);
+    public int calcRot() {
+        return Math.round((context.getPlayer().getViewYRot(1) + 180f) / 45f) % 8;
     }
 
 
