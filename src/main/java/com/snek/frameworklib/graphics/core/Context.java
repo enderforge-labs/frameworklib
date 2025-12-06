@@ -245,6 +245,13 @@ public abstract sealed class Context permits HudContext, UiContext {
                     targetedElm.updateHoverState(player);
                 }
             }
+            else {
+                final Elm targetedChild = targetedElm.findTargetedChild(player);
+                if(targetedChild != null) {
+                    targetedElm = targetedChild;
+                    targetedElm.updateHoverState(player);
+                }
+            }
         }
 
         // If a targeted element is not present, check if a new element is being hovered
