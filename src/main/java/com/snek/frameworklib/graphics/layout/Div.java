@@ -297,8 +297,24 @@ public class Div {
      */
     public @Nullable Elm findTargetedElement(final @NotNull Player player) {
         if((this instanceof Hoverable || this instanceof Clickable || this instanceof Scrollable) && this instanceof Elm e) {
-            if(e.checkIntersection(player)) return e;
+            final Elm targetedChild = findTargetedChild(player);
+            if(targetedChild != null) {
+                return targetedChild;
+            }
+            else if(e.checkIntersection(player)) {
+                return e;
+            }
+            else {
+                return null;
+            }
         }
+        else {
+            return findTargetedChild(player);
+        }
+    }
+
+
+    private @Nullable Elm findTargetedChild(final @NotNull Player player) {
         for(final Div elm : children) {
             final Elm r = elm.findTargetedElement(player);
             if(r != null) return r;
