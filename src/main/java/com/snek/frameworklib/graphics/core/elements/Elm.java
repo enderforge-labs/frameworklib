@@ -497,15 +497,14 @@ public abstract class Elm extends Div {
 
                     //FIXME merge into one function
                     // Wait for the animation to finish. Reset tracking name and normalize transform, then remove the entity from the world
+                    //FIXME save in a handler and cancel this or something when the entity respawns
                     Scheduler.schedule(animation.getTotalDuration(), () -> {
-                        if(isSpawned) {
-                            entity.setCustomName(new Txt("removed").get());
-                            if(canvas != null && !isTransformNormalized) {
-                                canvas.normalizeTransform(this);
-                                isTransformNormalized = true;
-                            }
-                            entity.despawn();
+                        entity.setCustomName(new Txt("removed").get());
+                        if(canvas != null && !isTransformNormalized) {
+                            canvas.normalizeTransform(this);
+                            isTransformNormalized = true;
                         }
+                        entity.despawn();
                     });
                 }
                 else {
@@ -521,7 +520,7 @@ public abstract class Elm extends Div {
             }
 
 
-            // If animations are , reset tracking name and normalize transform, then remove the entity from the world
+            // If animations are null, reset tracking name and normalize transform, then remove the entity from the world
             else {
                 //FIXME merge into one function
                 entity.setCustomName(new Txt("removed").get());
