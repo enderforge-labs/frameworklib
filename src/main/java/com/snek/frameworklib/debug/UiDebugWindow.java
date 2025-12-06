@@ -7,8 +7,13 @@ import javax.swing.WindowConstants;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
+import com.snek.frameworklib.utils.Utils;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,17 +26,37 @@ import java.util.List;
 
 public class UiDebugWindow extends JPanel {
     private static UiDebugWindow w = null;
+    private static JFrame frame;
     public static @NotNull UiDebugWindow getW() { return w; }
+    public static @NotNull JFrame getFrame() { return frame; }
+
     static {
         if(DebugCheck.isDebug()) {
+            System.setProperty("sun.java2d.opengl", "true");
+            System.setProperty("sun.java2d.opengl.fbobject", "false");
+            System.setProperty("sun.java2d.d3d", "false");
+            System.setProperty("sun.java2d.noddraw", "true");
+            System.setProperty("sun.java2d.pmoffscreen", "false");
+
             w = new UiDebugWindow();
-            final JFrame frame = new JFrame("FrameworkLib - Graphics debug window");
+            frame = new JFrame("FrameworkLib - Graphics debug window");
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-            frame.setSize(400, 300);
-            frame.add(w);
+            frame.setAlwaysOnTop(true);
+            frame.setUndecorated(true);
+
+            // Set layout explicitly
+            frame.setLayout(new BorderLayout());
+            frame.add(w, BorderLayout.CENTER);
             w.setBackground(Color.BLACK);
-            w.requestFocusInWindow();
+
+            // Set preferred size and pack the frame
+            frame.setPreferredSize(new Dimension(400, 300));
+            frame.pack();
+
+            // Make the frame visible and set buffer strategy
             frame.setVisible(true);
+            frame.createBufferStrategy(2);
+            w.setDoubleBuffered(true);
         }
     }
 

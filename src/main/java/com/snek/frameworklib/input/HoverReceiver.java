@@ -1,9 +1,13 @@
 package com.snek.frameworklib.input;
 
+import java.awt.Graphics;
+import java.awt.image.BufferStrategy;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import javax.swing.SwingUtilities;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -118,8 +122,17 @@ public final class HoverReceiver extends UtilityClassBase {
 
         //! Debug window update
         if(DebugCheck.isDebug()) {
-            UiDebugWindow.getW().revalidate();
-            UiDebugWindow.getW().paintImmediately(0, 0, UiDebugWindow.getW().getWidth(), UiDebugWindow.getW().getHeight());
+            UiDebugWindow.getW().repaint();
+            SwingUtilities.invokeLater(() -> {
+                // UiDebugWindow.getW().repaint();
+                BufferStrategy bs = UiDebugWindow.getFrame().getBufferStrategy();
+                if(bs != null) {
+                    Graphics g = bs.getDrawGraphics();
+                    UiDebugWindow.getW().paint(g);
+                    g.dispose();
+                    bs.show();
+                }
+            });
         }
     }
 
