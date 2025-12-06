@@ -124,7 +124,6 @@ public final class HoverReceiver extends UtilityClassBase {
         if(DebugCheck.isDebug()) {
             UiDebugWindow.getW().repaint();
             SwingUtilities.invokeLater(() -> {
-                // UiDebugWindow.getW().repaint();
                 BufferStrategy bs = UiDebugWindow.getFrame().getBufferStrategy();
                 if(bs != null) {
                     Graphics g = bs.getDrawGraphics();

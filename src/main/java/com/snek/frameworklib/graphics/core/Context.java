@@ -236,19 +236,20 @@ public abstract sealed class Context permits HudContext, UiContext {
         if(targetedElm != null) {
             targetedElm.updateHoverState(player);
 
+            // If it's still being hovered on, check if its child elements are being hovered and update them
+            if(targetedElm.isHovered()) {
+                final Elm targetedChild = targetedElm.findTargetedChild(player);
+                if(targetedChild != null) {
+                    targetedElm = targetedChild;
+                    targetedElm.updateHoverState(player);
+                }
+            }
             // If it's no longer being hovered on, check if a new element is being hovered
-            if(!targetedElm.isHovered()) {
+            else {
                 targetedElm = canvas.findTargetedElement(player);
 
                 // If said element exists, send an update to it
                 if(targetedElm != null) {
-                    targetedElm.updateHoverState(player);
-                }
-            }
-            else {
-                final Elm targetedChild = targetedElm.findTargetedChild(player);
-                if(targetedChild != null) {
-                    targetedElm = targetedChild;
                     targetedElm.updateHoverState(player);
                 }
             }

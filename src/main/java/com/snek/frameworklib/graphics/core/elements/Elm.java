@@ -585,37 +585,24 @@ public abstract class Elm extends Div {
     }
 
 
-
-
-    /**
-     * Updates the new hover state of the element and executes the specified callbacks.
-     * @param player The player to check the view of.
-     */
-    public void updateHoverState(final @NotNull Player player) {
-        if(!(this instanceof Hoverable)) return;
-        updateHoverState(player, checkIntersection(player));
-    }
-
-
     /**
      * Updates the new hover state of the element with the specified value, then executes the specified callbacks.
      * @param player The player to check the view of.
-     * @param hoverStateNext The new hover state to set. Can be omitted to make the function calculate it automatically.
      */
-    public void updateHoverState(final @NotNull Player player, final boolean hoverStateNext) {
-        if(!(this instanceof Hoverable h)) return;
+    public void updateHoverState(final @NotNull Player player) {
+        final boolean hoverStateNext = checkIntersection(player);
 
         // Update current state and run hover state change callbacks if needed
         if(isHovered != hoverStateNext && hoverRateLimiter.attempt()) {
             isHovered = hoverStateNext;
             if(isHovered) {
-                h.onHoverEnter(player);
+                if(this instanceof Hoverable h) h.onHoverEnter(player);
                 if(canvas instanceof HudCanvas hud) {
                     hud.resetInactivityTimer();
                 }
             }
             else {
-                h.onHoverExit(player);
+                if(this instanceof Hoverable h) h.onHoverExit(player);
                 if(canvas instanceof HudCanvas hud) {
                     hud.resetInactivityTimer();
                 }
@@ -623,7 +610,9 @@ public abstract class Elm extends Div {
         }
 
         // Call hover tick callback
-        if(isHovered) h.onHoverTick(player);
+        if(this instanceof Hoverable h && isHovered) {
+            h.onHoverTick(player);
+        }
     }
 
 
