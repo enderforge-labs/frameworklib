@@ -44,7 +44,10 @@ public class CustomTextDisplay extends CustomDisplay {
     private long lastAlphaUpdate = 0;
     private boolean lastAlphaInitialized = false;
     private void shiftLastAlpha(final int newAlpha) {
-        if(lastAlphaUpdate >= Scheduler.getTickNum()) return;
+        if(lastAlphaUpdate >= Scheduler.getTickNum()) {
+            lastAlpha[0] = newAlpha;
+            return;
+        }
 
         if(!lastAlphaInitialized) {
             lastAlphaInitialized = true;
@@ -166,12 +169,8 @@ public class CustomTextDisplay extends CustomDisplay {
      * @param text The new value.
      */
     public void setText(final @NotNull Component text) {
-        if(noTextUnderA26 && lastAlpha[0] < 26 && lastAlpha[1] < 26) {
-            Utils.invokeSafe(method_setText, heldEntity, EMPTY_TEXT);
-        }
-        else {
-            Utils.invokeSafe(method_setText, heldEntity, text);
-        }
+        final boolean hideText = noTextUnderA26 && lastAlpha[0] < 26 && lastAlpha[1] < 26;
+        Utils.invokeSafe(method_setText, heldEntity, hideText ? EMPTY_TEXT : text);
         textCache = text.copy();
     }
 
@@ -220,13 +219,12 @@ public class CustomTextDisplay extends CustomDisplay {
     /**
      * Sets the alpha value of the rendered text.
      * @param a The alpha value.
-     *  <p>
+     * <p>
      * Values smaller than {@code 26} are converted to {@code 26} unless {@code noTextUnderA26} is set to {@code true}, in which case the text is not rendered at all.
-     *  This is done because minecraft ignores these values and usually makes the text fully opaque instead of fully transparent, rendering animations jittery.
-     *  <p>
-     * Notice:
-     *  Interpolation is broken. Opacity values are NOT converted back to {@code 0-255} range
-     *  before interpolating, but the raw byte value ({@code 0 to 127}, {@code -128 to -1}) is used instead.
+     * This is done because minecraft ignores these values and usually makes the text fully opaque instead of fully transparent, rendering animations jittery.
+     * <p>
+     * Notice: Minecraft's interpolation is broken. Opacity values are NOT converted back to {@code 0-255} range
+     * before interpolating, but the raw byte value ({@code 0 to 127}, {@code -128 to -1}) is used instead.
      */
     public void setTextOpacity(int a) {
         shiftLastAlpha(a);
