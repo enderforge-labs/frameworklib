@@ -27,7 +27,6 @@ import com.snek.frameworklib.utils.GeometryUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
-import com.snek.frameworklib.utils.scheduler.TaskHandler;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Display;

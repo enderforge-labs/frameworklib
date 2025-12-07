@@ -9,7 +9,6 @@ import org.joml.Vector3f;
 
 import com.mojang.math.Transformation;
 import com.snek.frameworklib.FrameworkLib;
-import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.Utils;
 
 import net.minecraft.network.chat.Component;

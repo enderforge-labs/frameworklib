@@ -1,13 +1,13 @@
 package com.snek.frameworklib.graphics.basic.elements;
 
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
 import org.joml.Vector3i;
 import org.joml.Vector4i;
 
 import com.snek.frameworklib.data_types.animations.InterpolatedData;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.containers.Flagged;
-import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 import com.snek.frameworklib.graphics.core.elements.Elm;
@@ -43,26 +43,13 @@ public class PanelElm extends Elm {
 
 
 
-
-    /**
-     * Creates a new PanelElm using an existing entity and a custom style.
-     * @param world The world in which to place the element.
-     * @param entity The display entity.
-     * @param style The custom style.
-     */
-    protected PanelElm(final @NotNull ServerLevel world, final @NotNull CustomDisplay entity, final @NotNull ElmStyle style) {
-        super(world, entity, style);
-        getThisEntity().setText(new Txt().get());
-    }
-
-
     /**
      * Creates a new PanelElm using a custom style.
      * @param world The world in which to place the element.
      * @param style The custom style.
      */
     public PanelElm(final @NotNull ServerLevel world, final @NotNull ElmStyle style) {
-        this(world, new CustomTextDisplay(world), style);
+        super(world, new CustomTextDisplay(world), style);
     }
 
 
@@ -71,7 +58,7 @@ public class PanelElm extends Elm {
      * @param world The world in which to place the element.
      */
     public PanelElm(final @NotNull ServerLevel world) {
-        this(world, new CustomTextDisplay(world), new PanelElmStyle());
+        super(world, new CustomTextDisplay(world), new PanelElmStyle());
     }
 
 
@@ -147,5 +134,21 @@ public class PanelElm extends Elm {
             .scaleY(ENTITY_BLOCK_RATIO_Y * getAbsSize().y)
             .moveX(ENTITY_SHIFT_X * getAbsSize().x)
         ;
+    }
+
+
+
+
+    @Override
+    public void spawn(@NotNull Vector3d pos, boolean animate) {
+
+        // Spawn entity
+        super.spawn(pos, animate);
+
+        // Initialize permanent entity values
+        getThisEntity().setText(new Txt().get());
+
+        // Force flush data to the entity
+        flushStyle(true);
     }
 }

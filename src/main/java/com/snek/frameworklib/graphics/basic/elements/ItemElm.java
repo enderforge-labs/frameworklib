@@ -5,11 +5,11 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
 
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.containers.Pair;
-import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.data_types.displays.CustomItemDisplay;
 import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
 import com.snek.frameworklib.graphics.core.elements.Elm;
@@ -85,24 +85,12 @@ public class ItemElm extends Elm {
 
 
     /**
-     * Creates a new ItemElm using an existing entity and a custom style.
-     * @param world The world in which to place the element.
-     * @param entity The display entity.
-     * @param style The custom style.
-     */
-    protected ItemElm(final @NotNull ServerLevel world, final @NotNull CustomDisplay entity, final @NotNull ElmStyle style) {
-        super(world, entity, style);
-        getThisEntity().setDisplayType(ItemDisplayContext.NONE);
-    }
-
-
-    /**
      * Creates a new ItemElm using a custom style.
      * @param world The world in which to place the element.
      * @param style The custom style.
      */
     protected ItemElm(final @NotNull ServerLevel world, final @NotNull ElmStyle style) {
-        this(world, new CustomItemDisplay(world), style);
+        super(world, new CustomItemDisplay(world), style);
     }
 
 
@@ -111,7 +99,7 @@ public class ItemElm extends Elm {
      * @param world The world in which to place the element.
      */
     public ItemElm(final @NotNull ServerLevel world) {
-        this(world, new CustomItemDisplay(world), new ItemElmStyle());
+        super(world, new CustomItemDisplay(world), new ItemElmStyle());
     }
 
 
@@ -165,5 +153,21 @@ public class ItemElm extends Elm {
         return exception == null ? t : t.apply(exception.getSecond());
         //FIXME shield and other y-translated items don't go up enough when the edit animation is triggered
         //FIXME ^ y translation doesn't scale with y size so the final translation looks greater on smaller scales
+    }
+
+
+
+
+    @Override
+    public void spawn(@NotNull Vector3d pos, boolean animate) {
+
+        // Spawn entity
+        super.spawn(pos, animate);
+
+        // Initialize permanent entity values
+        getThisEntity().setDisplayType(ItemDisplayContext.NONE);
+
+        // Force flush data to the entity
+        flushStyle(true);
     }
 }

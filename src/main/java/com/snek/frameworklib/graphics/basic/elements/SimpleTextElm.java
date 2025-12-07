@@ -7,7 +7,6 @@ import org.joml.Vector4i;
 import com.snek.frameworklib.data_types.animations.InterpolatedData;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.containers.Flagged;
-import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
@@ -41,28 +40,13 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
     }
 
 
-
-
-    /**
-     * Creates a new SimpleTextElm using an existing entity and a custom style.
-     * @param world The world in which to place the element.
-     * @param entity The display entity.
-     * @param style The custom style.
-     */
-    protected SimpleTextElm(final @NotNull ServerLevel world, final @NotNull CustomDisplay entity, final @NotNull ElmStyle style) {
-        super(world, entity, style);
-        getThisEntity().setBackground(new Vector4i(0, 0, 0, 0));
-        getThisEntity().setLineWidth(Integer.MAX_VALUE);
-    }
-
-
     /**
      * Creates a new SimpleTextElm using a custom style.
      * @param world The world in which to place the element.
      * @param style The custom style.
      */
     protected SimpleTextElm(final @NotNull ServerLevel world, final @NotNull ElmStyle style) {
-        this(world, new CustomTextDisplay(world), style);
+        super(world, new CustomTextDisplay(world), style);
     }
 
 
@@ -71,7 +55,7 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
      * @param world The world in which to place the element.
      */
     public SimpleTextElm(final @NotNull ServerLevel world) {
-        this(world, new CustomTextDisplay(world), new SimpleTextElmStyle());
+        super(world, new CustomTextDisplay(world), new SimpleTextElmStyle());
     }
 
 
@@ -164,7 +148,16 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
 
     @Override
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
+
+        // Spawn entity
         super.spawn(pos, animate);
+
+        // Initialize permanent entity values
+        getThisEntity().setBackground(new Vector4i(0, 0, 0, 0));
+        getThisEntity().setLineWidth(Integer.MAX_VALUE);
+
+        // Force flush data to the entity
+        flushStyle(true);
     }
 
 

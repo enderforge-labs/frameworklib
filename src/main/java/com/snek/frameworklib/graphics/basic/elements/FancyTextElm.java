@@ -63,11 +63,6 @@ public non-sealed class FancyTextElm extends __base_TextElm {
         // Create element and background element
         super(world, new CustomTextDisplay(world), style);
         text = new CustomTextDisplay(world);
-
-        // Initialize permanent entity values
-        getBgEntity().setText(new Txt().get());
-        getFgEntity().setBackground(new Vector4i(0, 0, 0, 0));
-        getFgEntity().setLineWidth(Integer.MAX_VALUE);
     }
 
 
@@ -283,6 +278,7 @@ public non-sealed class FancyTextElm extends __base_TextElm {
     @Override
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
 
+        // Flush style of the foreground entity and spawn it
         flushStyle(false);
         getFgEntity().spawn(world, pos);
 
@@ -291,8 +287,16 @@ public non-sealed class FancyTextElm extends __base_TextElm {
         getFgEntity().setCustomNameVisible(false);
         getFgEntity().setCustomName(new Txt(ENTITY_CUSTOM_NAME).get());
 
-        // Call superclass spawn
+        // Call superclass spawn (spawns background entity)
         super.spawn(pos, animate);
+
+        // Initialize permanent entity values
+        getBgEntity().setText(new Txt().get());
+        getFgEntity().setBackground(new Vector4i(0, 0, 0, 0));
+        getFgEntity().setLineWidth(Integer.MAX_VALUE);
+
+        // Force flush data to the entities
+        flushStyle(true);
     }
 
 

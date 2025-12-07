@@ -7,13 +7,11 @@ import javax.swing.WindowConstants;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.frameworklib.utils.Utils;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.List;
 
