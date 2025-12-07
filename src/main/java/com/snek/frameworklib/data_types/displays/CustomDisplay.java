@@ -126,25 +126,33 @@ public abstract class CustomDisplay {
     public void spawn(final @NotNull Level world, final @NotNull Vector3d pos) {
         if(!spawned) {
             spawned = true;
-            // heldEntity = MinecraftUtils.renewDisplayEntity(heldEntity);
-
-
-            // Renew Minecraft entity if needed
-            if(heldEntity.isRemoved()) {
-                if(heldEntity instanceof TextDisplay) {
-                    heldEntity = new TextDisplay(EntityType.TEXT_DISPLAY, world);
-                }
-                else if(heldEntity instanceof ItemDisplay) {
-                    heldEntity = new ItemDisplay(EntityType.ITEM_DISPLAY, world);
-                }
-                else if(heldEntity instanceof BlockDisplay) {
-                    heldEntity = new BlockDisplay(EntityType.BLOCK_DISPLAY, world);
-                }
-            }
 
             // Set position and add entity to the world
             heldEntity.setPos(pos.x, pos.y, pos.z);
             world.addFreshEntity(heldEntity);
+        }
+    }
+
+
+
+
+    /**
+     * Replaces the held entity with a fresh one, but only if it was despawned at some point in the past.
+     * <p>
+     * Notice: This method does NOT copy NBT data to the new entity.
+     * @param world The world to spawn the new entity in.
+     */
+    public void renewEntity(final Level world) {
+        if(heldEntity.isRemoved()) {
+            if(heldEntity instanceof TextDisplay) {
+                heldEntity = new TextDisplay(EntityType.TEXT_DISPLAY, world);
+            }
+            else if(heldEntity instanceof ItemDisplay) {
+                heldEntity = new ItemDisplay(EntityType.ITEM_DISPLAY, world);
+            }
+            else if(heldEntity instanceof BlockDisplay) {
+                heldEntity = new BlockDisplay(EntityType.BLOCK_DISPLAY, world);
+            }
         }
     }
 

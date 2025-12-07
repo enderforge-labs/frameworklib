@@ -160,14 +160,10 @@ public class ItemElm extends Elm {
 
     @Override
     public void spawn(@NotNull Vector3d pos, boolean animate) {
-
-        // Spawn entity
         super.spawn(pos, animate);
-
-        // Initialize permanent entity values
+    }
+    @Override
+    protected void prepareEntityForSpawn(final @NotNull Vector3d pos) {
         getThisEntity().setDisplayType(ItemDisplayContext.NONE);
-
-        // Force flush data to the entity
-        flushStyle(true);
     }
 }

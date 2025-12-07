@@ -330,6 +330,9 @@ public class Div {
     /**
      * Spawns the element and its associated entities into the world.
      * @param pos The position of the spawned entities.
+     * @param animate Whether to animate the element.
+     *     Using {@code animate = false} will still apply the primer and spawning animations,
+     *     but their effects will be instantly visible instead of appearing gradually over time.
      */
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         if(!isSpawned) {

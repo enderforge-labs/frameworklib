@@ -278,25 +278,22 @@ public non-sealed class FancyTextElm extends __base_TextElm {
     @Override
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
 
-        // Flush style of the foreground entity and spawn it
-        flushStyle(false);
+        // Call superclass spawn (which also spawns background entity)
+        super.spawn(pos, animate);
+
+        // Spawn foreground entity
         getFgEntity().spawn(world, pos);
 
         // Set tracking custom name to foreground entity
         //! Name must be set after spawning as entities that load in with the tracking name are purged
         getFgEntity().setCustomNameVisible(false);
         getFgEntity().setCustomName(new Txt(ENTITY_CUSTOM_NAME).get());
-
-        // Call superclass spawn (spawns background entity)
-        super.spawn(pos, animate);
-
-        // Initialize permanent entity values
+    }
+    @Override
+    protected void prepareEntityForSpawn(final @NotNull Vector3d pos) {
         getBgEntity().setText(new Txt().get());
         getFgEntity().setBackground(new Vector4i(0, 0, 0, 0));
         getFgEntity().setLineWidth(Integer.MAX_VALUE);
-
-        // Force flush data to the entities
-        flushStyle(true);
     }
 
 

@@ -148,16 +148,12 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
 
     @Override
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
-
-        // Spawn entity
         super.spawn(pos, animate);
-
-        // Initialize permanent entity values
+    }
+    @Override
+    protected void prepareEntityForSpawn(final @NotNull Vector3d pos) {
         getThisEntity().setBackground(new Vector4i(0, 0, 0, 0));
         getThisEntity().setLineWidth(Integer.MAX_VALUE);
-
-        // Force flush data to the entity
-        flushStyle(true);
     }
 
 

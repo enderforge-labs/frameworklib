@@ -432,8 +432,8 @@ public abstract class Elm extends Div {
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         if(!isSpawned) {
 
-            // Flush previous changes to the entity to avoid bad interpolations
-            flushStyle(false);
+            // // Flush previous changes to the entity to avoid bad interpolations //TODO remove
+            // flushStyle(false);
 
 
             // Denormalize transform and apply the primer animation
@@ -443,14 +443,11 @@ public abstract class Elm extends Div {
             }
 
 
-            // Handle primer and spawn animations (after a delay)
-
-            // if(!entity.isRemoved()) {
-                final Animation primerAnimation = style.getPrimerAnimation();
-                if(primerAnimation != null) {
-                    applyAnimationNow(primerAnimation);
-                }
-            // }
+            // Handle primer and spawn animations
+            final Animation primerAnimation = style.getPrimerAnimation();
+            if(primerAnimation != null) {
+                applyAnimationNow(primerAnimation);
+            }
             final Animation animation = style.getSpawnAnimation();
             if(animation != null) {
                 if(animate) applyAnimation(animation);
@@ -458,15 +455,11 @@ public abstract class Elm extends Div {
             }
 
 
-            // Spawn the entity and refresh the style if needed
-            final boolean respawning = entity.isRemoved();
+            // Renew the entity if needed, then prepare the entity, flush style data and spawn it
+            entity.renewEntity(world);
+            prepareEntityForSpawn(pos);
+            flushStyle(true);
             entity.spawn(world, pos);
-            if(respawning) {
-                flushStyle(true);
-                flushStyle(true); //TODO remove
-                flushStyle(true); //TODO remove
-                flushStyle(true); //TODO remove
-            }
 
 
             // Set the tracking custom name and call Div's spawn
@@ -476,6 +469,23 @@ public abstract class Elm extends Div {
             super.spawn(pos, animate);
         }
     }
+
+
+    /**
+     * A method called right after the old entity is replaced (if one exists), but before the new one is flushed and spawned.
+     * <p>
+     * This allows subclasses to set custom properties and NBTs before the element becomes visible on the client,
+     * which is especially useful for setting constant properties that only need to be initialized before spawn.
+     * <p>
+     * Overriding this method differs from adding logic to {@link #spawn(Vector3d, boolean)} because it correctly targets the new entity during respawns.
+     * Adding logic to {@link #spawn(Vector3d, boolean)} alone would incorrectly target the old entity instead.
+     * @param pos The position this element is going to be spawned at.
+     */
+    protected abstract void prepareEntityForSpawn(final @NotNull Vector3d pos);
+
+
+
+
 
 
 
