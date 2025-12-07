@@ -7,6 +7,7 @@ import javax.swing.WindowConstants;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
+import com.snek.frameworklib.data_types.containers.Pair;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -58,10 +59,13 @@ public class UiDebugWindow extends JPanel {
         }
     }
 
-
-    private final @NotNull List<@NotNull Vector2f> vertices = new ArrayList<>();
+    private static @NotNull Color currentColor = Color.WHITE;
+    public static void changeColor(final @NotNull Color newColor) {
+        currentColor = newColor;
+    }
+    private final @NotNull List<@NotNull Pair<@NotNull Vector2f, @NotNull Color>> vertices = new ArrayList<>();
     public void add(final @NotNull Vector2f v) {
-        vertices.add(v);
+        vertices.add(Pair.from(v, currentColor));
     }
     public void clear() {
         vertices.clear();
@@ -77,16 +81,16 @@ public class UiDebugWindow extends JPanel {
         final int centerY = height / 2;
 
         // Draw rectangles
-        g.setColor(Color.GREEN);
         for(int i = 0; i < vertices.size(); i += 4) {
-            final int x1 = centerX - (int)(400 * vertices.get(i + 0).x);
-            final int y1 = centerY - (int)(400 * vertices.get(i + 0).y);
-            final int x2 = centerX - (int)(400 * vertices.get(i + 1).x);
-            final int y2 = centerY - (int)(400 * vertices.get(i + 1).y);
-            final int x3 = centerX - (int)(400 * vertices.get(i + 2).x);
-            final int y3 = centerY - (int)(400 * vertices.get(i + 2).y);
-            final int x4 = centerX - (int)(400 * vertices.get(i + 3).x);
-            final int y4 = centerY - (int)(400 * vertices.get(i + 3).y);
+            g.setColor(vertices.get(i).getSecond());
+            final int x1 = centerX - (int)(400 * vertices.get(i + 0).getFirst().x);
+            final int y1 = centerY - (int)(400 * vertices.get(i + 0).getFirst().y);
+            final int x2 = centerX - (int)(400 * vertices.get(i + 1).getFirst().x);
+            final int y2 = centerY - (int)(400 * vertices.get(i + 1).getFirst().y);
+            final int x3 = centerX - (int)(400 * vertices.get(i + 2).getFirst().x);
+            final int y3 = centerY - (int)(400 * vertices.get(i + 2).getFirst().y);
+            final int x4 = centerX - (int)(400 * vertices.get(i + 3).getFirst().x);
+            final int y4 = centerY - (int)(400 * vertices.get(i + 3).getFirst().y);
             g.drawPolygon(new int[]{ x1, x2, x3, x4 }, new int[] { y1, y2, y3, y4 }, 4);
         }
 

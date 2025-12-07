@@ -1,5 +1,6 @@
 package com.snek.frameworklib.input;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.util.HashMap;
@@ -16,6 +17,8 @@ import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.debug.DebugCheck;
 import com.snek.frameworklib.debug.UiDebugWindow;
 import com.snek.frameworklib.graphics.core.Context;
+import com.snek.frameworklib.graphics.core.elements.Elm;
+import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.UtilityClassBase;
 
 import net.minecraft.world.entity.player.Player;
@@ -58,6 +61,15 @@ public final class HoverReceiver extends UtilityClassBase {
         return targetedContexts.get(player);
     }
 
+    public static void traceElements(final @NotNull Div div, final @NotNull Player player) {
+        if(div instanceof Elm e) {
+            e.checkIntersection(player);
+        }
+        for(final Div c : div.getChildren()) {
+            traceElements(c, player);
+        }
+    }
+
 
 
 
@@ -94,6 +106,7 @@ public final class HoverReceiver extends UtilityClassBase {
         //! Debug window
         if(DebugCheck.isDebug()) {
             UiDebugWindow.getW().clear();
+            UiDebugWindow.changeColor(Color.GREEN);
         }
 
 
@@ -107,6 +120,7 @@ public final class HoverReceiver extends UtilityClassBase {
 
             // Find targeted context and send hover updates
             final @Nullable Context targetedContext = updateTargetedContext(player);
+            if(DebugCheck.isDebug()) UiDebugWindow.changeColor(Color.GREEN);
             if(targetedContext != null) {
                 targetedContext.forwardHover(player);
                 updatedContexts.add(targetedContext);
@@ -135,8 +149,17 @@ public final class HoverReceiver extends UtilityClassBase {
         }
     }
 
+
+
+
+
+
+
+
     public static @Nullable Context updateTargetedContext(final @NotNull Player player) {
 
+
+        // Update context
         @Nullable Context topMost = Context.findTopMostContext(player);
         if(topMost != null) {
             targetedContexts.put(player, topMost);
@@ -145,6 +168,15 @@ public final class HoverReceiver extends UtilityClassBase {
             targetedContexts.remove(player);
         }
 
+
+        // Trace context elements for debugging
+        if(DebugCheck.isDebug() && topMost != null && topMost.getActiveCanvas() != null) {
+            UiDebugWindow.changeColor(Color.GRAY);
+            traceElements(topMost.getActiveCanvas(), player);
+        }
+
+
+        // Return the context
         return topMost;
     }
 }

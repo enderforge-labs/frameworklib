@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.frameworklib.data_types.animations.Animation;
-import com.snek.frameworklib.graphics.core.HudCanvas;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
