@@ -53,7 +53,10 @@ public final class LinePanel extends PanelElm {
         final Vector2f s = parent == null ? new Vector2f(1, 1) : parent.getAbsSize();
 
         // Update the value
-        absPos.set(p.add(localPos, new Vector2f()).mul(s, new Vector2f()));
+        absPos.set(new Vector2f(
+            p.x + localPos.x * s.x,
+            p.y + localPos.y * s.y
+        ));
     }
 
 
