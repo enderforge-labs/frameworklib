@@ -81,6 +81,15 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
         super.resetAll();
     }
 
+    @Override
+    public void flagAll() {
+        bgColor.edit();
+        bgAlpha.edit();
+        transformFg.edit();
+        transformBg.edit();
+        super.flagAll();
+    }
+
 
 
 

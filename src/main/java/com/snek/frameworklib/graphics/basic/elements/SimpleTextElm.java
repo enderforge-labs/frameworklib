@@ -62,12 +62,12 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
 
 
     @Override
-    public void flushStyle(final boolean force) {
+    public void flushStyle() {
 
 
         // Handle text first (transform depends on it)
         { final Flagged<Component> f = getThisStyle().getFlaggedText();
-        if(force || f.isFlagged()) {
+        if(f.isFlagged()) {
             updateTotTextSizeCache();
             //! ^ This takes into account the stile's text, not the actual text in the entity
             //! The entity's text is set by updateOverflowBehaviour based on the specified overflow behaviour
@@ -78,7 +78,7 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
 
         // Handle overflow behaviour
         { final Flagged<TextOverflowBehaviour> f = getThisStyle().getFlaggedTextOverflowBehaviour();
-        if(force || f.isFlagged()) {
+        if(f.isFlagged()) {
             updateOverflowBehaviour();
             f.unflag();
         }}
@@ -87,7 +87,7 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
         // Handle transform calculations separately
         {
             final Flagged<Transform> f = getThisStyle().getFlaggedTransform();
-            if(force || f.isFlagged() || getThisStyle().getFlaggedTextAlignment().isFlagged() || getThisStyle().getFlaggedText().isFlagged()) {
+            if(f.isFlagged() || getThisStyle().getFlaggedTextAlignment().isFlagged() || getThisStyle().getFlaggedText().isFlagged()) {
                 final Transform t = __calcTransform();
                 if(getThisStyle().getTextAlignment() == TextAlignment.LEFT ) t.moveX(-(getAbsSize().x - calcEntityWidth()) / 2f);
                 if(getThisStyle().getTextAlignment() == TextAlignment.RIGHT) t.moveX(+(getAbsSize().x - calcEntityWidth()) / 2f);
@@ -98,14 +98,14 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
 
 
         // Call superconstructor (transform is already unflagged) and handle the other values normally
-        super.flushStyle(force);
+        super.flushStyle();
         { final Flagged<Integer> f = getThisStyle().getFlaggedTextOpacity();
-        if(force || f.isFlagged()) {
+        if(f.isFlagged()) {
             getThisEntity().setTextOpacity(f.get());
             f.unflag();
         }}
         { final Flagged<TextAlignment> f = getThisStyle().getFlaggedTextAlignment();
-        if(force || f.isFlagged()) {
+        if(f.isFlagged()) {
             getThisEntity().setTextAlignment(f.get());
             f.unflag();
         }}

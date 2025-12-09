@@ -39,6 +39,12 @@ public class ItemElmStyle extends ElmStyle {
         super.resetAll();
     }
 
+    @Override
+    public void flagAll() {
+        item.edit();
+        super.flagAll();
+    }
+
 
 
 

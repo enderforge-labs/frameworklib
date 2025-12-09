@@ -47,6 +47,14 @@ public class SimpleButtonElmStyle extends PanelElmStyle {
         resetHoverLeaveAnimation();
     }
 
+    @Override
+    public void flagAll() {
+        super.flagAll();
+        hoverPrimerAnimation.edit();
+        hoverEnterAnimation.edit();
+        hoverLeaveAnimation.edit();
+    }
+
 
 
 

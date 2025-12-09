@@ -45,6 +45,8 @@ public class ElmStyle {
     }
 
 
+
+
     /**
      * Resets all the fields to their default value.
      */
@@ -55,6 +57,18 @@ public class ElmStyle {
         resetPrimerAnimation();
         resetSpawnAnimation();
         resetDespawnAnimation();
+    }
+
+    /**
+     * Flags all the fields.
+     */
+    public void flagAll() {
+        transform.edit();
+        viewRange.edit();
+        billboardMode.edit();
+        primerAnimation.edit();
+        spawnAnimation.edit();
+        despawnAnimation.edit();
     }
 
 

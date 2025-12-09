@@ -44,6 +44,13 @@ public class PanelElmStyle extends ElmStyle {
         super.resetAll();
     }
 
+    @Override
+    public void flagAll() {
+        color.edit();
+        alpha.edit();
+        super.flagAll();
+    }
+
 
 
 

@@ -157,29 +157,27 @@ public abstract class Elm extends Div {
      * Flushes changeable style values to the entity.
      * <p>
      * This does not start an interpolation.
-     * @param force Whether to force all updates. Using {@code force=false} only updates
-     *     values that have been modified since the last call to {@link #flushStyle}.
      */
-    public void flushStyle(final boolean force) {
+    public void flushStyle() {
         epsilonPolarity *= -1;
 
         // Apply transform
         { final Flagged<Transform> f = style.getFlaggedTransform();
-        if(force || f.isFlagged()) {
+        if(f.isFlagged()) {
             entity.setTransformation(__calcTransform().moveZ(EPSILON * epsilonPolarity).toMinecraftTransform());
             f.unflag();
         }}
 
         // Apply view range
         { final Flagged<Float> f = style.getFlaggedViewRange();
-        if(force || f.isFlagged()) {
+        if(f.isFlagged()) {
             entity.setViewRange(f.get());
             f.unflag();
         }}
 
         // Apply billboard mode
         { final Flagged<BillboardConstraints> f = style.getFlaggedBillboardMode();
-        if(force || f.isFlagged()) {
+        if(f.isFlagged()) {
             entity.setBillboardMode(f.get());
             f.unflag();
         }}
@@ -194,7 +192,7 @@ public abstract class Elm extends Div {
         super.updateAbsPosSelf();
         if(!getAbsPos().equals(oldPos)) {
             style.editTransform();
-            flushStyle(false);
+            flushStyle();
         }
         //! This check's sole purpose is to prevent unneeded transform updates and comparisons
     }
@@ -206,7 +204,7 @@ public abstract class Elm extends Div {
         super.updateZIndexSelf();
         if(getZIndex() != oldZIndex) {
             style.editTransform();
-            flushStyle(false);
+            flushStyle();
         }
         //! This check's sole purpose is to prevent unneeded transform updates and comparisons
     }
@@ -299,7 +297,7 @@ public abstract class Elm extends Div {
         final InterpolatedData data = __generateInterpolatedData();
         data.apply(step);
         __applyTransitionStep(data);
-        flushStyle(false);
+        flushStyle();
 
         // Update existing future data if present. Instantly start the interpolation otherwise
         if(futureDataQueue.isEmpty()) {
@@ -432,9 +430,6 @@ public abstract class Elm extends Div {
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         if(!isSpawned) {
 
-            // Flush previous changes to the entity to avoid bad interpolations //TODO remove
-            flushStyle(false);
-
 
             // Denormalize transform and apply the primer animation
             if(canvas != null && isTransformNormalized) {
@@ -458,7 +453,8 @@ public abstract class Elm extends Div {
             // Renew the entity if needed, then prepare the entity, flush style data and spawn it
             entity.renewEntity(world);
             prepareEntityForSpawn(pos);
-            flushStyle(true);
+            getStyle().flagAll();
+            flushStyle();
             entity.spawn(world, pos);
 
 
@@ -559,7 +555,7 @@ public abstract class Elm extends Div {
         if(!futureDataQueue.isEmpty()) {
             __applyTransitionStep(futureDataQueue.removeFirst());
         }
-        flushStyle(false);
+        flushStyle();
         entity.setInterpolationDuration(Configs.getPerf().animation_refresh_time.getValue());
         entity.setStartInterpolation();
 
@@ -706,7 +702,7 @@ public abstract class Elm extends Div {
 
 
     /**
-     * A special method that can be used to override the width of an element.
+     * A special method that can be used to override the width of the hitbox of this element, without changing the visual dimensions.
      * <p>
      * This specifies the distance from the center of the element to its left edge.
      * By default, this is equivalent to {@code getAbsSize().x / 2f}
@@ -716,7 +712,7 @@ public abstract class Elm extends Div {
     }
 
     /**
-     * A special method that can be used to override the width of an element.
+     * A special method that can be used to override the width of the hitbox of this element, without changing the visual dimensions.
      * <p>
      * This specifies the distance from the center of the element to its right edge.
      * By default, this is equivalent to {@code getAbsSize().x / 2f}

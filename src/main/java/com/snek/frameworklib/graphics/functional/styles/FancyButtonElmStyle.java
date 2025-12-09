@@ -44,6 +44,14 @@ public class FancyButtonElmStyle extends FancyTextElmStyle {
         resetHoverLeaveAnimation();
     }
 
+    @Override
+    public void flagAll() {
+        super.flagAll();
+        hoverPrimerAnimation.edit();
+        hoverEnterAnimation.edit();
+        hoverLeaveAnimation.edit();
+    }
+
 
 
 

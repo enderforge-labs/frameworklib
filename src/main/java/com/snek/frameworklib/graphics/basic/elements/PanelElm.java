@@ -65,15 +65,15 @@ public class PanelElm extends Elm {
 
 
     @Override
-    public void flushStyle(final boolean force) {
-        super.flushStyle(force);
+    public void flushStyle() {
+        super.flushStyle();
 
 
         // Apply color
         {
             final Flagged<Vector3i> fc = getThisStyle().getFlaggedColor();
             final Flagged<Integer>  fa = getThisStyle().getFlaggedAlpha();
-            if(force || fc.isFlagged() || fa.isFlagged()) {
+            if(fc.isFlagged() || fa.isFlagged()) {
                 final Vector3i color = fc.get();
                 getThisEntity().setBackground(new Vector4i(fa.get(), color.x, color.y, color.z));
                 fa.unflag();
