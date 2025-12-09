@@ -45,7 +45,7 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
      * @param world The world in which to place the element.
      * @param style The custom style.
      */
-    protected SimpleTextElm(final @NotNull ServerLevel world, final @NotNull ElmStyle style) {
+    public SimpleTextElm(final @NotNull ServerLevel world, final @NotNull ElmStyle style) {
         super(world, new CustomTextDisplay(world), style);
     }
 
