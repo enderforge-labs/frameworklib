@@ -82,7 +82,7 @@ public abstract class Elm extends Div {
     // In-world data
     protected final @NotNull ServerLevel   world;     // The world this Elm will be spawned in
     private   final @NotNull CustomDisplay entity;    // The display entity held by this element
-    private   final @NotNull ElmStyle      style;     // The style of the element
+    private         @NotNull ElmStyle      style;     // The style of the element
     private         boolean isHovered = false;        // Whether the element is being hovered on by a player's crosshair. //! Only valid in Hoverable instances
     public final RateLimiter hoverRateLimiter = new RateLimiter();
     private boolean isTransformNormalized = true;
@@ -114,7 +114,7 @@ public abstract class Elm extends Div {
      * Retrieves the style used by this element.
      * @return The style.
      */
-    public ElmStyle getStyle() {
+    public @NotNull ElmStyle getStyle() {
         return style;
     }
 
@@ -127,6 +127,16 @@ public abstract class Elm extends Div {
     public <T> @NotNull T getStyle(final @NotNull Class<T> type) {
         if(type.isInstance(style)) return type.cast(style);
         else throw new ClassCastException("Cannot cast style from " + style.getClass().getName() + " to " + type.getName());
+    }
+
+    /**
+     * Changes the style used by this element.
+     * <p>
+     * {@link #flushStyle()} must be called in order to update the entities.
+     * @param style The new style value.
+     */
+    public void setStyle(final @NotNull ElmStyle style) {
+        this.style = style;
     }
 
 
