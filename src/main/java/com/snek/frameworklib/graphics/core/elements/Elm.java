@@ -509,43 +509,36 @@ public abstract class Elm extends Div {
             if(animation != null) {
                 if(animate) {
                     applyAnimation(animation);
-
-                    //FIXME merge into one function
-                    // Wait for the animation to finish. Reset tracking name and normalize transform, then remove the entity from the world
+                    Scheduler.schedule(animation.getTotalDuration(), this::finalizeDespawn);
                     //FIXME save in a handler and cancel this or something when the entity respawns
-                    Scheduler.schedule(animation.getTotalDuration(), () -> {
-                        entity.setCustomName(new Txt("removed").get());
-                        if(canvas != null && !isTransformNormalized) {
-                            canvas.normalizeTransform(this);
-                            isTransformNormalized = true;
-                        }
-                        entity.despawn();
-                    });
                 }
                 else {
-                    //FIXME merge into one function
                     applyAnimationNow(animation);
-                    entity.setCustomName(new Txt("removed").get());
-                    if(canvas != null && !isTransformNormalized) {
-                        canvas.normalizeTransform(this);
-                        isTransformNormalized = true;
-                    }
-                    entity.despawn();
+                    finalizeDespawn();
                 }
             }
 
 
-            // If animations are null, reset tracking name and normalize transform, then remove the entity from the world
+            // Skip animations if they are null
             else {
-                //FIXME merge into one function
-                entity.setCustomName(new Txt("removed").get());
-                if(canvas != null && !isTransformNormalized) {
-                    canvas.normalizeTransform(this);
-                    isTransformNormalized = true;
-                }
-                entity.despawn();
+                finalizeDespawn();
             }
         }
+    }
+
+
+    /**
+     * A helper method that finalizes the despawning process.
+     * <p>
+     * It resets the tracking name, normalizes the transform and removes the entities from the world.
+     */
+    public void finalizeDespawn() {
+        entity.setCustomName(new Txt("removed").get());
+        if(canvas != null && !isTransformNormalized) {
+            canvas.normalizeTransform(this);
+            isTransformNormalized = true;
+        }
+        entity.despawn();
     }
 
 
