@@ -140,6 +140,6 @@ public class SimpleTextElmStyle extends ElmStyle {
     // Edit getters
     public @NotNull Component             editText                 () { return text                 .edit(); }
     public @NotNull TextOverflowBehaviour editTextOverflowBehaviour() { return textOverflowBehaviour.edit(); }
-    //!                                   editTextAlignment Primitive types cannot be edited
-    //!                                   editTextOpacity   Primitive types cannot be edited
+    public @NotNull TextAlignment         editTextAlignment        () { return textAlignment        .edit(); }
+    public          int                   editTextOpacity          () { return textOpacity          .edit(); }
 }

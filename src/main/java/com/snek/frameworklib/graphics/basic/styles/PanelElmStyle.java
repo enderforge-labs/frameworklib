@@ -111,6 +111,6 @@ public class PanelElmStyle extends ElmStyle {
     public          int      getAlpha() { return alpha.get(); }
 
 
-    public @NotNull Vector3i editColor () { return color.edit(); }
-    //!                      editAlpha Primitive types cannot be edited
+    public @NotNull Vector3i editColor() { return color.edit(); }
+    public          int      editAlpha() { return alpha.edit(); }
 }

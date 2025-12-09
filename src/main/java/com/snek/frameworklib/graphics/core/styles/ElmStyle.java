@@ -120,10 +120,10 @@ public class ElmStyle {
 
 
     // Edit getters
-    public @NotNull  Transform editTransform       () { return transform       .edit(); }
-    //!                        editViewRange       Primitive types cannot be edited
-    //!                        editBillboardMode   Primitive types cannot be edited
-    public @Nullable Animation editPrimerAnimation () { return primerAnimation .edit(); }
-    public @Nullable Animation editSpawnAnimation  () { return spawnAnimation  .edit(); }
-    public @Nullable Animation editDespawnAnimation() { return despawnAnimation.edit(); }
+    public @NotNull  Transform           editTransform       () { return transform       .edit(); }
+    public           float               editViewRange       () { return viewRange       .edit(); }
+    public @NotNull BillboardConstraints editBillboardMode   () { return billboardMode   .edit(); }
+    public @Nullable Animation           editPrimerAnimation () { return primerAnimation .edit(); }
+    public @Nullable Animation           editSpawnAnimation  () { return spawnAnimation  .edit(); }
+    public @Nullable Animation           editDespawnAnimation() { return despawnAnimation.edit(); }
 }

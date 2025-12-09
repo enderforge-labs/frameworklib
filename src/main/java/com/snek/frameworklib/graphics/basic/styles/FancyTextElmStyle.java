@@ -125,7 +125,7 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
 
 
     public @NotNull Vector3i  editBgColor    () { return bgColor    .edit(); }
-    //!                       editBgAlpha    Primitive types cannot be edited
+    public          int       editBgAlpha    () { return bgAlpha    .edit(); }
     public @NotNull Transform editTransformFg() { return transformFg.edit(); }
     public @NotNull Transform editTransformBg() { return transformBg.edit(); }
 }
