@@ -46,8 +46,8 @@ public class PanelElmStyle extends ElmStyle {
 
     @Override
     public void flagAll() {
-        color.edit();
-        alpha.edit();
+        editColor();
+        editAlpha();
         super.flagAll();
     }
 

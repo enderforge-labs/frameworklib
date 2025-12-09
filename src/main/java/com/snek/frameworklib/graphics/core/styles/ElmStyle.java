@@ -63,12 +63,12 @@ public class ElmStyle {
      * Flags all the fields.
      */
     public void flagAll() {
-        transform.edit();
-        viewRange.edit();
-        billboardMode.edit();
-        primerAnimation.edit();
-        spawnAnimation.edit();
-        despawnAnimation.edit();
+        editTransform();
+        editViewRange();
+        editBillboardMode();
+        editPrimerAnimation();
+        editSpawnAnimation();
+        editDespawnAnimation();
     }
 
 

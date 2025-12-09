@@ -83,10 +83,10 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
 
     @Override
     public void flagAll() {
-        bgColor.edit();
-        bgAlpha.edit();
-        transformFg.edit();
-        transformBg.edit();
+        editBgColor();
+        editBgAlpha();
+        editTransformFg();
+        editTransformBg();
         super.flagAll();
     }
 

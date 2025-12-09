@@ -47,9 +47,9 @@ public class FancyButtonElmStyle extends FancyTextElmStyle {
     @Override
     public void flagAll() {
         super.flagAll();
-        hoverPrimerAnimation.edit();
-        hoverEnterAnimation.edit();
-        hoverLeaveAnimation.edit();
+        editHoverPrimerAnimation();
+        editHoverEnterAnimation();
+        editHoverLeaveAnimation();
     }
 
 

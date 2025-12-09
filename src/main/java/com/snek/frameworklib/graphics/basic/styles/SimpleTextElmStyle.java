@@ -63,10 +63,10 @@ public class SimpleTextElmStyle extends ElmStyle {
 
     @Override
     public void flagAll() {
-        text.edit();
-        textOverflowBehaviour.edit();
-        textAlignment.edit();
-        textOpacity.edit();
+        editText();
+        editTextOverflowBehaviour();
+        editTextAlignment();
+        editTextOpacity();
         super.flagAll();
     }
 

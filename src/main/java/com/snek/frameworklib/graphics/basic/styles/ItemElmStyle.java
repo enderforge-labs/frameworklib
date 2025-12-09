@@ -41,7 +41,7 @@ public class ItemElmStyle extends ElmStyle {
 
     @Override
     public void flagAll() {
-        item.edit();
+        editItem();
         super.flagAll();
     }
 
