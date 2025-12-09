@@ -1,7 +1,6 @@
 package com.snek.frameworklib.utils;
 
 import org.jetbrains.annotations.NotNull;
-import org.joml.Quaternionf;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -81,29 +80,39 @@ public final class GeometryUtils extends UtilityClassBase {
      */
     public static boolean checkLineRectangleIntersection(final @NotNull Vector3f lineOrigin, final @NotNull Vector3f lineDirection, final @NotNull Vector3f[] corners) {
 
-        // Calculate corner coordinates when projected onto the screen's plane. Use lineOrigin as coordinates origin and lineDirection
-        final Quaternionf negativeDir = new Quaternionf();
-        lineDirection.rotationTo(new Vector3f(0, 0, 1), negativeDir);
-        final Vector3f c1 = new Vector3f(corners[0]).sub(lineOrigin).rotate(negativeDir);
-        final Vector3f c2 = new Vector3f(corners[1]).sub(lineOrigin).rotate(negativeDir);
-        final Vector3f c3 = new Vector3f(corners[2]).sub(lineOrigin).rotate(negativeDir);
-        final Vector3f c4 = new Vector3f(corners[3]).sub(lineOrigin).rotate(negativeDir);
+        // Build a stable coordinate system with dir as the Z axis
+        final Vector3f right = new Vector3f();
+        final Vector3f up = new Vector3f();
 
-        // //! Debugging window draws
+        // Choose a reference vector that's not parallel to dir
+        final Vector3f ref = Math.abs(lineDirection.y) < 0.9f ? new Vector3f(0, 1, 0) : new Vector3f(1, 0, 0);
+
+        // right = ref × dir (perpendicular to both)
+        ref.cross(lineDirection, right).normalize();
+
+        // up = dir × right (completes the orthonormal basis)
+        lineDirection.cross(right, up).normalize();
+
+        // Project corners onto the right-up plane
+        final Vector3f c1 = new Vector3f(corners[0]).sub(lineOrigin);
+        final Vector3f c2 = new Vector3f(corners[1]).sub(lineOrigin);
+        final Vector3f c3 = new Vector3f(corners[2]).sub(lineOrigin);
+        final Vector3f c4 = new Vector3f(corners[3]).sub(lineOrigin);
+
+        final Vector2f p1 = new Vector2f(c1.dot(right), c1.dot(up));
+        final Vector2f p2 = new Vector2f(c2.dot(right), c2.dot(up));
+        final Vector2f p3 = new Vector2f(c3.dot(right), c3.dot(up));
+        final Vector2f p4 = new Vector2f(c4.dot(right), c4.dot(up));
+
+        //! Debug draw calls
         if(DebugCheck.isDebug()) {
-            UiDebugWindow.getW().add(new Vector2f(c1.x, c1.y));
-            UiDebugWindow.getW().add(new Vector2f(c2.x, c2.y));
-            UiDebugWindow.getW().add(new Vector2f(c3.x, c3.y));
-            UiDebugWindow.getW().add(new Vector2f(c4.x, c4.y));
+            UiDebugWindow.getW().add(p1);
+            UiDebugWindow.getW().add(p2);
+            UiDebugWindow.getW().add(p3);
+            UiDebugWindow.getW().add(p4);
         }
 
-        // Check intersection on the projection plane
-        return isPointInQuad(new Vector2f(0, 0), new Vector2f[]{
-            new Vector2f(c1.x, c1.y),
-            new Vector2f(c2.x, c2.y),
-            new Vector2f(c3.x, c3.y),
-            new Vector2f(c4.x, c4.y)
-        });
+        return isPointInQuad(new Vector2f(0, 0), new Vector2f[]{p1, p2, p3, p4});
     }
 
 
