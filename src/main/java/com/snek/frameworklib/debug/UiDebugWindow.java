@@ -9,10 +9,12 @@ import org.joml.Vector2f;
 
 import com.snek.frameworklib.data_types.containers.Pair;
 
+import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,17 +74,21 @@ public class UiDebugWindow extends JPanel {
     }
 
 
+
+
     @Override
-    protected void paintComponent(final @NotNull Graphics g) {
-        super.paintComponent(g);
+    protected void paintComponent(final @NotNull Graphics _g) {
+        super.paintComponent(_g);
+        final Graphics2D g = (Graphics2D)_g;
         final int width = getWidth();
         final int height = getHeight();
         final int centerX = width / 2;
         final int centerY = height / 2;
 
-        // Draw rectangles
+
+        // Fill rectangles
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
         for(int i = 0; i < vertices.size(); i += 4) {
-            g.setColor(vertices.get(i).getSecond());
             final int x1 = centerX - (int)(400 * vertices.get(i + 0).getFirst().x);
             final int y1 = centerY - (int)(400 * vertices.get(i + 0).getFirst().y);
             final int x2 = centerX - (int)(400 * vertices.get(i + 1).getFirst().x);
@@ -91,10 +97,35 @@ public class UiDebugWindow extends JPanel {
             final int y3 = centerY - (int)(400 * vertices.get(i + 2).getFirst().y);
             final int x4 = centerX - (int)(400 * vertices.get(i + 3).getFirst().x);
             final int y4 = centerY - (int)(400 * vertices.get(i + 3).getFirst().y);
+
+            final Color color = vertices.get(i).getSecond();
+            g.setColor(new Color(
+                (int)(color.getRed() * 0.2),
+                (int)(color.getGreen() * 0.2),
+                (int)(color.getBlue() * 0.2)
+            ));
+            g.fillPolygon(new int[]{ x1, x2, x3, x4 }, new int[] { y1, y2, y3, y4 }, 4);
+        }
+
+
+        // Draw outlines
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC, 1.0f));
+        for(int i = 0; i < vertices.size(); i += 4) {
+            final int x1 = centerX - (int)(400 * vertices.get(i + 0).getFirst().x);
+            final int y1 = centerY - (int)(400 * vertices.get(i + 0).getFirst().y);
+            final int x2 = centerX - (int)(400 * vertices.get(i + 1).getFirst().x);
+            final int y2 = centerY - (int)(400 * vertices.get(i + 1).getFirst().y);
+            final int x3 = centerX - (int)(400 * vertices.get(i + 2).getFirst().x);
+            final int y3 = centerY - (int)(400 * vertices.get(i + 2).getFirst().y);
+            final int x4 = centerX - (int)(400 * vertices.get(i + 3).getFirst().x);
+            final int y4 = centerY - (int)(400 * vertices.get(i + 3).getFirst().y);
+            g.setColor(vertices.get(i).getSecond());
             g.drawPolygon(new int[]{ x1, x2, x3, x4 }, new int[] { y1, y2, y3, y4 }, 4);
         }
 
+
         // Draw center
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
         g.setColor(Color.WHITE);
         g.drawLine(centerX, 0, centerX, height);
         g.drawLine(0, centerY, width, centerY);
