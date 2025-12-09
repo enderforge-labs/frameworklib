@@ -105,6 +105,7 @@ public final class HoverReceiver extends UtilityClassBase {
 
         //! Debug window
         if(DebugCheck.isDebug()) {
+            UiDebugWindow.getW().clear();
             UiDebugWindow.changeColor(Color.GREEN);
         }
 
