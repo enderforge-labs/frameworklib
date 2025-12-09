@@ -69,9 +69,6 @@ public class UiDebugWindow extends JPanel {
     public void add(final @NotNull Vector2f v) {
         vertices.add(Pair.from(v, currentColor));
     }
-    public void clear() {
-        vertices.clear();
-    }
 
 
 
@@ -129,5 +126,9 @@ public class UiDebugWindow extends JPanel {
         g.setColor(Color.WHITE);
         g.drawLine(centerX, 0, centerX, height);
         g.drawLine(0, centerY, width, centerY);
+
+
+        // Clear data
+        vertices.clear();
     }
 }
