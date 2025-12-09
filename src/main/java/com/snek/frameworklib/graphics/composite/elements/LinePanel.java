@@ -3,8 +3,12 @@ package com.snek.frameworklib.graphics.composite.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
+import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.composite.styles.LinePanelStyle;
+import com.snek.frameworklib.graphics.interfaces.Clickable;
+import com.snek.frameworklib.graphics.interfaces.Hoverable;
+import com.snek.frameworklib.graphics.interfaces.Scrollable;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -17,9 +21,11 @@ import net.minecraft.world.entity.player.Player;
 
 
 /**
- * A {@link PanelElm} used to draw lines in graphic contexts. It uses special transforms to achieve the desired shape.
+ * A {@link PanelElm} used to draw lines in graphic contexts. It ignores alignment options and uses special transforms to achieve the desired shape.
  * <p>
  * This class removes the {@link #checkIntersection(Player)} and {@link #getIntersectionLength(Player)} logic and doesn't show up in the debug window.
+ * <p>
+ * Subclasses must NOT implement {@link Clickable}, {@link Scrollable} or {@link Hoverable}. Trying to do so will generate a warning.
  */
 public final class LinePanel extends PanelElm {
     final Vector2f absPosOg = new Vector2f();
@@ -27,6 +33,13 @@ public final class LinePanel extends PanelElm {
 
     public LinePanel(final @NotNull ServerLevel world) {
         super(world, new LinePanelStyle());
+        if(
+            Clickable .class.isAssignableFrom(getClass()) ||
+            Scrollable.class.isAssignableFrom(getClass()) ||
+            Hoverable .class.isAssignableFrom(getClass())
+        ) {
+            FrameworkLib.LOGGER.warn("LinePanel subclasses cannot implement Clickable, Scrollable, or Hoverable", new IllegalStateException());
+        }
     }
 
 
@@ -39,24 +52,8 @@ public final class LinePanel extends PanelElm {
         final Vector2f p = parent == null ? new Vector2f(0, 0) : parent.getAbsPos();
         final Vector2f s = parent == null ? new Vector2f(1, 1) : parent.getAbsSize();
 
-        // Apply horizontal alignment
-        final float x = switch(alignmentX) {
-            case LEFT   -> p.x - (s.x - absSize.x) / 2;
-            case RIGHT  -> p.x + (s.x - absSize.x) / 2;
-            case CENTER -> p.x;
-            case NONE   -> p.x + localPos.x * s.x;
-        };
-
-        // Apply vertical alignment
-        final float y = switch(alignmentY) {
-            case TOP    -> p.y + (s.y - absSize.y);
-            case BOTTOM -> p.y;
-            case CENTER -> p.y + (s.y - absSize.y) / 2;
-            case NONE   -> p.y + localPos.y * s.y;
-        };
-
         // Update the value
-        absPos.set(x, y);
+        absPos.set(p.add(localPos, new Vector2f()).mul(s, new Vector2f()));
     }
 
 

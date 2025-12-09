@@ -62,6 +62,7 @@ public abstract class Elm extends Div {
 
 
     // Animation handling
+    //FIXME use a custom linked list or something. adding and removing from elmUpdateQueue should be O(1)
     private   static final @NotNull List<Elm> elmUpdateQueue = new ArrayList<>();   // The list of instances with pending transition steps
     protected        final @NotNull IndexedArrayDeque<InterpolatedData> futureDataQueue = new IndexedArrayDeque<>(); // The list of transition steps to apply to this instance in the next ticks. 1 for each update tick
     private boolean isQueued = false;                                               // Whether this instance is queued for updates. Updated manually
@@ -240,7 +241,6 @@ public abstract class Elm extends Div {
             .add(entity.getPosCopy())
         ;
     }
-
 
 
 
@@ -432,8 +432,8 @@ public abstract class Elm extends Div {
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         if(!isSpawned) {
 
-            // // Flush previous changes to the entity to avoid bad interpolations //TODO remove
-            // flushStyle(false);
+            // Flush previous changes to the entity to avoid bad interpolations //TODO remove
+            flushStyle(false);
 
 
             // Denormalize transform and apply the primer animation

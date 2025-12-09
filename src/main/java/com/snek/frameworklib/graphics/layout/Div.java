@@ -134,6 +134,7 @@ public class Div {
     public @NotNull Div addChild(final @NotNull Div elm) {
         elm.parent = this;
         elm.setCanvas(canvas);
+        elm.updateAbsSize(); //TODO idk if this is needed, though it most likely is
         elm.updateAbsPos();
         elm.updateZIndex();
         children.add(elm);
@@ -148,6 +149,7 @@ public class Div {
      */
     public @NotNull Div removeChild(final @NotNull Div elm) {
         elm.parent = null;
+        elm.updateAbsSize(); //TODO idk if this is needed, though it most likely is
         elm.updateAbsPos();
         elm.updateZIndex();
         children.remove(elm);
