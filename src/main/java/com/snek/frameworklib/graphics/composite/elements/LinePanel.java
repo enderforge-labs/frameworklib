@@ -7,6 +7,7 @@ import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.composite.styles.LinePanelStyle;
 
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
 
 
 
@@ -16,7 +17,9 @@ import net.minecraft.server.level.ServerLevel;
 
 
 /**
- * A special {@link PanelElm} used to draw lines in graphic contexts.
+ * A {@link PanelElm} used to draw lines in graphic contexts. It uses special transforms to achieve the desired shape.
+ * <p>
+ * This class removes the {@link #checkIntersection(Player)} and {@link #getIntersectionLength(Player)} logic and doesn't show up in the debug window.
  */
 public final class LinePanel extends PanelElm {
     final Vector2f absPosOg = new Vector2f();
@@ -54,5 +57,18 @@ public final class LinePanel extends PanelElm {
 
         // Update the value
         absPos.set(x, y);
+    }
+
+
+
+
+    @Override
+    public boolean checkIntersection(final @NotNull Player player) {
+        return false;
+    }
+
+    @Override
+    public double getIntersectionLength(final @NotNull Player player) {
+        return Double.MAX_VALUE;
     }
 }
