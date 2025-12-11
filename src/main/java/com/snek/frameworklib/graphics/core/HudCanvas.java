@@ -6,8 +6,6 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 import com.snek.frameworklib.configs.Configs;
-import com.snek.frameworklib.data_types.animations.Transform;
-import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.layout.Div;
@@ -27,7 +25,7 @@ import com.snek.frameworklib.utils.scheduler.Scheduler;
 public non-sealed class HudCanvas extends Canvas {
 
     // HUD data
-    public static final float HUD_DISTANCE = 1.3f;
+    public static final float HUD_DISTANCE = 0.8f;
     public @NotNull HudContext getHudContext() { return (HudContext)super.getContext(); }
 
     // Despawn detection
