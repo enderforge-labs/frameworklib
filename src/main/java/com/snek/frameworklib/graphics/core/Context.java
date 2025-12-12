@@ -91,7 +91,10 @@ public abstract sealed class Context permits HudContext, UiContext {
      */
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         if(!spawned) {
+            setSpawnPos(pos);
             spawned = true;
+
+            // Spawn canvas and interaction blocker
             final float size = getInteractionBlockerSize();
             if(activeCanvas != null) activeCanvas.spawn(pos, animate);
             interactionBlocker = new InteractionBlocker(player.level(), size, size);
@@ -101,6 +104,9 @@ public abstract sealed class Context permits HudContext, UiContext {
             activeContexts.putIfAbsent(player, new LinkedList<>());
             final @NotNull LinkedList<Context> contexts = activeContexts.get(player);
             contexts.add(this);
+
+            // Force updates
+            tick();
         }
     }
 
@@ -139,11 +145,11 @@ public abstract sealed class Context permits HudContext, UiContext {
 
 
     public abstract void changeCanvas(final @NotNull Canvas canvas);
-    protected final void finalizeCanvasChange(final @NotNull Canvas newCanvas, final @NotNull Vector3d canvasSpawnPos) {
+    protected final void finalizeCanvasChange(final @NotNull Canvas newCanvas) {
 
         // Set new active canvas and spawn canvas into the world
         activeCanvas = newCanvas;
-        newCanvas.spawn(canvasSpawnPos, true);
+        newCanvas.spawn(getSpawnPos(), true);
     }
 
 

@@ -232,7 +232,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      * @param elm The element to modify.
      */
     public void denormalizeTransform(final @NotNull Div elm) {
-        elm.applyAnimationNow(Canvas.calcCanvasRotationAnimation(0, context.getRotation()));
+        elm.applyAnimationNow(calcCanvasRotationAnimation(0, context.getRotation()));
     }
 
 
@@ -245,7 +245,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      * @param elm The element to modify.
      */
     public void normalizeTransform(final @NotNull Div elm) {
-        elm.applyAnimationNow(Canvas.calcCanvasRotationAnimation(context.getRotation(), 0));
+        elm.applyAnimationNow(calcCanvasRotationAnimation(context.getRotation(), 0));
     }
 
 

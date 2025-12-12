@@ -100,7 +100,7 @@ public non-sealed class UiContext extends Context {
             throw new IllegalArgumentException("Canvas must be a subclass of UiCanvas, but got: " + newCanvas.getClass().getName());
         }
 
-        finalizeCanvasChange(newCanvas, getSpawnPos());
+        finalizeCanvasChange(newCanvas);
     }
 
 
@@ -109,7 +109,6 @@ public non-sealed class UiContext extends Context {
     @Override
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         if(!spawned) {
-            setSpawnPos(pos);
 
             // Update UiContext list
             activeUIs.putIfAbsent(player, new LinkedList<>());

@@ -107,42 +107,61 @@ public non-sealed class HudContext extends Context {
 
 
 
-
+    private boolean positionInitialized = false;
     @Override
     public void tick() {
-        final Vector3d newPos = MinecraftUtils.getPlayerStandingEyePos(getPlayer());
+        final Vector3d newPos = MinecraftUtils.getPlayerStandingEyePos(player);
 
-        // Detect not sneaking -> sneaking transition and set refresh flag if needed
-        if(player.isShiftKeyDown() && !playerHasSneaked) {
-
-            // Teleport interaction entityt if necessary
-            if(interactionBlocker != null) {
-                final Vector3d interactionNewPos = newPos.add(((HudCanvas)activeCanvas).__calcVisualShiftGlobal());
-                interactionBlocker.teleport(interactionNewPos);
-            }
-
-
-            //FIXME make it disappear and reappear instead
-            // Update rotation and position if needed
-            setSpawnPos(newPos);
-            if(activeCanvas != null) {
-                teleportElement(activeCanvas);
-                activeCanvas.rotate(getRotation(), calcRot(), true); //FIXME make it disappear and reappear instead
-            }
-            resetInactivityTimer();
-        }
-        playerHasSneaked = player.isShiftKeyDown();
 
 
         // Close the HUD if the player moved too far since the last update or it has been inactive for longer than the configured time
-        //! This else makes it skip calculations when the HUD moves
         if(
             newPos.sub(getSpawnPos(), new Vector3d()).length() >= Configs.getPerf().hud_close_distance.getValue() ||
             Scheduler.getTickNum() > lastInputTime + Configs.getPerf().hud_close_time.getValue()
         ) {
             //! Schedule despawn for the end of the current tick to avoid modifying the active contexts list while the thread is iterating it
             Scheduler.run(() -> despawn(true));
+            return;
         }
+
+
+
+
+        // Detect not sneaking -> sneaking transition and set refresh flag if needed
+        if(!positionInitialized || (player.isShiftKeyDown() && !playerHasSneaked)) {
+            positionInitialized = true;
+
+            //FIXME make it disappear and reappear instead
+            // Update position
+            setSpawnPos(newPos);
+            if(activeCanvas != null) {
+                teleportElement(activeCanvas);
+            }
+
+
+            // If the rotation needs to be updated
+            final int newRot = calcRot();
+            if(getRotation() != newRot) {
+
+                // Rotate the canvas and set the new rotation
+                if(activeCanvas != null) {
+                    activeCanvas.rotate(getRotation(), newRot, true); //FIXME make it disappear and reappear instead
+                }
+                setRotation(newRot);
+            }
+
+
+            // Teleport interaction entityt if necessary
+            if(activeCanvas != null && interactionBlocker != null) {
+                final Vector3d interactionNewPos = newPos.add(((HudCanvas)activeCanvas).__calcVisualShiftGlobal(), new Vector3d());
+                interactionBlocker.teleport(interactionNewPos);
+            }
+
+
+            // Reset inactivity timer
+            resetInactivityTimer();
+        }
+        playerHasSneaked = player.isShiftKeyDown();
     }
 
 
@@ -150,7 +169,7 @@ public non-sealed class HudContext extends Context {
 
     @Override
     public int calcRot() {
-        return Math.round((getPlayer().getViewYRot(1) + 180f) / 45f) % 8;
+        return Math.round((player.getViewYRot(1) + 180f) / 45f) % 8;
     }
 
 
@@ -162,7 +181,7 @@ public non-sealed class HudContext extends Context {
             throw new IllegalArgumentException("Canvas must be a subclass of HudCanvas, but got: " + newCanvas.getClass().getName());
         }
 
-        finalizeCanvasChange(newCanvas, getSpawnPos());
+        finalizeCanvasChange(newCanvas);
     }
 
 

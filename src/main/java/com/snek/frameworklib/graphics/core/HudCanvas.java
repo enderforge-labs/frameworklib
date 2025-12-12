@@ -2,7 +2,6 @@ package com.snek.frameworklib.graphics.core;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 import com.snek.frameworklib.data_types.animations.Transform;
@@ -47,19 +46,6 @@ public non-sealed class HudCanvas extends Canvas {
     }
 
 
-
-
-    @Override
-    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
-        if(!isSpawned) {
-
-            // Setup data
-            context.setSpawnPos(pos);
-
-            // Spawn
-            super.spawn(pos, animate);
-        }
-    }
 
 
     /**
