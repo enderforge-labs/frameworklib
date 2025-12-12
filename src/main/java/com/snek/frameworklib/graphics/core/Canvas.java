@@ -3,6 +3,7 @@ package com.snek.frameworklib.graphics.core;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
+import org.joml.Vector3d;
 import org.joml.Vector3i;
 
 import com.snek.frameworklib.data_types.animations.Animation;
@@ -277,5 +278,23 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
             new Transition(CANVAS_ROTATION_TIME, Easings.cubicOut)
             .additiveTransform(new Transform().rotGlobalY(rotation).rotY(- rotation))
         );
+    }
+
+
+
+
+    @Override
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
+
+        // If the background is already spawned, only spawn its children
+        if(bg.isSpawned()) for(final Div c : bg.getChildren()) {
+            isSpawned = true;
+            c.spawn(pos, animate);
+        }
+
+        // If not, spawn everything
+        else {
+            super.spawn(pos, animate);
+        }
     }
 }
