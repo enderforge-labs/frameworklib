@@ -38,7 +38,7 @@ public non-sealed class HudContext extends Context {
     public static Map<Player, LinkedList<HudContext>> getActiveHUDs() { return activeHUDs; }
 
     // HUD data
-    public static final float HUD_DISTANCE = 0.8f;
+    public static final float HUD_DISTANCE = 1.2f;
     private boolean playerHasSneaked = false;
 
     // Despawn detection
