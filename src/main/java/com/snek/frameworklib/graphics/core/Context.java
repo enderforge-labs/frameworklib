@@ -45,18 +45,24 @@ public abstract sealed class Context permits HudContext, UiContext {
     private static final Map<Player, LinkedList<Context>> activeContexts = new HashMap<>();
     public static Map<Player, LinkedList<Context>> getActiveContexts() { return activeContexts; }
 
-    // Hud data
+    // Context data
     protected final Player player;
     protected @Nullable InteractionBlocker interactionBlocker = null;
     protected @Nullable Canvas activeCanvas = null;
     protected boolean spawned = false;
+    private @NotNull Vector3d spawnPos = new Vector3d(0);
+    private int lastRotation = 0;
+    public abstract int calcRot();
 
     // Getters
     public @NotNull  Player             getPlayer                () { return player; }
     public @Nullable Canvas             getActiveCanvas          () { return activeCanvas; }
     public @Nullable InteractionBlocker getInteractionBlocker    () { return interactionBlocker; }
     public abstract float getInteractionBlockerSize();
-    public abstract @NotNull Vector3d getSpawnPos();
+    public void setSpawnPos(final @NotNull Vector3d spawnPos) { this.spawnPos = spawnPos; };
+    public @NotNull Vector3d getSpawnPos() { return spawnPos; }
+    public void setRotation(final int newRotation) { lastRotation = newRotation; }
+    public int getRotation() { return lastRotation; }
 
     // Optimization structures
     private @Nullable Elm targetedElm = null;
@@ -125,11 +131,9 @@ public abstract sealed class Context permits HudContext, UiContext {
 
 
     /**
-     * Updates the active canvas.
+     * Updates the context.
      */
-    public void update() {
-        if(activeCanvas != null) activeCanvas.update();
-    }
+    public abstract void tick();
 
 
 
@@ -137,20 +141,9 @@ public abstract sealed class Context permits HudContext, UiContext {
     public abstract void changeCanvas(final @NotNull Canvas canvas);
     protected final void finalizeCanvasChange(final @NotNull Canvas newCanvas, final @NotNull Vector3d canvasSpawnPos) {
 
-
         // Set new active canvas and spawn canvas into the world
         activeCanvas = newCanvas;
         newCanvas.spawn(canvasSpawnPos, true);
-
-
-        // // Adjust rotation of child elements if needed
-        // //! newCanvas.lastRotation is updated when the canvas is created. In Canvas.Canvas
-        // if(lastRotation != 0) {
-        //     final Animation animation = Canvas.calcCanvasRotationAnimation(0, lastRotation);
-        //     for(final Div c : newCanvas.getBg().getChildren()) {
-        //         c.applyAnimationNowRecursive(animation);
-        //     }
-        // }
     }
 
 
@@ -178,10 +171,10 @@ public abstract sealed class Context permits HudContext, UiContext {
     /**
      * Updates all active contexts of every player.
      */
-    public static void updateActiveContexts() {
+    public static void tickActiveContexts() {
         for(final LinkedList<Context> contexts : getActiveContexts().values()) {
             for(final Context context : contexts) {
-                context.update();
+                context.tick();
             }
         }
     }
@@ -197,12 +190,7 @@ public abstract sealed class Context permits HudContext, UiContext {
      */
     public boolean forwardClick(final @NotNull Player player, final @NotNull ClickAction action) {
         if(activeCanvas == null) return false;
-
-        final boolean r = activeCanvas.forwardClick(player, action);
-        if(r && activeCanvas instanceof HudCanvas hud) {
-            hud.resetInactivityTimer();
-        }
-        return r;
+        return activeCanvas.forwardClick(player, action);
     }
 
 

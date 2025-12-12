@@ -5,12 +5,10 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 
-import com.snek.frameworklib.configs.Configs;
+import com.snek.frameworklib.data_types.animations.Transform;
+import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
-import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.layout.Div;
-import com.snek.frameworklib.utils.MinecraftUtils;
-import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 
 
@@ -27,13 +25,6 @@ public non-sealed class HudCanvas extends Canvas {
     // HUD data
     public static final float HUD_DISTANCE = 0.8f;
     public @NotNull HudContext getHudContext() { return (HudContext)super.getContext(); }
-
-    // Despawn detection
-    private long lastInputTime = Long.MAX_VALUE;
-
-
-
-
 
 
 
@@ -59,80 +50,14 @@ public non-sealed class HudCanvas extends Canvas {
 
 
     @Override
-    public void update() {
-
-        // Calculate new position and position difference
-        final Vector3d newPos = MinecraftUtils.getPlayerStandingEyePos(context.getPlayer());
-        final Vector3d posDelta = newPos.sub(context.getSpawnPos(), new Vector3d());
-
-
-        // Update rotation and position if needed
-        if(((HudContext)context).attemptPositionRefresh()) {
-            ((HudContext)context).setSpawnPos(newPos);
-            updateRot(true); //FIXME make it disappear and reappear instead
-            updatePos(this); //FIXME make it disappear and reappear instead
-            resetInactivityTimer();
-        }
-
-
-        // Close the HUD if the player moved too far since the last update or it has been inactive for longer than the configured time
-        //! This else makes it skip calculations when the HUD moves
-        else if(
-            posDelta.length() >= Configs.getPerf().hud_close_distance.getValue() ||
-            Scheduler.getTickNum() > lastInputTime + Configs.getPerf().hud_close_time.getValue()
-        ) {
-            //! Schedule despawn for the end of the current tick to avoid modifying the active contexts list while the thread is iterating it
-            Scheduler.run(() -> context.despawn(true));
-        }
-    }
-
-
-
-
-    /**
-     * Sets the inactivity timer back to 0.
-     * This should be called when an input is detected.
-     */
-    public void resetInactivityTimer() {
-        lastInputTime = Scheduler.getTickNum();
-    }
-
-
-
-
-    @Override
-    public int calcRot() {
-        return Math.round((context.getPlayer().getViewYRot(1) + 180f) / 45f) % 8;
-    }
-
-
-    public void updatePos(final @NotNull Div div) {
-        if(div instanceof Elm e) {
-            e.getEntity().teleport(context.getSpawnPos());
-        }
-        for(Div c : div.getChildren()) {
-            updatePos(c);
-        }
-    }
-
-
-
-
-    @Override
-    public void spawn(Vector3d pos, final boolean animate) {
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         if(!isSpawned) {
 
             // Setup data
-            ((HudContext)context).setSpawnPos(pos);
-            resetInactivityTimer();
+            context.setSpawnPos(pos);
 
-            //TODO check if this was needed.
-            //TODO this should be handled by Canva's built in transform normalization, now
-            // // Move displays away from the player's center
-            // applyAnimationNowRecursive(new Transition().additiveTransform(new Transform().move(__calcVisualShiftGlobal())));
-
+            // Spawn
             super.spawn(pos, animate);
-            isSpawned = true;
         }
     }
 
@@ -142,7 +67,7 @@ public non-sealed class HudCanvas extends Canvas {
      * @return The translation calculated in the global frame.
      */
     public @NotNull Vector3f __calcVisualShiftGlobal() {
-        final float rotation = (float)Math.toRadians((lastRotation + 4) % 8 * -45f);
+        final float rotation = (float)Math.toRadians((context.getRotation() + 4) % 8 * -45f);
         final Vector3f direction = new Vector3f((float)Math.sin(rotation), 0, (float)Math.cos(rotation));
         return direction.mul(HUD_DISTANCE).sub(0, 0.5f, 0);
     }
@@ -161,10 +86,15 @@ public non-sealed class HudCanvas extends Canvas {
 
 
     @Override
-    public void despawn(final boolean animate) {
-        if(isSpawned) {
-            super.despawn(animate);
-            isSpawned = false;
-        }
+    public void denormalizeTransform(final @NotNull Div elm) {
+        elm.applyAnimationNow(new Transition().additiveTransform(new Transform().move(__calcVisualShiftLocal())));
+        super.denormalizeTransform(elm);
+    }
+
+
+    @Override
+    public void normalizeTransform(final @NotNull Div elm) {
+        elm.applyAnimationNow(new Transition().additiveTransform(new Transform().move(__calcVisualShiftLocal().mul(-1))));
+        super.normalizeTransform(elm);
     }
 }

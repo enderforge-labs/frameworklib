@@ -19,6 +19,7 @@ import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.containers.IndexedArrayDeque;
 import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.graphics.core.HudCanvas;
+import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.graphics.layout.Div;
@@ -605,13 +606,13 @@ public abstract class Elm extends Div {
             isHovered = hoverStateNext;
             if(isHovered) {
                 if(this instanceof Hoverable h) h.onHoverEnter(player);
-                if(canvas instanceof HudCanvas hud) {
+                if(canvas.getContext() instanceof HudContext hud) {
                     hud.resetInactivityTimer();
                 }
             }
             else {
                 if(this instanceof Hoverable h) h.onHoverExit(player);
-                if(canvas instanceof HudCanvas hud) {
+                if(canvas.getContext() instanceof HudContext hud) {
                     hud.resetInactivityTimer();
                 }
             }

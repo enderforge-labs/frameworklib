@@ -4,10 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
-import com.snek.frameworklib.utils.scheduler.RateLimiter;
-
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 
 
 
@@ -31,12 +27,7 @@ import net.minecraft.world.phys.Vec3;
 public non-sealed class UiCanvas extends Canvas {
 
     // UI data
-    protected @NotNull RateLimiter canvasRotationLimiter = new RateLimiter();
     public @NotNull UiContext getUiContext() { return (UiContext)super.getContext(); }
-
-    // Optimization data
-    private Vec3 lastPlayerPos = new Vec3(0, 0, 0);
-    public static final float POS_UPDATE_DISTANCE = 0.1f;
 
 
 
@@ -56,30 +47,5 @@ public non-sealed class UiCanvas extends Canvas {
         final @Nullable PanelElmStyle bgStyle, final @Nullable PanelElmStyle backStyle
     ) {
         super(context, height, heightTop, heightBottom, bgStyle, backStyle);
-    }
-
-
-
-
-    @Override
-    public void update() {
-        final Player player = context.getPlayer();
-        if(!canvasRotationLimiter.attempt()) return;
-
-        final Vec3 playerPos = player.getPosition(1f);                      // Get player position
-        if(!lastPlayerPos.closerThan(playerPos, POS_UPDATE_DISTANCE)) {     // If the player has moved far enough
-            updateRot(false);                                                   // Update rotation
-            canvasRotationLimiter.renewCooldown(CANVAS_ROTATION_TIME);          // Renew the rotation cooldown
-        }
-    }
-
-
-    @Override
-    public int calcRot() {
-        final Vec3 playerPos = context.getPlayer().getPosition(1f);             // Get player position
-        final double dx = ((UiContext)context).getSpawnPos().x - playerPos.x;   // Calculate X difference
-        final double dz = ((UiContext)context).getSpawnPos().z - playerPos.z;   // Calculate Z difference
-        final double angle = Math.toDegrees(Math.atan2(-dx, dz));               // Calculate angle from position difference
-        return (int)Math.round((angle + 180d) / 45d) % 8;                       // Convert from degrees to direction
     }
 }

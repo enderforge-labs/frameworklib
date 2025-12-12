@@ -8,7 +8,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
+import com.snek.frameworklib.utils.scheduler.RateLimiter;
+
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 
 
@@ -25,7 +28,8 @@ import net.minecraft.world.entity.player.Player;
 public non-sealed class UiContext extends Context {
 
     // UI data
-    protected final Vector3d spawnPos = new Vector3d();
+    public static final float POS_UPDATE_DISTANCE = 0.1f;
+    protected @NotNull RateLimiter canvasRotationLimiter = new RateLimiter();
 
     // Active UI list
     private static final Map<Player, LinkedList<UiContext>> activeUIs = new HashMap<>();
@@ -50,9 +54,42 @@ public non-sealed class UiContext extends Context {
     }
 
 
+
+
     @Override
-    public @NotNull Vector3d getSpawnPos() {
-        return spawnPos;
+    public void tick() {
+
+        // If the active canvas is not null and the limiter isn't blocking
+        if(activeCanvas != null) {
+            if(!canvasRotationLimiter.attempt()) return;
+
+            // If the rotation needs to be updated
+            final int newRot = calcRot();
+            if(getRotation() != newRot) {
+
+                // If the player has moved far enough
+                final Vector3d playerPos = new Vector3d(player.getPosition(1f).toVector3f());
+                if(getSpawnPos().distance(playerPos) > POS_UPDATE_DISTANCE) {
+
+                    // Rotate the canvas and update the current rotation
+                    activeCanvas.rotate(getRotation(), newRot, false);
+                    canvasRotationLimiter.renewCooldown(Canvas.CANVAS_ROTATION_TIME);
+                    setRotation(newRot);
+                }
+            }
+        }
+    }
+
+
+
+
+    @Override
+    public int calcRot() {
+        final Vec3 playerPos = player.getPosition(1f);              // Get player position
+        final double dx = getSpawnPos().x - playerPos.x;            // Calculate X difference
+        final double dz = getSpawnPos().z - playerPos.z;            // Calculate Z difference
+        final double angle = Math.toDegrees(Math.atan2(-dx, dz));   // Calculate angle from position difference
+        return (int)Math.round((angle + 180d) / 45d) % 8;           // Convert from degrees to direction
     }
 
 
@@ -72,7 +109,7 @@ public non-sealed class UiContext extends Context {
     @Override
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         if(!spawned) {
-            spawnPos.set(pos);
+            setSpawnPos(pos);
 
             // Update UiContext list
             activeUIs.putIfAbsent(player, new LinkedList<>());

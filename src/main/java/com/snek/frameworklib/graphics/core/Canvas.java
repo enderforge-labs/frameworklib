@@ -3,7 +3,6 @@ package com.snek.frameworklib.graphics.core;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
-import org.joml.Vector3d;
 import org.joml.Vector3i;
 
 import com.snek.frameworklib.data_types.animations.Animation;
@@ -50,7 +49,6 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
     // Core data
     protected final @NotNull Context context;
-    protected int lastRotation = 0;
 
     // Colors
     public static final @NotNull Vector3i TOOLBAR_FG_COLOR = new Vector3i(Txt.COLOR_WHITE);
@@ -82,7 +80,6 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
     public @NotNull Elm     getBack    () { return back;         }
     public @NotNull Elm     getTop     () { return top;          }
     public @NotNull Elm     getBottom  () { return bottom;       }
-    public @NotNull int     getRotation() { return lastRotation; }
     public @NotNull Context getContext () { return context;      }
 
     // Height cache
@@ -141,7 +138,9 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
         // If the elements don't exist yet
         if(prevCanvas == null) {
-            lastRotation = calcRot();
+
+            // Initialize last rotation
+            context.setRotation(context.calcRot());
 
 
             // Create the elements
@@ -175,11 +174,6 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
             back  .applyAnimationNow(new Transition().additiveTransform(transformBack));
             top   .applyAnimationNow(new Transition().additiveTransform(transformTop));
             bottom.applyAnimationNow(new Transition().additiveTransform(transformBottom));
-
-
-            // lastRotation = prevCanvas.getRotation(); //TODO REMOVE
-            // //! updateRot is called in the spawn method //TODO remove comment idk
-            // //! This is to avoid initialization order issues //TODO remove comment idk
         }
 
 
@@ -187,8 +181,6 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
         // If the elements already exist
         else {
-            lastRotation = prevCanvas.getRotation();
-
 
             // Instantly despawn and remove previous children of the background element
             for(final Div c : prevCanvas.getBg().getChildren()) c.despawn(false);
@@ -211,38 +203,23 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
             back  .applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformBack));
             top   .applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformTop));
             bottom.applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformBottom));
-
-
-            // // Rotate child elements to match the previous canvas's rotation (if neeeded) //TODO Remove
-            // //! New elements are rotated in Context.finalizeCanvasChange //TODO remove comment idk
-            // lastRotation = prevCanvas.getRotation(); //TODO Remove
         }
     }
-
-
-
-
-    /**
-     * Updates the canvas.
-     */
-    public abstract void update();
 
 
 
 
     /**
      * Updates the rotation of the canvas.
+     * @param from The current rotation.
+     * @param to The target rotation.
      * @param instant Whether the rotation should be instantaneous or animated.
      */
-    protected void updateRot(final boolean instant) {
-        final int newRot = calcRot();
-        if(lastRotation != newRot) {
-            final Animation animation = calcCanvasRotationAnimation(lastRotation, newRot);
-            if(instant) applyAnimationNowRecursive(animation); else applyAnimationRecursive(animation); //TODO replace with a single applyAnimationRecursive
-            lastRotation = newRot;
-        }
+    protected void rotate(final int from, final int to, final boolean instant) {
+        final Animation animation = calcCanvasRotationAnimation(from, to);
+        if(instant) applyAnimationNowRecursive(animation);
+        else applyAnimationRecursive(animation); //TODO replace with a single applyAnimationRecursive
     }
-    public abstract int calcRot();
 
 
 
@@ -254,10 +231,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      * @param elm The element to modify.
      */
     public void denormalizeTransform(final @NotNull Div elm) {
-        if(canvas instanceof HudCanvas hud) {
-            elm.applyAnimationNow(new Transition().additiveTransform(new Transform().move(hud.__calcVisualShiftLocal())));
-        }
-        elm.applyAnimationNow(Canvas.calcCanvasRotationAnimation(0, canvas.getRotation()));
+        elm.applyAnimationNow(Canvas.calcCanvasRotationAnimation(0, context.getRotation()));
     }
 
 
@@ -270,11 +244,10 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      * @param elm The element to modify.
      */
     public void normalizeTransform(final @NotNull Div elm) {
-        if(canvas instanceof HudCanvas hud) {
-            elm.applyAnimationNow(new Transition().additiveTransform(new Transform().move(hud.__calcVisualShiftLocal().mul(-1))));
-        }
-        elm.applyAnimationNow(Canvas.calcCanvasRotationAnimation(canvas.getRotation(), 0));
+        elm.applyAnimationNow(Canvas.calcCanvasRotationAnimation(context.getRotation(), 0));
     }
+
+
 
 
     /**
@@ -304,27 +277,5 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
             new Transition(CANVAS_ROTATION_TIME, Easings.cubicOut)
             .additiveTransform(new Transform().rotGlobalY(rotation).rotY(- rotation))
         );
-    }
-
-
-
-
-
-
-
-
-    @Override
-    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
-
-        // If the background is already spawned, only spawn its children
-        if(bg.isSpawned()) for(final Div c : bg.getChildren()) {
-            isSpawned = true;
-            c.spawn(pos, animate);
-        }
-
-        // If not, spawn everything
-        else {
-            super.spawn(pos, animate);
-        }
     }
 }

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.graphics.core.Context;
-import com.snek.frameworklib.graphics.core.HudCanvas;
+import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.utils.UtilityClassBase;
 
@@ -65,7 +65,7 @@ public final class ScrollReceiver extends UtilityClassBase {
                 s.onScroll(player, scrollAmount);
 
                 // Update inactivity timer
-                if(context.getActiveCanvas() instanceof HudCanvas hud) {
+                if(context instanceof HudContext hud) {
                     hud.resetInactivityTimer();
                 }
             }

@@ -93,7 +93,7 @@ public class FrameworkLib implements ModInitializer {
             // Schedule UI element update loop
             Scheduler.loop(0, Configs.getPerf().animation_refresh_time.getValue(), () -> {
                 Elm.processUpdateQueue();
-                Context.updateActiveContexts();
+                Context.tickActiveContexts();
             });
 
 
