@@ -20,9 +20,6 @@ import com.snek.frameworklib.graphics.layout.Div;
  * A canvas that can be used to create HUDs.
  */
 public non-sealed class HudCanvas extends Canvas {
-
-    // HUD data
-    public static final float HUD_DISTANCE = 0.8f;
     public @NotNull HudContext getHudContext() { return (HudContext)super.getContext(); }
 
 
@@ -48,39 +45,16 @@ public non-sealed class HudCanvas extends Canvas {
 
 
 
-    /**
-     * Calculates the translation needed to go from the player's eye position to the desired HUD origin coordinates.
-     * @return The translation calculated in the global frame.
-     */
-    public @NotNull Vector3f __calcVisualShiftGlobal() {
-        final float rotation = (float)Math.toRadians((context.getRotation() + 4) % 8 * -45f);
-        final Vector3f direction = new Vector3f((float)Math.sin(rotation), 0, (float)Math.cos(rotation));
-        return direction.mul(HUD_DISTANCE).sub(0, 0.5f, 0);
-    }
-
-
-    /**
-     * Calculates the translation needed to go from the player's eye position to the desired HUD origin coordinates.
-     * <p>
-     * @return The translation calculated in the local frame.
-     */
-    public @NotNull Vector3f __calcVisualShiftLocal() {
-        return new Vector3f(0, -0.5f, -HUD_DISTANCE);
-    }
-
-
-
-
     @Override
     public void denormalizeTransform(final @NotNull Div elm) {
-        elm.applyAnimationNow(new Transition().additiveTransform(new Transform().move(__calcVisualShiftLocal())));
+        elm.applyAnimationNow(new Transition().additiveTransform(new Transform().move(getHudContext().__calcVisualShiftLocal())));
         super.denormalizeTransform(elm);
     }
 
 
     @Override
     public void normalizeTransform(final @NotNull Div elm) {
-        elm.applyAnimationNow(new Transition().additiveTransform(new Transform().move(__calcVisualShiftLocal().mul(-1))));
+        elm.applyAnimationNow(new Transition().additiveTransform(new Transform().move(getHudContext().__calcVisualShiftLocal().mul(-1))));
         super.normalizeTransform(elm);
     }
 }

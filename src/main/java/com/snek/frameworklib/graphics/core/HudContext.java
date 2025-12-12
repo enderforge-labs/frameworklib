@@ -7,6 +7,7 @@ import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
+import org.joml.Vector3f;
 
 import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.graphics.core.elements.Elm;
@@ -37,6 +38,7 @@ public non-sealed class HudContext extends Context {
     public static Map<Player, LinkedList<HudContext>> getActiveHUDs() { return activeHUDs; }
 
     // HUD data
+    public static final float HUD_DISTANCE = 0.8f;
     private boolean playerHasSneaked = false;
 
     // Despawn detection
@@ -152,8 +154,8 @@ public non-sealed class HudContext extends Context {
 
 
             // Teleport interaction entityt if necessary
-            if(activeCanvas != null && interactionBlocker != null) {
-                final Vector3d interactionNewPos = newPos.add(((HudCanvas)activeCanvas).__calcVisualShiftGlobal(), new Vector3d());
+            if(interactionBlocker != null) {
+                final Vector3d interactionNewPos = newPos.add(__calcVisualShiftGlobal(), new Vector3d());
                 interactionBlocker.teleport(interactionNewPos);
             }
 
@@ -218,5 +220,28 @@ public non-sealed class HudContext extends Context {
             lastInputTime = Long.MAX_VALUE;
         }
         super.despawn(animate);
+    }
+
+
+
+
+    /**
+     * Calculates the translation needed to go from the player's eye position to the desired HUD origin coordinates.
+     * @return The translation calculated in the global frame.
+     */
+    public @NotNull Vector3f __calcVisualShiftGlobal() {
+        final float rotation = (float)Math.toRadians((getRotation() + 4) % 8 * -45f);
+        final Vector3f direction = new Vector3f((float)Math.sin(rotation), 0, (float)Math.cos(rotation));
+        return direction.mul(HUD_DISTANCE).sub(0, 0.5f, 0);
+    }
+
+
+    /**
+     * Calculates the translation needed to go from the player's eye position to the desired HUD origin coordinates.
+     * <p>
+     * @return The translation calculated in the local frame.
+     */
+    public @NotNull Vector3f __calcVisualShiftLocal() {
+        return new Vector3f(0, -0.5f, -HUD_DISTANCE);
     }
 }
