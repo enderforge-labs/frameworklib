@@ -12,7 +12,6 @@ import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 
 
 
