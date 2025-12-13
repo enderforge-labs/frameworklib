@@ -62,8 +62,13 @@ public non-sealed class FancyTextElm extends __base_TextElm {
      * @param defaultText The default text of the style.
      * @param defaultOverflowBehaviour The default overflow behaviour of the style.
      */
-    public FancyTextElm(final @NotNull ServerLevel world, final @NotNull Component defaultText, final @NotNull TextOverflowBehaviour defaultOverflowBehaviour) {
-        super(world, new CustomTextDisplay(world), new ConfigurableFancyTextElmStyle(defaultText, defaultOverflowBehaviour));
+    public FancyTextElm(
+        final @NotNull ServerLevel world,
+        final @NotNull Component defaultText,
+        final @NotNull TextAlignment defaultTextAlignment,
+        final @NotNull TextOverflowBehaviour defaultOverflowBehaviour
+    ) {
+        super(world, new CustomTextDisplay(world), new ConfigurableFancyTextElmStyle(defaultText, defaultTextAlignment, defaultOverflowBehaviour));
         text = new CustomTextDisplay(world);
     }
 

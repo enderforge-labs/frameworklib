@@ -49,8 +49,12 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
      * @param defaultText The default text of the style.
      * @param defaultOverflowBehaviour The default overflow behaviour of the style.
      */
-    public SimpleTextElm(final @NotNull ServerLevel world, final @NotNull Component defaultText, final @NotNull TextOverflowBehaviour defaultOverflowBehaviour) {
-        super(world, new CustomTextDisplay(world), new ConfigurableSimpleTextElmStyle(defaultText, defaultOverflowBehaviour));
+    public SimpleTextElm(
+        final @NotNull ServerLevel world,
+        final @NotNull Component defaultText,
+        final @NotNull TextAlignment defaultTextAlignment,
+        final @NotNull TextOverflowBehaviour defaultOverflowBehaviour) {
+        super(world, new CustomTextDisplay(world), new ConfigurableSimpleTextElmStyle(defaultText, defaultTextAlignment, defaultOverflowBehaviour));
     }
 
 

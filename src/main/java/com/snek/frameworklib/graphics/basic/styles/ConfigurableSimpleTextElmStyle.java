@@ -2,6 +2,7 @@ package com.snek.frameworklib.graphics.basic.styles;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 
 import net.minecraft.network.chat.Component;
@@ -18,15 +19,21 @@ import net.minecraft.network.chat.Component;
  */
 public class ConfigurableSimpleTextElmStyle extends SimpleTextElmStyle {
     protected final @NotNull Component defaultText;
+    protected final @NotNull TextAlignment defaultTextAlignment;
     protected final @NotNull TextOverflowBehaviour defaultOverflowBehaviour;
 
 
     /**
      * Creates a new ConfigurableSimpleTextElmStyle.
      */
-    public ConfigurableSimpleTextElmStyle(final @NotNull Component defaultText, final @NotNull TextOverflowBehaviour defaultOverflowBehaviour) {
+    public ConfigurableSimpleTextElmStyle(
+        final @NotNull Component defaultText,
+        final @NotNull TextAlignment defaultTextAlignment,
+        final @NotNull TextOverflowBehaviour defaultOverflowBehaviour
+    ) {
         super();
         this.defaultText = defaultText;
+        this.defaultTextAlignment = defaultTextAlignment;
         this.defaultOverflowBehaviour = defaultOverflowBehaviour;
     }
 
@@ -34,6 +41,12 @@ public class ConfigurableSimpleTextElmStyle extends SimpleTextElmStyle {
     @Override
     public @NotNull Component getDefaultText() {
         return defaultText;
+    }
+
+
+    @Override
+    public @NotNull TextAlignment getDefaultTextAlignment() {
+        return defaultTextAlignment;
     }
 
 
