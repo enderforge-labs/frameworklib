@@ -5,7 +5,7 @@ import org.joml.Vector2f;
 
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
-import com.snek.frameworklib.graphics.composite.interfaces.InputIndicatorCanvas;
+import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.graphics.layout.Div;
 
 import net.minecraft.server.level.ServerLevel;

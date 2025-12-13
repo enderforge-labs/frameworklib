@@ -32,22 +32,37 @@ public abstract class SimpleButtonElm extends PanelElm implements Clickable, Hov
     /**
      * Creates a new SimpleButtonElm using a custom style.
      * @param world The world in which to place the element.
+     * @param lmbActionName The name of the action associated with left clicks.
+     * @param rmbActionName The name of the action associated with right clicks.
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      * @param style The custom style.
      */
-    protected SimpleButtonElm(final @NotNull ServerLevel world, final int clickCooldown, final SimpleButtonElmStyle style) {
+    protected SimpleButtonElm(
+        final @NotNull ServerLevel world,
+        final @Nullable String lmbActionName,
+        final @Nullable String rmbActionName,
+        final int clickCooldown,
+        final SimpleButtonElmStyle style
+    ) {
         super(world, style);
-        base = new __base_ButtonElm(clickCooldown);
+        base = new __base_ButtonElm(lmbActionName, rmbActionName, clickCooldown);
     }
 
 
     /**
      * Creates a new SimpleButtonElm using the default style.
      * @param world The world in which to place the element.
+     * @param lmbActionName The name of the action associated with left clicks.
+     * @param rmbActionName The name of the action associated with right clicks.
      * @param lickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      */
-    protected SimpleButtonElm(final @NotNull ServerLevel world, final int clickCooldown) {
-        this(world, clickCooldown, new SimpleButtonElmStyle());
+    protected SimpleButtonElm(
+        final @NotNull ServerLevel world,
+        final @Nullable String lmbActionName,
+        final @Nullable String rmbActionName,
+        final int clickCooldown
+    ) {
+        this(world, lmbActionName, rmbActionName, clickCooldown, new SimpleButtonElmStyle());
     }
 
 

@@ -1,4 +1,4 @@
-package com.snek.frameworklib.graphics.composite.interfaces;
+package com.snek.frameworklib.graphics.interfaces;
 
 import org.jetbrains.annotations.NotNull;
 

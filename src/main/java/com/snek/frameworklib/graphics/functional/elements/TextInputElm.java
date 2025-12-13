@@ -38,11 +38,19 @@ public abstract class TextInputElm extends FancyButtonElm {
     /**
      * Creates a new TextInputElm using a custom style.
      * @param world The world in which to place the element.
+     * @param lmbActionName The name of the action associated with left clicks.
+     * @param rmbActionName The name of the action associated with right clicks.
      * @param clickFeedbackMessage The message to show to the player when they click the element.
      * @param style The custom style.
      */
-    protected TextInputElm(final @NotNull ServerLevel world, final @Nullable Component clickFeedbackMessage, final @NotNull TextInputElmStyle style) {
-        super(world, 1, style);
+    protected TextInputElm(
+        final @NotNull ServerLevel world,
+        final @Nullable String lmbActionName,
+        final @Nullable String rmbActionName,
+        final @Nullable Component clickFeedbackMessage,
+        final @NotNull TextInputElmStyle style
+    ) {
+        super(world, lmbActionName, rmbActionName, 1, style);
         this.clickFeedbackMessage = clickFeedbackMessage;
     }
 
@@ -50,10 +58,17 @@ public abstract class TextInputElm extends FancyButtonElm {
     /**
      * Creates a new TextInputElm using the default style.
      * @param world The world in which to place the element.
+     * @param lmbActionName The name of the action associated with left clicks.
+     * @param rmbActionName The name of the action associated with right clicks.
      * @param clickFeedbackMessage The message to show to the player when they click the element.
      */
-    protected TextInputElm(final @NotNull ServerLevel world, final @Nullable Component clickFeedbackMessage) {
-        this(world, clickFeedbackMessage, new TextInputElmStyle());
+    protected TextInputElm(
+        final @NotNull ServerLevel world,
+        final @Nullable String lmbActionName,
+        final @Nullable String rmbActionName,
+        final @Nullable Component clickFeedbackMessage
+    ) {
+        this(world, lmbActionName, rmbActionName, clickFeedbackMessage, new TextInputElmStyle());
     }
 
 
@@ -61,6 +76,7 @@ public abstract class TextInputElm extends FancyButtonElm {
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        super.onClick(player, click);
         if(!inputState) {
             enterInputState();
             __base_ButtonElm.playButtonSound(player);

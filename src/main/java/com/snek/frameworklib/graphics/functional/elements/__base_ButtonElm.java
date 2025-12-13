@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.graphics.core.elements.Elm;
+import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
@@ -29,14 +30,20 @@ public final class __base_ButtonElm {
     protected final RateLimiter clickRateLimiter       = new RateLimiter();
     protected final RateLimiter initialCooldownLimiter = new RateLimiter();
     private   final int clickCooldown;
+    protected final @Nullable String lmbActionName;
+    protected final @Nullable String rmbActionName;
 
 
 
     /**
      * Creates a new __base_ButtonElm.
+     * @param lmbActionName The name of the action associated with left clicks.
+     * @param rmbActionName The name of the action associated with right clicks.
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      */
-    protected __base_ButtonElm(final int clickCooldown) {
+    protected __base_ButtonElm(final @Nullable String lmbActionName, final @Nullable String rmbActionName, final int clickCooldown) {
+        this.lmbActionName = lmbActionName;
+        this.rmbActionName = rmbActionName;
         this.clickCooldown = clickCooldown;
     }
 
@@ -67,7 +74,12 @@ public final class __base_ButtonElm {
      * Shared override of onHoverTick from Hoverable
      */
     protected void onHoverTick(final @NotNull Elm _this) {
-        // Empty
+
+        // Update input displays if present
+        if(_this.getCanvas() instanceof InputIndicatorCanvas c) {
+            c.getLmbIndicator().updateDisplay(lmbActionName);
+            c.getRmbIndicator().updateDisplay(rmbActionName);
+        }
     }
 
 
@@ -75,9 +87,17 @@ public final class __base_ButtonElm {
      * Shared override of onHoverExit from Hoverable
      */
     protected void onHoverExit(final @NotNull Elm _this, final @Nullable Animation animation) {
+
+        // Start hover exit animation
         if(animation != null) {
             _this.applyAnimation(animation);
             _this.hoverRateLimiter.renewCooldown(animation.getTotalDuration());
+        }
+
+        // Update input displays if present
+        if(_this.getCanvas() instanceof InputIndicatorCanvas c) {
+            c.getLmbIndicator().updateDisplay(null);
+            c.getRmbIndicator().updateDisplay(null);
         }
     }
 
