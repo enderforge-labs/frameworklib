@@ -27,8 +27,7 @@ public final class __base_ButtonElm {
     public static final int INITIAL_COOLDOWN = 10;
 
     // Data
-    protected final RateLimiter clickRateLimiter       = new RateLimiter();
-    protected final RateLimiter initialCooldownLimiter = new RateLimiter();
+    protected final RateLimiter clickRateLimiter = new RateLimiter();
     private   final int clickCooldown;
     protected final @Nullable String lmbActionName;
     protected final @Nullable String rmbActionName;
@@ -53,7 +52,7 @@ public final class __base_ButtonElm {
      * Shared override of spawn from Elm
      */
     protected void spawn(final @NotNull Elm _this, final @Nullable Animation animation) {
-        initialCooldownLimiter.renewCooldown(INITIAL_COOLDOWN);
+        clickRateLimiter.renewCooldown(INITIAL_COOLDOWN);
         if(animation != null) {
             _this.applyAnimationNow(animation);
         }
@@ -106,7 +105,6 @@ public final class __base_ButtonElm {
      * Shared override of attemptClick from Clickable
      */
     protected boolean attemptClick(final @NotNull Elm _this, final @NotNull Player player) {
-        if(!initialCooldownLimiter.attempt()) return false;
         if(!clickRateLimiter.attempt()) return false;
         clickRateLimiter.renewCooldown(clickCooldown);
         return _this.checkIntersection(player);
