@@ -9,6 +9,7 @@ import com.snek.frameworklib.data_types.animations.InterpolatedData;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
+import com.snek.frameworklib.graphics.basic.styles.ConfigurablePanelElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
@@ -41,6 +42,19 @@ public class PanelElm extends Elm {
 
 
 
+
+
+
+
+    /**
+     * Creates a new PanelElm using a default style configured with the specified text and overflow behaviour.
+     * @param world The world in which to place the element.
+     * @param defaultAlpha The default alpha value of the style.
+     * @param defaultColor The default color of the style.
+     */
+    public PanelElm(final @NotNull ServerLevel world, final int defaultAlpha, final @NotNull Vector3i defaultColor) {
+        super(world, new CustomTextDisplay(world), new ConfigurablePanelElmStyle(defaultAlpha, defaultColor));
+    }
 
 
     /**

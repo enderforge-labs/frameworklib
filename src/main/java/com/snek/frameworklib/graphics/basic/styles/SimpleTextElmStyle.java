@@ -9,6 +9,7 @@ import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
+import com.snek.frameworklib.graphics.basic.elements.FancyTextElm;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
@@ -32,8 +33,6 @@ public class SimpleTextElmStyle extends ElmStyle {
     private @NotNull Flagged<@NotNull TextOverflowBehaviour> textOverflowBehaviour = null;
     private @NotNull Flagged<@NotNull TextAlignment>         textAlignment         = null;
     private @NotNull Flagged<@NotNull Integer>               textOpacity           = null;
-
-
 
 
     /**
