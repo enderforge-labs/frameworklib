@@ -77,11 +77,12 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
     protected final @NotNull Elm bottom;
 
     // Getters
-    public @NotNull Elm     getBg      () { return bg;           }
-    public @NotNull Elm     getBack    () { return back;         }
-    public @NotNull Elm     getTop     () { return top;          }
-    public @NotNull Elm     getBottom  () { return bottom;       }
-    public @NotNull Context getContext () { return context;      }
+    public @NotNull Elm     getBg      () { return bg;      }
+    public @NotNull Elm     getBack    () { return back;    }
+    public @NotNull Elm     getTop     () { return top;     }
+    public @NotNull Elm     getBottom  () { return bottom;  }
+    public @NotNull Context getContext () { return context; }
+    public @NotNull ServerLevel getLevel() { return (ServerLevel)context.player.level(); }
 
     // Height cache
     private final float newHeightBg;
@@ -132,7 +133,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
         // Cache data for element transfer/creation
         final @Nullable Canvas prevCanvas = context.getActiveCanvas();
-        final @NotNull ServerLevel world = (ServerLevel)context.getPlayer().level();
+        final @NotNull ServerLevel world = context.getLevel();
 
 
 

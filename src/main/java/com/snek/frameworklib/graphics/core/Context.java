@@ -12,6 +12,7 @@ import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.input.HoverReceiver;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -63,6 +64,7 @@ public abstract sealed class Context permits HudContext, UiContext {
     public @NotNull Vector3d getSpawnPos() { return spawnPos; }
     public void setRotation(final int newRotation) { lastRotation = newRotation; }
     public int getRotation() { return lastRotation; }
+    public @NotNull ServerLevel getLevel() { return (ServerLevel)player.level(); }
 
     // Optimization structures
     private @Nullable Elm targetedElm = null;
