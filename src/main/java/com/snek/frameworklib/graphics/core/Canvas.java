@@ -133,7 +133,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
         // Cache data for element transfer/creation
         final @Nullable Canvas prevCanvas = context.getActiveCanvas();
-        final @NotNull ServerLevel world = context.getLevel();
+        final @NotNull ServerLevel level = context.getLevel();
 
 
 
@@ -146,10 +146,10 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
 
             // Create the elements
-            bg     = (Elm)addChild(new PanelElm(world, bgStyle   == null ? new PanelElmStyle() : bgStyle));
-            back   = (Elm)addChild(new PanelElm(world, backStyle == null ? new PanelElmStyle() : backStyle));
-            top    = (Elm)addChild(new CanvasBorder(world));
-            bottom = (Elm)addChild(new CanvasBorder(world));
+            bg     = (Elm)addChild(new PanelElm(level, bgStyle   == null ? new PanelElmStyle() : bgStyle));
+            back   = (Elm)addChild(new PanelElm(level, backStyle == null ? new PanelElmStyle() : backStyle));
+            top    = (Elm)addChild(new CanvasBorder(level));
+            bottom = (Elm)addChild(new CanvasBorder(level));
 
 
             // Set their size, position and alignments

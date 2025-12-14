@@ -57,11 +57,11 @@ public class CustomItemDisplay extends CustomDisplay {
     }
 
     /**
-     * Creates a new CustomItemDisplay in the specified world.
-     * @param world The world.
+     * Creates a new CustomItemDisplay in the specified level.
+     * @param level The level.
      */
-    public CustomItemDisplay(final @NotNull Level world) {
-        super(new ItemDisplay(EntityType.ITEM_DISPLAY, world));
+    public CustomItemDisplay(final @NotNull Level level) {
+        super(new ItemDisplay(EntityType.ITEM_DISPLAY, level));
     }
 
 

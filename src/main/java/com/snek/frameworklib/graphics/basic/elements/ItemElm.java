@@ -86,20 +86,20 @@ public class ItemElm extends Elm {
 
     /**
      * Creates a new ItemElm using a custom style.
-     * @param world The world in which to place the element.
+     * @param level The level in which to place the element.
      * @param style The custom style.
      */
-    protected ItemElm(final @NotNull ServerLevel world, final @NotNull ElmStyle style) {
-        super(world, new CustomItemDisplay(world), style);
+    protected ItemElm(final @NotNull ServerLevel level, final @NotNull ElmStyle style) {
+        super(level, new CustomItemDisplay(level), style);
     }
 
 
     /**
      * Creates a new ItemElm using the default style.
-     * @param world The world in which to place the element.
+     * @param level The level in which to place the element.
      */
-    public ItemElm(final @NotNull ServerLevel world) {
-        super(world, new CustomItemDisplay(world), new ItemElmStyle());
+    public ItemElm(final @NotNull ServerLevel level) {
+        super(level, new CustomItemDisplay(level), new ItemElmStyle());
     }
 
 

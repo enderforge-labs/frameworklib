@@ -109,22 +109,22 @@ public class FrameworkLib implements ModInitializer {
 
 
             // Create and register entity click events (interaction blocker clicks)
-            AttackEntityCallback.EVENT.register(PHASE_ID, (player, world, hand, entity, hitResult) -> {
-                return ClickReceiver.onClickEntity(world, player, hand, ClickAction.PRIMARY, entity);
+            AttackEntityCallback.EVENT.register(PHASE_ID, (player, level, hand, entity, hitResult) -> {
+                return ClickReceiver.onClickEntity(level, player, hand, ClickAction.PRIMARY, entity);
             });
-            UseEntityCallback.EVENT.register(PHASE_ID, (player, world, hand, entity, hitResult) -> {
-                return ClickReceiver.onClickEntity(world, player, hand, ClickAction.SECONDARY, entity);
+            UseEntityCallback.EVENT.register(PHASE_ID, (player, level, hand, entity, hitResult) -> {
+                return ClickReceiver.onClickEntity(level, player, hand, ClickAction.SECONDARY, entity);
             });
 
 
 
 
             // Create and register block click events
-            AttackBlockCallback.EVENT.register(PHASE_ID, (player, world, hand, blockPos, direction) -> {
-                return ClickReceiver.onClickBlock(world, player, hand, ClickAction.PRIMARY, blockPos.offset(direction.getNormal()));
+            AttackBlockCallback.EVENT.register(PHASE_ID, (player, level, hand, blockPos, direction) -> {
+                return ClickReceiver.onClickBlock(level, player, hand, ClickAction.PRIMARY, blockPos.offset(direction.getNormal()));
             });
-            UseBlockCallback.EVENT.register(PHASE_ID, (player, world, hand, hitResult) -> {
-                return ClickReceiver.onClickBlock(world, player, hand, ClickAction.SECONDARY, hitResult.getBlockPos().offset(hitResult.getDirection().getNormal()));
+            UseBlockCallback.EVENT.register(PHASE_ID, (player, level, hand, hitResult) -> {
+                return ClickReceiver.onClickBlock(level, player, hand, ClickAction.SECONDARY, hitResult.getBlockPos().offset(hitResult.getDirection().getNormal()));
             });
 
 
@@ -137,7 +137,7 @@ public class FrameworkLib implements ModInitializer {
 
 
             // Register entity display purge
-            ServerEntityEvents.ENTITY_LOAD.register(PHASE_ID, (entity, world) -> {
+            ServerEntityEvents.ENTITY_LOAD.register(PHASE_ID, (entity, level) -> {
                 Elm.onEntityLoad(entity);
                 InteractionBlocker.onEntityLoad(entity);
             });

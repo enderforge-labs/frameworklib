@@ -45,35 +45,35 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
 
     /**
      * Creates a new SimpleTextElm using a default style configured with the specified text and overflow behaviour.
-     * @param world The world in which to place the element.
+     * @param level The level in which to place the element.
      * @param defaultText The default text of the style.
      * @param defaultOverflowBehaviour The default overflow behaviour of the style.
      */
     public SimpleTextElm(
-        final @NotNull ServerLevel world,
+        final @NotNull ServerLevel level,
         final @NotNull Component defaultText,
         final @NotNull TextAlignment defaultTextAlignment,
         final @NotNull TextOverflowBehaviour defaultOverflowBehaviour) {
-        super(world, new CustomTextDisplay(world), new ConfigurableSimpleTextElmStyle(defaultText, defaultTextAlignment, defaultOverflowBehaviour));
+        super(level, new CustomTextDisplay(level), new ConfigurableSimpleTextElmStyle(defaultText, defaultTextAlignment, defaultOverflowBehaviour));
     }
 
 
     /**
      * Creates a new SimpleTextElm using a custom style.
-     * @param world The world in which to place the element.
+     * @param level The level in which to place the element.
      * @param style The custom style.
      */
-    public SimpleTextElm(final @NotNull ServerLevel world, final @NotNull ElmStyle style) {
-        super(world, new CustomTextDisplay(world), style);
+    public SimpleTextElm(final @NotNull ServerLevel level, final @NotNull ElmStyle style) {
+        super(level, new CustomTextDisplay(level), style);
     }
 
 
     /**
      * Creates a new SimpleTextElm using the default style.
-     * @param world The world in which to place the element.
+     * @param level The level in which to place the element.
      */
-    public SimpleTextElm(final @NotNull ServerLevel world) {
-        super(world, new CustomTextDisplay(world), new SimpleTextElmStyle());
+    public SimpleTextElm(final @NotNull ServerLevel level) {
+        super(level, new CustomTextDisplay(level), new SimpleTextElmStyle());
     }
 
 

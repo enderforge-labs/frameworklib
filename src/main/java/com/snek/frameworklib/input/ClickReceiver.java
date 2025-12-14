@@ -42,13 +42,18 @@ public final class ClickReceiver extends UtilityClassBase {
 
     /**
      * Handles left and right clicks on contexts.
-     * @param world The world the player is in.
+     * @param level The level the player is in.
      * @param player The player.
      * @param hand The hand used.
      * @param clickType The type of click (LEFT click or RIGHT click).
      * @return FAIL if the player clicked a context, PASS if not.
      */
-    private static @NotNull InteractionResult onClick(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull ClickAction clickType) {
+    private static @NotNull InteractionResult onClick(
+        final @NotNull Level level,
+        final @NotNull Player player,
+        final @NotNull InteractionHand hand,
+        final @NotNull ClickAction clickType
+    ) {
 
         // Skip player if they are dead or in spectator mode
         if(player.isSpectator() || player.isDeadOrDying()) return InteractionResult.PASS;
@@ -84,16 +89,22 @@ public final class ClickReceiver extends UtilityClassBase {
      * Handles left and right clicks on contexts.
      * <p>
      * Must be called on AttackEntityCallback and UseEntityCallback events.
-     * @param world The world the player is in.
+     * @param level The level the player is in.
      * @param player The player.
      * @param hand The hand used.
      * @param clickType The type of click (LEFT click or RIGHT click).
      * @param entity The entity.
      * @return FAIL if the player clicked a context, PASS if not.
      */
-    public static @NotNull InteractionResult onClickEntity(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull ClickAction clickType, final @NotNull Entity entity) {
+    public static @NotNull InteractionResult onClickEntity(
+        final @NotNull Level level,
+        final @NotNull Player player,
+        final @NotNull InteractionHand hand,
+        final @NotNull ClickAction clickType,
+        final @NotNull Entity entity
+    ) {
         if(entity instanceof Interaction && entity.hasCustomName() && entity.getCustomName().getString().equals(InteractionBlocker.ENTITY_CUSTOM_NAME)) {
-            return onClick(world, player, hand, clickType);
+            return onClick(level, player, hand, clickType);
         }
         return InteractionResult.PASS;
     }
@@ -105,17 +116,23 @@ public final class ClickReceiver extends UtilityClassBase {
      * Handles left and right clicks on blocks before the interaction blocker is spawned.
      * <p>
      * Must be called on AttackBlockCallback and UseBlockCallback events.
-     * @param world The world the player is in.
+     * @param level The level the player is in.
      * @param player The player.
      * @param hand The hand used.
      * @param clickType The type of click (LEFT click or RIGHT click).
      * @param pos The position of the clicked block.
      * @return FAIL if the player clicked a context, PASS if not.
      */
-    public static @NotNull InteractionResult onClickBlock(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull ClickAction clickType, final @NotNull Vec3i pos) {
+    public static @NotNull InteractionResult onClickBlock(
+        final @NotNull Level level,
+        final @NotNull Player player,
+        final @NotNull InteractionHand hand,
+        final @NotNull ClickAction clickType,
+        final @NotNull Vec3i pos
+    ) {
 
         // Check ray casting result
-        return onClick(world, player, hand, clickType);
+        return onClick(level, player, hand, clickType);
     }
 
 
@@ -125,12 +142,16 @@ public final class ClickReceiver extends UtilityClassBase {
      * Handles right clicks on blocks before the interaction blocker is spawned.
      * <p>
      * Must be called on useItemCallback events.
-     * @param world The world the player is in.
+     * @param level The level the player is in.
      * @param player The player.
      * @param hand The hand used.
      * @return FAIL if the player clicked a context, PASS if not.
      */
-    public static @NotNull InteractionResult onUseItem(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand) {
-        return onClick(world, player, hand, ClickAction.SECONDARY);
+    public static @NotNull InteractionResult onUseItem(
+        final @NotNull Level level,
+        final @NotNull Player player,
+        final @NotNull InteractionHand hand
+    ) {
+        return onClick(level, player, hand, ClickAction.SECONDARY);
     }
 }

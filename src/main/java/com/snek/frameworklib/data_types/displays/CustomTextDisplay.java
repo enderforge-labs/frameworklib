@@ -131,13 +131,13 @@ public class CustomTextDisplay extends CustomDisplay {
 
 
     /**
-     * Creates a new CustomTextDisplay in the specified world.
-     * @param world The world.
+     * Creates a new CustomTextDisplay in the specified level.
+     * @param level The level.
      * @param noTextUnderA26 Whether the text should not be rendered when the opacity is lower than {@code 26},
      *     as opposed to forcing a minimum opacity value.
      */
-    public CustomTextDisplay(final @NotNull Level world, final boolean noTextUnderA26) {
-        super(new TextDisplay(EntityType.TEXT_DISPLAY, world));
+    public CustomTextDisplay(final @NotNull Level level, final boolean noTextUnderA26) {
+        super(new TextDisplay(EntityType.TEXT_DISPLAY, level));
         this.noTextUnderA26 = noTextUnderA26;
     }
 
@@ -152,11 +152,11 @@ public class CustomTextDisplay extends CustomDisplay {
 
 
     /**
-     * Creates a new CustomTextDisplay in the specified world.
-     * @param world The world.
+     * Creates a new CustomTextDisplay in the specified level.
+     * @param level The level.
      */
-    public CustomTextDisplay(final @NotNull Level world) {
-        this(world, true);
+    public CustomTextDisplay(final @NotNull Level level) {
+        this(level, true);
     }
 
 

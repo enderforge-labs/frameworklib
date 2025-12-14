@@ -80,7 +80,7 @@ public abstract class Elm extends Div {
 
 
     // In-world data
-    protected final @NotNull ServerLevel   world;     // The world this Elm will be spawned in
+    protected final @NotNull ServerLevel   level;     // The level this Elm will be spawned in
     private   final @NotNull CustomDisplay entity;    // The display entity held by this element
     private         @NotNull ElmStyle      style;     // The style of the element
     private         boolean isHovered = false;        // Whether the element is being hovered on by a player's crosshair. //! Only valid in Hoverable instances
@@ -148,13 +148,13 @@ public abstract class Elm extends Div {
 
     /**
      * Creates a new Elm using an existing CustomDisplay and a custom style.
-     * @param world The world in which to place the element.
+     * @param level The level in which to place the element.
      * @param entity The display entity.
      * @param style The custom style.
      */
-    protected Elm(final @NotNull ServerLevel world, final @NotNull CustomDisplay entity, final @NotNull ElmStyle style) {
+    protected Elm(final @NotNull ServerLevel level, final @NotNull CustomDisplay entity, final @NotNull ElmStyle style) {
         super();
-        this.world  = world;
+        this.level  = level;
         this.entity = entity;
         this.style  = style;
         this.style.resetAll();
@@ -461,11 +461,11 @@ public abstract class Elm extends Div {
 
 
             // Renew the entity if needed, then prepare the entity, flush style data and spawn it
-            entity.renewEntity(world);
+            entity.renewEntity(level);
             prepareEntityForSpawn(pos);
             getStyle().flagAll();
             flushStyle();
-            entity.spawn(world, pos);
+            entity.spawn(level, pos);
 
 
             // Set the tracking custom name and call Div's spawn
@@ -530,7 +530,7 @@ public abstract class Elm extends Div {
     /**
      * A helper method that finalizes the despawning process.
      * <p>
-     * It resets the tracking name, normalizes the transform and removes the entities from the world.
+     * It resets the tracking name, normalizes the transform and removes the entities from the level.
      */
     public void finalizeDespawn() {
         entity.setCustomName(new Txt("removed").get());

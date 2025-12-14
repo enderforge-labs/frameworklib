@@ -48,31 +48,31 @@ public class PanelElm extends Elm {
 
     /**
      * Creates a new PanelElm using a default style configured with the specified text and overflow behaviour.
-     * @param world The world in which to place the element.
+     * @param level The level in which to place the element.
      * @param defaultAlpha The default alpha value of the style.
      * @param defaultColor The default color of the style.
      */
-    public PanelElm(final @NotNull ServerLevel world, final int defaultAlpha, final @NotNull Vector3i defaultColor) {
-        super(world, new CustomTextDisplay(world), new ConfigurablePanelElmStyle(defaultAlpha, defaultColor));
+    public PanelElm(final @NotNull ServerLevel level, final int defaultAlpha, final @NotNull Vector3i defaultColor) {
+        super(level, new CustomTextDisplay(level), new ConfigurablePanelElmStyle(defaultAlpha, defaultColor));
     }
 
 
     /**
      * Creates a new PanelElm using a custom style.
-     * @param world The world in which to place the element.
+     * @param level The level in which to place the element.
      * @param style The custom style.
      */
-    public PanelElm(final @NotNull ServerLevel world, final @NotNull ElmStyle style) {
-        super(world, new CustomTextDisplay(world), style);
+    public PanelElm(final @NotNull ServerLevel level, final @NotNull ElmStyle style) {
+        super(level, new CustomTextDisplay(level), style);
     }
 
 
     /**
      * Creates a new PanelElm using the default style.
-     * @param world The world in which to place the element.
+     * @param level The level in which to place the element.
      */
-    public PanelElm(final @NotNull ServerLevel world) {
-        super(world, new CustomTextDisplay(world), new PanelElmStyle());
+    public PanelElm(final @NotNull ServerLevel level) {
+        super(level, new CustomTextDisplay(level), new PanelElmStyle());
     }
 
 

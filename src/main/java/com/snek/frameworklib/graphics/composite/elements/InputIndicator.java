@@ -44,25 +44,25 @@ public class InputIndicator extends Div {
      * Creates a new InputIndicator.
      * @param button The button to display.
      */
-    public InputIndicator(final @NotNull ServerLevel world, final @NotNull ClickAction button) {
+    public InputIndicator(final @NotNull ServerLevel level, final @NotNull ClickAction button) {
         super();
         Div e;
 
 
         // Create mouse display element
-        final Div m = addChild(new PanelElm(world, new InputIndicator_MouseButtonDown_S()));
+        final Div m = addChild(new PanelElm(level, new InputIndicator_MouseButtonDown_S()));
         m.setSize(MOUSE_SIZE);
         m.setAlignment(AlignmentX.LEFT, AlignmentY.BOTTOM);
         {
             // Add mouse button
-            e = m.addChild(new PanelElm(world, new InputIndicator_MouseButtonUp_S()));
+            e = m.addChild(new PanelElm(level, new InputIndicator_MouseButtonUp_S()));
             e.setSize(BUTTON_SIZE);
             e.setAlignment(button == ClickAction.PRIMARY ? AlignmentX.LEFT : AlignmentX.RIGHT, AlignmentY.TOP);
         }
 
 
         // Add text element
-        e = addChild(new SimpleTextElm(world, new InputIndicator_Text_S()));
+        e = addChild(new SimpleTextElm(level, new InputIndicator_Text_S()));
         e.setSize(new Vector2f(1 - MOUSE_SIZE.x - BUTTON_TEXT_SPACING, 1f));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
         ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.LEFT);

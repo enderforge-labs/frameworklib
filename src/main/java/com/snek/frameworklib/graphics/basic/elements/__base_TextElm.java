@@ -45,7 +45,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
     public abstract @NotNull CustomTextDisplay getTextDisplay();
 
 
-    // Entity size cache. This represents the actual size the entity has in the world when using the default transform. Measured in blocks
+    // Entity size cache. This represents the actual size the entity has in the level when using the default transform. Measured in blocks
     protected float entitySizeCacheX = 0;
     protected float entitySizeCacheY = 0;
 
@@ -62,12 +62,12 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
     /**
      * Creates a new __base_TextElm using the specified entity.
-     * @param world The world to create the element in.
+     * @param level The level to create the element in.
      * @param entity The entity to use for the new element.
      * @param style The style to use.
      */
-    protected __base_TextElm(final @NotNull ServerLevel world, final @NotNull CustomDisplay entity, final @NotNull ElmStyle style) {
-        super(world, entity, style);
+    protected __base_TextElm(final @NotNull ServerLevel level, final @NotNull CustomDisplay entity, final @NotNull ElmStyle style) {
+        super(level, entity, style);
     }
 
 

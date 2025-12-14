@@ -119,17 +119,17 @@ public abstract class CustomDisplay {
 
 
     /**
-     * Spawns the entity into the world.
-     * @param world The world to spawn the entity in.
+     * Spawns the entity into the level.
+     * @param level The level to spawn the entity in.
      * @param pos The position of the spawned entity.
      */
-    public void spawn(final @NotNull Level world, final @NotNull Vector3d pos) {
+    public void spawn(final @NotNull Level level, final @NotNull Vector3d pos) {
         if(!spawned) {
             spawned = true;
 
-            // Set position and add entity to the world
+            // Set position and add entity to the level
             heldEntity.setPos(pos.x, pos.y, pos.z);
-            world.addFreshEntity(heldEntity);
+            level.addFreshEntity(heldEntity);
         }
     }
 
@@ -140,25 +140,25 @@ public abstract class CustomDisplay {
      * Replaces the held entity with a fresh one, but only if it was despawned at some point in the past.
      * <p>
      * Notice: This method does NOT copy NBT data to the new entity.
-     * @param world The world to spawn the new entity in.
+     * @param level The level to spawn the new entity in.
      */
-    public void renewEntity(final Level world) {
+    public void renewEntity(final Level level) {
         if(heldEntity.isRemoved()) {
             if(heldEntity instanceof TextDisplay) {
-                heldEntity = new TextDisplay(EntityType.TEXT_DISPLAY, world);
+                heldEntity = new TextDisplay(EntityType.TEXT_DISPLAY, level);
             }
             else if(heldEntity instanceof ItemDisplay) {
-                heldEntity = new ItemDisplay(EntityType.ITEM_DISPLAY, world);
+                heldEntity = new ItemDisplay(EntityType.ITEM_DISPLAY, level);
             }
             else if(heldEntity instanceof BlockDisplay) {
-                heldEntity = new BlockDisplay(EntityType.BLOCK_DISPLAY, world);
+                heldEntity = new BlockDisplay(EntityType.BLOCK_DISPLAY, level);
             }
         }
     }
 
 
     /**
-     * Removes the entity from the world.
+     * Removes the entity from the level.
      */
     public void despawn() {
         if(spawned) {

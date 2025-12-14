@@ -32,38 +32,38 @@ public abstract class FancyButtonElm extends FancyTextElm implements Clickable, 
 
     /**
      * Creates a new FancyButtonElm using a custom style.
-     * @param world The world in which to place the element
+     * @param level The level in which to place the element
      * @param lmbActionName The name of the action associated with left clicks.
      * @param rmbActionName The name of the action associated with right clicks.
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      * @param style The custom style.
      */
     protected FancyButtonElm(
-        final @NotNull ServerLevel world,
+        final @NotNull ServerLevel level,
         final @Nullable String lmbActionName,
         final @Nullable String rmbActionName,
         final int clickCooldown,
         final FancyButtonElmStyle style
     ) {
-        super(world, style);
+        super(level, style);
         base = new __base_ButtonElm(lmbActionName, rmbActionName, clickCooldown);
     }
 
 
     /**
      * Creates a new FancyButtonElm using the default style.
-     * @param world The world in which to place the element.
+     * @param level The level in which to place the element.
      * @param lmbActionName The name of the action associated with left clicks.
      * @param rmbActionName The name of the action associated with right clicks.
      * @param lickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      */
     protected FancyButtonElm(
-        final @NotNull ServerLevel world,
+        final @NotNull ServerLevel level,
         final @Nullable String lmbActionName,
         final @Nullable String rmbActionName,
         final int clickCooldown
     ) {
-        this(world, lmbActionName, rmbActionName, clickCooldown, new FancyButtonElmStyle());
+        this(level, lmbActionName, rmbActionName, clickCooldown, new FancyButtonElmStyle());
     }
 
 

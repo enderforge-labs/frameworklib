@@ -31,8 +31,8 @@ public class ElmStyle {
 
     // Animations
     private @NotNull Flagged<@Nullable Animation>         primerAnimation  = null;   // The animation used to prepare the element to receive the spawning animation. Applied instantly.
-    private @NotNull Flagged<@Nullable Animation>         spawnAnimation   = null;   // The spawning animation. Played when the entity is spawned into the world
-    private @NotNull Flagged<@Nullable Animation>         despawnAnimation = null;   // The despawning animation. Played before the entity is removed from the world
+    private @NotNull Flagged<@Nullable Animation>         spawnAnimation   = null;   // The spawning animation. Played when the entity is spawned into the level
+    private @NotNull Flagged<@Nullable Animation>         despawnAnimation = null;   // The despawning animation. Played before the entity is removed from the level
 
 
 

@@ -37,38 +37,38 @@ public abstract class TextInputElm extends FancyButtonElm {
 
     /**
      * Creates a new TextInputElm using a custom style.
-     * @param world The world in which to place the element.
+     * @param level The level in which to place the element.
      * @param lmbActionName The name of the action associated with left clicks.
      * @param rmbActionName The name of the action associated with right clicks.
      * @param clickFeedbackMessage The message to show to the player when they click the element.
      * @param style The custom style.
      */
     protected TextInputElm(
-        final @NotNull ServerLevel world,
+        final @NotNull ServerLevel level,
         final @Nullable String lmbActionName,
         final @Nullable String rmbActionName,
         final @Nullable Component clickFeedbackMessage,
         final @NotNull TextInputElmStyle style
     ) {
-        super(world, lmbActionName, rmbActionName, 1, style);
+        super(level, lmbActionName, rmbActionName, 1, style);
         this.clickFeedbackMessage = clickFeedbackMessage;
     }
 
 
     /**
      * Creates a new TextInputElm using the default style.
-     * @param world The world in which to place the element.
+     * @param level The level in which to place the element.
      * @param lmbActionName The name of the action associated with left clicks.
      * @param rmbActionName The name of the action associated with right clicks.
      * @param clickFeedbackMessage The message to show to the player when they click the element.
      */
     protected TextInputElm(
-        final @NotNull ServerLevel world,
+        final @NotNull ServerLevel level,
         final @Nullable String lmbActionName,
         final @Nullable String rmbActionName,
         final @Nullable Component clickFeedbackMessage
     ) {
-        this(world, lmbActionName, rmbActionName, clickFeedbackMessage, new TextInputElmStyle());
+        this(level, lmbActionName, rmbActionName, clickFeedbackMessage, new TextInputElmStyle());
     }
 
 

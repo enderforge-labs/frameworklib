@@ -25,19 +25,19 @@ public class CanvasBorder extends PanelElm {
 
     /**
      * Creates a new HudBorder using a custom style.
-     * @param world The world to create the element in.
+     * @param level The level to create the element in.
      * @param style The style.
      */
-    public CanvasBorder(final @NotNull ServerLevel world, final @NotNull CanvasBorder_S style) {
-        super(world, style);
+    public CanvasBorder(final @NotNull ServerLevel level, final @NotNull CanvasBorder_S style) {
+        super(level, style);
     }
 
 
     /**
      * Creates a new HudBorder using the default style.
-     * @param world The world to create the element in.
+     * @param level The level to create the element in.
      */
-    public CanvasBorder(final @NotNull ServerLevel world) {
-        this(world, new CanvasBorder_S());
+    public CanvasBorder(final @NotNull ServerLevel level) {
+        this(level, new CanvasBorder_S());
     }
 }

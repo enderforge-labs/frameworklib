@@ -58,38 +58,38 @@ public non-sealed class FancyTextElm extends __base_TextElm {
 
     /**
      * Creates a new FancyTextElm using a default style configured with the specified text and overflow behaviour.
-     * @param world The world in which to place the element.
+     * @param level The level in which to place the element.
      * @param defaultText The default text of the style.
      * @param defaultOverflowBehaviour The default overflow behaviour of the style.
      */
     public FancyTextElm(
-        final @NotNull ServerLevel world,
+        final @NotNull ServerLevel level,
         final @NotNull Component defaultText,
         final @NotNull TextAlignment defaultTextAlignment,
         final @NotNull TextOverflowBehaviour defaultOverflowBehaviour
     ) {
-        super(world, new CustomTextDisplay(world), new ConfigurableFancyTextElmStyle(defaultText, defaultTextAlignment, defaultOverflowBehaviour));
-        text = new CustomTextDisplay(world);
+        super(level, new CustomTextDisplay(level), new ConfigurableFancyTextElmStyle(defaultText, defaultTextAlignment, defaultOverflowBehaviour));
+        text = new CustomTextDisplay(level);
     }
 
 
     /**
      * Creates a new FancyTextElm using a custom style.
-     * @param world The world in which to place the element.
+     * @param level The level in which to place the element.
      * @param style The custom style.
      */
-    public FancyTextElm(final @NotNull ServerLevel world, final @NotNull ElmStyle style) {
-        super(world, new CustomTextDisplay(world), style);
-        text = new CustomTextDisplay(world);
+    public FancyTextElm(final @NotNull ServerLevel level, final @NotNull ElmStyle style) {
+        super(level, new CustomTextDisplay(level), style);
+        text = new CustomTextDisplay(level);
     }
 
 
     /**
      * Creates a new FancyTextElm using the default style.
-     * @param world The world in which to place the element.
+     * @param level The level in which to place the element.
      */
-    public FancyTextElm(final @NotNull ServerLevel world) {
-        this(world, new FancyTextElmStyle());
+    public FancyTextElm(final @NotNull ServerLevel level) {
+        this(level, new FancyTextElmStyle());
     }
 
 
@@ -300,7 +300,7 @@ public non-sealed class FancyTextElm extends __base_TextElm {
         super.spawn(pos, animate);
 
         // Spawn foreground entity
-        getFgEntity().spawn(world, pos);
+        getFgEntity().spawn(level, pos);
 
         // Set tracking custom name to foreground entity
         //! Name must be set after spawning as entities that load in with the tracking name are purged

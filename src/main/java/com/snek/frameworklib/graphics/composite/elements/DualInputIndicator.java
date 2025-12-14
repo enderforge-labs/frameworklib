@@ -35,19 +35,19 @@ public class DualInputIndicator extends Div implements InputIndicatorCanvas {
     /**
      * Creates a new DualInputIndicator.
      */
-    public DualInputIndicator(final @NotNull ServerLevel world) {
+    public DualInputIndicator(final @NotNull ServerLevel level) {
         Div e;
 
 
         // Add left click display
-        e = addChild(new InputIndicator(world, ClickAction.PRIMARY));
+        e = addChild(new InputIndicator(level, ClickAction.PRIMARY));
         e.setSize(INDICATOR_SIZE);
         e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
         lmbIndicator = (InputIndicator)e;
 
 
         // Add right click display
-        e = addChild(new InputIndicator(world, ClickAction.SECONDARY));
+        e = addChild(new InputIndicator(level, ClickAction.SECONDARY));
         e.setSize(INDICATOR_SIZE);
         e.setAlignment(AlignmentX.CENTER, AlignmentY.BOTTOM);
         rmbIndicator = (InputIndicator)e;

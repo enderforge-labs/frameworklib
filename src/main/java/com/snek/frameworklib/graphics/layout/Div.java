@@ -39,7 +39,7 @@ import net.minecraft.world.inventory.ClickAction;
 /**
  * The most basic graphic element. It can contain and manage any amount of elements.
  * <p>
- * By default, divs are invisible and don't exist in the minecraft world nor on the client.
+ * By default, divs are invisible and don't exist in the minecraft level nor on the client.
  * They have a 2D size, a 2D position and alignment options.
  */
 public class Div {
@@ -330,7 +330,7 @@ public class Div {
 
 
     /**
-     * Spawns the element and its associated entities into the world.
+     * Spawns the element and its associated entities into the level.
      * @param pos The position of the spawned entities.
      * @param animate Whether to animate the element.
      *     Using {@code animate = false} will still apply the primer and spawning animations,
@@ -350,7 +350,7 @@ public class Div {
 
 
     /**
-     * Removes the element and its associated entities from the world.
+     * Removes the element and its associated entities from the level.
      * @param animate Whether to display despawn animations. Using {@code animate=false} will despawn the entities immediately.
      */
     public void despawn(final boolean animate) {

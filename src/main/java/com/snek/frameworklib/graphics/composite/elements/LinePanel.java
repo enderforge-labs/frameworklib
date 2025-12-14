@@ -31,8 +31,8 @@ public final class LinePanel extends PanelElm {
     final Vector2f absPosOg = new Vector2f();
 
 
-    public LinePanel(final @NotNull ServerLevel world) {
-        super(world, new LinePanelStyle());
+    public LinePanel(final @NotNull ServerLevel level) {
+        super(level, new LinePanelStyle());
         if(
             Clickable .class.isAssignableFrom(getClass()) ||
             Scrollable.class.isAssignableFrom(getClass()) ||

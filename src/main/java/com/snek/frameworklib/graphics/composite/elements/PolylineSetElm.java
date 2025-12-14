@@ -37,7 +37,7 @@ public class PolylineSetElm extends Div {
      * Creates a new PolylineSetElm.
      * @param polylines The list of polylines.
      */
-    public PolylineSetElm(ServerLevel world, final @NotNull PolylineData... polylines) {
+    public PolylineSetElm(ServerLevel level, final @NotNull PolylineData... polylines) {
         super();
 
         // Create lines and add them to the children list
@@ -47,7 +47,7 @@ public class PolylineSetElm extends Div {
             for(int i = 0; i < points.size() - 1; ++i) {
                 final Vector2f a = points.get(i);
                 final Vector2f b = points.get(i + 1);
-                createLine(world, l, a, b, previousLen);
+                createLine(level, l, a, b, previousLen);
                 previousLen += a.distance(b);
             }
         }
@@ -58,13 +58,13 @@ public class PolylineSetElm extends Div {
 
     /**
      * Creates a new line and adds it to this element's children.
-     * @param world The world to spawn the display entities in.
+     * @param level The level to spawn the display entities in.
      * @param l The polyline data that specifies color, opacity and width.
      * @param a The first point of the line.
      * @param b The second point of the line.
      * @param previousLen The total length of the lines that precede this line.
      */
-    private void createLine(final @NotNull ServerLevel world, final @NotNull PolylineData l, final @NotNull Vector2f a, final @NotNull Vector2f b, final float previousLen) {
+    private void createLine(final @NotNull ServerLevel level, final @NotNull PolylineData l, final @NotNull Vector2f a, final @NotNull Vector2f b, final float previousLen) {
 
         // Calculate the normalized direction of the line and add the new point positions taking into account the edge value
         final Vector2f normal = b.sub(a, new Vector2f()).normalize(new Vector2f());
@@ -80,7 +80,7 @@ public class PolylineSetElm extends Div {
 
 
         // Create the panel and set its size and position
-        final LinePanel e = (LinePanel)addChild(new LinePanel(world));      // Create the panel
+        final LinePanel e = (LinePanel)addChild(new LinePanel(level));      // Create the panel
         e.setSize(new Vector2f(len, l.getWidth()));                         // Set the size to match the line's length and width
         e.setPos(                                                           // Set the position
             new Vector2f(_a)                                                     // Start by moving the origin (center of lower edge) the first point

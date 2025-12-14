@@ -149,7 +149,7 @@ public abstract sealed class Context permits HudContext, UiContext {
     public abstract void changeCanvas(final @NotNull Canvas canvas);
     protected final void finalizeCanvasChange(final @NotNull Canvas newCanvas) {
 
-        // Set new active canvas and spawn canvas into the world
+        // Set new active canvas and spawn canvas into the level
         activeCanvas = newCanvas;
         newCanvas.spawn(getSpawnPos(), true);
     }

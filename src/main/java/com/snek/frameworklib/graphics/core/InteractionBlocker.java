@@ -71,18 +71,18 @@ public class InteractionBlocker {
 
     // In-world data
     private final @NotNull Interaction entity;
-    private final @NotNull Level world;
+    private final @NotNull Level level;
 
 
 
 
     /**
      * Creates a new InteractionBlocker.
-     * @param world The world to create this interaction in.
+     * @param level The level to create this interaction in.
      */
-    public InteractionBlocker(final @NotNull Level world, final float w, final float h) {
-        this.world = world;
-        entity = new Interaction(EntityType.INTERACTION, world);
+    public InteractionBlocker(final @NotNull Level level, final float w, final float h) {
+        this.level = level;
+        entity = new Interaction(EntityType.INTERACTION, level);
         Utils.invokeSafe(method_setWidth,  entity, w);
         Utils.invokeSafe(method_setHeight, entity, h);
     }
@@ -98,9 +98,9 @@ public class InteractionBlocker {
      */
     public static void onEntityLoad(@NotNull Entity entity) {
         if(entity instanceof Interaction) {
-            final Level world = entity.level();
+            final Level level = entity.level();
             if(
-                world != null &&
+                level != null &&
                 entity.hasCustomName() &&
                 entity.getCustomName().getString().equals(ENTITY_CUSTOM_NAME)
             ) {
@@ -113,13 +113,13 @@ public class InteractionBlocker {
 
 
     /**
-     * Spawns the interaction entity into the world.
+     * Spawns the interaction entity into the level.
      * @param pos The coordinates at which to spawn the entity.
      */
     public void spawn(final @NotNull Vector3d pos) {
 
         // Spawn the entity, move it to the specified coords and set a temporary name to allow the command to recognize it
-        world.addFreshEntity(entity);
+        level.addFreshEntity(entity);
         entity.setPos(pos.x, pos.y, pos.z);
         entity.setCustomNameVisible(false);
         entity.setCustomName(new Txt(ENTITY_CUSTOM_NAME_UNINITIALIZED).get());
@@ -174,7 +174,7 @@ public class InteractionBlocker {
 
 
     /**
-     * Removes the interaction entity from the world
+     * Removes the interaction entity from the level
      */
     public void despawn() {
         Scheduler.schedule(DESPAWN_DELAY, () -> {
