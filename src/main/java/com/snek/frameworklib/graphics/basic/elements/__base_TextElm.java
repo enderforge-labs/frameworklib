@@ -1,6 +1,7 @@
 package com.snek.frameworklib.graphics.basic.elements;
 
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.frameworklib.data_types.animations.Transform;
@@ -102,7 +103,8 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
         // Calculate line height
         final int lineNum = lines.length;
-        entitySizeCacheY = (lineNum == 1 ? 0f : lineNum - 1) * 2 + lineNum * (float)FontSize.getHeight();
+        // entitySizeCacheY = (lineNum == 1 ? 0f : lineNum - 1) * 2 + lineNum * (float)FontSize.getHeight();
+        entitySizeCacheY = lineNum * (float)FontSize.getHeight();
     }
 
 
@@ -300,11 +302,13 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
     @Override
     public void updateAbsSizeSelf() {
         super.updateAbsSizeSelf();
+        // updateTotTextSizeCache(); //TODO
         updateOverflowBehaviour();
     }
     @Override
     public void updateAbsSizeInverseSelf() {
         super.updateAbsSizeInverseSelf();
+        // updateTotTextSizeCache(); //TODO
         updateOverflowBehaviour();
     }
 

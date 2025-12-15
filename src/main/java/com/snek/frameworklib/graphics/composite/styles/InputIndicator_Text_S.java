@@ -16,7 +16,6 @@ import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
  * The style of the InputIndicatorText UI element.
  */
 public class InputIndicator_Text_S extends SimpleTextElmStyle {
-    public static final float Y_ADJUSTMENT = -0.01f; //! Workaround for the height issues
 
 
     /**
@@ -29,6 +28,6 @@ public class InputIndicator_Text_S extends SimpleTextElmStyle {
 
     @Override
     public @NotNull Transform getDefaultTransform() {
-        return super.getDefaultTransform().scale(0.5f).moveY(Y_ADJUSTMENT);
+        return super.getDefaultTransform().scale(0.5f);
     }
 }
