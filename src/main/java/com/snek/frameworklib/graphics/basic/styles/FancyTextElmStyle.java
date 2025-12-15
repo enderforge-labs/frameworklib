@@ -8,6 +8,7 @@ import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
+import com.snek.frameworklib.graphics.basic.elements.FancyTextElm;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.utils.Easings;
 
@@ -33,6 +34,14 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
      */
     public FancyTextElmStyle() {
         super();
+    }
+
+
+
+
+    @Override
+    public @NotNull Transform getDefaultTransform() {
+        return new Transform();
     }
 
 
@@ -90,7 +99,7 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
 
     public @NotNull Vector3i  getDefaultBgColor    () { return new Vector3i(20, 2, 20); }
     public          int       getDefaultBgAlpha    () { return 130; }
-    public @NotNull Transform getDefaultTransformFg() { return new Transform(); }
+    public @NotNull Transform getDefaultTransformFg() { return new Transform().scale(DEFAULT_TEXT_SCALE); }
     public @NotNull Transform getDefaultTransformBg() { return new Transform(); }
 
 
