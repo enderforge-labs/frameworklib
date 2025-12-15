@@ -67,12 +67,6 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
 
 
     @Override
-    public @NotNull Transform getDefaultTransform () {
-        return new Transform();
-    }
-
-
-    @Override
     public void resetAll() {
         resetBgColor();
         resetBgAlpha();

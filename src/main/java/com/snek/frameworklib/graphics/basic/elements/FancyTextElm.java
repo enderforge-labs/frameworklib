@@ -113,7 +113,6 @@ public non-sealed class FancyTextElm extends __base_TextElm {
             initialTransform.copy()
             .apply(getThisStyle().getTransformFg())
             .moveZ((getZIndex() + 1) * Configs.getUi().z_layer_spacing.getValue())
-            .scale(SimpleTextElmStyle.DEFAULT_TEXT_SCALE)
         ;
     }
 
