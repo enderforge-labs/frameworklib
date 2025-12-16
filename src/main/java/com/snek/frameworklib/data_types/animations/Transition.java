@@ -50,6 +50,16 @@ public class Transition {
 
 
     /**
+     * Creates a copy of the provided Transition.
+     * @param t The transition to copy.
+     */
+    public Transition(final @NotNull Transition t) {
+        this(t.getDuration(), t.getEasing());
+        d = new InterpolatedData(t.d);
+    }
+
+
+    /**
      * Creates a new Transition with 0 duration and linear easing.
      */
     public Transition() {

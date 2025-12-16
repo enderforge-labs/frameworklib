@@ -75,11 +75,20 @@ public class Transform {
 
 
     /**
+     * Creates a copy of the provided Transform.
+     * @param t The transform to copy.
+     */
+    public Transform(final @NotNull Transform t) {
+        this(t.getPos(), t.getRot(), t.getScale(), t.getGlobalRot());
+    }
+
+
+    /**
      * Creates a new Transform.
      * @param pos The translation.
      * @param lrot The local rotation.
      * @param scale The scale.
-     * @param gRot The global rotation
+     * @param gRot The global rotation.
      */
     public Transform(final @NotNull Vector3f pos, final @NotNull Quaternionf lrot, final @NotNull Vector3f scale, final @NotNull Quaternionf gRot) {
         _pos   = new Vector3f   (pos);

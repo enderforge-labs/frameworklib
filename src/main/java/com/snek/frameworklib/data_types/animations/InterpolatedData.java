@@ -56,6 +56,16 @@ public class InterpolatedData {
 
 
     /**
+     * Creates a copy of the provided InterpolatedData.
+     * @param d The InterpolatedData to copy.
+     */
+    public InterpolatedData(final @NotNull InterpolatedData d) {
+        this(d.transform, d.bgColor, d.bgAlpha, d.opacity, d.transformFg, d.transformBg);
+    }
+
+
+
+    /**
      * Creates a new InterpolatedData.
      * <p>
      * Notice: {@code transformFg} and {@code transformBg} are only used by elements that have distinct background and foreground.
@@ -75,13 +85,15 @@ public class InterpolatedData {
         final @Nullable Transform transformFg,
         final @Nullable Transform transformBg
     ) {
-        this.transform   = transform;
-        this.bgColor     = bgColor;
+        this.transform   = new Transform(transform);
+        this.bgColor     = new Vector3i(bgColor);
         this.bgAlpha     = bgAlpha;
         this.opacity     = opacity;
-        this.transformFg = transformFg;
-        this.transformBg = transformBg;
+        this.transformFg = new Transform(transformFg);
+        this.transformBg = new Transform(transformBg);
     }
+
+
 
 
     /**

@@ -28,7 +28,7 @@ public class Animation {
     public Animation(final @NotNull Transition... transitions) {
         int _totalDuration = 0;
         for(final Transition t : transitions) {
-            this.transitions.add(t);
+            this.transitions.add(new Transition(t));
             _totalDuration += t.getDuration();
         }
 
