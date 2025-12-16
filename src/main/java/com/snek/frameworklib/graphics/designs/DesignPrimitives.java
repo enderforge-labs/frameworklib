@@ -13,7 +13,6 @@ import com.snek.frameworklib.utils.UtilityClassBase;
 
 
 
-
 public final class DesignPrimitives extends UtilityClassBase {
     public static @NotNull List<@NotNull Vector2f> createCircle(final float radius, final boolean close) {
         final @NotNull List<@NotNull Vector2f> r = new ArrayList<>(close ? 9 : 8);
@@ -23,7 +22,9 @@ public final class DesignPrimitives extends UtilityClassBase {
                 (float)Math.toRadians(45) * (i + 0.5f)
             ));
         }
-        r.add(r.get(0));
+        if(close) {
+            r.add(new Vector2f(r.get(0)));
+        }
         return r;
     }
     public static final @NotNull List<@NotNull Vector2f> createCircle(final float radius) {

@@ -158,6 +158,7 @@ public class PolylineData {
 
 
 
+//FIXME rotating is broken
     public @NotNull PolylineData transform(
         final float shiftX,   final float shiftY,
         final float stretchX, final float stretchY,
