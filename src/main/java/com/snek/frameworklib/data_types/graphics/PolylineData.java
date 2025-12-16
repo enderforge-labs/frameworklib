@@ -3,13 +3,14 @@ package com.snek.frameworklib.data_types.graphics;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 import org.joml.Vector3i;
+
+import com.snek.frameworklib.utils.Txt;
 
 
 
@@ -22,6 +23,11 @@ import org.joml.Vector3i;
  * Represents the data of a multi-segment line.
  */
 public class PolylineData {
+
+    // Constants
+    public static final @NotNull Vector3i DEFAULT_COLOR = new Vector3i(Txt.COLOR_WHITE);
+    public static final          int      DEFAULT_ALPHA = 255;
+    public static final          float    DEFAULT_WIDTH = 0.15f;
 
     // Data
     private @NotNull Vector3i color;
@@ -112,5 +118,39 @@ public class PolylineData {
                 Arrays.stream(points)
             ).collect(Collectors.toList())
         );
+    }
+
+
+
+
+    /**
+     * Creates a new PolylineData using the specified points and default color, alpha, and line width.
+     * @param edge  The additional width to add on each end of each line
+     * @param points The list of points.
+     */
+    public PolylineData(
+        final float edge,
+        final @NotNull List<Vector2f> points
+    ) {
+        this(DEFAULT_COLOR, DEFAULT_ALPHA, DEFAULT_WIDTH, edge, points);
+    }
+
+
+
+
+    /**
+     * Creates a new PolylineData using the specified points and default color, alpha, and line width.
+     * @param edge  The additional width to add on each end of each line
+     * @param point1 The coordinates of the first point of the line.
+     * @param point2 The coordinates of the second point of the line.
+     * @param points An optional list of coordinates for additional points.
+     */
+    public PolylineData(
+        final float edge,
+        final @NotNull Vector2f point1,
+        final @NotNull Vector2f point2,
+        final @NotNull Vector2f... points
+    ) {
+        this(DEFAULT_COLOR, DEFAULT_ALPHA, DEFAULT_WIDTH, edge, point1, point2, points);
     }
 }
