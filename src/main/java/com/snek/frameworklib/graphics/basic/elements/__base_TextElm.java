@@ -333,13 +333,11 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
     @Override
     public void updateAbsSizeSelf() {
         super.updateAbsSizeSelf();
-        // updateTotTextSizeCache(); //TODO prob not needed
         updateOverflowBehaviour();
     }
     @Override
     public void updateAbsSizeInverseSelf() {
         super.updateAbsSizeInverseSelf();
-        // updateTotTextSizeCache(); //TODO prob not needed
         updateOverflowBehaviour();
     }
 

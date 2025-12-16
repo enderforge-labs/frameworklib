@@ -60,9 +60,9 @@ public final class __base_ButtonElm {
 
 
     /**
-     * Shared override of despawn from Elm
+     * Shared override of finalizeDespawn from Elm
      */
-    protected void despawn(final @NotNull Elm _this, final @Nullable Animation hoverPrimerAanimation) {
+    protected void finalizeDespawn(final @NotNull Elm _this, final @Nullable Animation hoverPrimerAanimation) {
         if(hoverPrimerAanimation != null) {
             _this.applyAnimationNow(new Animation(hoverPrimerAanimation).invert());
         }

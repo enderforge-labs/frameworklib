@@ -79,9 +79,9 @@ public abstract class SimpleButtonElm extends PanelElm implements Clickable, Hov
 
 
     @Override
-    public void despawn(final boolean animate) {
-        base.despawn(this, getThisStyle().getHoverPrimerAnimation());
-        super.despawn(animate);
+    public void finalizeDespawn() {
+        super.finalizeDespawn();
+        base.finalizeDespawn(this, getThisStyle().getHoverPrimerAnimation());
     }
 
 
