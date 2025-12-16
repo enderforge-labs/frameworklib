@@ -46,10 +46,10 @@ public class PolylineData {
     public float                            getTotLen() { return totLen; }
 
     // Setters
-    public void setColor (@NotNull Vector3i color) { this.color = new Vector3i(color); }
-    public void setAlpha (int               alpha) { this.alpha = alpha; }
-    public void setWidth (float             width) { this.width = width; }
-    public void setEdge  (float              edge) { this.edge  = edge;  }
+    public @NotNull PolylineData withColor(@NotNull Vector3i color) { this.color = new Vector3i(color); return this; }
+    public @NotNull PolylineData withAlpha(int               alpha) { this.alpha = alpha;               return this; }
+    public @NotNull PolylineData withWidth(float             width) { this.width = width;               return this; }
+    public @NotNull PolylineData withEdge (float              edge) { this.edge  = edge;                return this; }
 
 
 
