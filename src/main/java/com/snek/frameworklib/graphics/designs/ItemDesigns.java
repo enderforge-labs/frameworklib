@@ -13,7 +13,7 @@ import com.snek.frameworklib.utils.UtilityClassBase;
 
 
 
-public final class ObjectDesigns extends UtilityClassBase {
+public final class ItemDesigns extends UtilityClassBase {
     public static final @NotNull PolylineData[] MagnifyingGlass = {
         new PolylineData(0.05f,
             new Vector2f(0.7f, 0.3f),
