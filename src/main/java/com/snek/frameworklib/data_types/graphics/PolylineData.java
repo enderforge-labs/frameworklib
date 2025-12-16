@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 import org.joml.Vector3i;
 
+import com.snek.frameworklib.utils.GeometryUtils;
 import com.snek.frameworklib.utils.Txt;
 
 
@@ -152,5 +153,76 @@ public class PolylineData {
         final @NotNull Vector2f... points
     ) {
         this(DEFAULT_COLOR, DEFAULT_ALPHA, DEFAULT_WIDTH, edge, point1, point2, points);
+    }
+
+
+
+
+
+
+
+    public @NotNull PolylineData transform(
+        final float shiftX, float shiftY,
+        final float stretchX, float stretchY,
+        final float rotate
+    ) {
+        for(final Vector2f p : points) {
+            p.add(
+                GeometryUtils.rotateVec2(
+                    new Vector2f(
+                        (p.x + shiftX) * stretchX,
+                        (p.y + shiftY) * stretchY
+                    ),
+                    rotate
+                )
+            );
+        }
+        return this;
+    }
+
+
+
+
+    public @NotNull PolylineData shift(final float amountX, final float amountY) {
+        return transform(amountX, amountY, 1, 1, 0);
+    }
+    public @NotNull PolylineData shiftX(final float amount) {
+        return transform(amount, 0, 1, 1, 0);
+    }
+    public @NotNull PolylineData shiftY(final float amount) {
+        return transform(0, amount, 1, 1, 0);
+    }
+
+
+
+
+    public @NotNull PolylineData stretch(final float amountX, final float amountY) {
+        return transform(0, 0, amountX, amountY, 0);
+    }
+    public @NotNull PolylineData stretchX(final float amount) {
+        return transform(0, 0, amount, 1, 0);
+    }
+    public @NotNull PolylineData stretchY(final float amount) {
+        return transform(0, 0, 1, amount, 0);
+    }
+
+
+
+
+    public @NotNull PolylineData flipXY() {
+        return stretch(-1, -1);
+    }
+    public @NotNull PolylineData flipX() {
+        return stretchX(-1);
+    }
+    public @NotNull PolylineData flipY() {
+        return stretchY(-1);
+    }
+
+
+
+
+    public @NotNull PolylineData rotate(final float amount) {
+        return transform(0, 0, 1, 1, amount);
     }
 }
