@@ -51,12 +51,6 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
     // Core data
     protected final @NotNull Context context;
 
-    // Layout
-    public static final float SQUARE_BUTTON_SIZE = 0.12f; //TODO move back to shops mod
-    public static final float BOTTOM_ROW_SPACING      = 0.04f; //TODO move back to shops mod
-    public static final float BOTTOM_ROW_SHIFT        = SQUARE_BUTTON_SIZE + BOTTOM_ROW_SPACING; //TODO move back to shops mod
-    public static final float BOTTOM_ROW_CONTENT_SIZE = 0.6f; //TODO move back to shops mod
-
     // Animation
     public static final int SPAWN_SIZE_TIME      = 8;
     public static final int CANVAS_ROTATION_TIME = 8;
