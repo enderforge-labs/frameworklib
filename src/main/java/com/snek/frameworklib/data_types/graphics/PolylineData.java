@@ -158,12 +158,9 @@ public class PolylineData {
 
 
 
-
-
-
     public @NotNull PolylineData transform(
-        final float shiftX, float shiftY,
-        final float stretchX, float stretchY,
+        final float shiftX,   final float shiftY,
+        final float stretchX, final float stretchY,
         final float rotate
     ) {
         for(final Vector2f p : points) {
@@ -183,38 +180,97 @@ public class PolylineData {
 
 
 
+    /**
+     * Shifts the lines.
+     * @param amountX The amount to shift the lines by along the X axis.
+     * @param amountY The amount to shift the lines by along the y axis.
+     * @return {@code this}.
+     */
     public @NotNull PolylineData shift(final float amountX, final float amountY) {
         return transform(amountX, amountY, 1, 1, 0);
     }
+
+    /**
+     * Shifts the lines along the X axis.
+     * @param amount The amount to shift the lines by.
+     * @return {@code this}.
+     */
     public @NotNull PolylineData shiftX(final float amount) {
-        return transform(amount, 0, 1, 1, 0);
+        return shift(amount, 0);
     }
+
+    /**
+     * Shifts the lines along the Y axis.
+     * @param amount The amount to shift the lines by.
+     * @return {@code this}.
+     */
     public @NotNull PolylineData shiftY(final float amount) {
-        return transform(0, amount, 1, 1, 0);
+        return shift(0, amount);
     }
 
 
 
 
+
+    /**
+     * Stretches or shrinks the lines, using the center of the design (0.5, 0.5) as origin.
+     * @param amountX The amount of stretching on the X asis.
+     *     Values between -0.5 and 0.5 shrink the design.
+     *     Negative values flip the design.
+     * @param amountY The amount of stretching on the Y axis.
+     *     Values between -0.5 and 0.5 shrink the design.
+     *     Negative values flip the design.
+     * @return {@code this}.
+     */
     public @NotNull PolylineData stretch(final float amountX, final float amountY) {
-        return transform(0, 0, amountX, amountY, 0);
+        return transform(-0.5f, -0.5f, amountX, amountY, 0).shift(0.5f, 0.5f);
     }
+
+    /**
+     * Stretches or shrinks the lines along the X axis, using the center of the design (0.5, 0.5) as origin.
+     * @param amount The amount of stretching.
+     *     Values between -0.5 and 0.5 shrink the design.
+     *     Negative values flip the design.
+     * @return {@code this}.
+     */
     public @NotNull PolylineData stretchX(final float amount) {
-        return transform(0, 0, amount, 1, 0);
+        return stretch(amount, 1);
     }
+
+    /**
+     * Stretches or shrinks the lines along the Y axis, using the center of the design (0.5, 0.5) as origin.
+     * @param amount The amount of stretching.
+     *     Values between -0.5 and 0.5 shrink the design.
+     *     Negative values flip the design.
+     * @return {@code this}.
+     */
     public @NotNull PolylineData stretchY(final float amount) {
-        return transform(0, 0, 1, amount, 0);
+        return stretch(1, amount);
     }
 
 
 
 
+    /**
+     * Flips the lines along the X and Y axes, using the center of the design(0.5, 0.5) as origin.
+     * @return {@code this}.
+     */
     public @NotNull PolylineData flipXY() {
         return stretch(-1, -1);
     }
+
+    /**
+     * Flips the lines along the X axis, using the center of the design(0.5, 0.5) as origin.
+     * @return {@code this}.
+     */
     public @NotNull PolylineData flipX() {
         return stretchX(-1);
     }
+
+    /**
+     * Flips the lines along the X axis, using the center of the design(0.5, 0.5) as origin.
+     * @return {@code this}.
+     */
     public @NotNull PolylineData flipY() {
         return stretchY(-1);
     }
@@ -222,6 +278,11 @@ public class PolylineData {
 
 
 
+    /**
+     * Rotates the lines around the origin (0, 0)
+     * @param amount The angle, in radians.
+     * @return {@code this}.
+     */
     public @NotNull PolylineData rotate(final float amount) {
         return transform(0, 0, 1, 1, amount);
     }
@@ -229,6 +290,10 @@ public class PolylineData {
 
 
 
+    /**
+     * Creates a deep copy of this data.
+     * @return A copy of this data.
+     */
     public @NotNull PolylineData copy() {
         return new PolylineData(color, alpha, width, edge, points);
     }
