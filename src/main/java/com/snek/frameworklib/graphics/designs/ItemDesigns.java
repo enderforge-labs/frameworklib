@@ -136,7 +136,7 @@ public final class ItemDesigns extends UtilityClassBase {
             new Vector2f(1.0f, 0.0f)
         ),
         new PolylineData(0.03f,
-            DesignPrimitives.createCircle(0.02f)
+            DesignPrimitives.createCircle(0.2f)
         ).shift(0.5f, 0.85f)
     };
 }
