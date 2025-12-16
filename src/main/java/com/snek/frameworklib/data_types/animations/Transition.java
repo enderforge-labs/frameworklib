@@ -23,7 +23,7 @@ public class Transition {
 
     // Transition data
     private final int duration;
-    private final @NotNull Easing easing;
+    private @NotNull Easing easing;
     private boolean additive;
     public final @NotNull InterpolatedData d;
 
@@ -54,6 +54,27 @@ public class Transition {
      */
     public Transition() {
         this(0, Easings.linear);
+    }
+
+
+
+    /**
+     * Inverts this transition, including its easing function.
+     * <p>
+     * This makes the transition look like it's being played backwards.
+     * <p>
+     * Notice: Background color, Background alpha, and opacity values are not affected.
+     */
+    public void invert() {
+
+        // Invert transforms
+        if(d.hasTransform  ()) d.getTransform  ().invert();
+        if(d.hasTransformFg()) d.getTransformFg().invert();
+        if(d.hasTransformBg()) d.getTransformBg().invert();
+
+        // Invert easing
+        final Easing original = easing;
+        easing = new Easing((n) -> { return original.compute(1f - n); });
     }
 
 

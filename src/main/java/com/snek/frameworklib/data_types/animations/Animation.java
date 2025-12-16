@@ -37,6 +37,21 @@ public class Animation {
 
 
     /**
+     * Inverts each of the transitions and flips their order.
+     * <p>
+     * This makes the animation look like it's being played backwards.
+     * <p>
+     * Notice: Background color, Background alpha, and opacity values are not affected.
+     */
+    public void invert() {
+        for(final Transition t : transitions) {
+            t.invert();
+        }
+        Collections.reverse(transitions);
+    }
+
+
+    /**
      * Returns the list of transitions that make up this animation as a read-only list.
      * @return The translations.
      */

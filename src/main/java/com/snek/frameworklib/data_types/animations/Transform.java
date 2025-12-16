@@ -169,6 +169,21 @@ public class Transform {
 
 
 
+    /**
+     * Inverts the translation, rotation, scale and global rotation of this transform.
+     * @return this transform.
+     */
+    public @NotNull Transform invert() {
+        _pos.negate();
+        _lrot.conjugate();
+        _scale.set(1.0f / _scale.x, 1.0f / _scale.y, 1.0f / _scale.z);
+        _grot.conjugate();
+        return this;
+    }
+
+
+
+
     // Local rotation
     public @NotNull Transform rotX         (final float x                  ) { _lrot.rotateX(x); return this; }
     public @NotNull Transform rotY         (final float y                  ) { _lrot.rotateY(y); return this; }
