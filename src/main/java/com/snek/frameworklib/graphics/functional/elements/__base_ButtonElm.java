@@ -51,10 +51,20 @@ public final class __base_ButtonElm {
     /**
      * Shared override of spawn from Elm
      */
-    protected void spawn(final @NotNull Elm _this, final @Nullable Animation animation) {
+    protected void spawn(final @NotNull Elm _this, final @Nullable Animation hoverPrimerAanimation) {
         clickRateLimiter.renewCooldown(INITIAL_COOLDOWN);
-        if(animation != null) {
-            _this.applyAnimationNow(animation);
+        if(hoverPrimerAanimation != null) {
+            _this.applyAnimationNow(hoverPrimerAanimation);
+        }
+    }
+
+
+    /**
+     * Shared override of despawn from Elm
+     */
+    protected void despawn(final @NotNull Elm _this, final @Nullable Animation hoverPrimerAanimation) {
+        if(hoverPrimerAanimation != null) {
+            _this.applyAnimationNow(new Animation(hoverPrimerAanimation).invert());
         }
     }
 

@@ -26,6 +26,9 @@ import net.minecraft.world.inventory.ClickAction;
  */
 public abstract class FancyButtonElm extends FancyTextElm implements Clickable, Hoverable {
     __base_ButtonElm base;
+    private @NotNull FancyButtonElmStyle getThisStyle() {
+        return getStyle(FancyButtonElmStyle.class);
+    }
 
 
 
@@ -72,7 +75,14 @@ public abstract class FancyButtonElm extends FancyTextElm implements Clickable, 
     @Override
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         super.spawn(pos, animate);
-        base.spawn(this, getStyle(FancyButtonElmStyle.class).getHoverPrimerAnimation());
+        base.spawn(this, getThisStyle().getHoverPrimerAnimation());
+    }
+
+
+    @Override
+    public void despawn(final boolean animate) {
+        base.despawn(this, getThisStyle().getHoverPrimerAnimation());
+        super.despawn(animate);
     }
 
 
@@ -80,7 +90,7 @@ public abstract class FancyButtonElm extends FancyTextElm implements Clickable, 
 
     @Override
     public void onHoverEnter(final @NotNull Player player) {
-        base.onHoverEnter(this, getStyle(FancyButtonElmStyle.class).getHoverEnterAnimation());
+        base.onHoverEnter(this, getThisStyle().getHoverEnterAnimation());
     }
 
     @Override
@@ -90,7 +100,7 @@ public abstract class FancyButtonElm extends FancyTextElm implements Clickable, 
 
     @Override
     public void onHoverExit(final @Nullable Player player) {
-        base.onHoverExit(this, getStyle(FancyButtonElmStyle.class).getHoverLeaveAnimation());
+        base.onHoverExit(this, getThisStyle().getHoverLeaveAnimation());
     }
 
 

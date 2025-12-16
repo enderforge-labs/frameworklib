@@ -441,7 +441,7 @@ public abstract class Elm extends Div {
         if(!isSpawned) {
 
 
-            // Denormalize transform and apply the primer animation
+            // Denormalize transform
             if(canvas != null && isTransformNormalized) {
                 canvas.denormalizeTransform(this);
                 isTransformNormalized = false;
@@ -453,10 +453,10 @@ public abstract class Elm extends Div {
             if(primerAnimation != null) {
                 applyAnimationNow(primerAnimation);
             }
-            final Animation animation = style.getSpawnAnimation();
-            if(animation != null) {
-                if(animate) applyAnimation(animation);
-                else applyAnimationNow(animation);
+            final Animation spawnAnimation = style.getSpawnAnimation();
+            if(spawnAnimation != null) {
+                if(animate) applyAnimation(spawnAnimation);
+                else applyAnimationNow(spawnAnimation);
             }
 
 
@@ -468,7 +468,7 @@ public abstract class Elm extends Div {
             entity.spawn(level, pos);
 
 
-            // Set the tracking custom name and call Div's spawn
+            // Set the tracking custom name and call Div's spawn method
             //! Name must be set after spawning as entities that load in with the tracking name are purged
             entity.setCustomNameVisible(false);
             entity.setCustomName(new Txt(ENTITY_CUSTOM_NAME).get());
@@ -505,15 +505,15 @@ public abstract class Elm extends Div {
 
 
             // Handle animations
-            final Animation animation = style.getDespawnAnimation();
-            if(animation != null) {
+            final Animation despawnAnimation = style.getDespawnAnimation();
+            if(despawnAnimation != null) {
                 if(animate) {
-                    applyAnimation(animation);
-                    Scheduler.schedule(animation.getTotalDuration(), this::finalizeDespawn);
+                    applyAnimation(despawnAnimation);
+                    Scheduler.schedule(despawnAnimation.getTotalDuration(), this::finalizeDespawn);
                     //FIXME save in a handler and cancel this or something when the entity respawns
                 }
                 else {
-                    applyAnimationNow(animation);
+                    applyAnimationNow(despawnAnimation);
                     finalizeDespawn();
                 }
             }
@@ -533,11 +533,21 @@ public abstract class Elm extends Div {
      * It resets the tracking name, normalizes the transform and removes the entities from the level.
      */
     public void finalizeDespawn() {
+
+        // Undo primer animation
+        final Animation primerAnimation = style.getPrimerAnimation();
+        if(primerAnimation != null) {
+            applyAnimationNow(new Animation(primerAnimation).invert());
+        }
+
+        // Remove tracking custom name. This lets the entity respawn freely without getting purged.
         entity.setCustomName(new Txt("removed").get());
         if(canvas != null && !isTransformNormalized) {
             canvas.normalizeTransform(this);
             isTransformNormalized = true;
         }
+
+        // Despawn the entity
         entity.despawn();
     }
 
