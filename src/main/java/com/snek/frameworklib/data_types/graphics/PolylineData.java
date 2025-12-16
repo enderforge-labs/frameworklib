@@ -50,7 +50,7 @@ public class PolylineData {
     public PolylineData(final @NotNull Vector3i color, final int alpha, final float width, final float edge, final @NotNull Vector2f point1, final @NotNull Vector2f point2, final @NotNull Vector2f... points) {
 
         // Save basic data
-        this.color = color;
+        this.color = new Vector3i(color);
         this.alpha = alpha;
         this.width = width;
         this.edge  = edge;
@@ -59,7 +59,9 @@ public class PolylineData {
         this.points = new ArrayList<>(points.length + 2);
         this.points.add(point1);
         this.points.add(point2);
-        Collections.addAll(this.points, points);
+        for(final Vector2f p : points) {
+            this.points.add(new Vector2f(p));
+        }
 
         // Calculate total length
         float totLen = 0;
