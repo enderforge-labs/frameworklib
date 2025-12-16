@@ -36,7 +36,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
     // Constants
     public static final char ELLIPSIS_CHAR = '…';   // The ellipsis character to use when truncating text
-    public static final int  SCROLL_DELAY  = 4;     // How often to move the text by SCROLL_AMOUNT pixels, in ticks
+    public static final int  SCROLL_DELAY  = 8;     // How often to move the text by SCROLL_AMOUNT pixels, in ticks
     public static final int  SCROLL_AMOUNT = 1;     // The number of characters to move the text by, every iteration
     public static final float SCROLL_BOUNDARY_DELAY = 20f / SCROLL_DELAY; // The amount of cycles to wait for before and after scrolling the text
     public static final int  ENTITY_MARGIN_WIDTH_PX = 2;
@@ -302,7 +302,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
                         final @NotNull Transform transform0 = new Transform().moveX((float)((+moveAmountL + moveAmountR) / 2 * xScale));
                         final @NotNull Transform transform1 = new Transform().moveX((float)((-moveAmountL - moveAmountR) / 2 * xScale));
                         applyAnimationNow(new Transition(                            ).additiveTransform(transform0));
-                        applyAnimation   (new Transition(SCROLL_DELAY, Easings.linear).additiveTransform(transform1));
+                        applyAnimation   (new Transition(SCROLL_DELAY - 1, Easings.linear).additiveTransform(transform1));
 
 
                         // Shift string value by SCROLL_AMOUNT
