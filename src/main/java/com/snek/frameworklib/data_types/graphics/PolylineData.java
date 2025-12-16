@@ -1,7 +1,6 @@
 package com.snek.frameworklib.data_types.graphics;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -43,11 +42,15 @@ public class PolylineData {
      * @param alpha The opacity of the line.
      * @param width The width of the line.
      * @param edge  The additional width to add on each end of each line
-     * @param point1 The coordinates of the first point of the line.
-     * @param point2 The coordinates of the second point of the line.
-     * @param points An optional list of coordinates for additional points.
+     * @param points The list of points.
      */
-    public PolylineData(final @NotNull Vector3i color, final int alpha, final float width, final float edge, final @NotNull Vector2f point1, final @NotNull Vector2f point2, final @NotNull Vector2f... points) {
+    public PolylineData(
+        final @NotNull Vector3i color,
+        final int alpha,
+        final float width,
+        final float edge,
+        final @NotNull List<Vector2f> points
+    ) {
 
         // Save basic data
         this.color = new Vector3i(color);
@@ -56,9 +59,7 @@ public class PolylineData {
         this.edge  = edge;
 
         // Save points
-        this.points = new ArrayList<>(points.length + 2);
-        this.points.add(point1);
-        this.points.add(point2);
+        this.points = new ArrayList<>(points.size());
         for(final Vector2f p : points) {
             this.points.add(new Vector2f(p));
         }
