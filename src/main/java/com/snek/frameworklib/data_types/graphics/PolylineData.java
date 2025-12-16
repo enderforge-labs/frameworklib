@@ -225,4 +225,11 @@ public class PolylineData {
     public @NotNull PolylineData rotate(final float amount) {
         return transform(0, 0, 1, 1, amount);
     }
+
+
+
+
+    public @NotNull PolylineData copy() {
+        return new PolylineData(color, alpha, width, edge, points);
+    }
 }
