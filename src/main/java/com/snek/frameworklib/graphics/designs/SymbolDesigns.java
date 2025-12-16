@@ -163,22 +163,22 @@ public final class SymbolDesigns extends UtilityClassBase {
 
 
 
-    private static final @NotNull PolylineData __ArrowHead = new PolylineData(0.06f,
+    private static final @NotNull PolylineData __ArrowHeadSmall = new PolylineData(0.06f,
         new Vector2f(-0.15f, 0.4f),
         new Vector2f(+0.0f,  0.5f),
         new Vector2f(+0.15f, 0.4f)
     );
     public static final @NotNull PolylineData[] ArrowHeadsPointingOut = {
-        __ArrowHead.copy().shift(0.5f, 0.5f).rotate((float)Math.toRadians(  0)),
-        __ArrowHead.copy().shift(0.5f, 0.5f).rotate((float)Math.toRadians( 90)),
-        __ArrowHead.copy().shift(0.5f, 0.5f).rotate((float)Math.toRadians(180)),
-        __ArrowHead.copy().shift(0.5f, 0.5f).rotate((float)Math.toRadians(270))
+        __ArrowHeadSmall.copy().shift(0.5f, 0.5f).rotate((float)Math.toRadians(  0)),
+        __ArrowHeadSmall.copy().shift(0.5f, 0.5f).rotate((float)Math.toRadians( 90)),
+        __ArrowHeadSmall.copy().shift(0.5f, 0.5f).rotate((float)Math.toRadians(180)),
+        __ArrowHeadSmall.copy().shift(0.5f, 0.5f).rotate((float)Math.toRadians(270))
     };
     public static final @NotNull PolylineData[] ArrowHeadsPointingIn = {
-        __ArrowHead.copy().rotate((float)(Math.PI)).shift(0.5f, 0.5f).rotate((float)Math.toRadians(  0)),
-        __ArrowHead.copy().rotate((float)(Math.PI)).shift(0.5f, 0.5f).rotate((float)Math.toRadians( 90)),
-        __ArrowHead.copy().rotate((float)(Math.PI)).shift(0.5f, 0.5f).rotate((float)Math.toRadians(180)),
-        __ArrowHead.copy().rotate((float)(Math.PI)).shift(0.5f, 0.5f).rotate((float)Math.toRadians(270))
+        __ArrowHeadSmall.copy().rotate((float)(Math.PI)).shift(0.5f, 0.5f).rotate((float)Math.toRadians(  0)),
+        __ArrowHeadSmall.copy().rotate((float)(Math.PI)).shift(0.5f, 0.5f).rotate((float)Math.toRadians( 90)),
+        __ArrowHeadSmall.copy().rotate((float)(Math.PI)).shift(0.5f, 0.5f).rotate((float)Math.toRadians(180)),
+        __ArrowHeadSmall.copy().rotate((float)(Math.PI)).shift(0.5f, 0.5f).rotate((float)Math.toRadians(270))
     };
     public static final @NotNull PolylineData[] DiagonalArrowHeadsPointingOut = {
         ArrowHeadsPointingOut[0].copy().rotate((float)Math.toRadians(45)),
@@ -191,5 +191,19 @@ public final class SymbolDesigns extends UtilityClassBase {
         ArrowHeadsPointingIn[1].copy().rotate((float)Math.toRadians(45)),
         ArrowHeadsPointingIn[2].copy().rotate((float)Math.toRadians(45)),
         ArrowHeadsPointingIn[3].copy().rotate((float)Math.toRadians(45))
+    };
+
+
+
+    private static final @NotNull PolylineData __ArrowHeadLarge = new PolylineData(0.06f,
+        new Vector2f(-0.15f, 0.2f),
+        new Vector2f(+0.15f, 0.5f),
+        new Vector2f(-0.15f, 0.8f)
+    );
+    public static final @NotNull PolylineData[] ArrowHeadPointingLeft = {
+        __ArrowHeadLarge.copy().shift(0.5f, 0.5f)
+    };
+    public static final @NotNull PolylineData[] ArrowHeadPointingRight = {
+        ArrowHeadPointingLeft[0].copy().flipX()
     };
 }
