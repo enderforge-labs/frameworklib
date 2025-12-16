@@ -85,12 +85,12 @@ public class InterpolatedData {
         final @Nullable Transform transformFg,
         final @Nullable Transform transformBg
     ) {
-        this.transform   = new Transform(transform);
-        this.bgColor     = new Vector3i(bgColor);
+        this.transform   = transform   == null ? null : new Transform(transform);
+        this.bgColor     = bgColor     == null ? null : new Vector3i(bgColor);
         this.bgAlpha     = bgAlpha;
         this.opacity     = opacity;
-        this.transformFg = new Transform(transformFg);
-        this.transformBg = new Transform(transformBg);
+        this.transformFg = transformFg == null ? null : new Transform(transformFg);
+        this.transformBg = transformBg == null ? null : new Transform(transformBg);
     }
 
 
