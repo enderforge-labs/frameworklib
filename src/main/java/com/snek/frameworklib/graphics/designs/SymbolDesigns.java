@@ -57,13 +57,13 @@ public final class SymbolDesigns extends UtilityClassBase {
 
     public static final @NotNull PolylineData[] CircularArrowCCW = {
         new PolylineData(0.05f,
-            new Vector2f(0.5f, 1.0f- 0.025f),
-            new Vector2f(0.3f, 0.8f- 0.025f),
-            new Vector2f(0.5f, 0.6f- 0.025f)
+            new Vector2f(0.4f, 1.0f),
+            new Vector2f(0.2f, 0.8f),
+            new Vector2f(0.4f, 0.6f)
         ),
         new PolylineData(0.03f,
-            DesignPrimitives.createCircle(0.4f, false)
-        ).rotate((float)Math.toRadians(-45)).shift(0.5f, 0.4f)
+            DesignPrimitives.createCircle(0.4f, false, 6)
+        ).rotate((float)Math.toRadians(45)).shift(0.5f, 0.4f)
     };
     public static final @NotNull PolylineData[] CircularArrowCW = {
         CircularArrowCCW[0].copy().flipX(),
