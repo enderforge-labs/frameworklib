@@ -1,7 +1,6 @@
 package com.snek.frameworklib.graphics.basic.elements;
 
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.frameworklib.data_types.animations.Transform;
@@ -40,6 +39,8 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
     public static final int  SCROLL_DELAY  = 4;     // How often to move the text by SCROLL_AMOUNT pixels, in ticks
     public static final int  SCROLL_AMOUNT = 1;     // The number of characters to move the text by, every iteration
     public static final float SCROLL_BOUNDARY_DELAY = 20f / SCROLL_DELAY; // The amount of cycles to wait for before and after scrolling the text
+    public static final int  ENTITY_MARGIN_WIDTH_PX = 2;
+    public static final int  ENTITY_MARGIN_HEIGHT_PX = 2;
 
 
     // In-world data
@@ -103,7 +104,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
         // Calculate line height
         final int lineNum = lines.length;
-        // entitySizeCacheY = (lineNum == 1 ? 0f : lineNum - 1) * 2 + lineNum * (float)FontSize.getHeight();
+        // entitySizeCacheY = (lineNum == 1 ? 0f : lineNum - 1) * 2 + lineNum * (float)FontSize.getHeight(); //TODO remove if not used
         entitySizeCacheY = lineNum * (float)FontSize.getHeight();
     }
 
@@ -118,22 +119,35 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
     //TODO this might need to be cached
     //TODO check subclasses too
     /**
-     * Calculates the in-world height of the TextDisplay entity associated with a TextDisplay or FancyTextDisplay.
+     * Calculates the in-world height of the TextDisplay entity associated with this element.
      * <p>
      * Notice: The height can be inaccurate as a lot of assumptions are made to calculate it. The returned value is the best possible approximation.
      * <p>
      * Notice: Wrapped lines are counted as one.
+     * <p>
+     * Notice: This height value does not include the eneity's margin. Use {@link #calcEntityHeightWithMargins()} to account for margins.
      * @return The height in blocks.
      */
     public float calcEntityHeight() {
+        final float r = entitySizeCacheY == 0 ? 0 : entitySizeCacheY;
+        return r * calcForegroundTransform().getScale().y;
+    }
 
-        // Return 0 if width cache is 0
-        if(entitySizeCacheY == 0) {
-            return 0;
-        }
 
-        // If not, get the transform and calculate the visual height using it
-        return entitySizeCacheY * calcForegroundTransform().getScale().y;
+    /**
+     * Calculates the in-world height of the TextDisplay entity associated with this element.
+     * <p>
+     * Notice: The height can be inaccurate as a lot of assumptions are made to calculate it. The returned value is the best possible approximation.
+     * <p>
+     * Notice: Wrapped lines are counted as one.
+     * <p>
+     * Notice: This height value includes the eneity's margin. Use {@link #calcEntityHeight()} to ignore them.
+     * @return The height in blocks.
+     */
+    public float calcEntityHeightWithMargins() {
+        final float r = entitySizeCacheY == 0 ? 0 : entitySizeCacheY;
+        final float margin = ENTITY_MARGIN_HEIGHT_PX * 2f / FontData.TEXT_PIXEL_BLOCK_RATIO;
+        return (r + margin) * calcForegroundTransform().getScale().y;
     }
 
 
@@ -143,23 +157,40 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
     //TODO this might need to be cached
     //TODO check subclasses too
     /**
-     * Calculates the in-world width of the TextDisplay entity associated with a TextDisplay or FancyTextDisplay.
+     * Calculates the in-world width of the TextDisplay entity associated with this element.
      * <p>
      * Notice: The width can be inaccurate as a lot of assumptions are made to calculate it. The returned value is the best possible approximation.
      * <p>
      * Notice: Wrapped lines are counted as one.
+     * <p>
+     * Notice: This width value includes the eneity's margin. Use {@link #calcEntityWidthWithMargins()} to account for margins.
      * @return The width in blocks.
      */
     public float calcEntityWidth() {
-
-        // Return 0 if width cache is 0
-        if(entitySizeCacheX == 0) {
-            return 0;
-        }
-
-        // If not, get the transform and calculate the visual width using it
-        return entitySizeCacheX * calcForegroundTransform().getScale().x;
+        final float r = entitySizeCacheX == 0 ? 0 : entitySizeCacheX;
+        return r * calcForegroundTransform().getScale().x;
     }
+
+
+
+
+    /**
+     * Calculates the in-world width of the TextDisplay entity associated with this element.
+     * <p>
+     * Notice: The width can be inaccurate as a lot of assumptions are made to calculate it. The returned value is the best possible approximation.
+     * <p>
+     * Notice: Wrapped lines are counted as one.
+     * <p>
+     * Notice: This width value includes the eneity's margin. Use {@link #calcEntityWidth()} to ignore them
+     * @return The width in blocks.
+     */
+    public float calcEntityWidthWithMargins() {
+        final float r = entitySizeCacheX == 0 ? 0f : entitySizeCacheX;
+        final float margin = ENTITY_MARGIN_WIDTH_PX * 2f / FontData.TEXT_PIXEL_BLOCK_RATIO ;
+        return (r + margin) * calcForegroundTransform().getScale().x;
+    }
+
+
 
 
     private @NotNull Transform calcForegroundTransform() {

@@ -16,7 +16,6 @@ import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.graphics.basic.styles.ConfigurableFancyTextElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.utils.Txt;
 
@@ -186,7 +185,7 @@ public non-sealed class FancyTextElm extends __base_TextElm {
                     final Transform tFg = __calcTransformFg(t);
                     if(getThisStyle().getTextAlignment() == TextAlignment.LEFT ) tFg.moveX(-(getAbsSize().x - calcEntityWidth()) / 2f);
                     if(getThisStyle().getTextAlignment() == TextAlignment.RIGHT) tFg.moveX(+(getAbsSize().x - calcEntityWidth()) / 2f);
-                    tFg.moveY((getAbsSize().y - calcEntityHeight()) / 2f); //TODO idk if this is correct or needed
+                    tFg.moveY((getAbsSize().y - calcEntityHeightWithMargins()) / 2f); //TODO idk if this is correct or needed
                     fg.setTransformation(tFg.moveZ(EPSILON * epsilonPolarity).toMinecraftTransform());
                     fFg.unflag();
                 }

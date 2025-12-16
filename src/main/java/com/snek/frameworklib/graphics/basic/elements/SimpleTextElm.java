@@ -109,7 +109,7 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
                 final Transform t = __calcTransform();
                 if(getThisStyle().getTextAlignment() == TextAlignment.LEFT ) t.moveX(-(getAbsSize().x - calcEntityWidth()) / 2f);
                 if(getThisStyle().getTextAlignment() == TextAlignment.RIGHT) t.moveX(+(getAbsSize().x - calcEntityWidth()) / 2f);
-                t.moveY((getAbsSize().y - calcEntityHeight()) / 2f); //TODO idk if this is correct or needed
+                t.moveY((getAbsSize().y - calcEntityHeightWithMargins()) / 2f);
                 getThisEntity().setTransformation(t.moveZ(EPSILON * epsilonPolarity).toMinecraftTransform());
                 f.unflag();
             }
