@@ -75,8 +75,9 @@ public class Transition {
      * This makes the transition look like it's being played backwards.
      * <p>
      * Notice: Background color, Background alpha, and opacity values are not affected.
+     * @return {@code this}.
      */
-    public void invert() {
+    public @NotNull Transition invert() {
 
         // Invert transforms
         if(d.hasTransform  ()) d.getTransform  ().invert();
@@ -86,6 +87,9 @@ public class Transition {
         // Invert easing
         final Easing original = easing;
         easing = new Easing((n) -> { return original.compute(1f - n); });
+
+        // Return
+        return this;
     }
 
 

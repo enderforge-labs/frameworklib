@@ -17,8 +17,21 @@ import org.jetbrains.annotations.NotNull;
  * An animation expressed as a list of Transitions.
  */
 public class Animation {
-    private final @NotNull List<@NotNull Transition> transitions = new ArrayList<>();
+    private final @NotNull List<@NotNull Transition> transitions;
     private final int totalDuration;
+
+
+    /**
+     * Creates a copy of the provided Animation.
+     * @param a The animation to copy.
+     */
+    public Animation(final @NotNull Animation a) {
+        transitions = new ArrayList<>(a.getTransitions().size());
+        for(final Transition t : a.getTransitions()) {
+            this.transitions.add(new Transition(t));
+        }
+        this.totalDuration = a.totalDuration;
+    }
 
 
     /**
@@ -26,6 +39,7 @@ public class Animation {
      * @param transitions One or more transitions.
      */
     public Animation(final @NotNull Transition... transitions) {
+        this.transitions = new ArrayList<>(transitions.length);
         int _totalDuration = 0;
         for(final Transition t : transitions) {
             this.transitions.add(new Transition(t));
@@ -42,12 +56,14 @@ public class Animation {
      * This makes the animation look like it's being played backwards.
      * <p>
      * Notice: Background color, Background alpha, and opacity values are not affected.
+     * @return {@code this}.
      */
-    public void invert() {
+    public @NotNull Animation invert() {
         for(final Transition t : transitions) {
             t.invert();
         }
         Collections.reverse(transitions);
+        return this;
     }
 
 
