@@ -43,7 +43,6 @@ public class Transition {
     public Transition(final int duration, final @NotNull Easing easing) {
         this.duration  = duration;
         this.easing    = easing;
-
         additive   = false;
         d = new InterpolatedData(null, null, null, null);
     }
@@ -54,7 +53,9 @@ public class Transition {
      * @param t The transition to copy.
      */
     public Transition(final @NotNull Transition t) {
-        this(t.getDuration(), t.getEasing());
+        this.duration  = t.getDuration();
+        this.easing    = t.getEasing();
+        additive       = t.isAdditive();
         d = new InterpolatedData(t.d);
     }
 
