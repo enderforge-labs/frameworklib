@@ -1,14 +1,11 @@
 package com.snek.frameworklib.data_types.displays;
 
-import java.lang.reflect.Method;
-
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector4i;
 
-import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
+import com.snek.frameworklib.mixin.TextDisplayAccessorMixin;
 import com.snek.frameworklib.utils.Txt;
-import com.snek.frameworklib.utils.Utils;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 import net.minecraft.nbt.CompoundTag;
@@ -30,6 +27,7 @@ import net.minecraft.world.level.Level;
  */
 public class CustomTextDisplay extends CustomDisplay {
     public @NotNull TextDisplay getRawDisplay() { return (TextDisplay)heldEntity; }
+    private @NotNull TextDisplayAccessorMixin getAccessibleDisplay() { return (TextDisplayAccessorMixin)heldEntity; }
 
 
     // Component cache and flag used to remove the text when the opacity value is lower than 26
@@ -78,41 +76,6 @@ public class CustomTextDisplay extends CustomDisplay {
             final boolean a2 = lastAlpha[2] < 26;
             if(a0 == a1 && a1 != a2) setText(textCache);
         }
-    }
-
-
-
-
-    // Private methods
-    private static @NotNull Method method_getText;
-    private static @NotNull Method method_getLineWidth;
-    private static @NotNull Method method_getTextOpacity;
-    private static @NotNull Method method_getBackground;
-    private static @NotNull Method method_setText;
-    private static @NotNull Method method_setLineWidth;
-    private static @NotNull Method method_setTextOpacity;
-    private static @NotNull Method method_setBackground;
-    static {
-        try {
-            method_getText          = TextDisplay.class.getDeclaredMethod("getText");
-            method_getLineWidth     = TextDisplay.class.getDeclaredMethod("getLineWidth");
-            method_getTextOpacity   = TextDisplay.class.getDeclaredMethod("getTextOpacity");
-            method_getBackground    = TextDisplay.class.getDeclaredMethod("getBackgroundColor");
-            method_setText          = TextDisplay.class.getDeclaredMethod("setText",      Component.class);
-            method_setLineWidth     = TextDisplay.class.getDeclaredMethod("setLineWidth",       int.class);
-            method_setTextOpacity   = TextDisplay.class.getDeclaredMethod("setTextOpacity",    byte.class);
-            method_setBackground    = TextDisplay.class.getDeclaredMethod("setBackgroundColor", int.class);
-        } catch(final NoSuchMethodException | SecurityException e) {
-            FrameworkLib.LOGGER.error("Couldn't initialize TextDisplay reflection methods", e);
-        }
-        method_getText.setAccessible(true);
-        method_getLineWidth.setAccessible(true);
-        method_getTextOpacity.setAccessible(true);
-        method_getBackground.setAccessible(true);
-        method_setText.setAccessible(true);
-        method_setLineWidth.setAccessible(true);
-        method_setTextOpacity.setAccessible(true);
-        method_setBackground.setAccessible(true);
     }
 
 
@@ -170,7 +133,7 @@ public class CustomTextDisplay extends CustomDisplay {
      */
     public void setText(final @NotNull Component text) {
         final boolean hideText = noTextUnderA26 && lastAlpha[0] < 26 && lastAlpha[1] < 26;
-        Utils.invokeSafe(method_setText, heldEntity, hideText ? EMPTY_TEXT : text);
+        getAccessibleDisplay().invokeSetText(hideText ? EMPTY_TEXT : text);
         textCache = text.copy();
     }
 
@@ -182,7 +145,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * @param width The new value.
      */
     public void setLineWidth(final int width) {
-        Utils.invokeSafe(method_setLineWidth, heldEntity, width);
+        getAccessibleDisplay().invokeSetLineWidth(width);
     }
 
 
@@ -200,7 +163,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * @return The current line width.
      */
     public int getLineWidth() {
-        return (int)Utils.invokeSafe(method_getLineWidth, heldEntity);
+        return getAccessibleDisplay().invokeGetLineWidth();
     }
 
 
@@ -210,7 +173,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * @return The text value.
      */
     public @NotNull Component getTrueText() {
-        return (Component)Utils.invokeSafe(method_getText, heldEntity);
+        return getAccessibleDisplay().invokeGetText();
     }
 
 
@@ -232,17 +195,17 @@ public class CustomTextDisplay extends CustomDisplay {
 
         if(a < 26) {
             if(noTextUnderA26 && lastAlpha[1] < 26) {
-                Utils.invokeSafe(method_setText, heldEntity, EMPTY_TEXT);
+                getAccessibleDisplay().invokeSetText(EMPTY_TEXT);
             }
             else {
-                Utils.invokeSafe(method_setText, heldEntity, textCache);
+                getAccessibleDisplay().invokeSetText(textCache);
                 a = 26;
             }
         }
         else if(lastAlpha[1] >= 26 && lastAlpha[2] < 26) {
-            Utils.invokeSafe(method_setText, heldEntity, textCache);
+            getAccessibleDisplay().invokeSetText(textCache);
         }
-        Utils.invokeSafe(method_setTextOpacity, getRawDisplay(), (byte)(a > 127 ? a - 256 : a));
+        getAccessibleDisplay().invokeSetTextOpacity((byte)(a > 127 ? a - 256 : a));
     }
 
 
@@ -251,7 +214,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * @return The current text opacity.
      */
     public int getTextOpacity() {
-        final int a = (byte)Utils.invokeSafe(method_getTextOpacity, getRawDisplay());
+        final int a = getAccessibleDisplay().invokeGetTextOpacity();
         return a < 0 ? a + 256 : a;
     }
 
@@ -263,7 +226,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * @param argb The new value.
      */
     public void setBackground(final @NotNull Vector4i argb) {
-        Utils.invokeSafe(method_setBackground, getRawDisplay(), (argb.x << 24) | (argb.y << 16) | (argb.z << 8) | argb.w);
+        getAccessibleDisplay().invokeSetBackground((argb.x << 24) | (argb.y << 16) | (argb.z << 8) | argb.w);
     }
 
 
@@ -272,7 +235,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * @return The current background color.
      */
     public @NotNull Vector4i getBackground() {
-        final int bg = (int)Utils.invokeSafe(method_getBackground, getRawDisplay());
+        final int bg = getAccessibleDisplay().invokeGetBackground();
         return new Vector4i((bg >> 24) & 0xFF, (bg >> 16) & 0xFF, (bg >> 8) & 0xFF, bg & 0xFF);
     }
 

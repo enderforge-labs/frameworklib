@@ -1,6 +1,5 @@
 package com.snek.frameworklib.data_types.displays;
 
-import java.lang.reflect.Method;
 import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
@@ -8,8 +7,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 import com.mojang.math.Transformation;
-import com.snek.frameworklib.FrameworkLib;
-import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.mixin.DisplayAccessorMixin;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Brightness;
@@ -37,56 +35,10 @@ import net.minecraft.world.level.Level;
 public abstract class CustomDisplay {
     protected @NotNull Display heldEntity;
     protected boolean spawned = false;
+    private @NotNull DisplayAccessorMixin getAccessibleDisplay() { return (DisplayAccessorMixin)heldEntity; }
 
 
 
-
-    // Private methods
-    private static @NotNull Method method_setTransformation;
-    private static @NotNull Method method_setInterpolationDuration;
-    private static @NotNull Method method_setStartInterpolation;
-    private static @NotNull Method method_setBillboardMode;
-    private static @NotNull Method method_getBillboardMode;
-    private static @NotNull Method method_setViewRange;
-    private static @NotNull Method method_getViewRange;
-    private static @NotNull Method method_setBrightness;
-    private static @NotNull Method method_getBrightness;
-    private static @NotNull Method method_getMaxRenderWidth;
-    private static @NotNull Method method_getMaxRenderHeight;
-    private static @NotNull Method method_setMaxRenderWidth;
-    private static @NotNull Method method_setMaxRenderHeight;
-    static {
-        try {
-            method_setTransformation        = Display.class.getDeclaredMethod("setTransformation",             Transformation.class);
-            method_setInterpolationDuration = Display.class.getDeclaredMethod("setInterpolationDuration",                 int.class);
-            method_setStartInterpolation    = Display.class.getDeclaredMethod("setInterpolationDelay",                    int.class);
-            method_setBillboardMode         = Display.class.getDeclaredMethod("setBillboardConstraints", BillboardConstraints.class);
-            method_getBillboardMode         = Display.class.getDeclaredMethod("getBillboardConstraints");
-            method_setViewRange             = Display.class.getDeclaredMethod("setViewRange",                           float.class);
-            method_getViewRange             = Display.class.getDeclaredMethod("getViewRange");
-            method_setBrightness            = Display.class.getDeclaredMethod("setBrightnessOverride",             Brightness.class);
-            method_getBrightness            = Display.class.getDeclaredMethod("getPackedBrightnessOverride");
-            method_setMaxRenderWidth        = Display.class.getDeclaredMethod("setWidth",                               float.class);
-            method_getMaxRenderWidth        = Display.class.getDeclaredMethod("getWidth");
-            method_setMaxRenderHeight       = Display.class.getDeclaredMethod("setHeight",                              float.class);
-            method_getMaxRenderHeight       = Display.class.getDeclaredMethod("getHeight");
-        } catch(final NoSuchMethodException | SecurityException e) {
-            FrameworkLib.LOGGER.error("Couldn't initialize Display reflection methods", e);
-        }
-        method_setTransformation.setAccessible(true);
-        method_setInterpolationDuration.setAccessible(true);
-        method_setStartInterpolation.setAccessible(true);
-        method_setBillboardMode.setAccessible(true);
-        method_getBillboardMode.setAccessible(true);
-        method_setViewRange.setAccessible(true);
-        method_getViewRange.setAccessible(true);
-        method_setBrightness.setAccessible(true);
-        method_getBrightness.setAccessible(true);
-        method_setMaxRenderWidth.setAccessible(true);
-        method_getMaxRenderWidth.setAccessible(true);
-        method_setMaxRenderHeight.setAccessible(true);
-        method_getMaxRenderHeight.setAccessible(true);
-    }
 
     public boolean isRemoved() {
         return heldEntity.isRemoved();
@@ -184,7 +136,7 @@ public abstract class CustomDisplay {
      * @param transformation The new value.
      */
     public void setTransformation(final @NotNull Transformation transformation) {
-        Utils.invokeSafe(method_setTransformation, heldEntity, transformation);
+        getAccessibleDisplay().invokeSetTransformation(transformation);
     }
 
 
@@ -195,7 +147,7 @@ public abstract class CustomDisplay {
      * @param duration The new value, measured in ticks
      */
     public void setInterpolationDuration(final int duration) {
-        Utils.invokeSafe(method_setInterpolationDuration, heldEntity, duration);
+        getAccessibleDisplay().invokeSetInterpolationDuration(duration);
     }
 
 
@@ -205,7 +157,7 @@ public abstract class CustomDisplay {
      * This is equivalent to setting the entity's "start_interpolation" NBT to {@code 0}.
      */
     public void setStartInterpolation() {
-        Utils.invokeSafe(method_setStartInterpolation, heldEntity, 0);
+        getAccessibleDisplay().invokeSetStartInterpolation(0);
     }
 
 
@@ -216,7 +168,7 @@ public abstract class CustomDisplay {
      * @param billboardMode The new value.
      */
     public void setBillboardMode(final @NotNull BillboardConstraints billboardMode) {
-        Utils.invokeSafe(method_setBillboardMode, heldEntity, billboardMode);
+        getAccessibleDisplay().invokeSetBillboardMode(billboardMode);
     }
 
 
@@ -225,7 +177,7 @@ public abstract class CustomDisplay {
      * @return The current billboard mode.
      */
     public @NotNull BillboardConstraints getBillboardMode() {
-        return (BillboardConstraints)Utils.invokeSafe(method_getBillboardMode, heldEntity);
+        return getAccessibleDisplay().invokeGetBillboardMode();
     }
 
 
@@ -238,7 +190,7 @@ public abstract class CustomDisplay {
      * @param viewRange The new value.
      */
     public void setViewRange(final float viewRange) {
-        Utils.invokeSafe(method_setViewRange, heldEntity, viewRange);
+        getAccessibleDisplay().invokeSetViewRange(viewRange);
     }
 
 
@@ -249,7 +201,7 @@ public abstract class CustomDisplay {
      * @return The current view range.
      */
     public float getViewRange() {
-        return (float)Utils.invokeSafe(method_getViewRange, heldEntity);
+        return getAccessibleDisplay().invokeGetViewRange();
     }
 
 
@@ -260,7 +212,7 @@ public abstract class CustomDisplay {
      * @param brightness
      */
     public void setBrightness(final @NotNull Brightness brightness) {
-        Utils.invokeSafe(method_setBrightness, heldEntity, brightness);
+        getAccessibleDisplay().invokeSetBrightness(brightness);
     }
 
 
@@ -269,7 +221,7 @@ public abstract class CustomDisplay {
      * @return The current brightness.
      */
     public @NotNull Brightness getBrightness() {
-        return (Brightness)Utils.invokeSafe(method_getBrightness, heldEntity);
+        return getAccessibleDisplay().invokeGetBrightness();
     }
 
 
@@ -328,12 +280,10 @@ public abstract class CustomDisplay {
      * Sets a new maximum render width to the entity.
      * <p>
      * This is equivalent to changing the entity's "width" NBT.
-     * <p>
-     * Notice: This property seems to be very buggy in 1.20.1 and often has no effect.
      * @param n The new value.
      */
-    public void setMaxRenderWidth(final float n) {
-        Utils.invokeSafe(method_setMaxRenderWidth, heldEntity, n);
+    public void setFrustumCullingBoundingBoxWidth(final float n) {
+        getAccessibleDisplay().invokeSetFrustumCullingBoundingBoxWidth(n);
     }
 
 
@@ -341,8 +291,8 @@ public abstract class CustomDisplay {
      * Retrieves the entity's maximum render width.
      * @return The current maximum render width.
      */
-    public float getMaxRenderWidth() {
-        return (float)Utils.invokeSafe(method_getMaxRenderWidth, heldEntity);
+    public float getFrustumCullingBoundingBoxWidth() {
+        return getAccessibleDisplay().invokeGetFrustumCullingBoundingBoxWidth();
     }
 
 
@@ -350,12 +300,10 @@ public abstract class CustomDisplay {
      * Sets a new maximum render height to the entity.
      * <p>
      * This is equivalent to changing the entity's "height" NBT.
-     * <p>
-     * Notice: This property seems to be very buggy in 1.20.1 and often has no effect.
      * @param n The new value.
      */
-    public void setMaxRenderHeight(final float n) {
-        Utils.invokeSafe(method_setMaxRenderHeight, heldEntity, n);
+    public void setFrustumCullingBoundingBoxHeight(final float n) {
+        getAccessibleDisplay().invokeSetFrustumCullingBoundingBoxHeight(n);
     }
 
 
@@ -363,8 +311,8 @@ public abstract class CustomDisplay {
      * Retrieves the entity's maximum render height.
      * @return The current maximum render height.
      */
-    public float getMaxRenderHeight() {
-        return (float)Utils.invokeSafe(method_getMaxRenderHeight, heldEntity);
+    public float getFrustumCullingBoundingBoxHeight() {
+        return getAccessibleDisplay().invokeGetFrustumCullingBoundingBoxHeight();
     }
 
 

@@ -3,6 +3,11 @@
     "package": "com.snek.frameworklib.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
+        "DisplayAccessorMixin",
+        "InteractionAccessorMixin",
+        "TextDisplayAccessorMixin",
+        "ItemDisplayAccessorMixin",
+
         "CommandStackTraceMixin",
         "UnwearableHeadItemMixin"
     ],

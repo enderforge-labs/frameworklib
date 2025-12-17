@@ -1,11 +1,8 @@
 package com.snek.frameworklib.data_types.displays;
 
-import java.lang.reflect.Method;
-
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.frameworklib.FrameworkLib;
-import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.mixin.ItemDisplayAccessorMixin;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Display.ItemDisplay;
@@ -26,24 +23,7 @@ import net.minecraft.world.level.Level;
  */
 public class CustomItemDisplay extends CustomDisplay {
     public @NotNull ItemDisplay getRawDisplay() { return (ItemDisplay)heldEntity; }
-
-
-    // Private methods
-    private static @NotNull Method method_setItemStack;
-    private static @NotNull Method method_setDisplayType;
-    private static @NotNull Method method_getDisplayType;
-    static {
-        try {
-            method_setItemStack   = ItemDisplay.class.getDeclaredMethod("setItemStack",              ItemStack.class);
-            method_setDisplayType = ItemDisplay.class.getDeclaredMethod("setItemTransform", ItemDisplayContext.class);
-            method_getDisplayType = ItemDisplay.class.getDeclaredMethod("getItemTransform");
-        } catch(final NoSuchMethodException | SecurityException e) {
-            FrameworkLib.LOGGER.error("Couldn't initialize ItemDisplay reflection methods", e);
-        }
-        method_setItemStack.setAccessible(true);
-        method_setDisplayType.setAccessible(true);
-        method_getDisplayType.setAccessible(true);
-    }
+    private @NotNull ItemDisplayAccessorMixin getAccessibleDisplay() { return (ItemDisplayAccessorMixin)heldEntity; }
 
 
 
@@ -74,7 +54,7 @@ public class CustomItemDisplay extends CustomDisplay {
      * @param itemStack The new value.
      */
     public void setItemStack(final @NotNull ItemStack itemStack) {
-        Utils.invokeSafe(method_setItemStack, getRawDisplay(), itemStack);
+        getAccessibleDisplay().invokeSetItemStack(itemStack);
     }
 
 
@@ -85,7 +65,7 @@ public class CustomItemDisplay extends CustomDisplay {
      * @param displayType The new value.
      */
     public void setDisplayType(final @NotNull ItemDisplayContext displayType) {
-        Utils.invokeSafe(method_setDisplayType, getRawDisplay(), displayType);
+        getAccessibleDisplay().invokeSetDisplayType(displayType);
     }
 
 
@@ -94,6 +74,6 @@ public class CustomItemDisplay extends CustomDisplay {
      * @return The current display type.
      */
     public @NotNull ItemDisplayContext getDisplayType() {
-        return (ItemDisplayContext)Utils.invokeSafe(method_getDisplayType, heldEntity);
+        return (ItemDisplayContext)getAccessibleDisplay().invokeGetDisplayType();
     }
 }

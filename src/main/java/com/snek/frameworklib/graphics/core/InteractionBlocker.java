@@ -1,14 +1,12 @@
 package com.snek.frameworklib.graphics.core;
 
-import java.lang.reflect.Method;
-
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3d;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.mixin.InteractionAccessorMixin;
 import com.snek.frameworklib.utils.Txt;
-import com.snek.frameworklib.utils.Utils;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 import net.minecraft.commands.CommandSource;
@@ -39,24 +37,11 @@ import net.minecraft.world.phys.Vec3;
  * and client-side item use events, preventing annoying UI flashes and visual artifacts.
  */
 public class InteractionBlocker {
+    private @NotNull InteractionAccessorMixin getAccessibleDisplay() { return (InteractionAccessorMixin)heldEntity; }
+
 
     // Despawn delay, avoids accidental clicks after the UI is removed
     public static final int DESPAWN_DELAY = 10;
-
-
-    // Private methods of InteractionEntity
-    private static @NotNull Method method_setWidth;
-    private static @NotNull Method method_setHeight;
-    static {
-        try {
-            method_setWidth  = Interaction.class.getDeclaredMethod("setWidth",  float.class);
-            method_setHeight = Interaction.class.getDeclaredMethod("setHeight", float.class);
-        } catch(final NoSuchMethodException | SecurityException e) {
-            FrameworkLib.LOGGER.error("Couldn't initialize Interaction reflection methods", e);
-        }
-        method_setWidth.setAccessible(true);
-        method_setHeight.setAccessible(true);
-    }
 
 
     // Entity names and command source identifier
@@ -70,7 +55,7 @@ public class InteractionBlocker {
 
 
     // In-world data
-    private final @NotNull Interaction entity;
+    private final @NotNull Interaction heldEntity;
     private final @NotNull Level level;
 
 
@@ -82,9 +67,9 @@ public class InteractionBlocker {
      */
     public InteractionBlocker(final @NotNull Level level, final float w, final float h) {
         this.level = level;
-        entity = new Interaction(EntityType.INTERACTION, level);
-        Utils.invokeSafe(method_setWidth,  entity, w);
-        Utils.invokeSafe(method_setHeight, entity, h);
+        heldEntity = new Interaction(EntityType.INTERACTION, level);
+        getAccessibleDisplay().invokeSetWidth(w);
+        getAccessibleDisplay().invokeSetHeight(h);
     }
 
 
@@ -119,10 +104,10 @@ public class InteractionBlocker {
     public void spawn(final @NotNull Vector3d pos) {
 
         // Spawn the entity, move it to the specified coords and set a temporary name to allow the command to recognize it
-        level.addFreshEntity(entity);
-        entity.setPos(pos.x, pos.y, pos.z);
-        entity.setCustomNameVisible(false);
-        entity.setCustomName(new Txt(ENTITY_CUSTOM_NAME_UNINITIALIZED).get());
+        level.addFreshEntity(heldEntity);
+        heldEntity.setPos(pos.x, pos.y, pos.z);
+        heldEntity.setCustomNameVisible(false);
+        heldEntity.setCustomName(new Txt(ENTITY_CUSTOM_NAME_UNINITIALIZED).get());
 
 
         //!  ╭────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
@@ -137,7 +122,7 @@ public class InteractionBlocker {
         /*!  │  // Create the custom command source and use DUMMY as output to silence it                                   //!
         /*!  │  */final MinecraftServer server = FrameworkLib.getServer();                                                  //!
         /*!  │  */final CommandSourceStack source = new CommandSourceStack(                                                 //!
-        /*!  │  */    CommandSource.NULL, Vec3.ZERO, Vec2.ZERO, (ServerLevel)entity.level(),                                //!
+        /*!  │  */    CommandSource.NULL, Vec3.ZERO, Vec2.ZERO, (ServerLevel)heldEntity.level(),                            //!
         /*!  │  */    4, UPDATE_COMMAND_SOURCE_NAME, Component.literal(UPDATE_COMMAND_SOURCE_NAME), server, (Entity)null    //!
         /*!  │  */);                                                                                                        //!
         //!  │                                                                                                              //!
@@ -145,7 +130,7 @@ public class InteractionBlocker {
         /*!  │  // Execute the command using the custom command source                                                      //!
         /*!  │  */try {                                                                                                     //!
         /*!  │  */    final int result = server.getCommands().getDispatcher().execute(UPDATE_COMMAND, source);              //!
-        /*!  │  */    if(result == 0) {                                                                                    //!
+        /*!  │  */    if(result == 0) {                                                                                     //!
         /*!  │  */        FrameworkLib.LOGGER.warn("Interaction entity update command found no matching entities");         //!
         /*!  │  */    }                                                                                                     //!
         /*!  │  */} catch(final CommandSyntaxException e) {                                                                 //!
@@ -156,7 +141,7 @@ public class InteractionBlocker {
 
 
         // Replace the temporary name with the actual custom name. This name is the one that will be used to purge stray interactions
-        entity.setCustomName(new Txt(ENTITY_CUSTOM_NAME).get());
+        heldEntity.setCustomName(new Txt(ENTITY_CUSTOM_NAME).get());
     }
 
 
@@ -167,7 +152,7 @@ public class InteractionBlocker {
      * @param pos The position.
      */
     public void teleport(final @NotNull Vector3d pos) {
-        entity.teleportTo(pos.x, pos.y, pos.z);
+        heldEntity.teleportTo(pos.x, pos.y, pos.z);
     }
 
 
@@ -178,7 +163,7 @@ public class InteractionBlocker {
      */
     public void despawn() {
         Scheduler.schedule(DESPAWN_DELAY, () -> {
-            entity.remove(RemovalReason.KILLED);
+            heldEntity.remove(RemovalReason.KILLED);
         });
     }
 }
