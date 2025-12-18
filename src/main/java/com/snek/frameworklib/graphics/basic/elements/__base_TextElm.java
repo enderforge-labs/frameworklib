@@ -318,7 +318,6 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
                     // Reset scroll data
                     currentStartIndex = 0;
                     boundaryElapsedIterations = 0;
-                    lastEnd = 0; //TODO Prob not needed since currentStartIndex==0 doesn't use lastEnd
                     lastStartIndex = 0;
 
 
@@ -355,7 +354,6 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
             // Reset text position if end delay has passed
             if(boundaryElapsedIterations > 0) {
                 currentStartIndex = 0;
-                lastEnd = 0; //TODO Prob not needed since currentStartIndex==0 doesn't use lastEnd
                 lastStartIndex = 0;
             }
             else return;
