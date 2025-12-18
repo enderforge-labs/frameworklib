@@ -318,7 +318,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
                     // Reset scroll data
                     currentStartIndex = 0;
                     boundaryElapsedIterations = 0;
-                    lastEnd = 0; //! Prob not needed since currentStartIndex==0 doesn't use lastEnd
+                    lastEnd = 0; //TODO Prob not needed since currentStartIndex==0 doesn't use lastEnd
                     lastStartIndex = 0;
 
 
@@ -327,56 +327,71 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
                     final int endSegmentWidth = FontSize.calcMaxStringEnd(flippedString, 0, maxWidthPx);
 
 
+                    // Run the first iteration instantly
+                    //! This is needed in order to compute the correct visual width cache and proper spawn animations
+                    //! This immediate call runs before the entity spawns
+                    runScrollTask(text, xScale, maxWidthPx, textString, endSegmentWidth, false);
+                    //! ^ Don't start animations as they would create a feedback look with this method and crash the server
+
                     // Start a new scroll task that runs every SCROLL_DELAY
-                    textAutoScrollHandler = Scheduler.loop(0, SCROLL_DELAY, () -> {
-
-                        // Update elapsed ticks and return if in delay period
-                        if(boundaryElapsedIterations < SCROLL_BOUNDARY_DELAY) {
-                            ++boundaryElapsedIterations;
-
-                            // Reset text position if end delay has passed
-                            if(boundaryElapsedIterations > 0) {
-                                currentStartIndex = 0;
-                                lastEnd = 0; //! Prob not needed since currentStartIndex==0 doesn't use lastEnd
-                                lastStartIndex = 0;
-                            }
-                            else return;
-                        }
-
-
-                        // Find new end
-                        final int end = FontSize.calcMaxStringEnd(textString, currentStartIndex, maxWidthPx);
-
-
-                        // Create and start scrolling animation
-                        final double moveAmountL = FontSize.getStringWidth(textString.substring(lastStartIndex, currentStartIndex));
-                        final double moveAmountR = currentStartIndex == 0 ? 0 : FontSize.getStringWidth(textString.substring(lastEnd, end));
-                        final @NotNull Transform transform0 = new Transform().moveX((float)((+moveAmountL + moveAmountR) / 2 * xScale));
-                        final @NotNull Transform transform1 = new Transform().moveX((float)((-moveAmountL - moveAmountR) / 2 * xScale));
-                        applyAnimationNow(new Transition(                            ).additiveTransform(transform0));
-                        applyAnimation   (new Transition(SCROLL_DELAY - 1, Easings.linear).additiveTransform(transform1));
-
-
-                        // Shift string value by SCROLL_AMOUNT
-                        getTextDisplay().setText(text.substring(currentStartIndex, end).get());
-                        updateVisualTextSizeCache();
-                        lastStartIndex = currentStartIndex;
-                        currentStartIndex += SCROLL_AMOUNT;
-
-
-                        // If the remaining text fits, stop scrolling for the specified delay and restart the cycle
-                        if(currentStartIndex > text.length() - endSegmentWidth) {
-                            boundaryElapsedIterations = -SCROLL_BOUNDARY_DELAY;
-                        }
-
-
-                        // Update last end
-                        lastEnd = end;
+                    textAutoScrollHandler = Scheduler.loop(SCROLL_DELAY, SCROLL_DELAY, () -> {
+                        runScrollTask(text, xScale, maxWidthPx, textString, endSegmentWidth, true);
                     });
                     break;
                 }
             }
         }
+    }
+
+
+
+
+    private void runScrollTask(final Txt text, final float xScale, final int maxWidthPx, final String textString, final int endSegmentWidth, final boolean startAnimations) {
+
+        // Update elapsed ticks and return if in delay period
+        if(boundaryElapsedIterations < SCROLL_BOUNDARY_DELAY) {
+            ++boundaryElapsedIterations;
+
+            // Reset text position if end delay has passed
+            if(boundaryElapsedIterations > 0) {
+                currentStartIndex = 0;
+                lastEnd = 0; //TODO Prob not needed since currentStartIndex==0 doesn't use lastEnd
+                lastStartIndex = 0;
+            }
+            else return;
+        }
+
+
+        // Find new end
+        final int end = FontSize.calcMaxStringEnd(textString, currentStartIndex, maxWidthPx);
+
+
+        // Create and start scrolling animation (if requested)
+        if(startAnimations) {
+            final double moveAmountL = FontSize.getStringWidth(textString.substring(lastStartIndex, currentStartIndex));
+            final double moveAmountR = currentStartIndex == 0 ? 0 : FontSize.getStringWidth(textString.substring(lastEnd, end));
+            final @NotNull Transform transform0 = new Transform().moveX((float)((+moveAmountL + moveAmountR) / 2 * xScale));
+            final @NotNull Transform transform1 = new Transform().moveX((float)((-moveAmountL - moveAmountR) / 2 * xScale));
+            applyAnimationNow(new Transition(                            ).additiveTransform(transform0));
+            applyAnimation   (new Transition(SCROLL_DELAY - 1, Easings.linear).additiveTransform(transform1));
+        }
+
+
+        // Shift string value by SCROLL_AMOUNT
+        getTextDisplay().setText(text.substring(currentStartIndex, end).get());
+        updateVisualTextSizeCache();
+        lastStartIndex = currentStartIndex;
+        currentStartIndex += SCROLL_AMOUNT;
+
+
+        // If the remaining text fits, stop scrolling for the specified delay and restart the cycle
+        if(currentStartIndex > text.length() - endSegmentWidth) {
+            boundaryElapsedIterations = -SCROLL_BOUNDARY_DELAY;
+        }
+
+
+        // Update last end
+        lastEnd = end;
     }
 
 
@@ -399,17 +414,24 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
     @Override
     public void spawn(Vector3d pos, final boolean animate) {
-        updateTotTextSizeCache();
-        updateVisualTextSizeCache();
-        super.spawn(pos, animate);
+        if(!isSpawned) {
+            updateTotTextSizeCache();
+            //! This forces the visual text to update.
+            //! This is needed in order to get an accurate visualTextSizeCache and calculate proper spawn animations
+            updateOverflowBehaviour();
+            updateVisualTextSizeCache();
+            super.spawn(pos, animate);
+        }
     }
 
     @Override
     public void despawn(final boolean animate) {
-        super.despawn(animate);
-        if(textAutoScrollHandler != null) {
-            textAutoScrollHandler.cancel();
-            textAutoScrollHandler = null;
+        if(isSpawned) {
+            super.despawn(animate);
+            if(textAutoScrollHandler != null) {
+                textAutoScrollHandler.cancel();
+                textAutoScrollHandler = null;
+            }
         }
     }
 }
