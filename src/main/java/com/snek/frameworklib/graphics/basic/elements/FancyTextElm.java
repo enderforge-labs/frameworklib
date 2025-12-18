@@ -147,18 +147,21 @@ public non-sealed class FancyTextElm extends __base_TextElm {
         final @NotNull CustomTextDisplay bg = getBgEntity();
 
 
-        // Handle text first (transform depends on it)
+        // Handle text first
+        //! Must be computed before the transform as it depends on i
         { final Flagged<Component> f = getThisStyle().getFlaggedText();
         if(f.isFlagged()) {
             updateTotTextSizeCache();
-            //! ^ This takes into account the stile's text, not the actual text in the entity
+            //! ^ This takes into account the style's text, not the actual text in the entity
             //! The entity's text is set by updateOverflowBehaviour based on the specified overflow behaviour
+            updateVisualTextSizeCache();
             updateOverflowBehaviour();
             f.unflag();
         }}
 
 
         // Handle overflow behaviour
+        //! Must be computed before transforms as it changes the style's text, which changes the visual width of the entity
         { final Flagged<TextOverflowBehaviour> f = getThisStyle().getFlaggedTextOverflowBehaviour();
         if(f.isFlagged()) {
             updateOverflowBehaviour();
@@ -183,9 +186,9 @@ public non-sealed class FancyTextElm extends __base_TextElm {
                 // Update foreground transform if necessary
                 if(fgNeedsUpdate) {
                     final Transform tFg = __calcTransformFg(t);
-                    if(getThisStyle().getTextAlignment() == TextAlignment.LEFT ) tFg.moveX(-(getAbsSize().x - calcEntityWidth()) / 2f);
-                    if(getThisStyle().getTextAlignment() == TextAlignment.RIGHT) tFg.moveX(+(getAbsSize().x - calcEntityWidth()) / 2f);
-                    tFg.moveY((getAbsSize().y - calcEntityHeightWithMargins()) / 2f); //TODO idk if this is correct or needed
+                    if(getThisStyle().getTextAlignment() == TextAlignment.LEFT ) tFg.moveX(-(getAbsSize().x - calcVisualEntityWidth()) / 2f);
+                    if(getThisStyle().getTextAlignment() == TextAlignment.RIGHT) tFg.moveX(+(getAbsSize().x - calcVisualEntityWidth()) / 2f);
+                    tFg.moveY((getAbsSize().y - calcTotEntityHeightWithMargins()) / 2f); //TODO idk if this is correct or needed
                     fg.setTransformation(tFg.moveZ(EPSILON * epsilonPolarity).toMinecraftTransform());
                     fFg.unflag();
                 }

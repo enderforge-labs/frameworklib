@@ -83,18 +83,21 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
     public void flushStyle() {
 
 
-        // Handle text first (transform depends on it)
+        // Handle text first
+        //! Must be computed before the transform as it depends on i
         { final Flagged<Component> f = getThisStyle().getFlaggedText();
         if(f.isFlagged()) {
             updateTotTextSizeCache();
-            //! ^ This takes into account the stile's text, not the actual text in the entity
+            //! ^ This takes into account the style's text, not the actual text in the entity
             //! The entity's text is set by updateOverflowBehaviour based on the specified overflow behaviour
+            updateVisualTextSizeCache();
             updateOverflowBehaviour();
             f.unflag();
         }}
 
 
         // Handle overflow behaviour
+        //! Must be computed before transforms as it changes the visual width of the entity
         { final Flagged<TextOverflowBehaviour> f = getThisStyle().getFlaggedTextOverflowBehaviour();
         if(f.isFlagged()) {
             updateOverflowBehaviour();
@@ -107,9 +110,9 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
             final Flagged<Transform> f = getThisStyle().getFlaggedTransform();
             if(f.isFlagged() || getThisStyle().getFlaggedTextAlignment().isFlagged() || getThisStyle().getFlaggedText().isFlagged()) {
                 final Transform t = __calcTransform();
-                if(getThisStyle().getTextAlignment() == TextAlignment.LEFT ) t.moveX(-(getAbsSize().x - calcEntityWidth()) / 2f);
-                if(getThisStyle().getTextAlignment() == TextAlignment.RIGHT) t.moveX(+(getAbsSize().x - calcEntityWidth()) / 2f);
-                t.moveY((getAbsSize().y - calcEntityHeightWithMargins()) / 2f);
+                if(getThisStyle().getTextAlignment() == TextAlignment.LEFT ) t.moveX(-(getAbsSize().x - calcVisualEntityWidth()) / 2f);
+                if(getThisStyle().getTextAlignment() == TextAlignment.RIGHT) t.moveX(+(getAbsSize().x - calcVisualEntityWidth()) / 2f);
+                t.moveY((getAbsSize().y - calcTotEntityHeightWithMargins()) / 2f);
                 getThisEntity().setTransformation(t.moveZ(EPSILON * epsilonPolarity).toMinecraftTransform());
                 f.unflag();
             }

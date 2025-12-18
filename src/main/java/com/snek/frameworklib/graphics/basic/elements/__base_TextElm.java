@@ -1,6 +1,7 @@
 package com.snek.frameworklib.graphics.basic.elements;
 
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.frameworklib.data_types.animations.Transform;
@@ -47,9 +48,13 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
     public abstract @NotNull CustomTextDisplay getTextDisplay();
 
 
-    // Entity size cache. This represents the actual size the entity has in the level when using the default transform. Measured in blocks
-    protected float entitySizeCacheX = 0;
-    protected float entitySizeCacheY = 0;
+    // Entity total size cache. This represents size the entity would have using the text stored in the style and the default transform. Measured in blocks
+    protected float entityTotSizeCacheX = 0;
+    protected float entityTotSizeCacheY = 0;
+
+    // Entity visual size cache. This represents the actual size the entity has in the level when using the default transform. Measured in blocks
+    protected float entityVisualSizeCacheX = 0;
+    protected float entityVisualSizeCacheY = 0;
 
 
     // Scrolling text data
@@ -75,23 +80,40 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
 
+    //TODO comment
     public void updateTotTextSizeCache() {
-        final String string = getStyle(SimpleTextElmStyle.class).getText().getString();
+        final Vector2f s = __calcTextSizeCache(getStyle(SimpleTextElmStyle.class).getText().getString());
+        entityTotSizeCacheX = s.x;
+        entityTotSizeCacheY = s.y;
+    }
+
+
+
+    //TODO comment
+    public void updateVisualTextSizeCache() {
+        final Vector2f s = __calcTextSizeCache(getTextDisplay().getText().getString());
+        entityVisualSizeCacheX = s.x;
+        entityVisualSizeCacheY = s.y;
+    }
+
+
+
+
+    //TODO comment
+    public Vector2f __calcTextSizeCache(final String string) {
 
         // Set cache to 0 if the text is empty.
         if(string.isEmpty()) {
-            entitySizeCacheX = 0f;
-            entitySizeCacheY = 0f;
-            return;
+            return new Vector2f(0);
         }
 
         // Calculate the number of lines. Set the cache to 0 if there are none
         final String[] lines = string.split("\n");
         if(lines.length == 0) {
-            entitySizeCacheX = 0f;
-            entitySizeCacheY = 0f;
-            return;
+            return new Vector2f(0);
         }
+
+
 
         // If lines are present, find the longest one and save its length
         double maxWidth = 0;
@@ -99,13 +121,17 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
             final double w = FontSize.getStringWidth(line);
             if(w > maxWidth) maxWidth = w;
         }
-        entitySizeCacheX = (float)maxWidth;
+        final float x = (float)maxWidth;
 
 
         // Calculate line height
         final int lineNum = lines.length;
         // entitySizeCacheY = (lineNum == 1 ? 0f : lineNum - 1) * 2 + lineNum * (float)FontSize.getHeight(); //TODO remove if not used
-        entitySizeCacheY = lineNum * (float)FontSize.getHeight();
+        final float y = lineNum * (float)FontSize.getHeight();
+
+
+        // Return
+        return new Vector2f(x, y);
     }
 
 
@@ -125,11 +151,16 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
      * <p>
      * Notice: Wrapped lines are counted as one.
      * <p>
-     * Notice: This height value does not include the eneity's margin. Use {@link #calcEntityHeightWithMargins()} to account for margins.
+     * Notice: This height value does not include the eneity's margin. Use {@link #calcTotEntityHeightWithMargins()} to account for margins.
      * @return The height in blocks.
      */
-    public float calcEntityHeight() {
-        final float r = entitySizeCacheY == 0 ? 0 : entitySizeCacheY;
+    public float calcTotEntityHeight() {
+        final float r = entityTotSizeCacheY == 0 ? 0 : entityTotSizeCacheY;
+        return r * calcForegroundTransform().getScale().y;
+    }
+    //TODO comment
+    public float calcVisualEntityHeight() {
+        final float r = entityVisualSizeCacheY == 0 ? 0 : entityVisualSizeCacheY;
         return r * calcForegroundTransform().getScale().y;
     }
 
@@ -141,11 +172,17 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
      * <p>
      * Notice: Wrapped lines are counted as one.
      * <p>
-     * Notice: This height value includes the eneity's margin. Use {@link #calcEntityHeight()} to ignore them.
+     * Notice: This height value includes the eneity's margin. Use {@link #calcTotEntityHeight()} to ignore them.
      * @return The height in blocks.
      */
-    public float calcEntityHeightWithMargins() {
-        final float r = entitySizeCacheY == 0 ? 0 : entitySizeCacheY;
+    public float calcTotEntityHeightWithMargins() {
+        final float r = entityTotSizeCacheY == 0 ? 0 : entityTotSizeCacheY;
+        final float margin = ENTITY_MARGIN_HEIGHT_PX * 2f / FontData.TEXT_PIXEL_BLOCK_RATIO;
+        return (r + margin) * calcForegroundTransform().getScale().y;
+    }
+    //TODO comment
+    public float calcVisualEntityHeightWithMargins() {
+        final float r = entityVisualSizeCacheY == 0 ? 0 : entityVisualSizeCacheY;
         final float margin = ENTITY_MARGIN_HEIGHT_PX * 2f / FontData.TEXT_PIXEL_BLOCK_RATIO;
         return (r + margin) * calcForegroundTransform().getScale().y;
     }
@@ -163,11 +200,16 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
      * <p>
      * Notice: Wrapped lines are counted as one.
      * <p>
-     * Notice: This width value includes the eneity's margin. Use {@link #calcEntityWidthWithMargins()} to account for margins.
+     * Notice: This width value includes the eneity's margin. Use {@link #calcTotEntityWidthWithMargins()} to account for margins.
      * @return The width in blocks.
      */
-    public float calcEntityWidth() {
-        final float r = entitySizeCacheX == 0 ? 0 : entitySizeCacheX;
+    public float calcTotEntityWidth() {
+        final float r = entityTotSizeCacheX == 0 ? 0 : entityTotSizeCacheX;
+        return r * calcForegroundTransform().getScale().x;
+    }
+    //TODO comment
+    public float calcVisualEntityWidth() {
+        final float r = entityVisualSizeCacheX == 0 ? 0 : entityVisualSizeCacheX;
         return r * calcForegroundTransform().getScale().x;
     }
 
@@ -181,11 +223,17 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
      * <p>
      * Notice: Wrapped lines are counted as one.
      * <p>
-     * Notice: This width value includes the eneity's margin. Use {@link #calcEntityWidth()} to ignore them
+     * Notice: This width value includes the eneity's margin. Use {@link #calcTotEntityWidth()} to ignore them
      * @return The width in blocks.
      */
-    public float calcEntityWidthWithMargins() {
-        final float r = entitySizeCacheX == 0 ? 0f : entitySizeCacheX;
+    public float calcTotEntityWidthWithMargins() {
+        final float r = entityTotSizeCacheX == 0 ? 0f : entityTotSizeCacheX;
+        final float margin = ENTITY_MARGIN_WIDTH_PX * 2f / FontData.TEXT_PIXEL_BLOCK_RATIO ;
+        return (r + margin) * calcForegroundTransform().getScale().x;
+    }
+    //TODO comment
+    public float calcVisualEntityWidthWithMargins() {
+        final float r = entityVisualSizeCacheX == 0 ? 0f : entityVisualSizeCacheX;
         final float margin = ENTITY_MARGIN_WIDTH_PX * 2f / FontData.TEXT_PIXEL_BLOCK_RATIO ;
         return (r + margin) * calcForegroundTransform().getScale().x;
     }
@@ -224,13 +272,14 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
         // Cache data
         final Txt text = new Txt(getStyle(SimpleTextElmStyle.class).getText());
         final TextOverflowBehaviour behaviour = getStyle(SimpleTextElmStyle.class).getTextOverflowBehaviour();
-        final float totWidth = calcEntityWidth();
+        final float totWidth = calcTotEntityWidth();
         final float maxWidth = absSize.x;
 
 
         // Overflow (or the text fits): Reset text
         if(behaviour == TextOverflowBehaviour.OVERFLOW || totWidth <= maxWidth) {
             getTextDisplay().setText(text.get());
+            updateVisualTextSizeCache();
         }
 
 
@@ -244,8 +293,10 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
                 // Truncate: Compute truncated text
+                //! OVERFLOW is handled before the switch. This is only for fallthrough
                 case OVERFLOW, TRUNCATE: {
                     getTextDisplay().setText(text.substring(0, FontSize.calcMaxStringEnd(textString, 0, maxWidthPx)).get());
+                    updateVisualTextSizeCache();
                     break;
                 }
 
@@ -254,6 +305,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
                 case ELLIPSIS: {
                     final int restrictedMaxWidthPx = Math.max(0, maxWidthPx - FontSize.getCharWidthPx(ELLIPSIS_CHAR));
                     getTextDisplay().setText(text.substring(0, FontSize.calcMaxStringEnd(textString, 0, restrictedMaxWidthPx)).cat(ELLIPSIS_CHAR).get());
+                    updateVisualTextSizeCache();
                     break;
                 }
 
@@ -307,6 +359,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
                         // Shift string value by SCROLL_AMOUNT
                         getTextDisplay().setText(text.substring(currentStartIndex, end).get());
+                        updateVisualTextSizeCache();
                         lastStartIndex = currentStartIndex;
                         currentStartIndex += SCROLL_AMOUNT;
 
@@ -347,6 +400,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
     @Override
     public void spawn(Vector3d pos, final boolean animate) {
         updateTotTextSizeCache();
+        updateVisualTextSizeCache();
         super.spawn(pos, animate);
     }
 
