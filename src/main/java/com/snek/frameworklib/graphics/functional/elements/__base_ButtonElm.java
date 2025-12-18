@@ -6,10 +6,8 @@ import org.jetbrains.annotations.Nullable;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
-import com.snek.frameworklib.utils.MinecraftUtils;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 
 
@@ -126,14 +124,5 @@ public final class __base_ButtonElm {
      */
     public void onClick(final @NotNull Elm _this) {
         //Empty
-    }
-
-
-    /**
-     * Plays the button click sound to the specified player.
-     * @param player The player to play the sound to.
-     */
-    public static void playButtonSound(final @NotNull Player player) {
-        MinecraftUtils.playSoundClient(player, SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON, 2, 1.5f);
     }
 }

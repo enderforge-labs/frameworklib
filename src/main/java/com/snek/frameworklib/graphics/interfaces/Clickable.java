@@ -2,6 +2,9 @@ package com.snek.frameworklib.graphics.interfaces;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.frameworklib.utils.MinecraftUtils;
+
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -41,4 +44,15 @@ public interface Clickable {
      * @param click The type of click.
      */
     public void onClick(@NotNull Player player, @NotNull ClickAction click);
+
+
+    /**
+     * Plays a predefined sound to the specified player.
+     * <p>
+     * Only the specified player will hear this sound.
+     * @param player The player to play the sound to.
+     */
+    public static void playSound(final @NotNull Player player) {
+        MinecraftUtils.playSoundClient(player, SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON, 2, 1.5f);
+    }
 }

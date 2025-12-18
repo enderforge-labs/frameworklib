@@ -2,6 +2,9 @@ package com.snek.frameworklib.graphics.interfaces;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.frameworklib.utils.MinecraftUtils;
+
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 
 
@@ -26,4 +29,15 @@ public interface Scrollable {
      *     Negative values mean that the player scrolled down instead of up.
      */
     public void onScroll(@NotNull Player player, float amount);
+
+
+    /**
+     * Plays a predefined sound to the specified player.
+     * <p>
+     * Only the specified player will hear this sound.
+     * @param player The player to play the sound to.
+     */
+    public static void playSound(final @NotNull Player player) {
+        MinecraftUtils.playSoundClient(player, SoundEvents.STONE_BUTTON_CLICK_ON, 1, 1.5f);
+    }
 }

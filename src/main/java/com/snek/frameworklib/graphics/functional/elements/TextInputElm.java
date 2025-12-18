@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.snek.frameworklib.graphics.functional.styles.TextInputElmStyle;
+import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.input.MessageReceiver;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
@@ -79,7 +80,7 @@ public abstract class TextInputElm extends FancyButtonElm {
         super.onClick(player, click);
         if(!inputState) {
             enterInputState();
-            __base_ButtonElm.playButtonSound(player);
+            Clickable.playSound(player);
         }
         if(clickFeedbackMessage != null) player.displayClientMessage(clickFeedbackMessage, true);
         MessageReceiver.setCallback(player, this::__internal_messageCallback);
