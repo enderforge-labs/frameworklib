@@ -47,11 +47,28 @@ public class PolylineData {
     public @NotNull List<@NotNull Vector2f> getPoints() { return points; }
     public float                            getTotLen() { return totLen; }
 
+
     // Setters
-    public @NotNull PolylineData withColor(@NotNull Vector3i color) { assert Require.nonNull    (color, "color"); this.color = new Vector3i(color); return this; }
-    public @NotNull PolylineData withAlpha(int               alpha) { assert Require.nonNegative(alpha, "alpha"); this.alpha = alpha; return this; }
-    public @NotNull PolylineData withWidth(float             width) { assert Require.nonNegative(width, "width"); this.width = width; return this; }
-    public @NotNull PolylineData withEdge (float              edge) { assert Require.nonNegative(edge,  "edge");  this.edge  = edge;  return this; }
+    public @NotNull PolylineData withColor(final @NotNull Vector3i color) {
+        assert Require.nonNull(color, "color");
+        this.color = new Vector3i(color);
+        return this;
+    }
+    public @NotNull PolylineData withAlpha(final int alpha) {
+        assert Require.inRange(alpha, 0, 255, "alpha");
+        this.alpha = alpha;
+        return this;
+    }
+    public @NotNull PolylineData withWidth(final float width) {
+        assert Require.nonNegative(width, "width");
+        this.width = width;
+        return this;
+    }
+    public @NotNull PolylineData withEdge(final float edge) {
+        assert Require.nonNegative(edge,  "edge");
+        this.edge  = edge;
+        return this;
+    }
 
 
 
@@ -72,6 +89,11 @@ public class PolylineData {
         final @NotNull List<Vector2f> points
     ) {
         assert Require.nonNull(color, "color");
+        assert Require.inRange(color.x, 0, 255, "color red");
+        assert Require.inRange(color.y, 0, 255, "color blue");
+        assert Require.inRange(color.z, 0, 255, "color green");
+        assert Require.inRange(alpha, 0, 255, "alpha");
+        assert Require.nonNegative(edge, "edge");
         assert Require.nonNull(points, "point list");
 
         // Save basic data

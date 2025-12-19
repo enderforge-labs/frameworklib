@@ -62,15 +62,19 @@ public class UiDebugWindow extends JPanel {
     }
 
     private static @NotNull Color currentColor = Color.WHITE;
+    private final @NotNull List<@NotNull Pair<@NotNull Vector2f, @NotNull Color>> vertices = new ArrayList<>();
+
+
     public static void changeColor(final @NotNull Color newColor) {
         assert Require.nonNull(newColor, "new color");
         currentColor = newColor;
     }
-    private final @NotNull List<@NotNull Pair<@NotNull Vector2f, @NotNull Color>> vertices = new ArrayList<>();
+
     public void add(final @NotNull Vector2f v) {
         assert Require.nonNull(v, "vector");
         vertices.add(Pair.from(v, currentColor));
     }
+
     public void clear() {
         vertices.clear();
     }

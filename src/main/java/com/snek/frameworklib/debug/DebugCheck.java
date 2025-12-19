@@ -22,7 +22,7 @@ public final class DebugCheck extends UtilityClassBase {
             .getInputArguments()
         ;
         IS_DEBUG = false;
-        for(String arg : args) {
+        for(final String arg : args) {
             if(arg.contains("-agentlib:jdwp") || arg.contains("-Xrunjdwp")) {
                 IS_DEBUG = true;
                 break;
