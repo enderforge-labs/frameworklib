@@ -9,6 +9,10 @@ import java.util.function.Supplier;
 
 
 
+//TODO properly document the class and every method
+//TODO add @NotNull @Nullable and final to members, parameters and return types
+//TODO properly format the code, split long one liners
+
 public class Option<T> {
     // Rust-Like wrapper of Optional, can also convert to Result, and will never return null.
     private final Optional<T> innerOptional;
@@ -29,18 +33,18 @@ public class Option<T> {
     public boolean is_some() {
         return innerOptional.isPresent();
     }
-    public boolean is_none(){
+    public boolean is_none() {
         return  innerOptional.isEmpty();
     }
 
-    public boolean is_some_and(Function<T, Boolean> f){
-        if (this.is_some()) {
+    public boolean is_some_and(Function<T, Boolean> f) {
+        if(this.is_some()) {
             return f.apply(this.unwrap());
         }
         return false;
     }
     public boolean is_none_or(Function<T, Boolean> f) {
-        if (this.is_some()) {
+        if(this.is_some()) {
             return f.apply(this.unwrap());
         }
         return true;
@@ -52,38 +56,38 @@ public class Option<T> {
     public T unwrap() {
         return innerOptional.orElseThrow();
     }
-    public T unwrap_or(T default_value){
+    public T unwrap_or(T default_value) {
         return innerOptional.orElse(default_value);
     }
     public T unwrap_or_else(Supplier<? extends T> supplier) {
         return innerOptional.orElseGet(supplier);
     }
     public <E> Result<T,E> ok_or(E err) {
-        if (this.is_some()) {
+        if(this.is_some()) {
             return Result.Ok(this.unwrap());
         }
         return Result.Err(err);
     }
     public <E> Result<T,E> ok_or_else(Supplier<E> f) {
-        if (this.is_some()) {
+        if(this.is_some()) {
             return Result.Ok(this.unwrap());
         }
         return Result.Err(f.get());
     }
-    public Option<T> filter(Function<T, Boolean> filter){
-        if (this.is_some_and(filter)) {
+    public Option<T> filter(Function<T, Boolean> filter) {
+        if(this.is_some_and(filter)) {
             return this;
         }
         return Option.None();
     }
-    public Option<T> inspect(Consumer<T> c){
-        if (this.is_some()) {
+    public Option<T> inspect(Consumer<T> c) {
+        if(this.is_some()) {
             c.accept(this.unwrap());
         }
         return this;
     }
-    public <U> Option<U> map(Function<T,U> f){
-        if (this.is_none()) {
+    public <U> Option<U> map(Function<T,U> f) {
+        if(this.is_none()) {
             return Option.None();
         }
         return Option.Some(f.apply(this.unwrap()));
@@ -96,29 +100,29 @@ public class Option<T> {
     }
 
     public <U> Option<U> and(Option<U> input) {
-        if (input.is_some() && this.is_some()) {
+        if(input.is_some() && this.is_some()) {
             return input;
         }
         return Option.None();
     }
     public Option<T> or(Option<T> input) {
-        if (this.is_some()) {return this;}
-        if (input.is_some()) {return input;}
+        if(this.is_some()) {return this;}
+        if(input.is_some()) {return input;}
         return Option.None();
     }
     public Option<T> xor(Option<T> input) {
-        if (this.is_some() && input.is_none()) {return this;}
-        if (this.is_none() && input.is_some()) {return input;}
+        if(this.is_some() && input.is_none()) {return this;}
+        if(this.is_none() && input.is_some()) {return input;}
         return Option.None();
     }
     public <U> Option<U> and_then(Function<T,Option<U>> function) {
-        if (this.is_some()) {
+        if(this.is_some()) {
             return function.apply(this.unwrap());
         }
         return Option.None();
     }
     public Option<T> or_else(Supplier<Option<T>> function) {
-        if (this.is_some()) {return this;}
+        if(this.is_some()) {return this;}
         return function.get();
     }
 }

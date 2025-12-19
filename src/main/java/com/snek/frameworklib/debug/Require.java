@@ -44,7 +44,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param condition The condition to check.
      * @param message The error message to display if checks fail.
      * @return True.
@@ -99,7 +99,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param name The name of the value for the error message.
      * @return True.
@@ -128,7 +128,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param name The name of the value for the error message.
      * @return True.
@@ -171,7 +171,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param obj The object to check.
      * @param name The name of the object for the error message.
      * @return True.
@@ -212,7 +212,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param min The minimum allowed value (inclusive).
      * @param max The maximum allowed value (inclusive).
@@ -240,7 +240,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param min The minimum allowed value (inclusive).
      * @param max The maximum allowed value (inclusive).
@@ -260,7 +260,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param min The minimum allowed value (inclusive).
      * @param max The maximum allowed value (inclusive).
@@ -280,7 +280,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param min The minimum allowed value (inclusive).
      * @param max The maximum allowed value (inclusive).
@@ -301,7 +301,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param min The minimum allowed value (inclusive).
      * @param max The maximum allowed value (inclusive).
@@ -333,7 +333,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param min The minimum allowed value (inclusive).
      * @param max The maximum allowed value (inclusive).
@@ -366,7 +366,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param name The name of the value for the error message.
      * @return True.
@@ -386,7 +386,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param name The name of the value for the error message.
      * @return True.
@@ -403,7 +403,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param name The name of the value for the error message.
      * @return True.
@@ -420,7 +420,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param name The name of the value for the error message.
      * @return True.
@@ -438,7 +438,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param name The name of the value for the error message.
      * @return True.
@@ -462,7 +462,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param name The name of the value for the error message.
      * @return True.
@@ -493,7 +493,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param name The name of the value for the error message.
      * @return True.
@@ -515,7 +515,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param name The name of the value for the error message.
      * @return True.
@@ -532,7 +532,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param name The name of the value for the error message.
      * @return True.
@@ -549,7 +549,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param name The name of the value for the error message.
      * @return True.
@@ -567,7 +567,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param name The name of the value for the error message.
      * @return True.
@@ -591,7 +591,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param value The value to check.
      * @param name The name of the value for the error message.
      * @return True.
@@ -622,7 +622,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param collection The collection to check.
      * @param name The name of the collection for the error message.
      * @return True.
@@ -645,7 +645,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param array The array to check.
      * @param name The name of the array for the error message.
      * @return True.
@@ -668,7 +668,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param array The array to check.
      * @param name The name of the array for the error message.
      * @return True.
@@ -691,7 +691,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param array The array to check.
      * @param name The name of the array for the error message.
      * @return True.
@@ -714,7 +714,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param array The array to check.
      * @param name The name of the array for the error message.
      * @return True.
@@ -737,7 +737,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param array The array to check.
      * @param name The name of the array for the error message.
      * @return True.
@@ -760,7 +760,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param array The array to check.
      * @param name The name of the array for the error message.
      * @return True.
@@ -783,7 +783,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param array The array to check.
      * @param name The name of the array for the error message.
      * @return True.
@@ -806,7 +806,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param str The string to check.
      * @param name The name of the string for the error message.
      * @return True.
@@ -843,7 +843,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param expected The expected value.
      * @param actual The actual value.
      * @param name The name for the error message.
@@ -866,7 +866,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param object The object to check.
      * @param expected The class to check for.
      * @param name The name of the object.
@@ -891,7 +891,7 @@ public final class Require extends UtilityClassBase {
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
      * Passing existing values has effectively negligible cost.
      * <p>
-     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code> or prefix it with {@code assert } (requires -ea)
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
      * @param message The error message.
      * @return True.
      */

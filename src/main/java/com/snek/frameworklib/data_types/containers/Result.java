@@ -4,6 +4,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 
+//TODO properly document the class and every method
+//TODO add @NotNull @Nullable and final to members, parameters and return types
+//TODO properly format the code, split long one liners
 
 
 public class Result<T, E> {
@@ -54,7 +57,7 @@ public class Result<T, E> {
         return this.innerOption.unwrap_or(default_value);
     }
     public T unwrap_or_else(Function<E,T> function) {
-        if (this.is_ok()) {return this.unwrap();}
+        if(this.is_ok()) {return this.unwrap();}
         return function.apply(this.err.unwrap());
     }
     public E expect_err(String msg) {
@@ -65,18 +68,18 @@ public class Result<T, E> {
     }
 
     public <U> Result<U,E> map(Function<T,U> function) {
-        if (this.is_err()) {return Result.Err(err.unwrap());}
+        if(this.is_err()) {return Result.Err(err.unwrap());}
         return Result.Ok(this.ok().map(function).unwrap());
     }
     public <U> U map_or(Function<T,U> function, U default_value) {
         return this.ok().map_or(function,default_value);
     }
     public <U> U map_or_else(Function<T,U> function, Function<E,U> default_function) {
-        if (this.is_ok()) {return this.ok().map(function).unwrap();}
+        if(this.is_ok()) {return this.ok().map(function).unwrap();}
         return this.err().map(default_function).unwrap();
     }
     public <F> Result<T,F> map_err(Function<E,F> function) {
-        if (this.is_ok()) {return Result.Ok(this.unwrap());}
+        if(this.is_ok()) {return Result.Ok(this.unwrap());}
         return Result.Err(this.err().map(function).unwrap());
     }
     public Result<T,E> inspect(Consumer<T> consumer) {
