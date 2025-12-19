@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector4i;
 
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
-import com.snek.frameworklib.debug.Assert;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.mixin.TextDisplayAccessorMixin;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
@@ -133,7 +133,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * @param text The new value.
      */
     public void setText(final @NotNull Component text) {
-        Assert.requireNonNull(text, "text");
+        assert Require.nonNull(text, "text");
 
         final boolean hideText = noTextUnderA26 && lastAlpha[0] < 26 && lastAlpha[1] < 26;
         getAccessibleDisplay().invokeSetText(hideText ? EMPTY_TEXT : text);
@@ -148,7 +148,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * @param width The new value.
      */
     public void setLineWidth(final int width) {
-        Assert.requirePositive(width, "line width");
+        assert Require.positive(width, "line width");
         getAccessibleDisplay().invokeSetLineWidth(width);
     }
 
@@ -194,7 +194,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * before interpolating, but the raw byte value ({@code 0 to 127}, {@code -128 to -1}) is used instead.
      */
     public void setTextOpacity(final int opacity) {
-        Assert.requireNonNegative(opacity, "text opacity");
+        assert Require.nonNegative(opacity, "text opacity");
 
         int a = opacity;
         shiftLastAlpha(a);
@@ -233,7 +233,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * @param argb The new value.
      */
     public void setBackground(final @NotNull Vector4i argb) {
-        Assert.requireNonNull(argb, "background color");
+        assert Require.nonNull(argb, "background color");
         getAccessibleDisplay().invokeSetBackground((argb.x << 24) | (argb.y << 16) | (argb.z << 8) | argb.w);
     }
 
@@ -255,7 +255,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * @param alignment The new value.
      */
     public void setTextAlignment(final @NotNull TextAlignment alignment) {
-        Assert.requireNonNull(alignment, "text alignment");
+        assert Require.nonNull(alignment, "text alignment");
 
         final CompoundTag nbt = new CompoundTag();
         heldEntity.save(nbt);

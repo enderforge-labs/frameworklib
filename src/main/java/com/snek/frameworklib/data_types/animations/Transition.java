@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
 
-import com.snek.frameworklib.debug.Assert;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.utils.Easing;
 import com.snek.frameworklib.utils.Easings;
 
@@ -42,8 +42,8 @@ public class Transition {
      * @param easing The type of easing to use.
      */
     public Transition(final int duration, final @NotNull Easing easing) {
-        Assert.requireNonNegative(duration, "duration");
-        Assert.requireNonNull(easing, "easing function");
+        assert Require.nonNegative(duration, "duration");
+        assert Require.nonNull(easing, "easing function");
 
         this.duration  = duration;
         this.easing    = easing;
@@ -57,7 +57,9 @@ public class Transition {
      * @param t The transition to copy.
      */
     public Transition(final @NotNull Transition t) {
-        Assert.requireNonNull(t, "transition");
+        assert Require.nonNull(t, "transition");
+        assert Require.nonNegative(t.getDuration(), "transition duration");
+        assert Require.nonNull(t.getEasing(), "transition easing function");
 
         this.duration  = t.getDuration();
         this.easing    = t.getEasing();
@@ -84,6 +86,7 @@ public class Transition {
      * @return {@code this}.
      */
     public @NotNull Transition invert() {
+        assert Require.nonNull(easing, "easing function");
 
         // Invert transforms
         if(d.hasTransform  ()) d.getTransform  ().invert();
@@ -107,6 +110,11 @@ public class Transition {
      * @return This transition.
      */
     public @NotNull Transition targetTransform(final @Nullable Transform transform) {
+        assert Require.condition(transform == null || transform.getScale() != null,     "transform scale");
+        assert Require.condition(transform == null || transform.getRot() != null,       "transform local rotation");
+        assert Require.condition(transform == null || transform.getPos() != null,       "transform position");
+        assert Require.condition(transform == null || transform.getGlobalRot() != null, "transform global rotation");
+
         d.setTransform(transform);
         additive = false;
         return this;
@@ -117,6 +125,11 @@ public class Transition {
      * @return This transition.
      */
     public @NotNull Transition additiveTransform(final @Nullable Transform transform) {
+        assert Require.condition(transform == null || transform.getScale() != null,     "transform scale");
+        assert Require.condition(transform == null || transform.getRot() != null,       "transform local rotation");
+        assert Require.condition(transform == null || transform.getPos() != null,       "transform position");
+        assert Require.condition(transform == null || transform.getGlobalRot() != null, "transform global rotation");
+
         d.setTransform(transform);
         additive = true;
         return this;
@@ -129,6 +142,11 @@ public class Transition {
      * @return This transition.
      */
     public @NotNull Transition targetTransformFg(final @Nullable Transform transform) {
+        assert Require.condition(transform == null || transform.getScale() != null,     "transform scale");
+        assert Require.condition(transform == null || transform.getRot() != null,       "transform local rotation");
+        assert Require.condition(transform == null || transform.getPos() != null,       "transform position");
+        assert Require.condition(transform == null || transform.getGlobalRot() != null, "transform global rotation");
+
         d.setTransformFg(transform);
         additive = false;
         return this;
@@ -139,6 +157,11 @@ public class Transition {
      * @return This transition.
      */
     public @NotNull Transition additiveTransformFg(final @Nullable Transform transform) {
+        assert Require.condition(transform == null || transform.getScale() != null,     "transform scale");
+        assert Require.condition(transform == null || transform.getRot() != null,       "transform local rotation");
+        assert Require.condition(transform == null || transform.getPos() != null,       "transform position");
+        assert Require.condition(transform == null || transform.getGlobalRot() != null, "transform global rotation");
+
         d.setTransformFg(transform);
         additive = true;
         return this;
@@ -151,6 +174,11 @@ public class Transition {
      * @return This transition.
      */
     public @NotNull Transition targetTransformBg(final @Nullable Transform transform) {
+        assert Require.condition(transform == null || transform.getScale() != null,     "transform scale");
+        assert Require.condition(transform == null || transform.getRot() != null,       "transform local rotation");
+        assert Require.condition(transform == null || transform.getPos() != null,       "transform position");
+        assert Require.condition(transform == null || transform.getGlobalRot() != null, "transform global rotation");
+
         d.setTransformBg(transform);
         additive = false;
         return this;
@@ -161,6 +189,11 @@ public class Transition {
      * @return This transition.
      */
     public @NotNull Transition additiveTransformBg(final @Nullable Transform transform) {
+        assert Require.condition(transform == null || transform.getScale() != null,     "transform scale");
+        assert Require.condition(transform == null || transform.getRot() != null,       "transform local rotation");
+        assert Require.condition(transform == null || transform.getPos() != null,       "transform position");
+        assert Require.condition(transform == null || transform.getGlobalRot() != null, "transform global rotation");
+
         d.setTransformBg(transform);
         additive = true;
         return this;

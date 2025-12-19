@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.frameworkconfig.ConfigManager;
 import com.snek.frameworklib.FrameworkLib;
-import com.snek.frameworklib.debug.Assert;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.utils.UtilityClassBase;
 
 
@@ -37,7 +37,8 @@ public final class Configs extends UtilityClassBase {
     public static void loadConfigs() {
         ui   = ConfigManager.loadConfig("UiConfig",    UiConfig.class,          FrameworkLib.LIB_ID); //TODO rename ui config to "graphics"
         perf = ConfigManager.loadConfig("Performance", PerformanceConfig.class, FrameworkLib.LIB_ID);
-        Assert.requireNonNull(ui, "ui config data");
-        Assert.requireNonNull(perf, "perf config data");
+
+        assert Require.nonNull(ui, "ui config data");
+        assert Require.nonNull(perf, "perf config data");
     }
 }

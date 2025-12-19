@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.frameworklib.debug.Assert;
+import com.snek.frameworklib.debug.Require;
 
 
 
@@ -28,7 +28,9 @@ public class Animation {
      * @param a The animation to copy.
      */
     public Animation(final @NotNull Animation a) {
-        Assert.requireNonNull(a, "animation");
+        assert Require.nonNull(a, "animation");
+        assert Require.notEmpty(a.getTransitions(), "animation transitions");
+        assert Require.nonNegative(a.getTotalDuration(), "animation duration");
 
         transitions = new ArrayList<>(a.getTransitions().size());
         for(final Transition t : a.getTransitions()) {
@@ -43,11 +45,13 @@ public class Animation {
      * @param transitions One or more transitions.
      */
     public Animation(final @NotNull Transition... transitions) {
-        Assert.requireNonNull(transitions, "transition list");
+        assert Require.notEmpty(transitions, "transition list");
 
         this.transitions = new ArrayList<>(transitions.length);
         int _totalDuration = 0;
         for(final Transition t : transitions) {
+            assert Require.nonNull(t, "transition");
+
             this.transitions.add(new Transition(t));
             _totalDuration += t.getDuration();
         }
@@ -65,7 +69,10 @@ public class Animation {
      * @return {@code this}.
      */
     public @NotNull Animation invert() {
+        assert Require.notEmpty(transitions, "transition list");
+
         for(final Transition t : transitions) {
+            assert Require.nonNull(t, "transition");
             t.invert();
         }
         Collections.reverse(transitions);
@@ -78,6 +85,8 @@ public class Animation {
      * @return The translations.
      */
     public @NotNull List<@NotNull Transition> getTransitions() {
+        assert Require.notEmpty(transitions, "transition list");
+
         return Collections.unmodifiableList(transitions);
     }
 

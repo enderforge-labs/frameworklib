@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
 
-import com.snek.frameworklib.debug.Assert;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.utils.Utils;
 
 
@@ -38,12 +38,18 @@ public class InterpolatedData {
     public boolean hasOpacity    () { return opacity     != null; }
 
     // Setters
-    public void setTransformFg(final @Nullable Transform _transformFg) { transformFg = _transformFg; }
-    public void setTransformBg(final @Nullable Transform _transformBg) { transformBg = _transformBg; }
-    public void setTransform  (final @Nullable Transform _transform  ) { transform   = _transform;   }
-    public void setBgColor    (final @Nullable Vector3i  _bgColor    ) { bgColor     = _bgColor;     }
-    public void setBgAlpha    (final @Nullable Integer   _bgAlpha    ) { bgAlpha     = _bgAlpha;     }
-    public void setOpacity    (final @Nullable Integer   _opacity    ) { opacity     = _opacity;     }
+    public void setTransformFg(final @Nullable Transform transformFg) { this.transformFg = transformFg; }
+    public void setTransformBg(final @Nullable Transform transformBg) { this.transformBg = transformBg; }
+    public void setTransform  (final @Nullable Transform transform  ) { this.transform   = transform;   }
+    public void setBgColor    (final @Nullable Vector3i  bgColor    ) { this.bgColor     = bgColor;     }
+    public void setBgAlpha    (final @Nullable Integer   bgAlpha    ) {
+        assert Require.nonNegative(bgAlpha, "background alpha");
+        this.bgAlpha = bgAlpha;
+    }
+    public void setOpacity    (final @Nullable Integer   opacity    ) {
+        assert Require.nonNegative(opacity, "opacity");
+        this.opacity = opacity;
+    }
 
     // Getters
     public @Nullable Transform getTransformFg() { return transformFg; }
@@ -86,6 +92,9 @@ public class InterpolatedData {
         final @Nullable Transform transformFg,
         final @Nullable Transform transformBg
     ) {
+        assert Require.nonNegative(bgAlpha, "background alpha");
+        assert Require.nonNegative(opacity, "opacity");
+
         this.transform   = transform   == null ? null : new Transform(transform);
         this.bgColor     = bgColor     == null ? null : new Vector3i(bgColor);
         this.bgAlpha     = bgAlpha;
@@ -121,7 +130,7 @@ public class InterpolatedData {
      * @param s The step to apply.
      */
     public void apply(final @NotNull TransitionStep s) {
-        Assert.requireNonNull(s, "transition step");
+        assert Require.nonNull(s, "transition step");
 
         if(s.d.hasTransform() && hasTransform()) {
             if(s.isAdditive()) transform.interpolate(transform.copy().apply(s.d.getTransform()), s.getFactor());

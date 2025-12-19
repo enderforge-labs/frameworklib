@@ -9,6 +9,7 @@ import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.generated.FontData;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.elements.Elm;
@@ -36,12 +37,12 @@ import net.minecraft.server.level.ServerLevel;
 public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, SimpleTextElm {
 
     // Constants
-    public static final char ELLIPSIS_CHAR = '…';   // The ellipsis character to use when truncating text
-    public static final int  SCROLL_DELAY  = 8;     // How often to move the text by SCROLL_AMOUNT pixels, in ticks
-    public static final int  SCROLL_AMOUNT = 1;     // The number of characters to move the text by, every iteration
+    public static final char  ELLIPSIS_CHAR = '…';   // The ellipsis character to use when truncating text
+    public static final int   SCROLL_DELAY  = 8;     // How often to move the text by SCROLL_AMOUNT pixels, in ticks
+    public static final int   SCROLL_AMOUNT = 1;     // The number of characters to move the text by, every iteration
     public static final float SCROLL_BOUNDARY_DELAY = 20f / SCROLL_DELAY; // The amount of cycles to wait for before and after scrolling the text
-    public static final int  ENTITY_MARGIN_WIDTH_PX = 2;
-    public static final int  ENTITY_MARGIN_HEIGHT_PX = 2;
+    public static final int   ENTITY_MARGIN_WIDTH_PX = 2;
+    public static final int   ENTITY_MARGIN_HEIGHT_PX = 2;
 
 
     // In-world data
@@ -100,7 +101,8 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
     //TODO comment
-    public Vector2f __calcTextSizeCache(final String string) {
+    public Vector2f __calcTextSizeCache(final @NotNull String string) {
+        assert Require.nonNull(string, "string");
 
         // Set cache to 0 if the text is empty.
         if(string.isEmpty()) {
@@ -345,7 +347,11 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
 
-    private void runScrollTask(final Txt text, final float xScale, final int maxWidthPx, final String textString, final int endSegmentWidth, final boolean startAnimations) {
+    private void runScrollTask(final @NotNull Txt text, final float xScale, final int maxWidthPx, final String textString, final int endSegmentWidth, final boolean startAnimations) {
+        assert Require.nonNull(text, "text");
+        assert Require.nonNull(textString, "text string");
+        assert Require.nonNegative(maxWidthPx, "max pixel width");
+        assert Require.nonNegative(endSegmentWidth, "end segment width");
 
         // Update elapsed ticks and return if in delay period
         if(boundaryElapsedIterations < SCROLL_BOUNDARY_DELAY) {

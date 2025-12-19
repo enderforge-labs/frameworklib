@@ -7,7 +7,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 import com.mojang.math.Transformation;
-import com.snek.frameworklib.debug.Assert;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.mixin.DisplayAccessorMixin;
 
 import net.minecraft.network.chat.Component;
@@ -53,7 +53,7 @@ public abstract class CustomDisplay {
      * @param _heldEntity The display entity.
      */
     protected CustomDisplay(final @NotNull Display _heldEntity) {
-        Assert.requireNonNull(_heldEntity, "held entity");
+        assert Require.nonNull(_heldEntity, "held entity");
         heldEntity = _heldEntity;
         setBrightness(new Brightness(15, 15));
     }
@@ -78,8 +78,8 @@ public abstract class CustomDisplay {
      * @param pos The position of the spawned entity.
      */
     public void spawn(final @NotNull Level level, final @NotNull Vector3d pos) {
-        Assert.requireNonNull(level, "level");
-        Assert.requireNonNull(pos, "position");
+        assert Require.nonNull(level, "level");
+        assert Require.nonNull(pos, "position");
 
         if(!spawned) {
             spawned = true;
@@ -100,7 +100,7 @@ public abstract class CustomDisplay {
      * @param level The level to spawn the new entity in.
      */
     public void renewEntity(final Level level) {
-        Assert.requireNonNull(level, "level");
+        assert Require.nonNull(level, "level");
 
         if(heldEntity.isRemoved()) {
             if(heldEntity instanceof TextDisplay) {
@@ -143,7 +143,7 @@ public abstract class CustomDisplay {
      * @param transformation The new value.
      */
     public void setTransformation(final @NotNull Transformation transformation) {
-        Assert.requireNonNull(transformation, "transformation");
+        assert Require.nonNull(transformation, "transformation");
         getAccessibleDisplay().invokeSetTransformation(transformation);
     }
 
@@ -155,7 +155,7 @@ public abstract class CustomDisplay {
      * @param duration The new value, measured in ticks
      */
     public void setInterpolationDuration(final int duration) {
-        Assert.requireNonNegative(duration, "interpolation duration");
+        assert Require.nonNegative(duration, "interpolation duration");
         getAccessibleDisplay().invokeSetInterpolationDuration(duration);
     }
 
@@ -177,7 +177,7 @@ public abstract class CustomDisplay {
      * @param billboardMode The new value.
      */
     public void setBillboardMode(final @NotNull BillboardConstraints billboardMode) {
-        Assert.requireNonNull(billboardMode, "billboard mode");
+        assert Require.nonNull(billboardMode, "billboard mode");
         getAccessibleDisplay().invokeSetBillboardMode(billboardMode);
     }
 
@@ -200,7 +200,7 @@ public abstract class CustomDisplay {
      * @param viewRange The new value.
      */
     public void setViewRange(final float viewRange) {
-        Assert.requireNonNegative(viewRange, "view range");
+        assert Require.nonNegative(viewRange, "view range");
         getAccessibleDisplay().invokeSetViewRange(viewRange);
     }
 
@@ -223,7 +223,7 @@ public abstract class CustomDisplay {
      * @param brightness
      */
     public void setBrightness(final @NotNull Brightness brightness) {
-        Assert.requireNonNull(brightness, "brightness");
+        assert Require.nonNull(brightness, "brightness");
         getAccessibleDisplay().invokeSetBrightness(brightness);
     }
 
@@ -244,7 +244,7 @@ public abstract class CustomDisplay {
      * @param name The new value.
      */
     public void setCustomName(final @NotNull Component name) {
-        Assert.requireNonNull(name, "name");
+        assert Require.nonNull(name, "name");
         heldEntity.setCustomName(name);
     }
 
@@ -274,7 +274,7 @@ public abstract class CustomDisplay {
      * @param pos The new position.
      */
     public void setPos(final @NotNull Vector3d pos) {
-        Assert.requireNonNull(pos, "position");
+        assert Require.nonNull(pos, "position");
         heldEntity.setPos(pos.x, pos.y, pos.z);
     }
 
@@ -297,7 +297,7 @@ public abstract class CustomDisplay {
      * @param width The new value.
      */
     public void setFrustumCullingBoundingBoxWidth(final float width) {
-        Assert.requireNonNegative(width, "width");
+        assert Require.nonNegative(width, "width");
         getAccessibleDisplay().invokeSetFrustumCullingBoundingBoxWidth(width);
     }
 
@@ -318,7 +318,7 @@ public abstract class CustomDisplay {
      * @param height The new value.
      */
     public void setFrustumCullingBoundingBoxHeight(final float height) {
-        Assert.requireNonNegative(height, "height");
+        assert Require.nonNegative(height, "height");
         getAccessibleDisplay().invokeSetFrustumCullingBoundingBoxHeight(height);
     }
 
@@ -338,7 +338,7 @@ public abstract class CustomDisplay {
      * @return Whether the display could successfully ride the entity.
      */
     public boolean startRiding(final @NotNull Entity e) {
-        Assert.requireNonNull(e, "entity");
+        assert Require.nonNull(e, "entity");
         return heldEntity.startRiding(e, true);
     }
 
@@ -348,7 +348,7 @@ public abstract class CustomDisplay {
      * @param pos The target position.
      */
     public void teleport(final @NotNull Vector3d pos) {
-        Assert.requireNonNull(pos, "position");
+        assert Require.nonNull(pos, "position");
         heldEntity.teleportTo(pos.x, pos.y, pos.z);
     }
 }

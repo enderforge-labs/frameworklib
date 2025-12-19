@@ -14,6 +14,7 @@ import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.styles.ConfigurableFancyTextElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
@@ -108,6 +109,7 @@ public non-sealed class FancyTextElm extends __base_TextElm {
      * @return The final transformation.
      */
     public @NotNull Transform __calcTransformFg(final @NotNull Transform initialTransform) {
+        assert Require.nonNull(initialTransform, "initial transform");
         return
             initialTransform.copy()
             .apply(getThisStyle().getTransformFg())
@@ -123,6 +125,7 @@ public non-sealed class FancyTextElm extends __base_TextElm {
      * @return The final transformation.
      */
     public @NotNull Transform __calcTransformBg(final @NotNull Transform initialTransform) {
+        assert Require.nonNull(initialTransform, "initial transform");
         return
             initialTransform.copy()
             .apply(getThisStyle().getTransformBg())
