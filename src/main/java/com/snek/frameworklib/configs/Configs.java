@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.frameworkconfig.ConfigManager;
 import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.debug.Assert;
 import com.snek.frameworklib.utils.UtilityClassBase;
 
 
