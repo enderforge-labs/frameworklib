@@ -38,9 +38,21 @@ public non-sealed class FancyTextElm extends __base_TextElm {
 
     // In-world data
     private final @NotNull CustomDisplay text;
-    public  @NotNull CustomTextDisplay getFgEntity()  { return (CustomTextDisplay)text; }
-    public  @NotNull CustomTextDisplay getBgEntity()  { return getEntity(CustomTextDisplay.class); }
-    private @NotNull FancyTextElmStyle getThisStyle() { return getStyle(FancyTextElmStyle.class); }
+    public @NotNull CustomTextDisplay getFgEntity()  {
+        assert Require.nonNull(text, "foreground entity");
+        assert Require.instanceOf(text, CustomTextDisplay.class, "foreground entity");
+        return (CustomTextDisplay)text;
+    }
+    public @NotNull CustomTextDisplay getBgEntity()  {
+        assert Require.nonNull(getEntity(), "background entity");
+        assert Require.instanceOf(getEntity(), CustomTextDisplay.class, "background entity");
+        return getEntity(CustomTextDisplay.class);
+    }
+    private @NotNull FancyTextElmStyle getThisStyle() {
+        assert Require.nonNull(getStyle(), "style");
+        assert Require.instanceOf(getStyle(), FancyTextElmStyle.class, "style");
+        return getStyle(FancyTextElmStyle.class);
+    }
 
     @Override
     public @NotNull CustomTextDisplay getTextDisplay() {

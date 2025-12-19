@@ -3,6 +3,8 @@ package com.snek.frameworklib.graphics.basic.styles;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
+import com.snek.frameworklib.debug.Require;
+
 
 
 
@@ -23,6 +25,11 @@ public class ConfigurablePanelElmStyle extends PanelElmStyle {
      */
     public ConfigurablePanelElmStyle(final int defaultAlpha, final @NotNull Vector3i defaultColor) {
         super();
+        assert Require.inRange(defaultAlpha, 0, 255, "default alpha");
+        assert Require.nonNull(defaultColor, "default color");
+        assert Require.inRange(defaultColor.x, 0, 255, "default color red");
+        assert Require.inRange(defaultColor.y, 0, 255, "default color green");
+        assert Require.inRange(defaultColor.z, 0, 255, "default color blue");
         this.defaultAlpha = defaultAlpha;
         this.defaultColor = defaultColor;
     }

@@ -10,6 +10,7 @@ import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.styles.ConfigurableSimpleTextElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
@@ -32,8 +33,16 @@ import net.minecraft.server.level.ServerLevel;
 public non-sealed class SimpleTextElm extends __base_TextElm {
 
     // In-world data
-    private @NotNull CustomTextDisplay  getThisEntity() { return getEntity(CustomTextDisplay.class); }
-    private @NotNull SimpleTextElmStyle getThisStyle () { return getStyle (SimpleTextElmStyle.class); }
+    private @NotNull CustomTextDisplay  getThisEntity() {
+        assert Require.nonNull(getEntity(), "entity");
+        assert Require.instanceOf(getEntity(), CustomTextDisplay.class, "entity");
+        return getEntity(CustomTextDisplay.class);
+    }
+    private @NotNull SimpleTextElmStyle getThisStyle () {
+        assert Require.nonNull(getStyle(), "style");
+        assert Require.instanceOf(getStyle(), SimpleTextElmStyle.class, "style");
+        return getStyle(SimpleTextElmStyle.class);
+    }
 
     @Override
     public @NotNull CustomTextDisplay getTextDisplay() {

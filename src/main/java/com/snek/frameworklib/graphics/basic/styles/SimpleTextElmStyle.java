@@ -9,6 +9,7 @@ import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.elements.FancyTextElm;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.utils.Easings;
@@ -116,10 +117,22 @@ public class SimpleTextElmStyle extends ElmStyle {
 
 
     // Setters
-    public void setText                 (final @NotNull Component             text                 ) { this.text                 .set(text                 ); }
-    public void setTextOverflowBehaviour(final @NotNull TextOverflowBehaviour textOverflowBehaviour) { this.textOverflowBehaviour.set(textOverflowBehaviour); }
-    public void setTextAlignment        (final @NotNull TextAlignment         textAlignment        ) { this.textAlignment        .set(textAlignment        ); }
-    public void setTextOpacity          (final          int                   textOpacity          ) { this.textOpacity          .set(textOpacity          ); }
+    public void setText(final @NotNull Component text) {
+        assert Require.nonNull(text, "text");
+        this.text.set(text);
+    }
+    public void setTextOverflowBehaviour(final @NotNull TextOverflowBehaviour textOverflowBehaviour) {
+        assert Require.nonNull(textOverflowBehaviour, "text overflow behaviour");
+        this.textOverflowBehaviour.set(textOverflowBehaviour);
+    }
+    public void setTextAlignment(final @NotNull TextAlignment textAlignment) {
+        assert Require.nonNull(textAlignment, "text alignment");
+        this.textAlignment.set(textAlignment);
+    }
+    public void setTextOpacity(final int textOpacity) {
+        assert Require.inRange(textOpacity, 0, 255, "opacity");
+        this.textOpacity.set(textOpacity);
+    }
 
 
     // Flagged getters

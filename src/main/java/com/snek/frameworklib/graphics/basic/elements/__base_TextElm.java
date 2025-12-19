@@ -147,7 +147,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
     //TODO this might need to be cached
     //TODO check subclasses too
     /**
-     * Calculates the in-world height of the TextDisplay entity associated with this element.
+     * Calculates the in-world height the TextDisplay entity associated with this element would have if it were displaying the full text stored in the style.
      * <p>
      * Notice: The height can be inaccurate as a lot of assumptions are made to calculate it. The returned value is the best possible approximation.
      * <p>
@@ -160,15 +160,27 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
         final float r = entityTotSizeCacheY == 0 ? 0 : entityTotSizeCacheY;
         return r * calcForegroundTransform().getScale().y;
     }
-    //TODO comment
+
+    /**
+     * Calculates the in-world height of the TextDisplay entity associated with this element.
+     * <p>
+     * Notice: The height can be inaccurate as a lot of assumptions are made to calculate it. The returned value is the best possible approximation.
+     * <p>
+     * Notice: Wrapped lines are counted as one.
+     * <p>
+     * Notice: This height value does not include the eneity's margin. Use {@link #calcTotEntityHeightWithMargins()} to account for margins.
+     * @return The height in blocks.
+     */
     public float calcVisualEntityHeight() {
         final float r = entityVisualSizeCacheY == 0 ? 0 : entityVisualSizeCacheY;
         return r * calcForegroundTransform().getScale().y;
     }
 
 
+
+
     /**
-     * Calculates the in-world height of the TextDisplay entity associated with this element.
+     * Calculates the in-world height the TextDisplay entity associated with this element would have if it were displaying the full text stored in the style.
      * <p>
      * Notice: The height can be inaccurate as a lot of assumptions are made to calculate it. The returned value is the best possible approximation.
      * <p>
@@ -182,7 +194,17 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
         final float margin = ENTITY_MARGIN_HEIGHT_PX * 2f / FontData.TEXT_PIXEL_BLOCK_RATIO;
         return (r + margin) * calcForegroundTransform().getScale().y;
     }
-    //TODO comment
+
+    /**
+     * Calculates the in-world height of the TextDisplay entity associated with this element.
+     * <p>
+     * Notice: The height can be inaccurate as a lot of assumptions are made to calculate it. The returned value is the best possible approximation.
+     * <p>
+     * Notice: Wrapped lines are counted as one.
+     * <p>
+     * Notice: This height value includes the eneity's margin. Use {@link #calcTotEntityHeight()} to ignore them.
+     * @return The height in blocks.
+     */
     public float calcVisualEntityHeightWithMargins() {
         final float r = entityVisualSizeCacheY == 0 ? 0 : entityVisualSizeCacheY;
         final float margin = ENTITY_MARGIN_HEIGHT_PX * 2f / FontData.TEXT_PIXEL_BLOCK_RATIO;
@@ -192,11 +214,15 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
 
+
+
+
+
     //TODO this might need to be cached
     //TODO this might need to be cached
     //TODO check subclasses too
     /**
-     * Calculates the in-world width of the TextDisplay entity associated with this element.
+     * Calculates the in-world width the TextDisplay entity associated with this element would have if it were displaying the full text stored in the style.
      * <p>
      * Notice: The width can be inaccurate as a lot of assumptions are made to calculate it. The returned value is the best possible approximation.
      * <p>
@@ -209,7 +235,17 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
         final float r = entityTotSizeCacheX == 0 ? 0 : entityTotSizeCacheX;
         return r * calcForegroundTransform().getScale().x;
     }
-    //TODO comment
+
+    /**
+     * Calculates the in-world width of the TextDisplay entity associated with this element.
+     * <p>
+     * Notice: The width can be inaccurate as a lot of assumptions are made to calculate it. The returned value is the best possible approximation.
+     * <p>
+     * Notice: Wrapped lines are counted as one.
+     * <p>
+     * Notice: This width value includes the eneity's margin. Use {@link #calcTotEntityWidthWithMargins()} to account for margins.
+     * @return The width in blocks.
+     */
     public float calcVisualEntityWidth() {
         final float r = entityVisualSizeCacheX == 0 ? 0 : entityVisualSizeCacheX;
         return r * calcForegroundTransform().getScale().x;
@@ -219,7 +255,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
     /**
-     * Calculates the in-world width of the TextDisplay entity associated with this element.
+     * Calculates the in-world width the TextDisplay entity associated with this element would have if it were displaying the full text stored in the style.
      * <p>
      * Notice: The width can be inaccurate as a lot of assumptions are made to calculate it. The returned value is the best possible approximation.
      * <p>
@@ -233,7 +269,17 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
         final float margin = ENTITY_MARGIN_WIDTH_PX * 2f / FontData.TEXT_PIXEL_BLOCK_RATIO ;
         return (r + margin) * calcForegroundTransform().getScale().x;
     }
-    //TODO comment
+
+    /**
+     * Calculates the in-world width of the TextDisplay entity associated with this element.
+     * <p>
+     * Notice: The width can be inaccurate as a lot of assumptions are made to calculate it. The returned value is the best possible approximation.
+     * <p>
+     * Notice: Wrapped lines are counted as one.
+     * <p>
+     * Notice: This width value includes the eneity's margin. Use {@link #calcTotEntityWidth()} to ignore them
+     * @return The width in blocks.
+     */
     public float calcVisualEntityWidthWithMargins() {
         final float r = entityVisualSizeCacheX == 0 ? 0f : entityVisualSizeCacheX;
         final float margin = ENTITY_MARGIN_WIDTH_PX * 2f / FontData.TEXT_PIXEL_BLOCK_RATIO ;
@@ -243,12 +289,19 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
 
+
+
+
+
     private @NotNull Transform calcForegroundTransform() {
         /**/ if(this instanceof SimpleTextElm e) { return                     e.__calcTransform();  }
         else if(this instanceof FancyTextElm  e) { return e.__calcTransformFg(e.__calcTransform()); }
 
         //! This is never actually called. __base_TextElm is a sealed class that only permits SimpleTextElm and FancyTextElm
-        else throw new RuntimeException();
+        else {
+            assert Require.fail("calcForegroundTransform called on invalid class");
+            throw new RuntimeException();
+        }
     }
 
 

@@ -8,6 +8,7 @@ import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.elements.FancyTextElm;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.utils.Easings;
@@ -109,10 +110,25 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
     public void resetTransformBg () { transformBg = Flagged.from(getDefaultTransformBg()); }
 
 
-    public void setBgColor     (final @NotNull Vector3i  bgColor    ) { this.bgColor    .set(bgColor    ); }
-    public void setBgAlpha     (final          int       bgAlpha    ) { this.bgAlpha    .set(bgAlpha    ); }
-    public void setTransformFg (final @NotNull Transform transformFg) { this.transformFg.set(transformFg); }
-    public void setTransformBg (final @NotNull Transform transformBg) { this.transformBg.set(transformBg); }
+    public void setBgColor(final @NotNull Vector3i bgColor) {
+        assert Require.nonNull(bgColor, "background color");
+        assert Require.inRange(bgColor.x, 0, 255, "background color red");
+        assert Require.inRange(bgColor.y, 0, 255, "background color green");
+        assert Require.inRange(bgColor.z, 0, 255, "background color blue");
+        this.bgColor.set(bgColor);
+    }
+    public void setBgAlpha(final int bgAlpha) {
+        assert Require.inRange(bgAlpha, 0, 255, "background alpha");
+        this.bgAlpha.set(bgAlpha);
+    }
+    public void setTransformFg(final @NotNull Transform transformFg) {
+        assert Require.nonNull(transformFg, "foreground transform");
+        this.transformFg.set(transformFg);
+    }
+    public void setTransformBg(final @NotNull Transform transformBg) {
+        assert Require.nonNull(transformBg, "background transform");
+        this.transformBg.set(transformBg);
+    }
 
 
     public @NotNull Flagged<@NotNull Vector3i>  getFlaggedBgColor    () { return bgColor; }

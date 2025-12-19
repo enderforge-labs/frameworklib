@@ -8,7 +8,9 @@ import org.joml.Vector4i;
 import com.snek.frameworklib.data_types.animations.InterpolatedData;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.containers.Flagged;
+import com.snek.frameworklib.data_types.displays.CustomItemDisplay;
 import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.styles.ConfigurablePanelElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 import com.snek.frameworklib.graphics.core.elements.Elm;
@@ -30,8 +32,18 @@ import net.minecraft.server.level.ServerLevel;
  * Panels default to a 1x1 blocks size.
  */
 public class PanelElm extends Elm {
-    private @NotNull CustomTextDisplay getThisEntity() { return getEntity(CustomTextDisplay.class); }
-    private @NotNull PanelElmStyle     getThisStyle () { return getStyle (PanelElmStyle    .class); }
+
+    private @NotNull CustomTextDisplay getThisEntity() {
+        assert Require.nonNull(getEntity(), "entity");
+        assert Require.instanceOf(getEntity(), CustomItemDisplay.class, "entity");
+        return getEntity(CustomTextDisplay.class);
+    }
+    private @NotNull PanelElmStyle getThisStyle () {
+        assert Require.nonNull(getStyle(), "style");
+        assert Require.instanceOf(getStyle(), PanelElmStyle.class, "style");
+        return getStyle (PanelElmStyle.class);
+    }
+
 
     // The amount of panel elements of default size would be needed to cover the width of a block
     public static final float ENTITY_BLOCK_RATIO_X = 40f;

@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
+import com.snek.frameworklib.debug.Require;
 
 import net.minecraft.network.chat.Component;
 
@@ -32,6 +33,9 @@ public class ConfigurableSimpleTextElmStyle extends SimpleTextElmStyle {
         final @NotNull TextOverflowBehaviour defaultOverflowBehaviour
     ) {
         super();
+        assert Require.nonNull(defaultText, "default text");
+        assert Require.nonNull(defaultTextAlignment, "default text alignment");
+        assert Require.nonNull(defaultOverflowBehaviour, "default overflow behaviour");
         this.defaultText = defaultText;
         this.defaultTextAlignment = defaultTextAlignment;
         this.defaultOverflowBehaviour = defaultOverflowBehaviour;

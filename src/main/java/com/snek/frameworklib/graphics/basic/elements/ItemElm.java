@@ -11,6 +11,7 @@ import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.data_types.displays.CustomItemDisplay;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
@@ -34,8 +35,17 @@ import net.minecraft.world.item.Items;
  * An element that can display items.
  */
 public class ItemElm extends Elm {
-    private @NotNull CustomItemDisplay getThisEntity() { return getEntity(CustomItemDisplay.class); }
-    private @NotNull ItemElmStyle      getThisStyle () { return getStyle (ItemElmStyle     .class); }
+
+    private @NotNull CustomItemDisplay getThisEntity() {
+        assert Require.nonNull(getEntity(), "entity");
+        assert Require.instanceOf(getEntity(), CustomItemDisplay.class, "entity");
+        return getEntity(CustomItemDisplay.class);
+    }
+    private @NotNull ItemElmStyle getThisStyle () {
+        assert Require.nonNull(getStyle(), "style");
+        assert Require.instanceOf(getStyle(), ItemElmStyle.class, "style");
+        return getStyle (ItemElmStyle.class);
+    }
 
 
 

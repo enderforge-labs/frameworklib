@@ -8,6 +8,7 @@ import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.utils.Easings;
@@ -99,8 +100,17 @@ public class PanelElmStyle extends ElmStyle {
     public void resetAlpha() { alpha = Flagged.from(getDefaultAlpha()); }
 
 
-    public void setColor(final @NotNull Vector3i color ) { this.color.set(color); }
-    public void setAlpha(final          int      alpha ) { this.alpha.set(alpha); }
+    public void setColor(final @NotNull Vector3i color ) {
+        assert Require.nonNull(color, "color");
+        assert Require.inRange(color.x, 0, 255, "color red");
+        assert Require.inRange(color.y, 0, 255, "color green");
+        assert Require.inRange(color.z, 0, 255, "color blue");
+        this.color.set(color);
+    }
+    public void setAlpha(final int alpha ) {
+        assert Require.inRange(alpha, 0, 255, "alpha");
+        this.alpha.set(alpha);
+    }
 
 
     public @NotNull Flagged<@NotNull Vector3i> getFlaggedColor() { return color; }
