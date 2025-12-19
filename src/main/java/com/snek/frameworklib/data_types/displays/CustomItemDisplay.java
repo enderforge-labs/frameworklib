@@ -23,8 +23,14 @@ import net.minecraft.world.level.Level;
  * This class allows for better customization and more readable code.
  */
 public class CustomItemDisplay extends CustomDisplay {
-    public @NotNull ItemDisplay getRawDisplay() { return (ItemDisplay)heldEntity; }
-    private @NotNull ItemDisplayAccessorMixin getAccessibleDisplay() { return (ItemDisplayAccessorMixin)heldEntity; }
+    public @NotNull ItemDisplay getRawDisplay() {
+        assert Require.nonNull(heldEntity, "held entity");
+        return (ItemDisplay)heldEntity;
+    }
+    private @NotNull ItemDisplayAccessorMixin getAccessibleDisplay() {
+        assert Require.nonNull(heldEntity, "held entity");
+        return (ItemDisplayAccessorMixin)heldEntity;
+    }
 
 
 
@@ -77,6 +83,6 @@ public class CustomItemDisplay extends CustomDisplay {
      * @return The current display type.
      */
     public @NotNull ItemDisplayContext getDisplayType() {
-        return (ItemDisplayContext)getAccessibleDisplay().invokeGetDisplayType();
+        return getAccessibleDisplay().invokeGetDisplayType();
     }
 }

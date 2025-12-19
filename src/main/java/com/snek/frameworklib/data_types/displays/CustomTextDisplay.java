@@ -27,8 +27,14 @@ import net.minecraft.world.level.Level;
  * This class allows for better customization and more readable code.
  */
 public class CustomTextDisplay extends CustomDisplay {
-    public @NotNull TextDisplay getRawDisplay() { return (TextDisplay)heldEntity; }
-    private @NotNull TextDisplayAccessorMixin getAccessibleDisplay() { return (TextDisplayAccessorMixin)heldEntity; }
+    public @NotNull TextDisplay getRawDisplay() {
+        assert Require.nonNull(heldEntity, "held entity");
+        return (TextDisplay)heldEntity;
+    }
+    private @NotNull TextDisplayAccessorMixin getAccessibleDisplay() {
+        assert Require.nonNull(heldEntity, "held entity");
+        return (TextDisplayAccessorMixin)heldEntity;
+    }
 
 
     // Component cache and flag used to remove the text when the opacity value is lower than 26
@@ -184,8 +190,8 @@ public class CustomTextDisplay extends CustomDisplay {
 
 
     /**
-     * Sets the alpha value of the rendered text.
-     * @param a The alpha value.
+     * Sets the opacity value of the rendered text.
+     * @param opacity The opacity value.
      * <p>
      * Values smaller than {@code 26} are converted to {@code 26} unless {@code noTextUnderA26} is set to {@code true}, in which case the text is not rendered at all.
      * This is done because minecraft ignores these values and usually makes the text fully opaque instead of fully transparent, rendering animations jittery.
@@ -194,7 +200,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * before interpolating, but the raw byte value ({@code 0 to 127}, {@code -128 to -1}) is used instead.
      */
     public void setTextOpacity(final int opacity) {
-        assert Require.nonNegative(opacity, "text opacity");
+        assert Require.inRange(opacity, 0, 255, "text opacity");
 
         int a = opacity;
         shiftLastAlpha(a);
@@ -234,6 +240,10 @@ public class CustomTextDisplay extends CustomDisplay {
      */
     public void setBackground(final @NotNull Vector4i argb) {
         assert Require.nonNull(argb, "background color");
+        assert Require.inRange(argb.x, 0, 255, "background color alpha");
+        assert Require.inRange(argb.y, 0, 255, "background color red");
+        assert Require.inRange(argb.z, 0, 255, "background color greeb");
+        assert Require.inRange(argb.w, 0, 255, "background color blue");
         getAccessibleDisplay().invokeSetBackground((argb.x << 24) | (argb.y << 16) | (argb.z << 8) | argb.w);
     }
 
@@ -256,6 +266,7 @@ public class CustomTextDisplay extends CustomDisplay {
      */
     public void setTextAlignment(final @NotNull TextAlignment alignment) {
         assert Require.nonNull(alignment, "text alignment");
+        assert Require.nonNull(heldEntity, "held entity");
 
         final CompoundTag nbt = new CompoundTag();
         heldEntity.save(nbt);

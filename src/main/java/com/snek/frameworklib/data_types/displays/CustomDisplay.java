@@ -36,7 +36,11 @@ import net.minecraft.world.level.Level;
 public abstract class CustomDisplay {
     protected @NotNull Display heldEntity;
     protected boolean spawned = false;
-    private @NotNull DisplayAccessorMixin getAccessibleDisplay() { return (DisplayAccessorMixin)heldEntity; }
+
+    private @NotNull DisplayAccessorMixin getAccessibleDisplay() {
+        assert Require.nonNull(heldEntity, "held entity");
+        return (DisplayAccessorMixin)heldEntity;
+    }
 
 
 
@@ -54,6 +58,7 @@ public abstract class CustomDisplay {
      */
     protected CustomDisplay(final @NotNull Display _heldEntity) {
         assert Require.nonNull(_heldEntity, "held entity");
+
         heldEntity = _heldEntity;
         setBrightness(new Brightness(15, 15));
     }
@@ -65,7 +70,8 @@ public abstract class CustomDisplay {
      * Returns the UUID of the raw display entity.
      * @return The UUID.
      */
-    public UUID getUuid() {
+    public @NotNull UUID getUuid() {
+        assert Require.nonNull( heldEntity.getUUID(), "entity UUID");
         return heldEntity.getUUID();
     }
 
@@ -85,6 +91,7 @@ public abstract class CustomDisplay {
             spawned = true;
 
             // Set position and add entity to the level
+            assert Require.nonNull(heldEntity, "held entity");
             heldEntity.setPos(pos.x, pos.y, pos.z);
             level.addFreshEntity(heldEntity);
         }
@@ -99,9 +106,10 @@ public abstract class CustomDisplay {
      * Notice: This method does NOT copy NBT data to the new entity.
      * @param level The level to spawn the new entity in.
      */
-    public void renewEntity(final Level level) {
+    public void renewEntity(final @NotNull Level level) {
         assert Require.nonNull(level, "level");
 
+        assert Require.nonNull(heldEntity, "held entity");
         if(heldEntity.isRemoved()) {
             if(heldEntity instanceof TextDisplay) {
                 heldEntity = new TextDisplay(EntityType.TEXT_DISPLAY, level);
@@ -123,6 +131,7 @@ public abstract class CustomDisplay {
         if(spawned) {
             spawned = false;
 
+            assert Require.nonNull(heldEntity, "held entity");
             if(!heldEntity.isRemoved()) {
                 heldEntity.remove(RemovalReason.KILLED);
             }
@@ -256,6 +265,7 @@ public abstract class CustomDisplay {
      * @param name The new value.
      */
     public void setCustomNameVisible(final boolean nameVisible) {
+        assert Require.nonNull(heldEntity, "held entity");
         heldEntity.setCustomNameVisible(nameVisible);
     }
 
@@ -275,6 +285,7 @@ public abstract class CustomDisplay {
      */
     public void setPos(final @NotNull Vector3d pos) {
         assert Require.nonNull(pos, "position");
+        assert Require.nonNull(heldEntity, "held entity");
         heldEntity.setPos(pos.x, pos.y, pos.z);
     }
 
@@ -284,6 +295,7 @@ public abstract class CustomDisplay {
      * @return A copy of the current position.
      */
     public @NotNull Vector3f getPosCopy() {
+        assert Require.nonNull(heldEntity, "held entity");
         return heldEntity.getPosition(1f).toVector3f();
     }
 
@@ -339,6 +351,7 @@ public abstract class CustomDisplay {
      */
     public boolean startRiding(final @NotNull Entity e) {
         assert Require.nonNull(e, "entity");
+        assert Require.nonNull(heldEntity, "held entity");
         return heldEntity.startRiding(e, true);
     }
 
@@ -349,6 +362,7 @@ public abstract class CustomDisplay {
      */
     public void teleport(final @NotNull Vector3d pos) {
         assert Require.nonNull(pos, "position");
+        assert Require.nonNull(heldEntity, "held entity");
         heldEntity.teleportTo(pos.x, pos.y, pos.z);
     }
 }
