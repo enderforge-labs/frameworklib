@@ -2,6 +2,7 @@ package com.snek.frameworklib.data_types.displays;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.frameworklib.debug.Assert;
 import com.snek.frameworklib.mixin.ItemDisplayAccessorMixin;
 
 import net.minecraft.world.entity.EntityType;
@@ -54,6 +55,7 @@ public class CustomItemDisplay extends CustomDisplay {
      * @param itemStack The new value.
      */
     public void setItemStack(final @NotNull ItemStack itemStack) {
+        Assert.requireNonNull(itemStack, "item stack");
         getAccessibleDisplay().invokeSetItemStack(itemStack);
     }
 
@@ -65,6 +67,7 @@ public class CustomItemDisplay extends CustomDisplay {
      * @param displayType The new value.
      */
     public void setDisplayType(final @NotNull ItemDisplayContext displayType) {
+        Assert.requireNonNull(displayType, "item display type");
         getAccessibleDisplay().invokeSetDisplayType(displayType);
     }
 

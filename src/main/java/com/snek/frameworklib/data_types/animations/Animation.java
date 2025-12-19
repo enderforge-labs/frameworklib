@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.frameworklib.debug.Assert;
+
 
 
 
@@ -26,6 +28,8 @@ public class Animation {
      * @param a The animation to copy.
      */
     public Animation(final @NotNull Animation a) {
+        Assert.requireNonNull(a, "animation");
+
         transitions = new ArrayList<>(a.getTransitions().size());
         for(final Transition t : a.getTransitions()) {
             this.transitions.add(new Transition(t));
@@ -39,6 +43,8 @@ public class Animation {
      * @param transitions One or more transitions.
      */
     public Animation(final @NotNull Transition... transitions) {
+        Assert.requireNonNull(transitions, "transition list");
+
         this.transitions = new ArrayList<>(transitions.length);
         int _totalDuration = 0;
         for(final Transition t : transitions) {

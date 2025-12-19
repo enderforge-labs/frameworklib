@@ -35,7 +35,9 @@ public final class Configs extends UtilityClassBase {
      * Loads the configuration files or creates new ones if they are missing.
      */
     public static void loadConfigs() {
-        ui   = ConfigManager.loadConfig("UiConfig",    UiConfig.class,          FrameworkLib.LIB_ID);
+        ui   = ConfigManager.loadConfig("UiConfig",    UiConfig.class,          FrameworkLib.LIB_ID); //TODO rename ui config to "graphics"
         perf = ConfigManager.loadConfig("Performance", PerformanceConfig.class, FrameworkLib.LIB_ID);
+        Assert.requireNonNull(ui, "ui config data");
+        Assert.requireNonNull(perf, "perf config data");
     }
 }

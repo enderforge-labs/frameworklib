@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
 
+import com.snek.frameworklib.debug.Assert;
 import com.snek.frameworklib.utils.Easing;
 import com.snek.frameworklib.utils.Easings;
 
@@ -41,6 +42,9 @@ public class Transition {
      * @param easing The type of easing to use.
      */
     public Transition(final int duration, final @NotNull Easing easing) {
+        Assert.requireNonNegative(duration, "duration");
+        Assert.requireNonNull(easing, "easing function");
+
         this.duration  = duration;
         this.easing    = easing;
         additive   = false;
@@ -53,6 +57,8 @@ public class Transition {
      * @param t The transition to copy.
      */
     public Transition(final @NotNull Transition t) {
+        Assert.requireNonNull(t, "transition");
+
         this.duration  = t.getDuration();
         this.easing    = t.getEasing();
         additive       = t.isAdditive();

@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
 
+import com.snek.frameworklib.debug.Assert;
 import com.snek.frameworklib.utils.Utils;
 
 
@@ -120,6 +121,8 @@ public class InterpolatedData {
      * @param s The step to apply.
      */
     public void apply(final @NotNull TransitionStep s) {
+        Assert.requireNonNull(s, "transition step");
+
         if(s.d.hasTransform() && hasTransform()) {
             if(s.isAdditive()) transform.interpolate(transform.copy().apply(s.d.getTransform()), s.getFactor());
             else               transform.interpolate(                       s.d.getTransform(),  s.getFactor());

@@ -2,6 +2,8 @@ package com.snek.frameworklib.data_types.animations;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.frameworklib.debug.Assert;
+
 
 
 
@@ -30,6 +32,9 @@ public class TransitionStep {
      * @param d The interpolated data.
      */
     public TransitionStep(final float factor, final boolean additive, final @NotNull InterpolatedData d) {
+        Assert.requireInRange(factor, 0, 1, "factor");
+        Assert.requireNonNull(d, "interpolated data");
+
         this.factor   = factor;
         this.additive = additive;
         this.d        = d;

@@ -5,6 +5,8 @@ import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.snek.frameworklib.debug.Assert;
+
 
 
 
@@ -52,6 +54,7 @@ public class IndexedArrayDeque<E> extends AccessibleArrayDeque<E> {
      *     ({@code index < 0})
      */
     public @Nullable E getOrAdd(final int index, final @NotNull Supplier<E> supplier) {
+        Assert.requireNonNull(supplier, "supplier");
         if(index < 0) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
         }
