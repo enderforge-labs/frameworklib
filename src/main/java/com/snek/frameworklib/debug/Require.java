@@ -24,17 +24,17 @@ import com.snek.frameworklib.utils.UtilityClassBase;
 
 
 
-/**
+/** //TODO update comment. these can be used together with assertions
  * Debug-only validation checks.
  * <p>
  * This is meant to be used as a replacement for Java's assertions.
  * <p>
  * These methods have little cost in production, but not always none.
- * All of the parameters are evaluated before the check (apart from the supplier parameter of {@link #require(Supplier, String)}).
+ * All of the parameters are evaluated before the check (apart from the supplier parameter of {@link #(Supplier, String)}).
  * Make sure computing them doesn't add much overhead and doesn't have any side effect.
  * Passing existing values has effectively negligible cost.
  */
-public final class Assert extends UtilityClassBase {
+public final class Require extends UtilityClassBase {
 
 
     /**
@@ -47,11 +47,13 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param condition The condition to check.
      * @param message The error message to display if checks fail.
+     * @return True.
      */
-    public static void require(final boolean condition, final @NotNull String message) {
+    public static boolean condition(final boolean condition, final @NotNull String message) {
         if(DebugCheck.isDebug() && !condition) {
             throw new IllegalStateException("Debug check failed: " + message);
         }
+        return true;
     }
 
 
@@ -63,14 +65,16 @@ public final class Assert extends UtilityClassBase {
      * Passing an existing value has effectively negligible cost.
      * @param condition A supplier that computes the condition to check.
      * @param message The error message to display if checks fail.
+     * @return True.
      */
-    public static void require(final @NotNull Supplier<@NotNull Boolean> condition, final @NotNull String message) {
+    public static boolean condition(final @NotNull Supplier<@NotNull Boolean> condition, final @NotNull String message) {
         if(DebugCheck.isDebug()) {
             final Boolean c = condition.get();
             if(c == null || !c) {
                 throw new IllegalStateException("Debug check failed: " + message);
             }
         }
+        return true;
     }
 
 
@@ -98,19 +102,22 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param value The value to check.
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requireFinite(final double value, final @NotNull String name) {
+    public static boolean finite(final double value, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
-            __unconditional_requireFinite(value, name);
+            __unconditional_Finite(value, name);
         }
+        return true;
     }
-    private static void __unconditional_requireFinite(final double value, final @NotNull String name) {
+    private static boolean __unconditional_Finite(final double value, final @NotNull String name) {
         if(Double.isNaN(value)) {
             throw new IllegalArgumentException(name + " must not be NaN");
         }
         if(Double.isInfinite(value)) {
             throw new IllegalArgumentException(name + " must not be infinite");
         }
+        return true;
     }
 
 
@@ -124,19 +131,22 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param value The value to check.
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requireFinite(final float value, final @NotNull String name) {
+    public static boolean finite(final float value, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
-            __unconditional_requireFinite(value, name);
+            __unconditional_Finite(value, name);
         }
+        return true;
     }
-    private static void __unconditional_requireFinite(final float value, final @NotNull String name) {
+    private static boolean __unconditional_Finite(final float value, final @NotNull String name) {
         if(Float.isNaN(value)) {
             throw new IllegalArgumentException(name + " must not be NaN");
         }
         if(Float.isInfinite(value)) {
             throw new IllegalArgumentException(name + " must not be infinite");
         }
+        return true;
     }
 
 
@@ -164,16 +174,19 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param obj The object to check.
      * @param name The name of the object for the error message.
+     * @return True.
      */
-    public static void requireNonNull(final @Nullable Object obj, final @NotNull String name) {
+    public static boolean nonNull(final @Nullable Object obj, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
-            __unconditional_requireNonNull(obj, name);
+            __unconditional_NonNull(obj, name);
         }
+        return true;
     }
-    private static void __unconditional_requireNonNull(final @Nullable Object obj, final @NotNull String name) {
+    private static boolean __unconditional_NonNull(final @Nullable Object obj, final @NotNull String name) {
         if(obj == null) {
             throw new NullPointerException(name + " must not be null");
         }
+        return true;
     }
 
 
@@ -204,8 +217,9 @@ public final class Assert extends UtilityClassBase {
      * @param min The minimum allowed value (inclusive).
      * @param max The maximum allowed value (inclusive).
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requireInRange(final long value, final long min, final long max, final @NotNull String name) {
+    public static boolean inRange(final long value, final long min, final long max, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
             if(min > max) {
                 throw new IllegalArgumentException("Minimum value of " + name + "(" + min + ") must be smaller than the maximum value (" + max + ")");
@@ -214,6 +228,7 @@ public final class Assert extends UtilityClassBase {
                 throw new IllegalArgumentException(name + " must be in range [" + min + ", " + max + "], got: " + value);
             }
         }
+        return true;
     }
 
 
@@ -230,9 +245,10 @@ public final class Assert extends UtilityClassBase {
      * @param min The minimum allowed value (inclusive).
      * @param max The maximum allowed value (inclusive).
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requireInRange(final int value, final int min, final int max, final @NotNull String name) {
-        requireInRange((long)value, (long)min, (long)max, name);
+    public static boolean inRange(final int value, final int min, final int max, final @NotNull String name) {
+        return inRange((long)value, (long)min, (long)max, name);
     }
 
 
@@ -249,9 +265,10 @@ public final class Assert extends UtilityClassBase {
      * @param min The minimum allowed value (inclusive).
      * @param max The maximum allowed value (inclusive).
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requireInRange(final short value, final short min, final short max, final @NotNull String name) {
-        requireInRange((long)value, (long)min, (long)max, name);
+    public static boolean inRange(final short value, final short min, final short max, final @NotNull String name) {
+        return inRange((long)value, (long)min, (long)max, name);
     }
 
 
@@ -268,9 +285,10 @@ public final class Assert extends UtilityClassBase {
      * @param min The minimum allowed value (inclusive).
      * @param max The maximum allowed value (inclusive).
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requireInRange(final byte value, final byte min, final byte max, final @NotNull String name) {
-        requireInRange((long)value, (long)min, (long)max, name);
+    public static boolean inRange(final byte value, final byte min, final byte max, final @NotNull String name) {
+        return inRange((long)value, (long)min, (long)max, name);
     }
 
 
@@ -288,12 +306,13 @@ public final class Assert extends UtilityClassBase {
      * @param min The minimum allowed value (inclusive).
      * @param max The maximum allowed value (inclusive).
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requireInRange(final double value, final double min, final double max, final @NotNull String name) {
+    public static boolean inRange(final double value, final double min, final double max, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
-            __unconditional_requireFinite(value, name);
-            __unconditional_requireFinite(min, name + " min");
-            __unconditional_requireFinite(max, name + " max");
+            __unconditional_Finite(value, name);
+            __unconditional_Finite(min, name + " min");
+            __unconditional_Finite(max, name + " max");
             if(min > max) {
                 throw new IllegalArgumentException("Minimum value of " + name + "(" + min + ") must be smaller than the maximum value (" + max + ")");
             }
@@ -301,6 +320,7 @@ public final class Assert extends UtilityClassBase {
                 throw new IllegalArgumentException(name + " must be in range [" + min + ", " + max + "], got: " + value);
             }
         }
+        return true;
     }
 
 
@@ -318,9 +338,10 @@ public final class Assert extends UtilityClassBase {
      * @param min The minimum allowed value (inclusive).
      * @param max The maximum allowed value (inclusive).
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requireInRange(final float value, final float min, final float max, final @NotNull String name) {
-        requireInRange((double)value, (double)min, (double)max, name);
+    public static boolean inRange(final float value, final float min, final float max, final @NotNull String name) {
+        return inRange((double)value, (double)min, (double)max, name);
     }
 
 
@@ -348,11 +369,13 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param value The value to check.
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requirePositive(final long value, final @NotNull String name) {
+    public static boolean positive(final long value, final @NotNull String name) {
         if(DebugCheck.isDebug() && value <= 0) {
             throw new IllegalArgumentException(name + " must be positive, got: " + value);
         }
+        return true;
     }
 
 
@@ -366,9 +389,10 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param value The value to check.
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requirePositive(final int value, final @NotNull String name) {
-        requirePositive((long)value, name);
+    public static boolean positive(final int value, final @NotNull String name) {
+        return positive((long)value, name);
     }
 
 
@@ -382,9 +406,10 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param value The value to check.
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requirePositive(final short value, final @NotNull String name) {
-        requirePositive((long)value, name);
+    public static boolean positive(final short value, final @NotNull String name) {
+        return positive((long)value, name);
     }
 
 
@@ -398,9 +423,10 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param value The value to check.
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requirePositive(final byte value, final @NotNull String name) {
-        requirePositive((long)value, name);
+    public static boolean positive(final byte value, final @NotNull String name) {
+        return positive((long)value, name);
     }
 
 
@@ -415,14 +441,16 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param value The value to check.
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requirePositive(final double value, final @NotNull String name) {
+    public static boolean positive(final double value, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
-            __unconditional_requireFinite(value, name);
+            __unconditional_Finite(value, name);
             if(value <= 0) {
                 throw new IllegalArgumentException(name + " must be positive, got: " + value);
             }
         }
+        return true;
     }
 
 
@@ -437,9 +465,10 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param value The value to check.
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requirePositive(final float value, final @NotNull String name) {
-        requirePositive((double)value, name);
+    public static boolean positive(final float value, final @NotNull String name) {
+        return positive((double)value, name);
     }
 
 
@@ -467,13 +496,15 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param value The value to check.
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requireNonNegative(final long value, final @NotNull String name) {
+    public static boolean nonNegative(final long value, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
             if(value < 0) {
                 throw new IllegalArgumentException(name + " must be non-negative, got: " + value);
             }
         }
+        return true;
     }
 
 
@@ -487,9 +518,10 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param value The value to check.
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requireNonNegative(final int value, final @NotNull String name) {
-        requireNonNegative((long)value, name);
+    public static boolean nonNegative(final int value, final @NotNull String name) {
+        return nonNegative((long)value, name);
     }
 
 
@@ -503,9 +535,10 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param value The value to check.
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requireNonNegative(final short value, final @NotNull String name) {
-        requireNonNegative((long)value, name);
+    public static boolean nonNegative(final short value, final @NotNull String name) {
+        return nonNegative((long)value, name);
     }
 
 
@@ -519,9 +552,10 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param value The value to check.
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requireNonNegative(final byte value, final @NotNull String name) {
-        requireNonNegative((long)value, name);
+    public static boolean nonNegative(final byte value, final @NotNull String name) {
+        return nonNegative((long)value, name);
     }
 
 
@@ -536,14 +570,16 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param value The value to check.
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requireNonNegative(final double value, final @NotNull String name) {
+    public static boolean nonNegative(final double value, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
-            __unconditional_requireFinite(value, name);
+            __unconditional_Finite(value, name);
             if(value < 0) {
                 throw new IllegalArgumentException(name + " must be non-negative, got: " + value);
             }
         }
+        return true;
     }
 
 
@@ -558,9 +594,10 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param value The value to check.
      * @param name The name of the value for the error message.
+     * @return True.
      */
-    public static void requireNonNegative(final float value, final @NotNull String name) {
-        requireNonNegative((double)value, name);
+    public static boolean nonNegative(final float value, final @NotNull String name) {
+        return nonNegative((double)value, name);
     }
 
 
@@ -588,14 +625,16 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param collection The collection to check.
      * @param name The name of the collection for the error message.
+     * @return True.
      */
-    public static void requireNotEmpty(final @Nullable Collection<?> collection, final @NotNull String name) {
+    public static boolean notEmpty(final @Nullable Collection<?> collection, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
-            __unconditional_requireNonNull(collection, name);
+            __unconditional_NonNull(collection, name);
             if(collection.isEmpty()) {
                 throw new IllegalArgumentException(name + " must not be empty");
             }
         }
+        return true;
     }
 
 
@@ -609,14 +648,16 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param array The array to check.
      * @param name The name of the array for the error message.
+     * @return True.
      */
-    public static void requireNotEmpty(final @Nullable Object[] array, final @NotNull String name) {
+    public static boolean notEmpty(final @Nullable Object[] array, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
-            __unconditional_requireNonNull(array, name);
+            __unconditional_NonNull(array, name);
             if(array.length == 0) {
                 throw new IllegalArgumentException(name + " must not be empty");
             }
         }
+        return true;
     }
 
 
@@ -630,14 +671,16 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param array The array to check.
      * @param name The name of the array for the error message.
+     * @return True.
      */
-    public static void requireNotEmpty(final @Nullable long[] array, final @NotNull String name) {
+    public static boolean notEmpty(final @Nullable long[] array, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
-            __unconditional_requireNonNull(array, name);
+            __unconditional_NonNull(array, name);
             if(array.length == 0) {
                 throw new IllegalArgumentException(name + " must not be empty");
             }
         }
+        return true;
     }
 
 
@@ -651,14 +694,16 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param array The array to check.
      * @param name The name of the array for the error message.
+     * @return True.
      */
-    public static void requireNotEmpty(final @Nullable int[] array, final @NotNull String name) {
+    public static boolean notEmpty(final @Nullable int[] array, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
-            __unconditional_requireNonNull(array, name);
+            __unconditional_NonNull(array, name);
             if(array.length == 0) {
                 throw new IllegalArgumentException(name + " must not be empty");
             }
         }
+        return true;
     }
 
 
@@ -672,14 +717,16 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param array The array to check.
      * @param name The name of the array for the error message.
+     * @return True.
      */
-    public static void requireNotEmpty(final @Nullable short[] array, final @NotNull String name) {
+    public static boolean notEmpty(final @Nullable short[] array, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
-            __unconditional_requireNonNull(array, name);
+            __unconditional_NonNull(array, name);
             if(array.length == 0) {
                 throw new IllegalArgumentException(name + " must not be empty");
             }
         }
+        return true;
     }
 
 
@@ -693,14 +740,16 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param array The array to check.
      * @param name The name of the array for the error message.
+     * @return True.
      */
-    public static void requireNotEmpty(final @Nullable byte[] array, final @NotNull String name) {
+    public static boolean notEmpty(final @Nullable byte[] array, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
-            __unconditional_requireNonNull(array, name);
+            __unconditional_NonNull(array, name);
             if(array.length == 0) {
                 throw new IllegalArgumentException(name + " must not be empty");
             }
         }
+        return true;
     }
 
 
@@ -714,14 +763,16 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param array The array to check.
      * @param name The name of the array for the error message.
+     * @return True.
      */
-    public static void requireNotEmpty(final @Nullable double[] array, final @NotNull String name) {
+    public static boolean notEmpty(final @Nullable double[] array, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
-            __unconditional_requireNonNull(array, name);
+            __unconditional_NonNull(array, name);
             if(array.length == 0) {
                 throw new IllegalArgumentException(name + " must not be empty");
             }
         }
+        return true;
     }
 
 
@@ -735,14 +786,16 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param array The array to check.
      * @param name The name of the array for the error message.
+     * @return True.
      */
-    public static void requireNotEmpty(final @Nullable float[] array, final @NotNull String name) {
+    public static boolean notEmpty(final @Nullable float[] array, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
-            __unconditional_requireNonNull(array, name);
+            __unconditional_NonNull(array, name);
             if(array.length == 0) {
                 throw new IllegalArgumentException(name + " must not be empty");
             }
         }
+        return true;
     }
 
 
@@ -756,14 +809,16 @@ public final class Assert extends UtilityClassBase {
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param str The string to check.
      * @param name The name of the string for the error message.
+     * @return True.
      */
-    public static void requireNotEmpty(final @Nullable String str, final @NotNull String name) {
+    public static boolean notEmpty(final @Nullable String str, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
-            __unconditional_requireNonNull(str, name);
+            __unconditional_NonNull(str, name);
             if(str.isEmpty()) {
                 throw new IllegalArgumentException(name + " must not be empty");
             }
         }
+        return true;
     }
 
 
@@ -792,13 +847,15 @@ public final class Assert extends UtilityClassBase {
      * @param expected The expected value.
      * @param actual The actual value.
      * @param name The name for the error message.
+     * @return True.
      */
-    public static void requireEqual(final @Nullable Object expected, final @Nullable Object actual, final @NotNull String name) {
+    public static boolean equal(final @Nullable Object expected, final @Nullable Object actual, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
             if(!Objects.equals(expected, actual)) {
                 throw new IllegalStateException(name + ". expected: " + expected + ", but got: " + actual);
             }
         }
+        return true;
     }
 
 
@@ -813,15 +870,17 @@ public final class Assert extends UtilityClassBase {
      * @param object The object to check.
      * @param expected The class to check for.
      * @param name The name of the object.
+     * @return True.
      */
-    public static <T> void requireInstanceOf(final @Nullable Object object, final @NotNull Class<T> expected, final @NotNull String name) {
+    public static <T> boolean instanceOf(final @Nullable Object object, final @NotNull Class<T> expected, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
-            __unconditional_requireNonNull(object, name);
-            __unconditional_requireNonNull(expected, "Expected base class of " + name);
+            __unconditional_NonNull(object, name);
+            __unconditional_NonNull(expected, "Expected base class of " + name);
             if(!expected.isInstance(object)) {
                 throw new IllegalStateException(name + " expected to be an instance of " + expected.getName() + ", but got: " + object.getClass().getName());
             }
         }
+        return true;
     }
 
 
@@ -834,10 +893,12 @@ public final class Assert extends UtilityClassBase {
      * <p>
      * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()){ ... }</code>
      * @param message The error message.
+     * @return True.
      */
-    public static void fail(final @NotNull String message) {
+    public static boolean fail(final @NotNull String message) {
         if(DebugCheck.isDebug()) {
             throw new IllegalStateException("Debug check failed: " + message);
         }
+        return true;
     }
 }
