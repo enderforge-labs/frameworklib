@@ -5,6 +5,7 @@ import org.joml.Vector2f;
 
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.graphics.layout.Div;
 
@@ -36,6 +37,8 @@ public class DualInputIndicator extends Div implements InputIndicatorCanvas {
      * Creates a new DualInputIndicator.
      */
     public DualInputIndicator(final @NotNull ServerLevel level) {
+        super();
+        assert Require.nonNull(level, "level");
         Div e;
 
 

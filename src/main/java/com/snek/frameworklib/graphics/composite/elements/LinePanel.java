@@ -3,7 +3,7 @@ package com.snek.frameworklib.graphics.composite.elements;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
-import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.composite.styles.LinePanelStyle;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
@@ -33,13 +33,9 @@ public final class LinePanel extends PanelElm {
 
     public LinePanel(final @NotNull ServerLevel level) {
         super(level, new LinePanelStyle());
-        if(
-            Clickable .class.isAssignableFrom(getClass()) ||
-            Scrollable.class.isAssignableFrom(getClass()) ||
-            Hoverable .class.isAssignableFrom(getClass())
-        ) {
-            FrameworkLib.LOGGER.warn("LinePanel subclasses cannot implement Clickable, Scrollable, or Hoverable", new IllegalStateException());
-        }
+        assert Require.notInstanceOf(this, Clickable .class, "line panel instance");
+        assert Require.notInstanceOf(this, Scrollable.class, "line panel instance");
+        assert Require.notInstanceOf(this, Hoverable .class, "line panel instance");
     }
 
 

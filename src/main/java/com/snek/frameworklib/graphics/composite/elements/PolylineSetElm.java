@@ -9,6 +9,7 @@ import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.graphics.PolylineData;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Easings;
 
@@ -37,8 +38,10 @@ public class PolylineSetElm extends Div {
      * Creates a new PolylineSetElm.
      * @param polylines The list of polylines.
      */
-    public PolylineSetElm(ServerLevel level, final @NotNull PolylineData... polylines) {
+    public PolylineSetElm(final @NotNull ServerLevel level, final @NotNull PolylineData... polylines) {
         super();
+        assert Require.nonNull(level, "level");
+        assert Require.notEmpty(polylines, "polyline list");
 
         // Create lines and add them to the children list
         for(final PolylineData l : polylines) {
@@ -65,6 +68,12 @@ public class PolylineSetElm extends Div {
      * @param previousLen The total length of the lines that precede this line.
      */
     private void createLine(final @NotNull ServerLevel level, final @NotNull PolylineData l, final @NotNull Vector2f a, final @NotNull Vector2f b, final float previousLen) {
+        assert Require.nonNull(level, "level");
+        assert Require.nonNull(l, "polyline data");
+        assert Require.nonNull(a, "first point");
+        assert Require.nonNull(b, "second point");
+        assert Require.nonNegative(previousLen, "previous length");
+
 
         // Calculate the normalized direction of the line and add the new point positions taking into account the edge value
         final Vector2f normal = b.sub(a, new Vector2f()).normalize(new Vector2f());
