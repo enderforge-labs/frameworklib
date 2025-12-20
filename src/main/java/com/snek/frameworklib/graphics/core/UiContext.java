@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
 import net.minecraft.world.entity.player.Player;
@@ -32,8 +33,8 @@ public non-sealed class UiContext extends Context {
     protected @NotNull RateLimiter canvasRotationLimiter = new RateLimiter();
 
     // Active UI list
-    private static final Map<Player, LinkedList<UiContext>> activeUIs = new HashMap<>();
-    public static Map<Player, LinkedList<UiContext>> getActiveUIs() { return activeUIs; }
+    private static final @NotNull Map<@NotNull Player, @Nullable LinkedList<@NotNull UiContext>> activeUIs = new HashMap<>();
+    public static        @NotNull Map<@NotNull Player, @Nullable LinkedList<@NotNull UiContext>> getActiveUIs() { return activeUIs; }
 
 
 
@@ -96,10 +97,8 @@ public non-sealed class UiContext extends Context {
 
     @Override
     public void changeCanvas(final @NotNull Canvas newCanvas) {
-        if(!(newCanvas instanceof UiCanvas)) {
-            throw new IllegalArgumentException("Canvas must be a subclass of UiCanvas, but got: " + newCanvas.getClass().getName());
-        }
-
+        assert Require.nonNull(newCanvas, "new canvas");
+        assert Require.instanceOf(newCanvas, UiCanvas.class, "new canvas");
         finalizeCanvasChange(newCanvas);
     }
 

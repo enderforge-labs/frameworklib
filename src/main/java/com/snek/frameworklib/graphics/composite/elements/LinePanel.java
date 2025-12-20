@@ -31,14 +31,16 @@ public final class LinePanel extends PanelElm {
     final Vector2f absPosOg = new Vector2f();
 
 
+    /**
+     * Creates a new LinePanel.
+     * @param level The level to create this element in.
+     */
     public LinePanel(final @NotNull ServerLevel level) {
         super(level, new LinePanelStyle());
         assert Require.notInstanceOf(this, Clickable .class, "line panel instance");
         assert Require.notInstanceOf(this, Scrollable.class, "line panel instance");
         assert Require.notInstanceOf(this, Hoverable .class, "line panel instance");
     }
-
-
 
 
     @Override
@@ -54,8 +56,6 @@ public final class LinePanel extends PanelElm {
             p.y + localPos.y * s.y
         ));
     }
-
-
 
 
     @Override

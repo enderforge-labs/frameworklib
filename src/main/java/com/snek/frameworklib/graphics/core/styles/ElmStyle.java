@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.containers.Flagged;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 
 import net.minecraft.world.entity.Display.BillboardConstraints;
@@ -20,8 +21,8 @@ import net.minecraft.world.entity.Display.BillboardConstraints;
  * The default style of the generic {@link Elm} element.
  */
 public class ElmStyle {
-    public static final int S_TIME = 5; // Spawn   time. Measured in ticks
-    public static final int D_TIME = 5; // Despawn time. Measured in ticks
+    public static final int S_TIME = 5; // Spawn   animation time. Measured in ticks
+    public static final int D_TIME = 5; // Despawn animation time. Measured in ticks
 
 
     // Data
@@ -93,12 +94,30 @@ public class ElmStyle {
 
 
     // Setters
-    public void setTransform       (final @NotNull  Transform            transform    ) { this.transform       .set(transform    ); }
-    public void setViewRange       (final           float                viewRange    ) { this.viewRange       .set(viewRange    ); }
-    public void setBillboardMode   (final @NotNull  BillboardConstraints billboardMode) { this.billboardMode   .set(billboardMode); }
-    public void setPrimerAnimation (final @Nullable Animation            animation    ) { this.primerAnimation  .set(animation   ); }
-    public void setSpawnAnimation  (final @Nullable Animation            animation    ) { this.spawnAnimation  .set(animation    ); }
-    public void setDespawnAnimation(final @Nullable Animation            animation    ) { this.despawnAnimation.set(animation    ); }
+    public void setTransform(final @NotNull  Transform transform) {
+        assert Require.nonNull(transform, "transform");
+        this.transform.set(transform);
+    }
+    public void setViewRange(final float viewRange) {
+        assert Require.nonNegative(viewRange, "view range");
+        this.viewRange.set(viewRange);
+    }
+    public void setBillboardMode(final @NotNull  BillboardConstraints billboardMode) {
+        assert Require.nonNull(billboardMode, "billboard mode");
+        this.billboardMode.set(billboardMode);
+    }
+    public void setPrimerAnimation(final @Nullable Animation animation) {
+        assert Require.nonNull(animation, "primer animation");
+        this.primerAnimation.set(animation);
+    }
+    public void setSpawnAnimation(final @Nullable Animation animation) {
+        assert Require.nonNull(animation, "spawn animation");
+        this.spawnAnimation.set(animation);
+    }
+    public void setDespawnAnimation(final @Nullable Animation animation) {
+        assert Require.nonNull(animation, "despawn animation");
+        this.despawnAnimation.set(animation);
+    }
 
 
     // Getters

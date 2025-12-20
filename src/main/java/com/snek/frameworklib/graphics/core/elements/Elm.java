@@ -18,6 +18,7 @@ import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.containers.IndexedArrayDeque;
 import com.snek.frameworklib.data_types.displays.CustomDisplay;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
@@ -94,7 +95,8 @@ public abstract class Elm extends Div {
      * Retrieves the display held by this element.
      * @return The custom display.
      */
-    public CustomDisplay getEntity() {
+    public @NotNull CustomDisplay getEntity() {
+        assert Require.nonNull(entity, "entity");
         return entity;
     }
 
@@ -102,11 +104,11 @@ public abstract class Elm extends Div {
      * Retrieves the custom display held by this element as the specified subclass.
      * @param type The sublass to cast the custom display to.
      * @return The custom display casted to the specified class.
-     * @throw ClassCastException if the display cannot be cast to the specified class.
      */
     public <T> @NotNull T getEntity(final @NotNull Class<T> type) {
-        if(type.isInstance(entity)) return type.cast(entity);
-        else throw new ClassCastException("Cannot cast entity from " + entity.getClass().getName() + " to " + type.getName());
+        assert Require.nonNull(entity, "entity");
+        assert Require.instanceOf(entity, type, "entity");
+        return type.cast(entity);
     }
 
 
@@ -115,6 +117,7 @@ public abstract class Elm extends Div {
      * @return The style.
      */
     public @NotNull ElmStyle getStyle() {
+        assert Require.nonNull(style, "style");
         return style;
     }
 
@@ -122,11 +125,11 @@ public abstract class Elm extends Div {
      * Retrieves the style used by this element as the specified subclass.
      * @param type The sublass to cast the style to.
      * @return The style casted to the specified class.
-     * @throw ClassCastException if the style cannot be cast to the specified class.
      */
     public <T> @NotNull T getStyle(final @NotNull Class<T> type) {
-        if(type.isInstance(style)) return type.cast(style);
-        else throw new ClassCastException("Cannot cast style from " + style.getClass().getName() + " to " + type.getName());
+        assert Require.nonNull(style, "style");
+        assert Require.instanceOf(style, type, "style");
+        return type.cast(style);
     }
 
     /**
@@ -136,6 +139,7 @@ public abstract class Elm extends Div {
      * @param style The new style value.
      */
     public void setStyle(final @NotNull ElmStyle style) {
+        assert Require.nonNull(style, "style");
         this.style = style;
     }
 
@@ -154,6 +158,10 @@ public abstract class Elm extends Div {
      */
     protected Elm(final @NotNull ServerLevel level, final @NotNull CustomDisplay entity, final @NotNull ElmStyle style) {
         super();
+        assert Require.nonNull(level, "level");
+        assert Require.nonNull(entity, "entity");
+        assert Require.nonNull(style, "style");
+
         this.level  = level;
         this.entity = entity;
         this.style  = style;
@@ -169,6 +177,7 @@ public abstract class Elm extends Div {
      * This does not start an interpolation.
      */
     public void flushStyle() {
+        assert Require.nonNull(style, "style");
         epsilonPolarity *= -1;
 
         // Apply transform
@@ -236,6 +245,8 @@ public abstract class Elm extends Div {
      * @return The transform.
      */
     public @NotNull Transform __calcTransform() {
+        assert Require.nonNull(style, "style");
+        assert Require.nonNull(style.getTransform(), "style transform");
         return
             style.getTransform().copy()
             .move(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getUi().z_layer_spacing.getValue())
@@ -243,6 +254,7 @@ public abstract class Elm extends Div {
     }
     //TODO this and all subclasses too
     public @NotNull Vector3f __calcEntityVisualOrigin(final @NotNull Transform _transform) {
+        assert Require.nonNull(_transform, "transform");
         return
             new Vector3f(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getUi().z_layer_spacing.getValue())
             .rotate(_transform.getGlobalRot())
@@ -301,6 +313,7 @@ public abstract class Elm extends Div {
      * @param t The transition to apply.
      */
     protected void __applyAnimationTransitionNow(final @NotNull Transition t) {
+        assert Require.nonNull(t, "transition");
 
         // Calculate step and apply it instantly
         final TransitionStep step = t.createStep(1);
@@ -333,6 +346,8 @@ public abstract class Elm extends Div {
      * @return The amount of future data this transition affected.
      */
     private int __applyAnimationTransition(final @NotNull Transition transition, final int shift) {
+        assert Require.nonNull(transition, "transition");
+        assert Require.nonNegative(shift, "shift");
 
 
         // Calculate transition as a list of steps
@@ -384,6 +399,7 @@ public abstract class Elm extends Div {
      * @param d The future data value.
      */
     protected void __applyTransitionStep(final @NotNull InterpolatedData d) {
+        assert Require.nonNull(d, "interpolated data");
         if(d.hasTransform()) { style.setTransform(d.getTransform()); }
     }
 
@@ -502,6 +518,7 @@ public abstract class Elm extends Div {
 
             // Call superclass spawn
             super.despawn(animate);
+            assert Require.nonNull(style, "style");
 
 
             // Handle animations
@@ -533,6 +550,8 @@ public abstract class Elm extends Div {
      * It resets the tracking name, normalizes the transform and removes the entities from the level.
      */
     public void finalizeDespawn() {
+        assert Require.nonNull(style, "style");
+        assert Require.nonNull(entity, "entity");
 
         // Undo primer animation
         final Animation primerAnimation = style.getPrimerAnimation();
@@ -563,6 +582,7 @@ public abstract class Elm extends Div {
      * @return false if the element has been removed from the update queue, true otherwise.
      */
     protected boolean stepTransition() {
+        assert Require.nonNull(entity, "entity");
 
         // Apply step and update the entity
         if(!futureDataQueue.isEmpty()) {
@@ -596,7 +616,6 @@ public abstract class Elm extends Div {
      * Must be called at the end of the tick every {@code Configs.getPerf().animation_refresh_time} ticks.
      */
     public static void processUpdateQueue() {
-
         for(int i = 0; i < elmUpdateQueue.size();) {
             if(elmUpdateQueue.get(i).stepTransition()) ++i;
         }
@@ -608,6 +627,7 @@ public abstract class Elm extends Div {
      * @param player The player to check the view of.
      */
     public void updateHoverState(final @NotNull Player player) {
+        assert Require.nonNull(player, "player");
         final boolean hoverStateNext = checkIntersection(player);
 
         // Update current state and run hover state change callbacks if needed
@@ -655,6 +675,7 @@ public abstract class Elm extends Div {
      *     Returns false if the element is not using FIXED billboard mode.
      */
     public boolean checkIntersection(final @NotNull Player player) {
+        assert Require.nonNull(player, "player");
         if(!isSpawned || style.getBillboardMode() != BillboardConstraints.FIXED) return false;
         final Transform t = __calcTransform();
 
@@ -689,6 +710,7 @@ public abstract class Elm extends Div {
      *     Returns Double.MAX_VALUE if the element is not using FIXED billboard mode.
      */
     public double getIntersectionLength(final @NotNull Player player) {
+        assert Require.nonNull(player, "player");
         if(!isSpawned || style.getBillboardMode() != BillboardConstraints.FIXED) return Double.MAX_VALUE;
         final Transform t = __calcTransform();
 
@@ -748,6 +770,7 @@ public abstract class Elm extends Div {
      * @param entity The entity.
      */
     public static void onEntityLoad(final @NotNull Entity entity) {
+        assert Require.nonNull(entity, "entity");
         if(entity instanceof Display) {
             if(
                 entity.level() != null &&

@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.input.HoverReceiver;
@@ -42,33 +43,46 @@ import net.minecraft.world.inventory.ClickAction;
  */
 public abstract sealed class Context permits HudContext, UiContext {
 
+
     // Active Context list
-    private static final Map<Player, LinkedList<Context>> activeContexts = new HashMap<>();
-    public static Map<Player, LinkedList<Context>> getActiveContexts() { return activeContexts; }
+    private static final @NotNull Map<@NotNull Player, @Nullable LinkedList<@NotNull Context>> activeContexts = new HashMap<>();
+    public static        @NotNull Map<@NotNull Player, @Nullable LinkedList<@NotNull Context>> getActiveContexts() { return activeContexts; }
+
 
     // Context data
     protected final Player player;
     protected @Nullable InteractionBlocker interactionBlocker = null;
-    protected @Nullable Canvas activeCanvas = null;
-    protected boolean spawned = false;
-    private @NotNull Vector3d spawnPos = new Vector3d(0);
-    private int lastRotation = 0;
+    protected @Nullable Canvas             activeCanvas       = null;
+    private   @NotNull Vector3d            spawnPos           = new Vector3d(0);
+    protected boolean spawned      = false;
+    private   int     lastRotation = 0;
     public abstract int calcRot();
 
+
     // Getters
-    public @NotNull  Player             getPlayer                () { return player; }
-    public @Nullable Canvas             getActiveCanvas          () { return activeCanvas; }
-    public @Nullable InteractionBlocker getInteractionBlocker    () { return interactionBlocker; }
-    public abstract float getInteractionBlockerSize();
-    public void setSpawnPos(final @NotNull Vector3d spawnPos) { this.spawnPos = spawnPos; };
-    public @NotNull Vector3d getSpawnPos() { return spawnPos; }
-    public void setRotation(final int newRotation) { lastRotation = newRotation; }
-    public int getRotation() { return lastRotation; }
-    public @NotNull ServerLevel getLevel() { return (ServerLevel)player.level(); }
+    public @NotNull  Player             getPlayer            () { assert Require.nonNull(player, "player");           return player; }
+    public @NotNull ServerLevel         getLevel             () { assert Require.nonNull(player.level(), "level");    return (ServerLevel)player.level(); }
+    public @NotNull  Vector3d           getSpawnPos          () { assert Require.nonNull(spawnPos, "spawn position"); return spawnPos; }
+    public @Nullable Canvas             getActiveCanvas      () { return activeCanvas; }
+    public @Nullable InteractionBlocker getInteractionBlocker() { return interactionBlocker; }
+    public int                          getRotation          () { return lastRotation; }
+    public abstract  float              getInteractionBlockerSize();
+
+
+    // Setters
+    public void setSpawnPos(final @NotNull Vector3d spawnPos) {
+        assert Require.nonNull(spawnPos, "spawn position");
+        this.spawnPos = spawnPos;
+    };
+    public void setRotation(final int newRotation) {
+        assert Require.inRange(newRotation, 0, 7, "new rotation");
+        lastRotation = newRotation;
+    }
+
 
     // Optimization structures
     private @Nullable Elm targetedElm = null;
-    public @Nullable Elm getTargetedElm() { return targetedElm; }
+    public  @Nullable Elm getTargetedElm() { return targetedElm; }
 
 
 
@@ -82,6 +96,7 @@ public abstract sealed class Context permits HudContext, UiContext {
      * @param player The owner of the context.
      */
     protected Context(final @NotNull Player player) {
+        assert Require.nonNull(player, "player");
         this.player = player;
     }
 
@@ -92,6 +107,8 @@ public abstract sealed class Context permits HudContext, UiContext {
      *     This defines the the center of the context's hitbox.
      */
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
+        assert Require.nonNull(pos, "position");
+
         if(!spawned) {
             setSpawnPos(pos);
             spawned = true;
@@ -148,6 +165,7 @@ public abstract sealed class Context permits HudContext, UiContext {
 
     public abstract void changeCanvas(final @NotNull Canvas canvas);
     protected final void finalizeCanvasChange(final @NotNull Canvas newCanvas) {
+        assert Require.nonNull(newCanvas, "new canvas");
 
         // Set new active canvas and spawn canvas into the level
         activeCanvas = newCanvas;
@@ -167,6 +185,8 @@ public abstract sealed class Context permits HudContext, UiContext {
      * @param player The player.
      */
     public static void closeContexts(final @NotNull Player player) {
+        assert Require.nonNull(player, "player");
+
         final LinkedList<Context> contexts = getActiveContexts().get(player);
         if(contexts != null) for(final Context context : contexts) {
             context.despawn(true);
@@ -197,7 +217,10 @@ public abstract sealed class Context permits HudContext, UiContext {
      * @return True if the context consumed the click, false otherwise.
      */
     public boolean forwardClick(final @NotNull Player player, final @NotNull ClickAction action) {
+        assert Require.nonNull(player, "player");
+        assert Require.nonNull(action, "click action");
         if(activeCanvas == null) return false;
+
         return activeCanvas.forwardClick(player, action);
     }
 
@@ -210,6 +233,7 @@ public abstract sealed class Context permits HudContext, UiContext {
      * @param action The amount of scroll.
      */
     public void forwardScroll(final @NotNull Player player, final float scrollAmount) {
+        assert Require.nonNull(player, "player");
         if(activeCanvas == null) return;
 
         if(targetedElm != null && targetedElm instanceof Scrollable s) {
@@ -225,8 +249,9 @@ public abstract sealed class Context permits HudContext, UiContext {
      * @param player The player.
      */
     public void forwardHover(final @NotNull Player player) {
-        final Canvas canvas = activeCanvas;
-        if(canvas == null) return;
+        assert Require.nonNull(player, "player");
+        if(activeCanvas == null) return;
+
 
         // If a targeted element is present, update its hover state
         if(targetedElm != null) {
@@ -242,7 +267,7 @@ public abstract sealed class Context permits HudContext, UiContext {
             }
             // If it's no longer being hovered on, check if a new element is being hovered
             else {
-                targetedElm = canvas.findTargetedElement(player);
+                targetedElm = activeCanvas.findTargetedElement(player);
 
                 // If said element exists, send an update to it
                 if(targetedElm != null) {
@@ -253,7 +278,7 @@ public abstract sealed class Context permits HudContext, UiContext {
 
         // If a targeted element is not present, check if a new element is being hovered
         else {
-            targetedElm = canvas.findTargetedElement(player);
+            targetedElm = activeCanvas.findTargetedElement(player);
 
             // If said element exists, send an update to it
             if(targetedElm != null) targetedElm.updateHoverState(player);
@@ -277,6 +302,7 @@ public abstract sealed class Context permits HudContext, UiContext {
      * @return The top-most context, or null if the player isn't directly looking at any context.
      */
     public static @Nullable Context findTopMostContext(final Player player) {
+        assert Require.nonNull(player, "player");
 
         // Get all contexts
         LinkedList<Context> contexts = getActiveContexts().get(player);

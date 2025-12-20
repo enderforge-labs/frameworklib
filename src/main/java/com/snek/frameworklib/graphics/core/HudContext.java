@@ -10,6 +10,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 import com.snek.frameworklib.configs.Configs;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.MinecraftUtils;
@@ -34,8 +35,8 @@ import net.minecraft.world.inventory.ClickAction;
 public non-sealed class HudContext extends Context {
 
     // Active HUD list
-    private static final Map<Player, LinkedList<HudContext>> activeHUDs = new HashMap<>();
-    public static Map<Player, LinkedList<HudContext>> getActiveHUDs() { return activeHUDs; }
+    private static final @NotNull Map<@NotNull Player, @Nullable LinkedList<@NotNull HudContext>> activeHUDs = new HashMap<>();
+    public static        @NotNull Map<@NotNull Player, @Nullable LinkedList<@NotNull HudContext>> getActiveHUDs() { return activeHUDs; }
 
     // HUD data
     public static final float HUD_DISTANCE = 1.2f;
@@ -57,6 +58,7 @@ public non-sealed class HudContext extends Context {
 
 
     public void teleportElement(final @NotNull Div div) {
+        assert Require.nonNull(div, "element");
         if(div instanceof Elm e) {
             e.getEntity().teleport(getSpawnPos());
         }
@@ -64,21 +66,6 @@ public non-sealed class HudContext extends Context {
             teleportElement(c);
         }
     }
-    // private boolean positionRefreshRequired = true;
-    // private @NotNull Vector3d lastSpawnPos = new Vector3d();
-
-
-    // /**
-    //  * Check if the position needs to be refreshed, then sets the refresh flag to false at the end of the tick.
-    //  * @return Whether the position needs to be refreshed.
-    //  */
-    // public boolean attemptPositionRefresh() {
-    //     if(positionRefreshRequired) {
-    //         Scheduler.run(() -> { positionRefreshRequired = false; });
-    //     }
-    //     return positionRefreshRequired;
-    // }
-
 
 
 
@@ -134,6 +121,7 @@ public non-sealed class HudContext extends Context {
             positionInitialized = true;
 
             //FIXME make it disappear and reappear instead
+            //TODO add "respawnDelayed" method that calls respawn on a tracked task handler - check said task handler from despawn and spawn methods
             // Update position
             setSpawnPos(newPos);
             if(activeCanvas != null) {
@@ -179,10 +167,8 @@ public non-sealed class HudContext extends Context {
 
     @Override
     public void changeCanvas(final @NotNull Canvas newCanvas) {
-        if(!(newCanvas instanceof HudCanvas)) {
-            throw new IllegalArgumentException("Canvas must be a subclass of HudCanvas, but got: " + newCanvas.getClass().getName());
-        }
-
+        assert Require.nonNull(newCanvas, "new canvas");
+        assert Require.instanceOf(newCanvas, HudCanvas.class, "new canvas");
         finalizeCanvasChange(newCanvas);
     }
 

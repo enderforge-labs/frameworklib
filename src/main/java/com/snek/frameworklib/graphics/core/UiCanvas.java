@@ -3,6 +3,7 @@ package com.snek.frameworklib.graphics.core;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 
 
@@ -27,7 +28,11 @@ import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 public non-sealed class UiCanvas extends Canvas {
 
     // UI data
-    public @NotNull UiContext getUiContext() { return (UiContext)super.getContext(); }
+    public @NotNull UiContext getUiContext() {
+        assert Require.nonNull(getContext(), "context");
+        assert Require.instanceOf(getContext(), UiContext.class, "context");
+        return (UiContext)getContext();
+    }
 
 
 

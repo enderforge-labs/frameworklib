@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 import com.snek.frameworklib.graphics.layout.Div;
 
@@ -19,7 +20,11 @@ import com.snek.frameworklib.graphics.layout.Div;
  * A canvas that can be used to create HUDs.
  */
 public non-sealed class HudCanvas extends Canvas {
-    public @NotNull HudContext getHudContext() { return (HudContext)super.getContext(); }
+    public @NotNull HudContext getHudContext() {
+        assert Require.nonNull(getContext(), "context");
+        assert Require.instanceOf(getContext(), HudContext.class, "context");
+        return (HudContext)getContext();
+    }
 
 
 

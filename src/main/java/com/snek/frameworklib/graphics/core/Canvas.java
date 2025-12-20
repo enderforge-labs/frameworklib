@@ -4,23 +4,21 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3d;
-import org.joml.Vector3i;
 
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Easings;
-import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.server.level.ServerLevel;
-
 
 
 
@@ -65,12 +63,16 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
     protected final @NotNull Elm bottom;
 
     // Getters
-    public @NotNull Elm     getBg      () { return bg;      }
-    public @NotNull Elm     getBack    () { return back;    }
-    public @NotNull Elm     getTop     () { return top;     }
-    public @NotNull Elm     getBottom  () { return bottom;  }
-    public @NotNull Context getContext () { return context; }
-    public @NotNull ServerLevel getLevel() { return (ServerLevel)context.player.level(); }
+    public @NotNull Elm     getBg       () { assert Require.nonNull(bg,      "bg");      return bg;      }
+    public @NotNull Elm     getBack     () { assert Require.nonNull(back,    "back");    return back;    }
+    public @NotNull Elm     getTop      () { assert Require.nonNull(top,     "top");     return top;     }
+    public @NotNull Elm     getBottom   () { assert Require.nonNull(bottom,  "bottom");  return bottom;  }
+    public @NotNull Context getContext  () { assert Require.nonNull(context, "context"); return context; }
+    public @NotNull ServerLevel getLevel() {
+        assert Require.nonNull(context, "context");
+        assert Require.nonNull(context.getLevel(), "context level");
+        return context.getLevel();
+    }
 
     // Height cache
     private final float newHeightBg;
@@ -103,6 +105,12 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
         final float height, final float heightTop, final float heightBottom,
         final @Nullable PanelElmStyle bgStyle, final @Nullable PanelElmStyle backStyle
     ) {
+        assert Require.nonNull(context, "context");
+        assert Require.nonNegative(height, "background height");
+        assert Require.nonNegative(heightTop, "top element height");
+        assert Require.nonNegative(heightBottom, "bottom element height");
+
+        // Set basic data
         this.context = context;
         canvas = this;
         setSize(new Vector2f(1f, 1f));
@@ -206,6 +214,9 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      * @param instant Whether the rotation should be instantaneous or animated.
      */
     protected void rotate(final int from, final int to, final boolean instant) {
+        assert Require.inRange(from, 0, 7, "starting rotation");
+        assert Require.inRange(to,   0, 7, "target rotation");
+
         final Animation animation = calcCanvasRotationAnimation(from, to);
         if(instant) applyAnimationNowRecursive(animation);
         else applyAnimationRecursive(animation); //TODO replace with a single applyAnimationRecursive
@@ -221,6 +232,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      * @param elm The element to modify.
      */
     public void denormalizeTransform(final @NotNull Div elm) {
+        assert Require.nonNull(elm, "element");
         elm.applyAnimationNow(calcCanvasRotationAnimation(0, context.getRotation()));
     }
 
@@ -234,6 +246,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      * @param elm The element to modify.
      */
     public void normalizeTransform(final @NotNull Div elm) {
+        assert Require.nonNull(elm, "element");
         elm.applyAnimationNow(calcCanvasRotationAnimation(context.getRotation(), 0));
     }
 
@@ -247,6 +260,9 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      * @return The canvas animation.
      */
     public static @NotNull Animation calcCanvasRotationAnimation(final int from, final int to) {
+        assert Require.inRange(from, 0, 7, "starting rotation");
+        assert Require.inRange(to,   0, 7, "target rotation");
+
         final float rotation = (float)(-Math.toRadians(to * 45f - from * 45f));
         return new Animation(
             new Transition(CANVAS_ROTATION_TIME, Easings.cubicOut)
@@ -262,6 +278,9 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      * @return The item display animation.
      */
     public static @NotNull Animation calcItemDisplayRotationAnimation(final int from, final int to) {
+        assert Require.inRange(from, 0, 7, "starting rotation");
+        assert Require.inRange(to,   0, 7, "target rotation");
+
         final float rotation = (float)(-Math.toRadians(to * 45f - from * 45f));
         return new Animation(
             new Transition(CANVAS_ROTATION_TIME, Easings.cubicOut)
