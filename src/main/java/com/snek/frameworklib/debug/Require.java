@@ -861,6 +861,7 @@ public final class Require extends UtilityClassBase {
 
     /**
      * Checks that an object is an instance of the specified class.
+     * This check fails if either {@code object} or {@code expected} are null.
      * <p>
      * Notice: All of the parameters are evaluated before the check, even in production.
      * Make sure computing them doesn't add much overhead and doesn't have any side effect.
@@ -878,6 +879,32 @@ public final class Require extends UtilityClassBase {
             __unconditional_NonNull(expected, "Expected base class of " + name);
             if(!expected.isInstance(object)) {
                 throw new IllegalStateException(name + " expected to be an instance of " + expected.getName() + ", but got: " + object.getClass().getName());
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * Checks that an object is not an instance of the specified class.
+     * Null objects pass this check.
+     * This check fails if {@code excluded} is null.
+     * <p>
+     * Notice: All of the parameters are evaluated before the check, even in production.
+     * Make sure computing them doesn't add much overhead and doesn't have any side effect.
+     * Passing existing values has effectively negligible cost.
+     * <p>
+     * For true zero cost checks, enclose the code in <code>if(DebugCheck.isDebug()) { ... }</code> or prefix it with {@code assert } (requires -ea)
+     * @param object The object to check.
+     * @param excluded The class to check for.
+     * @param name The name of the object.
+     * @return True.
+     */
+    public static <T> boolean notInstanceOf(final @Nullable Object object, final @NotNull Class<T> excluded, final @NotNull String name) {
+        if(DebugCheck.isDebug()) {
+            __unconditional_NonNull(excluded, "Excluded base class of " + name);
+            if(excluded.isInstance(object)) {
+                throw new IllegalStateException(name + " expected to not be an instance of " + excluded.getName() + ", but it is");
             }
         }
         return true;
