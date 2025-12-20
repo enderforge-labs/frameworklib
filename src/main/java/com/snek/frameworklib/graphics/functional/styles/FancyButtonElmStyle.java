@@ -89,9 +89,9 @@ public class FancyButtonElmStyle extends FancyTextElmStyle {
 
 
     // Setters
-    public void setHoverPrimerAnimation(final @Nullable Animation _hoverPrimerAnimation) { hoverPrimerAnimation.set(_hoverPrimerAnimation); }
-    public void setHoverEnterAnimation (final @Nullable Animation _hoverEnterAnimation ) { hoverEnterAnimation .set(_hoverEnterAnimation ); }
-    public void setHoverLeaveAnimation (final @Nullable Animation _hoverLeaveAnimation ) { hoverLeaveAnimation .set(_hoverLeaveAnimation ); }
+    public void setHoverPrimerAnimation(final @Nullable Animation hoverPrimerAnimation) { this.hoverPrimerAnimation.set(hoverPrimerAnimation); }
+    public void setHoverEnterAnimation (final @Nullable Animation hoverEnterAnimation ) { this.hoverEnterAnimation .set(hoverEnterAnimation ); }
+    public void setHoverLeaveAnimation (final @Nullable Animation hoverLeaveAnimation ) { this.hoverLeaveAnimation .set(hoverLeaveAnimation ); }
 
 
     // Flagged getters

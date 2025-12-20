@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.functional.styles.SimpleButtonElmStyle;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
@@ -48,6 +49,9 @@ public abstract class SimpleButtonElm extends PanelElm implements Clickable, Hov
         final SimpleButtonElmStyle style
     ) {
         super(level, style);
+        assert Require.nonNull(lmbActionName, "lmb action name");
+        assert Require.nonNull(rmbActionName, "rmb action name");
+        assert Require.nonNegative(clickCooldown, "click cooldown");
         base = new __base_ButtonElm(lmbActionName, rmbActionName, clickCooldown);
     }
 

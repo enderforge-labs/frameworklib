@@ -3,6 +3,7 @@ package com.snek.frameworklib.graphics.functional.elements;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.functional.styles.TextInputElmStyle;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.input.MessageReceiver;
@@ -52,6 +53,7 @@ public abstract class TextInputElm extends FancyButtonElm {
         final @NotNull TextInputElmStyle style
     ) {
         super(level, lmbActionName, rmbActionName, 1, style);
+        assert Require.nonNull(clickFeedbackMessage, "click feedback message");
         this.clickFeedbackMessage = clickFeedbackMessage;
     }
 
@@ -124,6 +126,8 @@ public abstract class TextInputElm extends FancyButtonElm {
      * @return True if the string s is recognized as an input and should not be broadcasted to the chat, false otherwise.
      */
     protected boolean __internal_messageCallback(final @NotNull String s) {
+        assert Require.nonNull(s, "input string");
+
         final boolean r = messageCallback(s);
         if(r) exitInputState();
         return r;
