@@ -2,6 +2,7 @@ package com.snek.frameworklib.graphics.interfaces;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.utils.MinecraftUtils;
 
 import net.minecraft.sounds.SoundEvents;
@@ -38,6 +39,7 @@ public interface Scrollable {
      * @param player The player to play the sound to.
      */
     public static void playSound(final @NotNull Player player) {
+        assert Require.nonNull(player, "player");
         MinecraftUtils.playSoundClient(player, SoundEvents.STONE_BUTTON_CLICK_ON, 1, 1.5f);
     }
 }
