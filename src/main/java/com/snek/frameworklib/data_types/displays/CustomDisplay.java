@@ -56,10 +56,10 @@ public abstract class CustomDisplay {
      * Creates a new CustomDisplay using an existing DisplayEntity as in-world entity.
      * @param _heldEntity The display entity.
      */
-    protected CustomDisplay(final @NotNull Display _heldEntity) {
-        assert Require.nonNull(_heldEntity, "held entity");
+    protected CustomDisplay(final @NotNull Display heldEntity) {
+        assert Require.nonNull(heldEntity, "held entity");
 
-        heldEntity = _heldEntity;
+        this.heldEntity = heldEntity;
         setBrightness(new Brightness(15, 15));
     }
 
