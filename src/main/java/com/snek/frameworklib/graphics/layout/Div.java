@@ -12,6 +12,7 @@ import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
@@ -47,26 +48,77 @@ public class Div {
 
     // Tree data
     protected @Nullable Canvas canvas = null;
-    protected @Nullable Div parent = null;
+    protected @Nullable Div    parent = null;
     protected final @NotNull List<@NotNull Div> children = new ArrayList<>();
-    public void setParent(final @Nullable Div _parent) { parent = _parent; }
-    public @Nullable Div getParent() { return parent; }
-    public @NotNull Canvas getCanvas() { return canvas; }
-
-
 
 
     // Element data
-    protected final @NotNull Vector2f   localSize  = new Vector2f(1, 1);
-    protected final @NotNull Vector2f   localPos   = new Vector2f(0, 0);
+    protected boolean isSpawned = false;
+    protected boolean isNew = true;
 
-    protected final @NotNull Vector2f   absSize    = new Vector2f(1, 1);
-    protected final @NotNull Vector2f   absPos     = new Vector2f(0, 0);
 
+    // Graphics data
+    protected final @NotNull Vector2f localSize = new Vector2f(1, 1);
+    protected final @NotNull Vector2f localPos  = new Vector2f(0, 0);
+    protected final @NotNull Vector2f absSize   = new Vector2f(1, 1);
+    protected final @NotNull Vector2f absPos    = new Vector2f(0, 0);
     protected @NotNull AlignmentX alignmentX = AlignmentX.NONE;
     protected @NotNull AlignmentY alignmentY = AlignmentY.NONE;
-
     protected int zIndex = 0;
+
+
+
+
+    /**
+     * Returns the canvas that contains this element.
+     * <p>
+     * The canvas of a Canvas is itself.
+     * @return The canvas.
+     */
+    public @Nullable Canvas getCanvas() {
+        return canvas;
+    }
+
+
+    /**
+     * Sets the reference to the parent canvas of this element and all of its children.
+     * <p>
+     * This method entirely skips branches whose root already has {@code canvas} as canvas.
+     * It assumes all the children of an element share the same canvas.
+     * This is not a problem unless the canvas reference is modified externally without changing the children, which is NOT allowed and should never happen.
+     * @param canvas The canvas.
+     */
+    public void setCanvas(final @Nullable Canvas canvas) {
+        setCanvasSelf(canvas);
+        for(final @NotNull Div c : children) {
+            if(c.canvas != canvas) {
+                c.setCanvas(canvas);
+            }
+        }
+    }
+    private void setCanvasSelf(final @Nullable Canvas canvas) {
+        this.canvas = canvas;
+    }
+
+
+    /**
+     * Returns the parent of this element.
+     * <p>
+     * The parent of a Canvas is null.
+     * @return
+     */
+    public @Nullable Div getParent() {
+        return parent;
+    }
+
+
+    /**
+     * Sets the parent of this object.
+     * @param _parent The parent.
+    */
+    public void setParent(final @Nullable Div parent) {
+       this.parent = parent;
+    }
 
 
     /**
@@ -76,7 +128,6 @@ public class Div {
     public boolean isSpawned() {
         return isSpawned;
     }
-    protected boolean isSpawned = false;
 
 
     /**
@@ -87,7 +138,6 @@ public class Div {
     public boolean isNew() {
         return isNew;
     }
-    protected boolean isNew = true;
 
 
 
@@ -105,33 +155,14 @@ public class Div {
 
 
 
-
-    /**
-     * Sets the reference to the parent canvas of this element and all of its children.
-     * <p>
-     * This method entirely skips branches whose root already has {@code canvas} as canvas.
-     * It assumes all the children of an element share the same canvas.
-     * This is not a problem unless the canvas reference is modified externally without changing the children, which is NOT allowed and should never happen.
-     */
-    public void setCanvas(final @Nullable Canvas canvas) {
-        setCanvasSelf(canvas);
-        for(final @NotNull Div c : children) {
-            if(c.canvas != canvas) {
-                c.setCanvas(canvas);
-            }
-        }
-    }
-    private void setCanvasSelf(final @Nullable Canvas canvas) {
-        this.canvas = canvas;
-    }
-
-
     /**
      * Adds a child to this Div.
      * @param elm The new element.
-     * @return {@code elm}
+     * @return {@code elm}.
      */
     public @NotNull Div addChild(final @NotNull Div elm) {
+        assert Require.nonNull(elm, "element");
+
         elm.parent = this;
         elm.setCanvas(canvas);
         elm.updateAbsSize(); //TODO idk if this is needed, though it most likely is
@@ -144,10 +175,12 @@ public class Div {
 
     /**
      * Removes a child from this Div, without despawning it.
-     * @param elm The removed element.
-     * @return {@code elm}
+     * @param elm The element to remove.
+     * @return {@code elm}.
      */
     public @NotNull Div removeChild(final @NotNull Div elm) {
+        assert Require.nonNull(elm, "element");
+
         elm.parent = null;
         elm.updateAbsSize(); //TODO idk if this is needed, though it most likely is
         elm.updateAbsPos();
@@ -163,6 +196,7 @@ public class Div {
     public void clearChildren() {
         for(final Div elm : children) {
             elm.parent = null;
+            elm.updateAbsSize(); //TODO idk if this is needed, though it most likely is
             elm.updateAbsPos();
             elm.updateZIndex();
         }
@@ -188,6 +222,7 @@ public class Div {
      * @param animation The animation to apply.
      */
     public void applyAnimation(final @NotNull Animation animation) {
+        assert Require.nonNull(animation, "animation");
         // Empty
     }
     /**
@@ -197,6 +232,7 @@ public class Div {
      * @param transition The transition to apply.
      */
     public final void applyAnimation(final @NotNull Transition transition) {
+        assert Require.nonNull(transition, "transition");
         applyAnimation(new Animation(transition));
     }
 
@@ -208,6 +244,7 @@ public class Div {
      * @param animation The animation to apply.
      */
     public void applyAnimationNow(final @NotNull Animation animation) {
+        assert Require.nonNull(animation, "animation");
         // Empty
     }
     /**
@@ -215,6 +252,7 @@ public class Div {
      * @param transition The transition to apply.
      */
     public final void applyAnimationNow(final @NotNull Transition transition) {
+        assert Require.nonNull(transition, "transition");
         applyAnimationNow(new Animation(transition));
     }
 
@@ -228,6 +266,7 @@ public class Div {
      * @param animation The animation to apply.
      */
     public final void applyAnimationRecursive(final @NotNull Animation animation) {
+        assert Require.nonNull(animation, "animation");
         applyAnimation(animation);
         for(final Div elm : children) {
             elm.applyAnimationRecursive(animation);
@@ -240,6 +279,7 @@ public class Div {
      * @param transition The transition to apply.
      */
     public final void applyAnimationRecursive(final @NotNull Transition transition) {
+        assert Require.nonNull(transition, "transition");
         applyAnimationRecursive(new Animation(transition));
     }
 
@@ -251,6 +291,7 @@ public class Div {
      * @param animation The animation to apply.
      */
     public final void applyAnimationNowRecursive(final @NotNull Animation animation) {
+        assert Require.nonNull(animation, "animation");
         applyAnimationNow(animation);
         for(final Div elm : children) {
             elm.applyAnimationNowRecursive(animation);
@@ -261,6 +302,7 @@ public class Div {
      * @param transition The transition to apply.
      */
     public final void applyAnimationNowRecursive(final @NotNull Transition transition) {
+        assert Require.nonNull(transition, "transition");
         applyAnimationNowRecursive(new Animation(transition));
     }
 
@@ -276,14 +318,24 @@ public class Div {
      * @return Whether the click was accepted by this element.
      */
     public boolean forwardClick(final @NotNull Player player, final @NotNull ClickAction clickType) {
+        assert Require.nonNull(player, "player");
+        assert Require.nonNull(clickType, "click type");
+
+        // If this element accepts the click, run callback and return
         if(this instanceof Clickable e && e.attemptClick(player, clickType)) {
             e.onClick(player, clickType);
             return true;
         }
+
+        //TODO check if this is actually needed. it prob was here to stop clicks from removing elements while iterating the tree
+        // If not, send the click event to all children until one of them accepts it
         final List<Div> _children = new ArrayList<>(children);
         for(final Div elm : _children) {
+        // for(final Div elm : children) { //TODO
             if(elm.forwardClick(player, clickType)) return true;
         }
+
+        // Return false if no element accepted the click
         return false;
     }
 
@@ -293,11 +345,13 @@ public class Div {
     /**
      * Finds the element that the player is looking at.
      * <p>
-     * This method skips non-Elm elements and elements that are both not hoverable and not clickable.
+     * This method skips non-Elm elements and elements that are not hoverable, not clickable and not scrollable.
      * @param player The player.
      * @return The element being looked at, or null if the player isnt looking at any of the elements.
      */
     public @Nullable Elm findTargetedElement(final @NotNull Player player) {
+        assert Require.nonNull(player, "player");
+
         if((this instanceof Hoverable || this instanceof Clickable || this instanceof Scrollable) && this instanceof Elm e) {
             if(e.checkIntersection(player)) {
                 final Elm targetedChild = findTargetedChild(player);
@@ -318,7 +372,16 @@ public class Div {
     }
 
 
+    /**
+     * Finds the child element that the player is looking at.
+     * <p>
+     * This method skips non-Elm elements and elements that are not hoverable, not clickable and not scrollable.
+     * @param player The player.
+     * @return The element being looked at, or null if the player isnt looking at any of the elements.
+     */
     public @Nullable Elm findTargetedChild(final @NotNull Player player) {
+        assert Require.nonNull(player, "player");
+
         for(final Div elm : children) {
             final Elm r = elm.findTargetedElement(player);
             if(r != null) return r;
@@ -337,6 +400,8 @@ public class Div {
      *     but their effects will be instantly visible instead of appearing gradually over time.
      */
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
+        assert Require.nonNull(pos, "position");
+
         if(!isSpawned) {
             for(final Div elm : children) {
                 elm.spawn(pos, animate);
@@ -488,11 +553,32 @@ public class Div {
 
     // Setters
 
-    public void setSize    (final @NotNull Vector2f size) { localSize.set(size); updateAbsSize       (); }
-    public void setAbsSize (final @NotNull Vector2f size) { absSize  .set(size); updateAbsSizeInverse(); }
-    public void scale      (final @NotNull Vector2f size) { localSize.mul(size); updateAbsSize       (); }
-    public void setPos     (final @NotNull Vector2f _pos) { localPos .set(_pos); updateAbsPos        (); }
-    public void move       (final @NotNull Vector2f _pos) { localPos .add(_pos); updateAbsPos        (); }
+    public void setSize(final @NotNull Vector2f size) {
+        assert Require.nonNull(size, "size");
+        localSize.set(size);
+        updateAbsSize();
+    }
+    public void setAbsSize(final @NotNull Vector2f size) {
+        assert Require.nonNull(size, "size");
+        absSize.set(size);
+        updateAbsSizeInverse();
+    }
+    public void scale(final @NotNull Vector2f size) {
+        assert Require.nonNull(size, "size");
+        localSize.mul(size);
+        updateAbsSize();
+    }
+    public void setPos(final @NotNull Vector2f pos) {
+        assert Require.nonNull(pos, "position");
+        localPos.set(pos );
+        updateAbsPos();
+    }
+    public void move(final @NotNull Vector2f pos) {
+        assert Require.nonNull(pos, "position");
+        localPos.add(pos );
+        updateAbsPos();
+    }
+
 
     public void setSizeX   (final float x) { localSize.x  = x; updateAbsSize       (); }
     public void setSizeY   (final float y) { localSize.y  = y; updateAbsSize       (); }
@@ -506,21 +592,23 @@ public class Div {
     public void moveY      (final float y) { localPos .y += y; updateAbsPos        (); }
 
 
-
-
-    public void setAlignmentX(final @NotNull AlignmentX _alignmentX) {
-        alignmentX = _alignmentX;
+    public void setAlignmentX(final @NotNull AlignmentX alignmentX) {
+        assert Require.nonNull(alignmentX, "x alignment");
+        this.alignmentX = alignmentX;
         updateAbsPos();
     }
 
-    public void setAlignmentY(final @NotNull AlignmentY _alignmentY) {
-        alignmentY = _alignmentY;
+    public void setAlignmentY(final @NotNull AlignmentY alignmentY) {
+        assert Require.nonNull(alignmentY, "y alignment");
+        this.alignmentY = alignmentY;
         updateAbsPos();
     }
 
-    public void setAlignment(final @NotNull AlignmentX _alignmentX, final @NotNull AlignmentY _alignmentY) {
-        alignmentX = _alignmentX;
-        alignmentY = _alignmentY;
+    public void setAlignment(final @NotNull AlignmentX alignmentX, final @NotNull AlignmentY alignmentY) {
+        assert Require.nonNull(alignmentX, "x alignment");
+        assert Require.nonNull(alignmentY, "y alignment");
+        this.alignmentX = alignmentX;
+        this.alignmentY = alignmentY;
         updateAbsPos();
     }
 
