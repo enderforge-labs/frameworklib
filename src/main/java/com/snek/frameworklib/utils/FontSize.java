@@ -1,6 +1,8 @@
 package com.snek.frameworklib.utils;
 
 import org.jetbrains.annotations.NotNull;
+
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.generated.FontData;
 
 
@@ -28,6 +30,8 @@ public final class FontSize extends UtilityClassBase {
      * @return The width of the string in pixels.
      */
     public static int getStringWidthPx(final @NotNull String s) {
+        assert Require.nonNull(s, "string");
+
         int r = 0;
         for(int i = 0; i < s.length(); ++i) {
             r += getCharWidthPx(s.charAt(i));
@@ -41,6 +45,7 @@ public final class FontSize extends UtilityClassBase {
      * @return The width of the string in blocks.
      */
     public static double getStringWidth(final @NotNull String s) {
+        assert Require.nonNull(s, "string");
         return (double)getStringWidthPx(s) / FontData.TEXT_PIXEL_BLOCK_RATIO;
     }
 
@@ -99,20 +104,15 @@ public final class FontSize extends UtilityClassBase {
      * Finds the end of  the longest substring of s that strarts at index offset and fits in maxWidth pixels.
      * @param s The full string value.
      * @param offset The character offset from the start of the string. This specifies where the substring starts.
+     *      Must be between {@code 0} and {@code s.length()} inclusive.
      * @param maxWidth The maximum allowed width of the returned substring, in pixels.
+     *      Must be {@code >= 0}.
      * @return The calculated EXCLUSIVE end index.
-     * @throws IllegalArgumentException if {@code offset < 0} or {@code offset > s.length()}
-     * @throws IllegalArgumentException if {@code maxWidth < 0}
      */
     public static int calcMaxStringEnd(final @NotNull String s, final int offset, final int maxWidth) {
-
-        // Validate parameters
-        if(offset < 0 || offset > s.length()) {
-            throw new IllegalArgumentException("Invalid offset " + offset);
-        }
-        if(maxWidth < 0) {
-            throw new IllegalArgumentException("Invalid max width " + maxWidth);
-        }
+        assert Require.nonNull(s, "string");
+        assert Require.inRange(offset, 0, s.length() - 1, "offset");
+        assert Require.nonNegative(maxWidth, "maxWidth");
 
         // Find end index
         int end = offset;

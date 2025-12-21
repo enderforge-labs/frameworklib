@@ -8,6 +8,8 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.joml.Vector4i;
 
+import com.snek.frameworklib.debug.Require;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -48,6 +50,8 @@ public class Txt {
      * @param s The String.
      */
     public Txt(final @NotNull String s) {
+        assert Require.nonNull(s, "string");
+
         rawText = Component.literal(s);
         _length = s.length();
         style = Style.EMPTY;
@@ -58,6 +62,8 @@ public class Txt {
      * @param s The MutableText.
      */
     public Txt(final @NotNull MutableComponent s) {
+        assert Require.nonNull(s, "component");
+
         rawText = s.copy();
         _length = s.getString().length();
         style = rawText.getStyle();
@@ -68,6 +74,8 @@ public class Txt {
      * @param s The Component.
      */
     public Txt(final @NotNull Component s) {
+        assert Require.nonNull(s, "component");
+
         rawText = s.copy();
         _length = s.getString().length();
         style = rawText.getStyle();
@@ -77,6 +85,9 @@ public class Txt {
 
 
     private Txt(final @NotNull MutableComponent s, final int length) {
+        assert Require.nonNull(s, "component");
+        assert Require.nonNegative(length, "length");
+
         rawText = s.copy();
         _length = length;
         style = rawText.getStyle();
@@ -156,6 +167,9 @@ public class Txt {
      * @return This.
      */
     public @NotNull Txt color(final int r, final int g, final int b) {
+        assert Require.inRange(r, 0, 255, "red");
+        assert Require.inRange(g, 0, 255, "green");
+        assert Require.inRange(b, 0, 255, "blue");
         style = style.withColor((r << 16) | (g << 8) | b);
         return this;
     }
@@ -166,6 +180,7 @@ public class Txt {
      * @return This.
      */
     public @NotNull Txt color(final @NotNull Vector3i rgb) {
+        assert Require.nonNull(rgb, "rgb");
         style = style.withColor((rgb.x << 16) | (rgb.y << 8) | rgb.z);
         return this;
     }
@@ -176,6 +191,7 @@ public class Txt {
      * @return This.
      */
     public @NotNull Txt colorHSV(final @NotNull Vector3f hsv) {
+        assert Require.nonNull(hsv, "hsv");
         return color(Utils.HSVtoRGB(hsv));
     }
 
@@ -187,6 +203,9 @@ public class Txt {
      * @return This.
      */
     public @NotNull Txt colorHSV(final float h, final float s, final float v) {
+        assert Require.inRange(h, 0, 360, "hue");
+        assert Require.inRange(s, 0, 1, "saturation");
+        assert Require.inRange(v, 0, 1, "value");
         return color(Utils.HSVtoRGB(new Vector3f(h, s, v)));
     }
 
@@ -196,6 +215,7 @@ public class Txt {
      * @return This.
      */
     public @NotNull Txt color(final @NotNull Vector4i argb) {
+        assert Require.nonNull(argb, "argb");
         style = style.withColor((argb.y << 16) | (argb.z << 8) | argb.w);
         return this;
     }
@@ -206,6 +226,7 @@ public class Txt {
      * @return This.
      */
     public @NotNull Txt color(final int rgb) {
+        assert Require.nonNull(rgb, "rgb");
         style = style.withColor(rgb);
         return this;
     }
@@ -234,6 +255,7 @@ public class Txt {
      * @return This.
      */
     public @NotNull Txt cat(final @NotNull Component s) {
+        assert Require.nonNull(s, "component");
         rawText.append(s);
         _length += s.getString().length();
         return this;
@@ -245,6 +267,7 @@ public class Txt {
      * @return This.
      */
     public @NotNull Txt cat(final @NotNull Txt s) {
+        assert Require.nonNull(s, "txt value");
         rawText.append(s.get());
         _length += s._length;
         return this;
@@ -256,6 +279,7 @@ public class Txt {
      * @return This.
      */
     public @NotNull Txt cat(final @NotNull String s) {
+        assert Require.nonNull(s, "string");
         rawText.append(s);
         _length += s.length();
         return this;
@@ -305,12 +329,12 @@ public class Txt {
      * @param start Starting index (inclusive).
      * @param end Ending index (exclusive).
      * @return A new Txt containing the substring with preserved styling.
-     * @throws IllegalArgumentException if {@code start < 0} or {@code end < start}
      */
     public Txt substring(final int start, final int end) {
-        if(start < 0 || end < start) {
-            throw new IllegalArgumentException("Invalid range: start=" + start + ", end=" + end);
-        }
+        assert Require.condition(
+            start < 0 || end < start || end > _length,
+            "Invalid range: start: " + start + ", end: " + end + ". String length: " + _length
+        );
 
         if(start == end) {
             return new Txt();
@@ -353,6 +377,13 @@ public class Txt {
 
 
     private static int extractRecursive(final @NotNull Component comp, final int start, final int end, int pos, final @NotNull Style parentStyle, final @NotNull List<@NotNull MutableComponent> parts) {
+        assert Require.nonNull(comp, "component");
+        assert Require.condition(start < 0 || end < start, "Invalid range: start: " + start + ", end: " + end);
+        assert Require.nonNegative(pos, "position");
+        assert Require.nonNull(parentStyle, "parent style");
+        assert Require.nonNull(parts, "parts");
+
+
         // Inherit missing styles from parent
         final @NotNull Style effectiveStyle = parentStyle.applyTo(comp.getStyle());
 

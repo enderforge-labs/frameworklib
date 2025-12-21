@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.snek.frameworkconfig.FrameworkConfig;
 import com.snek.frameworklib.configs.Configs;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.core.InteractionBlocker;
 import com.snek.frameworklib.graphics.core.elements.Elm;
@@ -50,9 +51,7 @@ public class FrameworkLib implements ModInitializer {
     // Server instance
     private static @Nullable MinecraftServer serverInstance = null;
     public  static @NotNull  MinecraftServer getServer() {
-        if(serverInstance == null) {
-            throw new NullPointerException("Server instance requested before initialization");
-        }
+        assert Require.condition(serverInstance != null, "Server instance requested before initialization");
         return serverInstance;
     }
 

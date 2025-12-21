@@ -5,6 +5,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import com.snek.frameworklib.debug.DebugCheck;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.debug.UiDebugWindow;
 
 
@@ -54,6 +55,9 @@ public final class GeometryUtils extends UtilityClassBase {
      * @return True if the line intersects the sphere, false otherwise.
      */
     public static boolean checkLineSphereIntersection(final @NotNull Vector3f lineOrigin, final @NotNull Vector3f lineDirection, final @NotNull Vector3f targetCenter, final float targetRadius) {
+        assert Require.nonNull(lineOrigin, "line origin");
+        assert Require.nonNull(lineDirection, "line direction");
+        assert Require.nonNull(targetCenter, "target center");
 
         // Calculate the direction vector from lineOrigin to targetCenter
         final Vector3f toCenter = new Vector3f(targetCenter).sub(lineOrigin);
@@ -79,6 +83,11 @@ public final class GeometryUtils extends UtilityClassBase {
      * @return True if the line intersects the rectangle, false otherwise.
      */
     public static boolean checkLineRectangleIntersection(final @NotNull Vector3f lineOrigin, final @NotNull Vector3f lineDirection, final @NotNull Vector3f[] corners) {
+        assert Require.nonNull(lineOrigin, "line origin");
+        assert Require.nonNull(lineDirection, "line direction");
+        assert Require.nonNull(corners, "corners");
+        assert Require.condition(corners.length == 4, "corner array must contain exactly 4 points");
+
 
         // Build a stable coordinate system with dir as the Z axis
         final Vector3f right = new Vector3f();
@@ -128,6 +137,11 @@ public final class GeometryUtils extends UtilityClassBase {
     *     Returns Double.MAX_VALUE if no intersection.
     */
     public static double getLineRectangleIntersectionDistance(final @NotNull Vector3f lineOrigin,final @NotNull Vector3f lineDirection,final @NotNull Vector3f[] corners) {
+        assert Require.nonNull(lineOrigin, "line origin");
+        assert Require.nonNull(lineDirection, "line direction");
+        assert Require.nonNull(corners, "corners");
+        assert Require.condition(corners.length == 4, "corner array must contain exactly 4 points");
+
 
         // Calculate the plane normal from the first three corners
         Vector3f edge1 = new Vector3f(corners[1]).sub(corners[0]);
@@ -154,14 +168,19 @@ public final class GeometryUtils extends UtilityClassBase {
     /**
      * Checks whether a point is within the quadrilateral polygon defined by the list of vertices.
      * @param point The coordinates of  the point.
-     * @param quad A list of 4 vectors identifying the corners of the polygon.
+     * @param corners A list of 4 vectors identifying the corners of the polygon.
      * @return True if the point is within the polygon, false otherwise.
      */
-    static boolean isPointInQuad(final @NotNull Vector2f point, final @NotNull Vector2f[] quad) {
+    static boolean isPointInQuad(final @NotNull Vector2f point, final @NotNull Vector2f[] corners) {
+        assert Require.nonNull(point, "point");
+        assert Require.nonNull(corners, "corners");
+        assert Require.condition(corners.length == 4, "corner array must contain exactly 4 points");
+
+
         int sign = 0;
         for(int i = 0; i < 4; i++) {
-            final Vector2f a = quad[i];
-            final Vector2f b = quad[(i + 1) % 4];
+            final Vector2f a = corners[i];
+            final Vector2f b = corners[(i + 1) % 4];
             final float cross = (b.x - a.x) * (point.y - a.y) - (b.y - a.y) * (point.x - a.x);
             if(cross != 0) {
                 final int newSign = cross > 0 ? 1 : -1;

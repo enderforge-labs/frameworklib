@@ -2,6 +2,8 @@ package com.snek.frameworklib.utils.scheduler;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.frameworklib.debug.Require;
+
 
 
 
@@ -21,12 +23,14 @@ public class LoopTaskHandler extends TaskHandler {
 
     /**
      * Creates a new LoopTaskHandler.
-     * @param targetTick The tick the first iteration of this task is scheduled for, measures in ticks.
-     * @param interval The interval between iterations, measures in ticks.
      * @param task The task to execute.
+     * @param targetTick The tick the first iteration of this task is scheduled for, measures in ticks.
+     * @param interval The interval between iterations, measures in ticks. Must be {@code > 0}.
      */
-    public LoopTaskHandler(final long targetTick, final long interval, final @NotNull Runnable task) {
-        super(targetTick, task);
+    public LoopTaskHandler(final @NotNull Runnable task, final long targetTick, final long interval) {
+        super(task, targetTick);
+        assert Require.positive(interval, "interval");
+
         this.interval = interval;
     }
 }

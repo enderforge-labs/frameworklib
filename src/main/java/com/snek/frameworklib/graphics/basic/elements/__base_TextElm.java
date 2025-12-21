@@ -298,10 +298,8 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
         else if(this instanceof FancyTextElm  e) { return e.__calcTransformFg(e.__calcTransform()); }
 
         //! This is never actually called. __base_TextElm is a sealed class that only permits SimpleTextElm and FancyTextElm
-        else {
-            assert Require.fail("calcForegroundTransform called on invalid class");
-            throw new RuntimeException();
-        }
+        assert Require.fail("calcForegroundTransform called on invalid class");
+        return null;
     }
 
 

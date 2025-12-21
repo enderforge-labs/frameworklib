@@ -18,6 +18,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.serialization.JsonOps;
 import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.debug.Require;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
@@ -30,7 +31,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -87,8 +87,9 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @param substring The substring to look for.
      * @return True if tag contains the substring anywhere in its tree, false otherwise.
      */
-    public static boolean nbtContainsSubstring(Tag tag, String substring) {
-        if(tag == null) return false;
+    public static boolean nbtContainsSubstring(final @NotNull Tag tag, final @NotNull String substring) {
+        assert Require.nonNull(tag, "tag");
+        assert Require.nonNull(substring, "substring");
 
 
         if(tag instanceof CompoundTag c) {
@@ -123,7 +124,8 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @param stack The item stack.
      * @return The UUID.
      */
-    public static UUID calcItemUUID(ItemStack stack) {
+    public static @NotNull UUID calcItemUUID(final @NotNull ItemStack stack) {
+        assert Require.nonNull(stack, "stack");
         final CompoundTag nbt = stack.getTag();
 
         try {
@@ -136,7 +138,8 @@ public final class MinecraftUtils extends UtilityClassBase {
             final ByteBuffer buffer = ByteBuffer.wrap(Arrays.copyOf(hash, 16));
             return new UUID(buffer.getLong(), buffer.getLong());
         } catch(final NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            FrameworkLib.LOGGER.error("Could not create item hash", new RuntimeException());
+            return null;
         }
     }
 
@@ -150,12 +153,13 @@ public final class MinecraftUtils extends UtilityClassBase {
     /**
      * Computes the serialized form of an ItemStack.
      * @return The serialized ItemStack as a String.
-     * @throws RuntimeException if the item cannot be serialized.
      */
     public static @NotNull String serializeItem(final @NotNull ItemStack item) {
+        assert Require.nonNull(item, "item");
+
         final var result = ItemStack.CODEC.encode(item, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).result();
         if(result.isEmpty()) {
-            throw new RuntimeException("Could not serialize item stack");
+            FrameworkLib.LOGGER.error("Could not serialize item stack", new RuntimeException());
         }
         return result.get().toString();
     }
@@ -166,12 +170,13 @@ public final class MinecraftUtils extends UtilityClassBase {
     /**
      * Computes the ItemStack form of a serialized item.
      * @return The deserialized ItemStack.
-     * @throws RuntimeException if the item cannot be deserialized.
      */
     public static @NotNull ItemStack deserializeItem(final @NotNull String serializedItem) {
+        assert Require.nonNull(serializedItem, "serializedItem");
+
         final var result = ItemStack.CODEC.decode(JsonOps.INSTANCE, JsonParser.parseString(serializedItem)).result();
         if(result.isEmpty()) {
-            throw new RuntimeException("Could not deserialize item stack");
+            FrameworkLib.LOGGER.error("Could not deserialize item stack", new RuntimeException());
         }
         return result.get().getFirst();
     }
@@ -190,6 +195,8 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @return True if all of the items could be given to the player, false othersise (not enough space in inventory).
      */
     public static boolean attemptGive(final @NotNull Player player, final @NotNull ItemStack item) {
+        assert Require.nonNull(player, "player");
+        assert Require.nonNull(item, "item");
         return player.getInventory().add(item);
     }
 
@@ -207,6 +214,9 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @return True if the item stack has the tag and it's set to {@code true}, false otherwise.
      */
     public static boolean hasTag(final @NotNull ItemStack stack, final @NotNull String tagKey) {
+        assert Require.nonNull(stack, "stack");
+        assert Require.nonNull(tagKey, "tag key");
+
         CompoundTag nbt = stack.getTag();
         return nbt != null && nbt.getBoolean(tagKey);
     }
@@ -221,6 +231,9 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @return The modified item stack.
      */
     public static @NotNull ItemStack addTag(final @NotNull ItemStack stack, final @NotNull String tagKey) {
+        assert Require.nonNull(stack, "stack");
+        assert Require.nonNull(tagKey, "tag key");
+
         final CompoundTag nbt = stack.getOrCreateTag();
         nbt.putBoolean(tagKey, true);
         return stack;
@@ -236,6 +249,9 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @return The modified item stack.
      */
     public static @NotNull ItemStack removeTag(final @NotNull ItemStack stack, final @NotNull String tagKey) {
+        assert Require.nonNull(stack, "stack");
+        assert Require.nonNull(tagKey, "tag key");
+
         final CompoundTag nbt = stack.getTag();
         if(nbt != null) {
             nbt.remove(tagKey);
@@ -257,6 +273,7 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @return The head as an ItemStack of count 1.
      */
     public static @NotNull ItemStack createCustomHead(final @NotNull String skin, final boolean wearable) {
+        assert Require.nonNull(skin, "skin");
 
         // Create the texture list NBT using the provided Base64 texture ID
         final CompoundTag NBT_texture = new CompoundTag();
@@ -298,13 +315,13 @@ public final class MinecraftUtils extends UtilityClassBase {
      * <p>
      * The player can be offline, as long as they have joined the server at least once in the past.
      * @param uuid The player's UUID.
-     * @param server The server instance.
      * @return The player's head as an ItemStack of count 1, or null if the player never joined this server.
      */
-    public static @Nullable ItemStack getOfflinePlayerHead(final @NotNull UUID uuid, final @NotNull MinecraftServer server) {
+    public static @Nullable ItemStack getOfflinePlayerHead(final @NotNull UUID uuid) {
+        assert Require.nonNull(uuid, "uuid");
 
         // Fetch player profile cache
-        final Optional<GameProfile> profile = server.getProfileCache().get(uuid);
+        final Optional<GameProfile> profile = FrameworkLib.getServer().getProfileCache().get(uuid);
         if(profile.isEmpty()) return null;
         final GameProfile gp = profile.get();
 
@@ -345,11 +362,13 @@ public final class MinecraftUtils extends UtilityClassBase {
      * <p>
      * The player can be offline, as long as they have joined the server at least once in the past.
      * @param uuid The player's UUID.
-     * @param server The server instance.
+     * @param server The serverinstance.
      * @return The player's name as a string, or null if the player never joined this server.
      */
-    public static @Nullable String getOfflinePlayerName(final @NotNull UUID uuid, final @NotNull MinecraftServer server) {
-        final Optional<GameProfile> profile = server.getProfileCache().get(uuid);
+    public static @Nullable String getOfflinePlayerName(final @NotNull UUID uuid) {
+        assert Require.nonNull(uuid, "uuid");
+
+        final Optional<GameProfile> profile = FrameworkLib.getServer().getProfileCache().get(uuid);
         if(profile.isEmpty()) return null;
         return profile.get().getName();
     }
@@ -371,6 +390,11 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @param pitch The sound's pitch.
      */
     public static void playSoundClient(final @NotNull Player player, final @NotNull SoundEvent sound, final float volume, final float pitch) {
+        assert Require.nonNull(player, "player");
+        assert Require.nonNull(sound, "sound");
+        assert Require.nonNegative(volume, "volume");
+        assert Require.nonNegative(pitch, "pitch");
+
         ((ServerPlayer)player).connection.send(
             new ClientboundSoundPacket(
                 Holder.direct(sound),
@@ -392,6 +416,10 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @param stack The item stack to set.
      */
     public static void sendClientSlotUpdate(final @NotNull Player player, final int slot, final @NotNull ItemStack stack) {
+        assert Require.nonNull(player, "player");
+        assert Require.nonNegative(slot, "slot");
+        assert Require.nonNull(stack, "stack");
+
         ((ServerPlayer)player).connection.send(new ClientboundContainerSetSlotPacket(
             InventoryMenu.CONTAINER_ID,
             player.containerMenu.getStateId(),
@@ -419,6 +447,8 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @return The name of the item.
      */
     public static @NotNull Component getFancyItemName(final @NotNull ItemStack item) {
+        assert Require.nonNull(item, "item");
+
 
         // Custom names
         if(item.hasCustomHoverName()) {
@@ -508,6 +538,7 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @return The name of the item.
      */
     public static @NotNull Component getItemName(final @NotNull ItemStack item) {
+        assert Require.nonNull(item, "item");
 
         // Custom names
         if(item.hasCustomHoverName()) {
@@ -532,6 +563,7 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @return The coordinates of the block as a Vec3i.
      */
     public static @NotNull Vec3i doubleToBlockCoords(final @NotNull Vector3d pos) {
+        assert Require.nonNull(pos, "pos");
         return new Vec3i(
             (int) Math.floor(pos.x),
             (int) Math.floor(pos.y),
@@ -546,6 +578,7 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @return The coordinates of the center of the block.
      */
     public static @NotNull Vector3d blockCenterCoords(final @NotNull Vec3i pos) {
+        assert Require.nonNull(pos, "pos");
         return new Vector3d(
             pos.getX() + 0.5,
             pos.getY() + 0.5,
@@ -561,6 +594,7 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @return The coordinates of the point.
      */
     public static @NotNull Vector3d blockSourceCoords(final @NotNull Vec3i pos) {
+        assert Require.nonNull(pos, "pos");
         return new Vector3d(
             pos.getX() + 0.5,
             pos.getY(),
@@ -577,6 +611,7 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @return The coordinates of the eyes.
      */
     public static @NotNull Vector3d getPlayerStandingEyePos(final @NotNull Player player) {
+        assert Require.nonNull(player, "player");
         final @NotNull Vec3 playerPos = player.getPosition(0);
         return new Vector3d(playerPos.x, playerPos.y + getPlayerStandingEyeHeight(player), playerPos.z);
     }
@@ -588,6 +623,7 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @return The height of the eyes.
      */
     public static double getPlayerStandingEyeHeight(final @NotNull Player player) {
+        assert Require.nonNull(player, "player");
         return player.getStandingEyeHeight(Pose.STANDING, player.getDimensions(Pose.STANDING));
     }
 }

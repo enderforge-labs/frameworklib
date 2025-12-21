@@ -12,6 +12,7 @@ import org.joml.Vector3i;
 import org.joml.Vector4i;
 
 import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.debug.Require;
 
 
 
@@ -69,6 +70,9 @@ public final class Utils extends UtilityClassBase {
      * @return The return value of the method.
      */
     public static @Nullable Object invokeSafe(final @NotNull Method method, final @NotNull Object target, final @Nullable Object... args) {
+        assert Require.nonNull(method, "method");
+        assert Require.nonNull(target, "target");
+
         try {
             return method.invoke(target, args);
         } catch(final IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -86,6 +90,10 @@ public final class Utils extends UtilityClassBase {
      * @param task The task to run.
      */
     public static void runAsync(final int delay, final @NotNull Runnable task) {
+        assert Require.nonNegative(delay, "delay");
+        assert Require.nonNull(task, "task");
+
+
         new Thread(() -> {
 
             // Wait for the delay
@@ -121,6 +129,7 @@ public final class Utils extends UtilityClassBase {
      * @return The formatted amount.
      */
     public static @NotNull String formatAmountShort(final long amount) {
+        assert Require.nonNegative(amount, "amount");
         return formatPriceShort(amount * 100l, "");
     }
 
@@ -131,6 +140,7 @@ public final class Utils extends UtilityClassBase {
      * @return The formatted price.
      */
     public static @NotNull String formatPriceShort(final long price) {
+        assert Require.nonNegative(price, "price");
         return formatPriceShort(price, "$");
     }
 
@@ -142,6 +152,10 @@ public final class Utils extends UtilityClassBase {
      * @return The formatted price.
      */
     public static @NotNull String formatPriceShort(final long price, final @NotNull String currency) {
+        assert Require.nonNegative(price, "price");
+        assert Require.nonNull(currency, "currency");
+
+
         final String[] suffixes = { "", "k", "m", "b", "t", "q" };
 
         // Calculate exponent
@@ -179,6 +193,7 @@ public final class Utils extends UtilityClassBase {
      * @return The formatted price.
      */
     public static @NotNull String formatPrice(final long price) {
+        assert Require.nonNegative(price, "price");
         return formatPrice(price, "$", true);
     }
 
@@ -191,6 +206,9 @@ public final class Utils extends UtilityClassBase {
      * @return The formatted price.
      */
     public static @NotNull String formatPrice(final long price, final @NotNull String currency, final boolean thousandsSeparator) {
+        assert Require.nonNegative(price, "price");
+        assert Require.nonNull(currency, "currency");
+
         final long units = price / 100l;
         final long cents = price % 100l;
 
@@ -217,6 +235,7 @@ public final class Utils extends UtilityClassBase {
      * @return The formatted price.
      */
     public static @NotNull String formatAmount(final double amount) {
+        assert Require.nonNegative(amount, "amount");
         return formatAmount(amount, false, true);
     }
 
@@ -228,6 +247,7 @@ public final class Utils extends UtilityClassBase {
      * @return The formatted price.
      */
     public static @NotNull String formatAmount(final double amount, final boolean x, final boolean thousandsSeparator) {
+        assert Require.nonNegative(amount, "amount");
         final String r;
 
         // Separator
@@ -248,9 +268,17 @@ public final class Utils extends UtilityClassBase {
 
 
     public static @NotNull Vector3i toBW(final @NotNull Vector3i rgb) {
+        assert Require.nonNull(rgb, "rgb");
+        assert Require.inRange(rgb.x, 0, 255, "red");
+        assert Require.inRange(rgb.y, 0, 255, "green");
+        assert Require.inRange(rgb.z, 0, 255, "blue");
         return HSVtoRGB(toBW(RGBtoHSV(rgb)));
     }
     public static @NotNull Vector3f toBW(final @NotNull Vector3f hsv) {
+        assert Require.nonNull(hsv, "hsv");
+        assert Require.inRange(hsv.x, 0, 360, "hue");
+        assert Require.inRange(hsv.y, 0, 1, "saturation");
+        assert Require.inRange(hsv.z, 0, 1, "value");
         return hsv.mul(1, 0, 1, new Vector3f());
     }
 
@@ -269,6 +297,12 @@ public final class Utils extends UtilityClassBase {
      * @return The color as an HSV value.
      */
     public static @NotNull Vector3f RGBtoHSV(final @NotNull Vector3i rgb) {
+        assert Require.nonNull(rgb, "rgb");
+        assert Require.inRange(rgb.x, 0, 255, "red");
+        assert Require.inRange(rgb.y, 0, 255, "green");
+        assert Require.inRange(rgb.z, 0, 255, "blue");
+
+
         final float r = rgb.x / 255.0f;
         final float g = rgb.y / 255.0f;
         final float b = rgb.z / 255.0f;
@@ -323,6 +357,12 @@ public final class Utils extends UtilityClassBase {
      * @return The color as an HSV value.
      */
     public static @NotNull Vector3i HSVtoRGB(final @NotNull Vector3f hsv) {
+        assert Require.nonNull(hsv, "hsv");
+        assert Require.inRange(hsv.x, 0, 360, "hue");
+        assert Require.inRange(hsv.y, 0, 1, "saturation");
+        assert Require.inRange(hsv.z, 0, 1, "value");
+
+
         final float h = hsv.x;
         final float s = hsv.y;
         final float v = hsv.z;
@@ -370,6 +410,16 @@ public final class Utils extends UtilityClassBase {
      * @return The resulting color.
      */
     public static @NotNull Vector3i interpolateRGB(final @NotNull Vector3i rgb1, final @NotNull Vector3i rgb2, final float factor) {
+        assert Require.nonNull(rgb1, "rgb 1");
+        assert Require.inRange(rgb1.x, 0, 255, "red 1");
+        assert Require.inRange(rgb1.y, 0, 255, "green 1");
+        assert Require.inRange(rgb1.z, 0, 255, "blue 1");
+        assert Require.nonNull(rgb2, "rgb 2");
+        assert Require.inRange(rgb2.x, 0, 255, "red 2");
+        assert Require.inRange(rgb2.y, 0, 255, "green 2");
+        assert Require.inRange(rgb2.z, 0, 255, "blue 2");
+
+
         final Vector3f hsv1 = RGBtoHSV(rgb1);
         final Vector3f hsv2 = RGBtoHSV(rgb2);
 
@@ -406,6 +456,12 @@ public final class Utils extends UtilityClassBase {
      * @return The resulting color.
      */
     public static @NotNull Vector4i interpolateARGB(final @NotNull Vector4i argb1, final @NotNull Vector4i argb2, final float factor) {
+        assert Require.nonNull(argb1, "argb 1");
+        assert Require.inRange(argb1.x, 0, 255, "alpha 1");
+        assert Require.nonNull(argb2, "argb 2");
+        assert Require.inRange(argb2.x, 0, 255, "alpha 2");
+
+
         final Vector3i rgbRet = interpolateRGB(
             new Vector3i(argb1.y, argb1.z, argb1.w),
             new Vector3i(argb2.y, argb2.z, argb2.w), factor

@@ -4,6 +4,8 @@ import java.util.function.UnaryOperator;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.frameworklib.debug.Require;
+
 
 
 
@@ -27,6 +29,7 @@ public final class Easing {
      *     the custom easing would produce at the same point in time.
      */
     public Easing(final @NotNull UnaryOperator<@NotNull Double> f) {
+        assert Require.nonNull(f, "easing operator");
         this.f = f;
     }
 

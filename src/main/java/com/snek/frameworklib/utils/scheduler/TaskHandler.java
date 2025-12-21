@@ -2,6 +2,8 @@ package com.snek.frameworklib.utils.scheduler;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.frameworklib.debug.Require;
+
 
 
 
@@ -16,10 +18,26 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TaskHandler {
     private long targetTick;
-    public long getTargetTick() { return targetTick; }
-    public void setTargetTick(long n) { targetTick = n; }
     protected final @NotNull Runnable task;
     protected boolean cancelled = false;
+
+
+    /**
+     * Retrieves the tick this task was scheduled for.
+     * @return The tick number.
+     */
+    public long getTargetTick() {
+        return targetTick;
+    }
+
+    /**
+     * Sets a new target tick for this task.
+     * @param targetTick the new targe tick.
+     */
+    public void setTargetTick(final long targetTick) {
+        assert Require.nonNegative(targetTick, "target tick");
+        this.targetTick = targetTick;
+    }
 
 
 
@@ -29,7 +47,10 @@ public class TaskHandler {
      * @param targetTick The tick the task is scheduled for.
      * @param task The task to execute.
      */
-    public TaskHandler(final long targetTick, final @NotNull Runnable task) {
+    public TaskHandler(final @NotNull Runnable task, final long targetTick) {
+        assert Require.nonNull(task, "task");
+        assert Require.nonNegative(targetTick, "target tick");
+
         this.targetTick = targetTick;
         this.task = task;
     }
