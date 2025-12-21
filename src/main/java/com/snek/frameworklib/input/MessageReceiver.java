@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.utils.UtilityClassBase;
 
 import net.minecraft.network.chat.PlayerChatMessage;
@@ -24,8 +25,8 @@ import net.minecraft.world.entity.player.Player;
  * A utility class that detects player messages and executes callbacks based on the sender.
  */
 public final class MessageReceiver extends UtilityClassBase {
-    private MessageReceiver() {}
     private static final @NotNull Map<@NotNull UUID, @Nullable Predicate<@NotNull String>> callbacks = new HashMap<>();
+    private MessageReceiver() {}
 
 
     /**
@@ -35,6 +36,7 @@ public final class MessageReceiver extends UtilityClassBase {
      * @param player The player.
      */
     public static void removeCallback(final @NotNull Player player) {
+        assert Require.nonNull(player, "player");
         callbacks.remove(player.getUUID());
     }
 
@@ -49,6 +51,9 @@ public final class MessageReceiver extends UtilityClassBase {
      *     Returning true will let the server broadcast the message in chat.
      */
     public static void setCallback(final @NotNull Player player, final @NotNull Predicate<@NotNull String> callback) {
+        assert Require.nonNull(player, "player");
+        assert Require.nonNull(callback, "callback");
+
         callbacks.put(player.getUUID(), callback);
     }
 
@@ -60,6 +65,9 @@ public final class MessageReceiver extends UtilityClassBase {
      * @return Whether the message should be blocked.
      */
     public static boolean onMessage(final @NotNull PlayerChatMessage message, final @NotNull Player player) {
+        assert Require.nonNull(message, "message");
+        assert Require.nonNull(player, "player");
+
         final Predicate<String> callback = callbacks.get(player.getUUID()); // Find callback for the specified player
         if(callback != null) {                                              // If present
             if(callback.test(message.decoratedContent().getString())) {         // Execute the callback. If it returns true

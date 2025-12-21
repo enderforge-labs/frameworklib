@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.core.InteractionBlocker;
 import com.snek.frameworklib.utils.UtilityClassBase;
@@ -54,6 +55,10 @@ public final class ClickReceiver extends UtilityClassBase {
         final @NotNull InteractionHand hand,
         final @NotNull ClickAction clickType
     ) {
+        assert Require.nonNull(level,     "level");
+        assert Require.nonNull(player,    "player");
+        assert Require.nonNull(hand,      "hand");
+        assert Require.nonNull(clickType, "click type");
 
         // Skip player if they are dead or in spectator mode
         if(player.isSpectator() || player.isDeadOrDying()) return InteractionResult.PASS;
@@ -70,7 +75,6 @@ public final class ClickReceiver extends UtilityClassBase {
 
 
         // Send click to the player's contexts and return if one is present
-        // @Nullable Context topMost = Context.findTopMostContext(player); //TODO
         @Nullable Context context = HoverReceiver.getTargetedContext(player);
         if(context != null) {
             if(context.forwardClick(player, clickType)) {
@@ -103,6 +107,13 @@ public final class ClickReceiver extends UtilityClassBase {
         final @NotNull ClickAction clickType,
         final @NotNull Entity entity
     ) {
+        assert Require.nonNull(level,     "level");
+        assert Require.nonNull(player,    "player");
+        assert Require.nonNull(hand,      "hand");
+        assert Require.nonNull(clickType, "click type");
+        assert Require.nonNull(entity,    "entity");
+
+        // Select entities that have the tracking name
         if(entity instanceof Interaction && entity.hasCustomName() && entity.getCustomName().getString().equals(InteractionBlocker.ENTITY_CUSTOM_NAME)) {
             return onClick(level, player, hand, clickType);
         }
@@ -130,6 +141,11 @@ public final class ClickReceiver extends UtilityClassBase {
         final @NotNull ClickAction clickType,
         final @NotNull Vec3i pos
     ) {
+        assert Require.nonNull(level,     "level");
+        assert Require.nonNull(player,    "player");
+        assert Require.nonNull(hand,      "hand");
+        assert Require.nonNull(clickType, "click type");
+        assert Require.nonNull(pos,       "position");
 
         // Check ray casting result
         return onClick(level, player, hand, clickType);
@@ -152,6 +168,10 @@ public final class ClickReceiver extends UtilityClassBase {
         final @NotNull Player player,
         final @NotNull InteractionHand hand
     ) {
+        assert Require.nonNull(level,     "level");
+        assert Require.nonNull(player,    "player");
+        assert Require.nonNull(hand,      "hand");
+
         return onClick(level, player, hand, ClickAction.SECONDARY);
     }
 }

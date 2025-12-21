@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.debug.DebugCheck;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.debug.UiDebugWindow;
 import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.core.elements.Elm;
@@ -53,15 +54,31 @@ public final class HoverReceiver extends UtilityClassBase {
 
 
     // Optimization structures
-    private static @NotNull Map<Player, Context> targetedContexts    =  new HashMap<>();
-    private static @NotNull HashSet<Context>     updatedContexts     =  new HashSet<>();
-    private static @NotNull HashSet<Context>     prevUpdatedContexts =  new HashSet<>();
+    private static @NotNull Map<@NotNull Player, @Nullable Context> targetedContexts    =  new HashMap<>();
+    private static @NotNull HashSet<@NotNull Context> updatedContexts     =  new HashSet<>();
+    private static @NotNull HashSet<@NotNull Context> prevUpdatedContexts =  new HashSet<>();
 
-    public static Context getTargetedContext(final @NotNull Player player) {
+
+    /**
+     * Find the context the specified player is currently looking at.
+     * @param player The player.
+     * @return The context the player is looking at, or none if  they aren't looking at any context.
+     */
+    public static @Nullable Context getTargetedContext(final @NotNull Player player) {
+        assert Require.nonNull(player, "player");
         return targetedContexts.get(player);
     }
 
+
+    /**
+     * Draws the specified element and all of its children in the debug window.
+     * @param div The element to draw.
+     * @param player The player to use as point of view.
+     */
     public static void traceElements(final @NotNull Div div, final @NotNull Player player) {
+        assert Require.nonNull(div, "div");
+        assert Require.nonNull(player, "player");
+
         if(div instanceof Elm e) {
             e.checkIntersection(player);
         }
@@ -156,7 +173,15 @@ public final class HoverReceiver extends UtilityClassBase {
 
 
 
+    /**
+     * Checks which context the specified player is currently targeting and updates the targeted context reference.
+     * <p>
+     * This reference can then be retrieved using {@code #getTargetedContext(Player)}.
+     * @param player The player.
+     * @return The targeted context.
+     */
     public static @Nullable Context updateTargetedContext(final @NotNull Player player) {
+        assert Require.nonNull(player, "player");
 
 
         // Update context
