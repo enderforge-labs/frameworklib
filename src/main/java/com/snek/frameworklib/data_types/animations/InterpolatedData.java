@@ -92,8 +92,8 @@ public class InterpolatedData {
         final @Nullable Transform transformFg,
         final @Nullable Transform transformBg
     ) {
-        assert Require.nonNegative(bgAlpha, "background alpha");
-        assert Require.nonNegative(opacity, "opacity");
+        assert Require.condition(bgAlpha == null || bgAlpha >= 0, "background alpha");
+        assert Require.condition(opacity == null || opacity >= 0, "opacity");
 
         this.transform   = transform   == null ? null : new Transform(transform);
         this.bgColor     = bgColor     == null ? null : new Vector3i(bgColor);
