@@ -35,7 +35,7 @@ public class PanelElm extends Elm {
 
     private @NotNull CustomTextDisplay getThisEntity() {
         assert Require.nonNull(getEntity(), "entity");
-        assert Require.instanceOf(getEntity(), CustomItemDisplay.class, "entity");
+        assert Require.instanceOf(getEntity(), CustomTextDisplay.class, "entity");
         return getEntity(CustomTextDisplay.class);
     }
     private @NotNull PanelElmStyle getThisStyle () {
