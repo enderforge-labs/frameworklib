@@ -40,8 +40,6 @@ public final class __base_ButtonElm {
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      */
     protected __base_ButtonElm(final @Nullable String lmbActionName, final @Nullable String rmbActionName, final int clickCooldown) {
-        assert Require.nonNull(lmbActionName, "lmb action name");
-        assert Require.nonNull(rmbActionName, "rmb action name");
         assert Require.nonNegative(clickCooldown, "click cooldown");
 
         this.lmbActionName = lmbActionName;

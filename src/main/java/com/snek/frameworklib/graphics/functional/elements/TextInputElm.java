@@ -53,7 +53,6 @@ public abstract class TextInputElm extends FancyButtonElm {
         final @NotNull TextInputElmStyle style
     ) {
         super(level, lmbActionName, rmbActionName, 1, style);
-        assert Require.nonNull(clickFeedbackMessage, "click feedback message");
         this.clickFeedbackMessage = clickFeedbackMessage;
     }
 

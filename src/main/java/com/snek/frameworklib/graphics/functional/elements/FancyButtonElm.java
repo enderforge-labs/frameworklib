@@ -50,8 +50,6 @@ public abstract class FancyButtonElm extends FancyTextElm implements Clickable, 
         final FancyButtonElmStyle style
     ) {
         super(level, style);
-        assert Require.nonNull(lmbActionName, "lmb action name");
-        assert Require.nonNull(rmbActionName, "rmb action name");
         assert Require.nonNegative(clickCooldown, "click cooldown");
         base = new __base_ButtonElm(lmbActionName, rmbActionName, clickCooldown);
     }
