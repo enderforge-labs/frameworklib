@@ -327,12 +327,13 @@ public class Txt {
      * Extracts a substring from a Txt, preserving styles.
      * @param component The component.
      * @param start Starting index (inclusive).
+     *     This can safely exceed the length of the text.
      * @param end Ending index (exclusive).
-     *     This can exceed the length of the text.
+     *     This can safely exceed the length of the text.
      * @return A new Txt containing the substring with preserved styling.
      */
     public Txt substring(final int start, final int end) {
-        assert Require.condition(start < 0 || end < start, "Invalid range: start: " + start + ", end: " + end);
+        assert Require.condition(start >= 0 && end >= start, "Invalid range: start: " + start + ", end: " + end);
 
         if(start == end) {
             return new Txt();
@@ -361,13 +362,15 @@ public class Txt {
      * Safe substring that clamps indices to valid range.
      * @param component The component.
      * @param start Starting index (inclusive).
+     *     This can safely exceed the length of the text.
      * @param end Ending index (exclusive).
+     *     This can safely exceed the length of the text.
      * @return A new Txt containing the substring with preserved styling.
      */
     public Txt substringClamped(final int start, final int end) {
         return substring(
-            Math.max(0, Math.min(start, _length)),
-            Math.max(start, Math.min(end, _length))
+            Math.max(0, start),
+            Math.max(start, end)
         );
     }
 
@@ -376,7 +379,7 @@ public class Txt {
 
     private static int extractRecursive(final @NotNull Component comp, final int start, final int end, int pos, final @NotNull Style parentStyle, final @NotNull List<@NotNull MutableComponent> parts) {
         assert Require.nonNull(comp, "component");
-        assert Require.condition(start < 0 || end < start, "Invalid range: start: " + start + ", end: " + end);
+        assert Require.condition(start >= 0 && end >= start, "Invalid range: start: " + start + ", end: " + end);
         assert Require.nonNegative(pos, "position");
         assert Require.nonNull(parentStyle, "parent style");
         assert Require.nonNull(parts, "parts");
