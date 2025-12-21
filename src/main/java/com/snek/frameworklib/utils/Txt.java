@@ -328,13 +328,11 @@ public class Txt {
      * @param component The component.
      * @param start Starting index (inclusive).
      * @param end Ending index (exclusive).
+     *     This can exceed the length of the text.
      * @return A new Txt containing the substring with preserved styling.
      */
     public Txt substring(final int start, final int end) {
-        assert Require.condition(
-            start < 0 || end < start || end > _length,
-            "Invalid range: start: " + start + ", end: " + end + ". String length: " + _length
-        );
+        assert Require.condition(start < 0 || end < start, "Invalid range: start: " + start + ", end: " + end);
 
         if(start == end) {
             return new Txt();
