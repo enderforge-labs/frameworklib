@@ -8,7 +8,6 @@ import org.joml.Vector4i;
 import com.snek.frameworklib.data_types.animations.InterpolatedData;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.containers.Flagged;
-import com.snek.frameworklib.data_types.displays.CustomItemDisplay;
 import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.styles.ConfigurablePanelElmStyle;
