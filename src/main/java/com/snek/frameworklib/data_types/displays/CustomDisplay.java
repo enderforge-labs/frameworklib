@@ -8,7 +8,7 @@ import org.joml.Vector3f;
 
 import com.mojang.math.Transformation;
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.mixin.DisplayAccessorMixin;
+import com.snek.frameworklib.mixin.accessors.DisplayAccessorMixin;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Brightness;

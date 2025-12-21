@@ -1,4 +1,4 @@
-package com.snek.frameworklib.mixin;
+package com.snek.frameworklib.mixin.accessors;
 
 import net.minecraft.world.entity.Interaction;
 import org.spongepowered.asm.mixin.Mixin;

@@ -3,7 +3,7 @@ package com.snek.frameworklib.data_types.displays;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.mixin.ItemDisplayAccessorMixin;
+import com.snek.frameworklib.mixin.accessors.ItemDisplayAccessorMixin;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Display.ItemDisplay;

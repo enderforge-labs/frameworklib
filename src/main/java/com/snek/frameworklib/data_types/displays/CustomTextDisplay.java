@@ -5,7 +5,7 @@ import org.joml.Vector4i;
 
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.mixin.TextDisplayAccessorMixin;
+import com.snek.frameworklib.mixin.accessors.TextDisplayAccessorMixin;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
 

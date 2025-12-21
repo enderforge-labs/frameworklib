@@ -6,7 +6,7 @@ import org.joml.Vector3d;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.mixin.InteractionAccessorMixin;
+import com.snek.frameworklib.mixin.accessors.InteractionAccessorMixin;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
 

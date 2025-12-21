@@ -1,4 +1,4 @@
-package com.snek.frameworklib.mixin;
+package com.snek.frameworklib.mixin.accessors;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Display.TextDisplay;

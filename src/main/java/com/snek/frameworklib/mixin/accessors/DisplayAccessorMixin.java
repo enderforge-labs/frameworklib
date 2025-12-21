@@ -1,4 +1,4 @@
-package com.snek.frameworklib.mixin;
+package com.snek.frameworklib.mixin.accessors;
 
 import net.minecraft.util.Brightness;
 import net.minecraft.world.entity.Display;
