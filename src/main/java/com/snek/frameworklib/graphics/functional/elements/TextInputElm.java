@@ -2,6 +2,7 @@ package com.snek.frameworklib.graphics.functional.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector2f;
 
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.functional.styles.TextInputElmStyle;
@@ -77,8 +78,8 @@ public abstract class TextInputElm extends FancyButtonElm {
 
 
     @Override
-    public void onClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        super.onClick(player, click);
+    public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
+        super.onClick(player, click, coords);
         if(!inputState) {
             enterInputState();
             Clickable.playSound(player);

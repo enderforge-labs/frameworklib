@@ -80,7 +80,7 @@ public final class HoverReceiver extends UtilityClassBase {
         assert Require.nonNull(player, "player");
 
         if(div instanceof Elm e) {
-            e.checkIntersection(player);
+            e.checkIntersection(player, false);
         }
         for(final Div c : div.getChildren()) {
             traceElements(c, player);

@@ -23,7 +23,7 @@ import net.minecraft.world.entity.player.Player;
 /**
  * A {@link PanelElm} used to draw lines in graphic contexts. It ignores alignment options and uses special transforms to achieve the desired shape.
  * <p>
- * This class removes the {@link #checkIntersection(Player)} and {@link #getIntersectionLength(Player)} logic and doesn't show up in the debug window.
+ * This class removes the {@link #checkIntersection(Player, boolean)} and {@link #getIntersectionLength(Player)} logic and doesn't show up in the debug window.
  * <p>
  * Subclasses must NOT implement {@link Clickable}, {@link Scrollable} or {@link Hoverable}. Trying to do so will generate a warning.
  */
@@ -59,8 +59,8 @@ public final class LinePanel extends PanelElm {
 
 
     @Override
-    public boolean checkIntersection(final @NotNull Player player) {
-        return false;
+    public Vector2f checkIntersection(final @NotNull Player player, boolean calculateIntersectionCoords) {
+        return null;
     }
 
     @Override

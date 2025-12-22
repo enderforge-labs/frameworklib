@@ -73,7 +73,7 @@ public abstract sealed class Context permits HudContext, UiContext {
     public void setSpawnPos(final @NotNull Vector3d spawnPos) {
         assert Require.nonNull(spawnPos, "spawn position");
         this.spawnPos = spawnPos;
-    };
+    }
     public void setRotation(final int newRotation) {
         assert Require.inRange(newRotation, 0, 7, "new rotation");
         lastRotation = newRotation;

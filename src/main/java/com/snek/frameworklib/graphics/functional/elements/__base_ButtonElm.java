@@ -2,6 +2,7 @@ package com.snek.frameworklib.graphics.functional.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector2f;
 
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.debug.Require;
@@ -10,6 +11,7 @@ import com.snek.frameworklib.graphics.interfaces.InputIndicatorCanvas;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
 
 
 
@@ -78,8 +80,9 @@ public final class __base_ButtonElm {
     /**
      * Shared override of onHoverEnter from Hoverable
      */
-    protected void onHoverEnter(final @NotNull Elm _this, final @Nullable Animation animation) {
+    protected void onHoverEnter(final @NotNull Elm _this, final @NotNull Player player, final @Nullable Animation animation) {
         assert Require.nonNull(_this, "_this");
+        assert Require.nonNull(player, "player");
 
         if(animation != null) {
             _this.applyAnimation(animation);
@@ -90,8 +93,9 @@ public final class __base_ButtonElm {
     /**
      * Shared override of onHoverTick from Hoverable
      */
-    protected void onHoverTick(final @NotNull Elm _this) {
+    protected void onHoverTick(final @NotNull Elm _this, final @NotNull Player player) {
         assert Require.nonNull(_this, "_this");
+        assert Require.nonNull(player, "player");
 
         // Update input displays if present
         if(_this.getCanvas() instanceof InputIndicatorCanvas c) {
@@ -124,21 +128,26 @@ public final class __base_ButtonElm {
     /**
      * Shared override of attemptClick from Clickable
      */
-    protected boolean attemptClick(final @NotNull Elm _this, final @NotNull Player player) {
+    protected @Nullable Vector2f attemptClick(final @NotNull Elm _this, final @NotNull Player player, final @NotNull ClickAction click) {
         assert Require.nonNull(_this, "_this");
         assert Require.nonNull(player, "player");
+        assert Require.nonNull(click, "click");
 
-        if(!clickRateLimiter.attempt()) return false;
+        if(!clickRateLimiter.attempt()) return null;
         clickRateLimiter.renewCooldown(clickCooldown);
-        return _this.checkIntersection(player);
+        return _this.checkIntersection(player, true);
     }
 
 
     /**
      * Shared override of onClick from Clickable
      */
-    public void onClick(final @NotNull Elm _this) {
+    public void onClick(final @NotNull Elm _this, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         assert Require.nonNull(_this, "_this");
+        assert Require.nonNull(click, "click");
+        assert Require.nonNull(coords, "click coords");
+        assert Require.inRange(coords.x, 0, 1, "click coords x");
+        assert Require.inRange(coords.y, 0, 1, "click coords y");
         //Empty
     }
 }

@@ -1,6 +1,7 @@
 package com.snek.frameworklib.graphics.interfaces;
 
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector2f;
 
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.utils.MinecraftUtils;
@@ -33,9 +34,9 @@ public interface Clickable {
      * Calling this function on elements with a different billboard mode is allowed and has no effect.
      * @param player The player.
      * @param click The type of click.
-     * @return Whether the function accepted the click.
+     * @return The 2d coordinates of the click if the element accepted it, null otherwise.
      */
-    public boolean attemptClick(@NotNull Player player, @NotNull ClickAction click);
+    public Vector2f attemptClick(@NotNull Player player, @NotNull ClickAction click);
 
 
     /**
@@ -43,8 +44,9 @@ public interface Clickable {
      * This method is called on elements that have previously accepted a click event.
      * @param player The player.
      * @param click The type of click.
+     * @param coords The 2d coordinates of the click.
      */
-    public void onClick(@NotNull Player player, @NotNull ClickAction click);
+    public void onClick(@NotNull Player player, @NotNull ClickAction click, final @NotNull Vector2f coords);
 
 
     /**

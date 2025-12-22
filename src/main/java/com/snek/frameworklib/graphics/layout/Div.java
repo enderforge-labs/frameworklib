@@ -322,9 +322,12 @@ public class Div {
         assert Require.nonNull(clickType, "click type");
 
         // If this element accepts the click, run callback and return
-        if(this instanceof Clickable e && e.attemptClick(player, clickType)) {
-            e.onClick(player, clickType);
-            return true;
+        if(this instanceof Clickable e) {
+            final Vector2f coords = e.attemptClick(player, clickType);
+            if(coords != null) {
+                e.onClick(player, clickType, coords);
+                return true;
+            }
         }
 
         //TODO check if this is actually needed. it prob was here to stop clicks from removing elements while iterating the tree
@@ -332,7 +335,9 @@ public class Div {
         final List<Div> _children = new ArrayList<>(children);
         for(final Div elm : _children) {
         // for(final Div elm : children) { //TODO
-            if(elm.forwardClick(player, clickType)) return true;
+            if(elm.forwardClick(player, clickType)) {
+                return true;
+            }
         }
 
         // Return false if no element accepted the click
@@ -353,7 +358,7 @@ public class Div {
         assert Require.nonNull(player, "player");
 
         if((this instanceof Hoverable || this instanceof Clickable || this instanceof Scrollable) && this instanceof Elm e) {
-            if(e.checkIntersection(player)) {
+            if(e.checkIntersection(player, false) != null) {
                 final Elm targetedChild = findTargetedChild(player);
                 if(targetedChild != null) {
                     return targetedChild;

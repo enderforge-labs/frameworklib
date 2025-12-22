@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
@@ -628,7 +629,7 @@ public abstract class Elm extends Div {
      */
     public void updateHoverState(final @NotNull Player player) {
         assert Require.nonNull(player, "player");
-        final boolean hoverStateNext = checkIntersection(player);
+        final boolean hoverStateNext = checkIntersection(player, false) != null;
 
         // Update current state and run hover state change callbacks if needed
         if(isHovered != hoverStateNext && hoverRateLimiter.attempt()) {
@@ -671,12 +672,15 @@ public abstract class Elm extends Div {
      * More specifically, it checks if the view vector of the player intersects
      * with the bounding box of this UI element, from any direction or distance.
      * @param player The player.
-     * @return true if the player is looking at this element, false otherwise.
-     *     Returns false if the element is not using FIXED billboard mode.
+     * @param calculateIntersectionCoords Whether to calculate the coordinates of the intersection.
+     * @return The 2d coordinates of the intersection if the view intersects the element
+     *     (or (0, 0) if {@code calculateIntersectionCoords == false}),
+     *     null otherwise.
+     *     Returns null if the element is not using FIXED billboard mode.
      */
-    public boolean checkIntersection(final @NotNull Player player) {
+    public @Nullable Vector2f checkIntersection(final @NotNull Player player, final boolean calculateIntersectionCoords) {
         assert Require.nonNull(player, "player");
-        if(!isSpawned || style.getBillboardMode() != BillboardConstraints.FIXED) return false;
+        if(!isSpawned || style.getBillboardMode() != BillboardConstraints.FIXED) return null;
         final Transform t = __calcTransform();
 
 
@@ -691,10 +695,11 @@ public abstract class Elm extends Div {
         final Vector3f corner2 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot()));
         final Vector3f corner3 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
         final Vector3f corner4 = new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
-        return GeometryUtils.checkLineRectangleIntersection(
+        return GeometryUtils.findLineRectangleIntersection(
             player.getEyePosition().toVector3f(),
             player.getViewVector(1f).toVector3f(),
-            new Vector3f[]{ corner1, corner2, corner3, corner4 }
+            new Vector3f[]{ corner1, corner2, corner3, corner4 },
+            calculateIntersectionCoords
         );
     }
 

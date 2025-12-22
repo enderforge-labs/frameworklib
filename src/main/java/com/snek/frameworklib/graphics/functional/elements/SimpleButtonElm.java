@@ -2,6 +2,7 @@ package com.snek.frameworklib.graphics.functional.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.frameworklib.debug.Require;
@@ -91,12 +92,12 @@ public abstract class SimpleButtonElm extends PanelElm implements Clickable, Hov
 
     @Override
     public void onHoverEnter(final @NotNull Player player) {
-        base.onHoverEnter(this, getThisStyle().getHoverEnterAnimation());
+        base.onHoverEnter(this, player, getThisStyle().getHoverEnterAnimation());
     }
 
     @Override
     public void onHoverTick(final @NotNull Player player) {
-        base.onHoverTick(this);
+        base.onHoverTick(this, player);
     }
 
     @Override
@@ -108,12 +109,12 @@ public abstract class SimpleButtonElm extends PanelElm implements Clickable, Hov
 
 
     @Override
-    public boolean attemptClick(final @NotNull Player player, final @NotNull ClickAction click) {
-        return base.attemptClick(this, player);
+    public @NotNull Vector2f attemptClick(final @NotNull Player player, final @NotNull ClickAction click) {
+        return base.attemptClick(this, player, click);
     }
 
     @Override
-    public void onClick(@NotNull Player player, @NotNull ClickAction click) {
-        base.onClick(this);
+    public void onClick(@NotNull Player player, @NotNull ClickAction click, final @NotNull Vector2f coords) {
+        base.onClick(this, click, coords);
     }
 }

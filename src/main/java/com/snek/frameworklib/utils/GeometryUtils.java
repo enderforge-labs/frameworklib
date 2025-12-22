@@ -1,6 +1,7 @@
 package com.snek.frameworklib.utils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -74,15 +75,17 @@ public final class GeometryUtils extends UtilityClassBase {
 
 
     /**
-     * Checks whether a line intersects a rectangle in a 3D space.
+     * Computes the 2d coordinates (0 to 1) where a line intersects a rectangle in a 3D space.
      * <p>
      * The line is assumed to be infinite in both directions, regardless of its length.
      * @param lineOrigin The starting point of the line.
      * @param lineDirection The direction of the line. Must be normalized.
      * @param corners The four corners of the rectangle.
-     * @return True if the line intersects the rectangle, false otherwise.
+     * @return The 2d coordinates of the intersection if the line intersects the rectangle,
+     *     (or (0, 0) if {@code calculateIntersectionCoords == false}),
+     *     null otherwise.
      */
-    public static boolean checkLineRectangleIntersection(final @NotNull Vector3f lineOrigin, final @NotNull Vector3f lineDirection, final @NotNull Vector3f[] corners) {
+    public static @Nullable Vector2f findLineRectangleIntersection(final @NotNull Vector3f lineOrigin, final @NotNull Vector3f lineDirection, final @NotNull Vector3f[] corners, final boolean calculateIntersectionCoords) {
         assert Require.nonNull(lineOrigin, "line origin");
         assert Require.nonNull(lineDirection, "line direction");
         assert Require.nonNull(corners, "corners");
@@ -107,26 +110,90 @@ public final class GeometryUtils extends UtilityClassBase {
         final Vector3f c2 = new Vector3f(corners[1]).sub(lineOrigin);
         final Vector3f c3 = new Vector3f(corners[2]).sub(lineOrigin);
         final Vector3f c4 = new Vector3f(corners[3]).sub(lineOrigin);
-
-        final Vector2f p1 = new Vector2f(c1.dot(right), c1.dot(up));
-        final Vector2f p2 = new Vector2f(c2.dot(right), c2.dot(up));
-        final Vector2f p3 = new Vector2f(c3.dot(right), c3.dot(up));
-        final Vector2f p4 = new Vector2f(c4.dot(right), c4.dot(up));
+        final Vector2f[] p = {
+            new Vector2f(c1.dot(right), c1.dot(up)),
+            new Vector2f(c2.dot(right), c2.dot(up)),
+            new Vector2f(c3.dot(right), c3.dot(up)),
+            new Vector2f(c4.dot(right), c4.dot(up))
+        };
 
         //! Debug draw calls
         if(DebugCheck.isDebug()) {
-            UiDebugWindow.getW().add(p1);
-            UiDebugWindow.getW().add(p2);
-            UiDebugWindow.getW().add(p3);
-            UiDebugWindow.getW().add(p4);
+            UiDebugWindow.getW().add(p[0]);
+            UiDebugWindow.getW().add(p[1]);
+            UiDebugWindow.getW().add(p[2]);
+            UiDebugWindow.getW().add(p[3]);
         }
 
-        return isPointInQuad(new Vector2f(0, 0), new Vector2f[]{p1, p2, p3, p4});
+
+        // Check intersection and return
+        if(isPointInQuad(new Vector2f(0, 0), p)) {
+            if(calculateIntersectionCoords) {
+                return inverseBilinearInterpolation(new Vector2f(0, 0), p);
+            }
+            else {
+                return new Vector2f(0, 0);
+            }
+        }
+        else {
+            return null;
+        }
     }
 
 
 
 
+    /**
+     * Finds the UV coordinates (0-1) of a point within a quad using inverse bilinear interpolation.
+     * @param point The point to find coordinates for.
+     * @param p1 The 4 corners of the quad (bottom-left, bottom-right, top-right, top-left).
+     * @return The UV coordinates (0-1) of the point within the quad.
+     */
+    public static @NotNull Vector2f inverseBilinearInterpolation(final @NotNull Vector2f point, final @NotNull Vector2f[] p) {
+        assert Require.nonNull(point, "point");
+        assert Require.nonNull(p, "corners");
+        assert Require.condition(p.length == 4, "corner array must contain exactly 4 points");
+
+        // Bilinear form: P(u,v) = (1-v)[(1-u)p1 + u*p2] + v[(1-u)p4 + u*p3]
+        // Rearranged: P = a + b*u + c*v + d*u*v
+
+        Vector2f a = new Vector2f(p[0]);
+        Vector2f b = new Vector2f(p[1].x - p[0].x, p[1].y - p[0].y);
+        Vector2f c = new Vector2f(p[3].x - p[0].x, p[3].y - p[0].y);
+        Vector2f d = new Vector2f(p[0].x - p[1].x + p[2].x - p[3].x, p[0].y - p[1].y + p[2].y - p[3].y);
+
+        // Iterative solution using Newton-Raphson
+        float u = 0.5f;
+        float v = 0.5f;
+        for(int i = 0; i < 10; i++) {
+            final float currentX = a.x + b.x * u + c.x * v + d.x * u * v;
+            final float currentY = a.y + b.y * u + c.y * v + d.y * u * v;
+
+            final float dx = point.x - currentX;
+            final float dy = point.y - currentY;
+            if(Math.abs(dx) < 0.0001f && Math.abs(dy) < 0.0001f) break;
+
+            // Compute Jacobian partial derivatives
+            final float dfdx_u = b.x + d.x * v;
+            final float dfdy_u = b.y + d.y * v;
+            final float dfdx_v = c.x + d.x * u;
+            final float dfdy_v = c.y + d.y * u;
+
+            final float det = dfdx_u * dfdy_v - dfdy_u * dfdx_v;
+            if(Math.abs(det) < 0.0001f) break; // Avoid division by zero
+
+            // Newton-Raphson update step
+            u += (dx * dfdy_v - dy * dfdx_v) / det;
+            v += (dfdx_u * dy - dfdy_u * dx) / det;
+        }
+
+        return new Vector2f(u, v);
+    }
+
+
+
+
+    //FIXME test intersection before checking the distance
     /**
     * Calculates the distance from the line origin to the intersection point on a rectangle.
     * @param lineOrigin The starting point of the line.
@@ -158,7 +225,7 @@ public final class GeometryUtils extends UtilityClassBase {
         Vector3f toPlane = new Vector3f(corners[0]).sub(lineOrigin);
         float distance = toPlane.dot(planeNormal) / denominator;
 
-        if(checkLineRectangleIntersection(lineOrigin, lineDirection, corners)) return distance;
+        if(findLineRectangleIntersection(lineOrigin, lineDirection, corners, false) != null) return distance;
         else return Double.MAX_VALUE;
     }
 
@@ -167,7 +234,7 @@ public final class GeometryUtils extends UtilityClassBase {
 
     /**
      * Checks whether a point is within the quadrilateral polygon defined by the list of vertices.
-     * @param point The coordinates of  the point.
+     * @param point The coordinates of the point.
      * @param corners A list of 4 vectors identifying the corners of the polygon.
      * @return True if the point is within the polygon, false otherwise.
      */
