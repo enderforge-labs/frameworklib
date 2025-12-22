@@ -29,7 +29,7 @@ import net.minecraft.network.chat.Component;
  */
 public class SimpleTextElmStyle extends ElmStyle {
     public static final float DEFAULT_TEXT_SCALE = 0.3f;
-    public static final float SPAWN_ANIMATION_SHIFT = 0.05f;
+    public static final float SPAWN_ANIMATION_SHIFT = 0.025f;
 
     private @NotNull Flagged<@NotNull Component>             text                  = null;
     private @NotNull Flagged<@NotNull TextOverflowBehaviour> textOverflowBehaviour = null;

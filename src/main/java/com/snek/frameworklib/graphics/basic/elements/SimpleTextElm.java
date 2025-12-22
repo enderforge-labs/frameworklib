@@ -62,7 +62,8 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
         final @NotNull ServerLevel level,
         final @NotNull Component defaultText,
         final @NotNull TextAlignment defaultTextAlignment,
-        final @NotNull TextOverflowBehaviour defaultOverflowBehaviour) {
+        final @NotNull TextOverflowBehaviour defaultOverflowBehaviour
+    ) {
         super(level, new CustomTextDisplay(level), new ConfigurableSimpleTextElmStyle(defaultText, defaultTextAlignment, defaultOverflowBehaviour));
     }
 

@@ -52,6 +52,7 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
             new Transition(ElmStyle.D_TIME, Easings.sineOut)
             .targetBgAlpha(0)
             .targetOpacity(0)
+            .additiveTransformFg(new Transform().moveX(SPAWN_ANIMATION_SHIFT))
         );
     }
 
@@ -62,6 +63,7 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
             new Transition(ElmStyle.S_TIME, Easings.sineOut)
             .targetBgAlpha(getDefaultBgAlpha())
             .targetOpacity(255)
+            .additiveTransformFg(new Transform().moveX(-SPAWN_ANIMATION_SHIFT))
         );
     }
 
