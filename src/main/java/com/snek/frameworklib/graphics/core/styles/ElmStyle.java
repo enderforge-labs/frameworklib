@@ -111,22 +111,11 @@ public class ElmStyle {
         assert Require.nonNull(billboardMode, "billboard mode");
         this.billboardMode.set(billboardMode);
     }
-    public void setPrimerAnimation(final @Nullable Animation animation) {
-        assert Require.nonNull(animation, "primer animation");
-        this.primerAnimation.set(animation);
-    }
-    public void setSpawnAnimation(final @Nullable Animation animation) {
-        assert Require.nonNull(animation, "spawn animation");
-        this.spawnAnimation.set(animation);
-    }
-    public void setDespawnAnimation(final @Nullable Animation animation) {
-        assert Require.nonNull(animation, "despawn animation");
-        this.despawnAnimation.set(animation);
-    }
-    public void setInversePrimerAnimation(final @Nullable Animation animation) {
-        assert Require.nonNull(animation, "inverse primer animation");
-        this.inversePrimerAnimation.set(animation);
-    }
+
+    public void setPrimerAnimation       (final @Nullable Animation animation) { this.primerAnimation       .set(animation); }
+    public void setSpawnAnimation        (final @Nullable Animation animation) { this.spawnAnimation        .set(animation); }
+    public void setDespawnAnimation      (final @Nullable Animation animation) { this.despawnAnimation      .set(animation); }
+    public void setInversePrimerAnimation(final @Nullable Animation animation) { this.inversePrimerAnimation.set(animation); }
 
 
     // Getters
