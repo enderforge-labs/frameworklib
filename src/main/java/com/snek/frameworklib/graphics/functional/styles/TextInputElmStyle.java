@@ -31,22 +31,29 @@ public class TextInputElmStyle extends FancyButtonElmStyle {
     @Override
     public @Nullable Animation getDefaultHoverPrimerAnimation() {
         return new Animation(
-            new Transition()
-            .additiveTransformBg(new Transform().scaleX(__base_ButtonElmStyle.HIDDEN_W))
-        );
-    }
-    @Override
-    public @Nullable Animation getDefaultHoverEnterAnimation () {
-        return new Animation(
-            new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
-            .additiveTransformBg(new Transform().scaleX(1f / __base_ButtonElmStyle.HIDDEN_W))
-        );
-    }
-    @Override
-    public @Nullable Animation getDefaultHoverLeaveAnimation () {
-        return new Animation(
             new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
             .additiveTransformBg(new Transform().scaleX(__base_ButtonElmStyle.HIDDEN_W))
         );
+    }
+
+    @Override
+    public @Nullable Animation getDefaultHoverEnterAnimation() {
+        return new Animation(
+            getDefaultHoverPrimerAnimation()
+        ).invert();
+    }
+
+    @Override
+    public @Nullable Animation getDefaultHoverLeaveAnimation() {
+        return new Animation(
+            getDefaultHoverPrimerAnimation()
+        );
+    }
+
+    @Override
+    public @Nullable Animation getDefaultHoverInversePrimerAnimation() {
+        return new Animation(
+            getDefaultHoverPrimerAnimation()
+        ).invert();
     }
 }

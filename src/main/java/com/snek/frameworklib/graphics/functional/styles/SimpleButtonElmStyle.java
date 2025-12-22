@@ -22,9 +22,10 @@ import com.snek.frameworklib.utils.Easings;
  * The default tyle of the generic {@Link SimpleButtonElm} element.
  */
 public class SimpleButtonElmStyle extends PanelElmStyle {
-    private @Nullable Flagged<Animation> hoverPrimerAnimation = null;
-    private @Nullable Flagged<Animation> hoverEnterAnimation  = null;
-    private @Nullable Flagged<Animation> hoverLeaveAnimation  = null;
+    private @Nullable Flagged<Animation> hoverPrimerAnimation         = null;
+    private @Nullable Flagged<Animation> hoverEnterAnimation          = null;
+    private @Nullable Flagged<Animation> hoverLeaveAnimation          = null;
+    private @Nullable Flagged<Animation> hoverInversePrimerAnimation  = null;
 
 
 
@@ -45,6 +46,7 @@ public class SimpleButtonElmStyle extends PanelElmStyle {
         resetHoverPrimerAnimation();
         resetHoverEnterAnimation();
         resetHoverLeaveAnimation();
+        resetHoverInversePrimerAnimation();
     }
 
     @Override
@@ -53,6 +55,7 @@ public class SimpleButtonElmStyle extends PanelElmStyle {
         editHoverPrimerAnimation();
         editHoverEnterAnimation();
         editHoverLeaveAnimation();
+        editHoverInversePrimerAnimation();
     }
 
 
@@ -80,6 +83,9 @@ public class SimpleButtonElmStyle extends PanelElmStyle {
     }
     public @Nullable Animation getDefaultHoverLeaveAnimation () {
         return __base_ButtonElmStyle.DEFAULT_HOVER_LEAVE_ANIMATION;
+    }
+    public @Nullable Animation getDefaultHoverInversePrimerAnimation() {
+        return __base_ButtonElmStyle.DEFAULT_HOVER_INVERSE_PRIMER_ANIMATION;
     }
 
 
@@ -114,31 +120,36 @@ public class SimpleButtonElmStyle extends PanelElmStyle {
 
 
     // Reset functions
-    public void resetHoverPrimerAnimation() { hoverPrimerAnimation = Flagged.from(getDefaultHoverPrimerAnimation()); }
-    public void resetHoverEnterAnimation () { hoverEnterAnimation  = Flagged.from(getDefaultHoverEnterAnimation ()); }
-    public void resetHoverLeaveAnimation () { hoverLeaveAnimation  = Flagged.from(getDefaultHoverLeaveAnimation ()); }
+    public void resetHoverPrimerAnimation       () {        hoverPrimerAnimation = Flagged.from(getDefaultHoverPrimerAnimation       ()); }
+    public void resetHoverEnterAnimation        () {        hoverEnterAnimation  = Flagged.from(getDefaultHoverEnterAnimation        ()); }
+    public void resetHoverLeaveAnimation        () {        hoverLeaveAnimation  = Flagged.from(getDefaultHoverLeaveAnimation        ()); }
+    public void resetHoverInversePrimerAnimation() { hoverInversePrimerAnimation = Flagged.from(getDefaultHoverInversePrimerAnimation()); }
 
 
     // Setters
-    public void setHoverPrimerAnimation(final @Nullable Animation hoverPrimerAnimation) { this.hoverPrimerAnimation.set(hoverPrimerAnimation); }
-    public void setHoverEnterAnimation (final @Nullable Animation hoverEnterAnimation ) { this.hoverEnterAnimation .set(hoverEnterAnimation ); }
-    public void setHoverLeaveAnimation (final @Nullable Animation hoverLeaveAnimation ) { this.hoverLeaveAnimation .set(hoverLeaveAnimation ); }
+    public void setHoverPrimerAnimation       (final @Nullable Animation hoverPrimerAnimation       ) { this.hoverPrimerAnimation       .set(hoverPrimerAnimation       ); }
+    public void setHoverEnterAnimation        (final @Nullable Animation hoverEnterAnimation        ) { this.hoverEnterAnimation        .set(hoverEnterAnimation        ); }
+    public void setHoverLeaveAnimation        (final @Nullable Animation hoverLeaveAnimation        ) { this.hoverLeaveAnimation        .set(hoverLeaveAnimation        ); }
+    public void setHoverInversePrimerAnimation(final @Nullable Animation hoverInversePrimerAnimation) { this.hoverInversePrimerAnimation.set(hoverInversePrimerAnimation); }
 
 
     // Flagged getters
-    public @Nullable Flagged<@NotNull Animation> getFlaggedHoverPrimerAnimation() { return hoverPrimerAnimation;}
-    public @Nullable Flagged<@NotNull Animation> getFlaggedHoverEnterAnimation () { return hoverEnterAnimation ;}
-    public @Nullable Flagged<@NotNull Animation> getFlaggedHoverLeaveAnimation () { return hoverLeaveAnimation ;}
+    public @Nullable Flagged<@NotNull Animation> getFlaggedHoverPrimerAnimation       () { return hoverPrimerAnimation       ;}
+    public @Nullable Flagged<@NotNull Animation> getFlaggedHoverEnterAnimation        () { return hoverEnterAnimation        ;}
+    public @Nullable Flagged<@NotNull Animation> getFlaggedHoverLeaveAnimation        () { return hoverLeaveAnimation        ;}
+    public @Nullable Flagged<@NotNull Animation> getFlaggedHoverInversePrimerAnimation() { return hoverInversePrimerAnimation;}
 
 
     // Getters
-    public @Nullable Animation getHoverPrimerAnimation() { return hoverPrimerAnimation.get(); }
-    public @Nullable Animation getHoverEnterAnimation () { return hoverEnterAnimation .get(); }
-    public @Nullable Animation getHoverLeaveAnimation () { return hoverLeaveAnimation .get(); }
+    public @Nullable Animation getHoverPrimerAnimation       () { return hoverPrimerAnimation       .get(); }
+    public @Nullable Animation getHoverEnterAnimation        () { return hoverEnterAnimation        .get(); }
+    public @Nullable Animation getHoverLeaveAnimation        () { return hoverLeaveAnimation        .get(); }
+    public @Nullable Animation getHoverInversePrimerAnimation() { return hoverInversePrimerAnimation.get(); }
 
 
     // Edit getters
-    public @Nullable Animation editHoverPrimerAnimation() { return hoverPrimerAnimation.edit(); }
-    public @Nullable Animation editHoverEnterAnimation () { return hoverEnterAnimation .edit(); }
-    public @Nullable Animation editHoverLeaveAnimation () { return hoverLeaveAnimation .edit(); }
+    public @Nullable Animation editHoverPrimerAnimation       () { return hoverPrimerAnimation       .edit(); }
+    public @Nullable Animation editHoverEnterAnimation        () { return hoverEnterAnimation        .edit(); }
+    public @Nullable Animation editHoverLeaveAnimation        () { return hoverLeaveAnimation        .edit(); }
+    public @Nullable Animation editHoverInversePrimerAnimation() { return hoverInversePrimerAnimation.edit(); }
 }

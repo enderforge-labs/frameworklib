@@ -65,11 +65,12 @@ public final class __base_ButtonElm {
     /**
      * Shared override of finalizeDespawn from Elm
      */
-    protected void finalizeDespawn(final @NotNull Elm _this, final @Nullable Animation hoverPrimerAanimation) {
+    protected void finalizeDespawn(final @NotNull Elm _this, final @Nullable Animation inverseHoverPrimerAanimation) {
         assert Require.nonNull(_this, "_this");
 
-        if(hoverPrimerAanimation != null) {
-            _this.applyAnimationNow(new Animation(hoverPrimerAanimation).invert());
+        // Start inverse hover primer aniamtion
+        if(inverseHoverPrimerAanimation != null) {
+            _this.applyAnimationNow(inverseHoverPrimerAanimation);
         }
     }
 

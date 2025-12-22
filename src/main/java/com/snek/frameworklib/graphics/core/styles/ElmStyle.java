@@ -26,14 +26,15 @@ public class ElmStyle {
 
 
     // Data
-    private @NotNull  Flagged<@NotNull Transform>            transform     = null;   // The current transformation
-    private @NotNull  Flagged<@NotNull Float>                viewRange     = null;   // The view range. 1.0f = 64 blocks
+    private @NotNull  Flagged<@NotNull Transform>                transform = null;   // The current transformation
+    private @NotNull  Flagged<@NotNull Float>                    viewRange = null;   // The view range. 1.0f = 64 blocks
     private @NotNull  Flagged<@NotNull BillboardConstraints> billboardMode = null;   // The billboard mode. Defines how the rendered entity is rotated relatively to the player's camera
 
     // Animations
     private @NotNull Flagged<@Nullable Animation>         primerAnimation  = null;   // The animation used to prepare the element to receive the spawning animation. Applied instantly.
-    private @NotNull Flagged<@Nullable Animation>         spawnAnimation   = null;   // The spawning animation. Played when the entity is spawned into the level
+    private @NotNull Flagged<@Nullable Animation>          spawnAnimation  = null;   // The spawning animation. Played when the entity is spawned into the level
     private @NotNull Flagged<@Nullable Animation>         despawnAnimation = null;   // The despawning animation. Played before the entity is removed from the level
+    private @NotNull Flagged<@Nullable Animation>   inversePrimerAnimation = null;   // The inverse primer animation. Played after the entity is removed from the level
 
 
 
@@ -58,6 +59,7 @@ public class ElmStyle {
         resetPrimerAnimation();
         resetSpawnAnimation();
         resetDespawnAnimation();
+        resetInversePrimerAnimation();
     }
 
     /**
@@ -70,27 +72,30 @@ public class ElmStyle {
         editPrimerAnimation();
         editSpawnAnimation();
         editDespawnAnimation();
+        editInversePrimerAnimation();
     }
 
 
 
 
     // Default value providers
-    public @NotNull  Transform            getDefaultTransform       () { return new Transform(); }
-    public           float                getDefaultViewRange       () { return 0.2f; }
-    public @NotNull  BillboardConstraints getDefaultBillboardMode   () { return BillboardConstraints.FIXED; }
-    public @Nullable Animation            getDefaultPrimerAnimation () { return null; }
-    public @Nullable Animation            getDefaultSpawnAnimation  () { return null; }
-    public @Nullable Animation            getDefaultDespawnAnimation() { return null; }
+    public @NotNull  Transform            getDefaultTransform              () { return new Transform(); }
+    public           float                getDefaultViewRange              () { return 0.2f; }
+    public @NotNull  BillboardConstraints getDefaultBillboardMode          () { return BillboardConstraints.FIXED; }
+    public @Nullable Animation            getDefaultPrimerAnimation        () { return null; }
+    public @Nullable Animation            getDefaultSpawnAnimation         () { return null; }
+    public @Nullable Animation            getDefaultDespawnAnimation       () { return null; }
+    public @Nullable Animation            getDefaultInversePrimerAnimation () { return null; }
 
 
     // Reset functions
-    public void resetTransform       () { transform        = Flagged.from(getDefaultTransform()       ); }
-    public void resetViewRange       () { viewRange        = Flagged.from(getDefaultViewRange()       ); }
-    public void resetBillboardMode   () { billboardMode    = Flagged.from(getDefaultBillboardMode()   ); }
-    public void resetPrimerAnimation () { primerAnimation  = Flagged.from(getDefaultPrimerAnimation() ); }
-    public void resetSpawnAnimation  () { spawnAnimation   = Flagged.from(getDefaultSpawnAnimation()  ); }
-    public void resetDespawnAnimation() { despawnAnimation = Flagged.from(getDefaultDespawnAnimation()); }
+    public void resetTransform             () { transform              = Flagged.from(getDefaultTransform()             ); }
+    public void resetViewRange             () { viewRange              = Flagged.from(getDefaultViewRange()             ); }
+    public void resetBillboardMode         () { billboardMode          = Flagged.from(getDefaultBillboardMode()         ); }
+    public void resetPrimerAnimation       () { primerAnimation        = Flagged.from(getDefaultPrimerAnimation()       ); }
+    public void resetSpawnAnimation        () { spawnAnimation         = Flagged.from(getDefaultSpawnAnimation()        ); }
+    public void resetDespawnAnimation      () { despawnAnimation       = Flagged.from(getDefaultDespawnAnimation()      ); }
+    public void resetInversePrimerAnimation() { inversePrimerAnimation = Flagged.from(getDefaultInversePrimerAnimation()); }
 
 
     // Setters
@@ -118,31 +123,38 @@ public class ElmStyle {
         assert Require.nonNull(animation, "despawn animation");
         this.despawnAnimation.set(animation);
     }
+    public void setInversePrimerAnimation(final @Nullable Animation animation) {
+        assert Require.nonNull(animation, "inverse primer animation");
+        this.inversePrimerAnimation.set(animation);
+    }
 
 
     // Getters
-    public @NotNull  Transform            getTransform       () { return transform       .get(); }
-    public           float                getViewRange       () { return viewRange       .get(); }
-    public @NotNull  BillboardConstraints getBillboardMode   () { return billboardMode   .get(); }
-    public @Nullable Animation            getPrimerAnimation () { return primerAnimation .get(); }
-    public @Nullable Animation            getSpawnAnimation  () { return spawnAnimation  .get(); }
-    public @Nullable Animation            getDespawnAnimation() { return despawnAnimation.get(); }
+    public @NotNull  Transform            getTransform       () { return transform             .get(); }
+    public           float                getViewRange       () { return viewRange             .get(); }
+    public @NotNull  BillboardConstraints getBillboardMode   () { return billboardMode         .get(); }
+    public @Nullable Animation            getPrimerAnimation () { return primerAnimation       .get(); }
+    public @Nullable Animation            getSpawnAnimation  () { return spawnAnimation        .get(); }
+    public @Nullable Animation            getDespawnAnimation() { return despawnAnimation      .get(); }
+    public @Nullable Animation     getInversePrimerAnimation () { return inversePrimerAnimation.get(); }
 
 
     // Flagged getters
-    public @NotNull Flagged<@NotNull  Transform>            getFlaggedTransform       () { return transform;        }
-    public @NotNull Flagged<@NotNull  Float>                getFlaggedViewRange       () { return viewRange;        }
-    public @NotNull Flagged<@NotNull  BillboardConstraints> getFlaggedBillboardMode   () { return billboardMode;    }
-    public @NotNull Flagged<@Nullable Animation>            getFlaggedPrimerAnimation () { return primerAnimation;  }
-    public @NotNull Flagged<@Nullable Animation>            getFlaggedSpawnAnimation  () { return spawnAnimation;   }
-    public @NotNull Flagged<@Nullable Animation>            getFlaggedDespawnAnimation() { return despawnAnimation; }
+    public @NotNull Flagged<@NotNull  Transform>            getFlaggedTransform       () { return transform;              }
+    public @NotNull Flagged<@NotNull  Float>                getFlaggedViewRange       () { return viewRange;              }
+    public @NotNull Flagged<@NotNull  BillboardConstraints> getFlaggedBillboardMode   () { return billboardMode;          }
+    public @NotNull Flagged<@Nullable Animation>            getFlaggedPrimerAnimation () { return primerAnimation;        }
+    public @NotNull Flagged<@Nullable Animation>            getFlaggedSpawnAnimation  () { return spawnAnimation;         }
+    public @NotNull Flagged<@Nullable Animation>            getFlaggedDespawnAnimation() { return despawnAnimation;       }
+    public @NotNull Flagged<@Nullable Animation>     getFlaggedInversePrimerAnimation () { return inversePrimerAnimation; }
 
 
     // Edit getters
-    public @NotNull  Transform           editTransform       () { return transform       .edit(); }
-    public           float               editViewRange       () { return viewRange       .edit(); }
-    public @NotNull BillboardConstraints editBillboardMode   () { return billboardMode   .edit(); }
-    public @Nullable Animation           editPrimerAnimation () { return primerAnimation .edit(); }
-    public @Nullable Animation           editSpawnAnimation  () { return spawnAnimation  .edit(); }
-    public @Nullable Animation           editDespawnAnimation() { return despawnAnimation.edit(); }
+    public @NotNull  Transform           editTransform       () { return transform             .edit(); }
+    public           float               editViewRange       () { return viewRange             .edit(); }
+    public @NotNull BillboardConstraints editBillboardMode   () { return billboardMode         .edit(); }
+    public @Nullable Animation           editPrimerAnimation () { return primerAnimation       .edit(); }
+    public @Nullable Animation           editSpawnAnimation  () { return spawnAnimation        .edit(); }
+    public @Nullable Animation           editDespawnAnimation() { return despawnAnimation      .edit(); }
+    public @Nullable Animation    editInversePrimerAnimation () { return inversePrimerAnimation.edit(); }
 }

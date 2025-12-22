@@ -553,10 +553,10 @@ public abstract class Elm extends Div {
         assert Require.nonNull(style, "style");
         assert Require.nonNull(entity, "entity");
 
-        // Undo primer animation
-        final Animation primerAnimation = style.getPrimerAnimation();
-        if(primerAnimation != null) {
-            applyAnimationNow(new Animation(primerAnimation).invert());
+        // Start inverse primer animation
+        final Animation inversePrimerAnimation = style.getInversePrimerAnimation();
+        if(inversePrimerAnimation != null) {
+            applyAnimationNow(inversePrimerAnimation);
         }
 
         // Remove tracking custom name. This lets the entity respawn freely without getting purged.

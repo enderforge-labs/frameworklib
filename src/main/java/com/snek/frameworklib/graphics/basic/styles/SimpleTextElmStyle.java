@@ -29,6 +29,7 @@ import net.minecraft.network.chat.Component;
  */
 public class SimpleTextElmStyle extends ElmStyle {
     public static final float DEFAULT_TEXT_SCALE = 0.3f;
+    public static final float SPAWN_ANIMATION_SHIFT = 0.05f;
 
     private @NotNull Flagged<@NotNull Component>             text                  = null;
     private @NotNull Flagged<@NotNull TextOverflowBehaviour> textOverflowBehaviour = null;
@@ -78,6 +79,7 @@ public class SimpleTextElmStyle extends ElmStyle {
         return new Animation(
             new Transition()
             .targetOpacity(0)
+            .additiveTransform(new Transform().moveX(SPAWN_ANIMATION_SHIFT))
         );
     }
 
@@ -87,6 +89,7 @@ public class SimpleTextElmStyle extends ElmStyle {
         return new Animation(
             new Transition(ElmStyle.S_TIME, Easings.sineOut)
             .targetOpacity(255)
+            .additiveTransform(new Transform().moveX(-SPAWN_ANIMATION_SHIFT))
         );
     }
 

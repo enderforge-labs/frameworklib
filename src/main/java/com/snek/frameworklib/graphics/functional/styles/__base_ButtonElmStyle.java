@@ -25,18 +25,22 @@ public final class __base_ButtonElmStyle extends UtilityClassBase {
     public static final          int      DEFAULT_BG_ALPHA     = 255;
 
 
+
+
     public static final @Nullable Animation DEFAULT_HOVER_PRIMER_ANIMATION = new Animation(
-        new Transition()
+        new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
         .additiveTransformBg(new Transform().scaleX(__base_ButtonElmStyle.HIDDEN_W))
     );
 
     public static final @Nullable Animation DEFAULT_HOVER_ENTER_ANIMATION = new Animation(
-        new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
-        .additiveTransformBg(new Transform().scaleX(1f / __base_ButtonElmStyle.HIDDEN_W))
-    );
+        DEFAULT_HOVER_PRIMER_ANIMATION
+    ).invert();
 
     public static final @Nullable Animation DEFAULT_HOVER_LEAVE_ANIMATION = new Animation(
-        new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
-        .additiveTransformBg(new Transform().scaleX(__base_ButtonElmStyle.HIDDEN_W))
+        DEFAULT_HOVER_PRIMER_ANIMATION
     );
+
+    public static final @Nullable Animation DEFAULT_HOVER_INVERSE_PRIMER_ANIMATION = new Animation(
+        DEFAULT_HOVER_PRIMER_ANIMATION
+    ).invert();
 }
