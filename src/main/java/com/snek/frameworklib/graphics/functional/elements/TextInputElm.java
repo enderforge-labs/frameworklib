@@ -3,6 +3,7 @@ package com.snek.frameworklib.graphics.functional.elements;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
+import org.joml.Vector3d;
 
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.functional.styles.TextInputElmStyle;
@@ -40,6 +41,7 @@ public abstract class TextInputElm extends FancyButtonElm {
 
 
     private @Nullable Component displayedText = null;
+    private @Nullable Component displayedCursor = null;
 
 
 
@@ -87,11 +89,7 @@ public abstract class TextInputElm extends FancyButtonElm {
         super.spawn(pos, animate);
     }
 
-    //TODO maybe change the entity's text directly like how text elements do it with scrollings?
-    //TODO it might make the logic simpler. though it has to be compatible with the scrolling text resolution
 
-    //TODO maybe change the entity's text directly like how text elements do it with scrollings?
-    //TODO it might make the logic simpler. though it has to be compatible with the scrolling text resolution
 
     /**
      * Changes the text displayed in the element when it leaves the input state.
@@ -100,8 +98,14 @@ public abstract class TextInputElm extends FancyButtonElm {
     public void setDisplayedText(final @Nullable Component displayedText) {
         this.displayedText = displayedText;
     }
+
+
+    /**
+     * Forces an update of the displayed text.
+     */
     public void forceTextUpdate() {
-        getStyle(TextInputElmStyle.class).setText(displayedText);
+        Component text = inputState ? new Txt(cursorToggleState ? "|" : " ").get() : displayedText;
+        getStyle(TextInputElmStyle.class).setText(text);
         flushStyle();
     }
 
@@ -130,8 +134,7 @@ public abstract class TextInputElm extends FancyButtonElm {
             inputState = true;
             cursorToggleState = true;
             inputStateHandler = Scheduler.loop(0, CURSOR_TOGGLE_DELAY, () -> {
-                getStyle(TextInputElmStyle.class).setText(new Txt(cursorToggleState ? "|" : " ").get());
-                flushStyle();
+                forceTextUpdate();
                 cursorToggleState = !cursorToggleState;
             });
         }
