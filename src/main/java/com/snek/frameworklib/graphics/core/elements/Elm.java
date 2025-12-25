@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3d;
-import org.joml.Vector3f;
 
 import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.FrameworkLib;
@@ -20,12 +19,9 @@ import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.containers.IndexedArrayDeque;
 import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
-import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Easing;
-import com.snek.frameworklib.utils.GeometryUtils;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
@@ -55,7 +51,7 @@ import net.minecraft.world.entity.player.Player;
 /**
  * The base class of every visible graphic element.
  * <p>
- * This implements automatic entity management, animation support and hover detection on top of the {@link Div} base class.
+ * This implements automatic entity management support for animations on top of the {@link Div} base class.
  */
 public abstract class Elm extends Div {
     public static final @NotNull String ENTITY_CUSTOM_NAME = FrameworkLib.LIB_ID + ".ui.displayentity";
@@ -85,8 +81,6 @@ public abstract class Elm extends Div {
     protected final @NotNull ServerLevel   level;     // The level this Elm will be spawned in
     private   final @NotNull CustomDisplay entity;    // The display entity held by this element
     private         @NotNull ElmStyle      style;     // The style of the element
-    private         boolean isHovered = false;        // Whether the element is being hovered on by a player's crosshair. //! Only valid in Hoverable instances
-    public final RateLimiter hoverRateLimiter = new RateLimiter();
     private boolean isTransformNormalized = true;
 
 
@@ -239,27 +233,13 @@ public abstract class Elm extends Div {
     //TODO this needs caching. Use a Flagged value to cache the transform and update it when any of its variables change
     //TODO this needs caching. Use a Flagged value to cache the transform and update it when any of its variables change
     //TODO all subclasses too
-    /**
-     * Calculates the final transform to apply to the entity.
-     * <p>
-     * This takes into account the element's position, alignment options, Z-index and visual transform.
-     * @return The transform.
-     */
+    @Override
     public @NotNull Transform __calcTransform() {
         assert Require.nonNull(style, "style");
         assert Require.nonNull(style.getTransform(), "style transform");
         return
             style.getTransform().copy()
             .move(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getUi().z_layer_spacing.getValue())
-        ;
-    }
-    //TODO this and all subclasses too
-    public @NotNull Vector3f __calcEntityVisualOrigin(final @NotNull Transform _transform) {
-        assert Require.nonNull(_transform, "transform");
-        return
-            new Vector3f(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getUi().z_layer_spacing.getValue())
-            .rotate(_transform.getGlobalRot())
-            .add(entity.getPosCopy())
         ;
     }
 
@@ -623,142 +603,26 @@ public abstract class Elm extends Div {
     }
 
 
-    /**
-     * Updates the new hover state of the element with the specified value, then executes the specified callbacks.
-     * @param player The player to check the view of.
-     */
-    public void updateHoverState(final @NotNull Player player) {
-        assert Require.nonNull(player, "player");
-        final boolean hoverStateNext = checkIntersection(player, false) != null;
-
-        // Update current state and run hover state change callbacks if needed
-        if(isHovered != hoverStateNext && hoverRateLimiter.attempt()) {
-            isHovered = hoverStateNext;
-            if(isHovered) {
-                if(this instanceof Hoverable h) h.onHoverEnter(player);
-                if(canvas.getContext() instanceof HudContext hud) {
-                    hud.resetInactivityTimer();
-                }
-            }
-            else {
-                if(this instanceof Hoverable h) h.onHoverExit(player);
-                if(canvas.getContext() instanceof HudContext hud) {
-                    hud.resetInactivityTimer();
-                }
-            }
-        }
-
-        // Call hover tick callback
-        if(this instanceof Hoverable h && isHovered) {
-            h.onHoverTick(player);
-        }
-    }
-
-
-    public boolean isHovered() {
-        return isHovered;
-    }
 
 
 
 
 
-
-
-
-    /**
-     * Checks if a player is looking at this element.
-     * <p>
-     * More specifically, it checks if the view vector of the player intersects
-     * with the bounding box of this UI element, from any direction or distance.
-     * @param player The player.
-     * @param calculateIntersectionCoords Whether to calculate the coordinates of the intersection.
-     * @return The 2d coordinates of the intersection if the view intersects the element
-     *     (or (0, 0) if {@code calculateIntersectionCoords == false}),
-     *     null otherwise.
-     *     Returns null if the element is not using FIXED billboard mode.
-     */
+    @Override
     public @Nullable Vector2f checkIntersection(final @NotNull Player player, final boolean calculateIntersectionCoords) {
         assert Require.nonNull(player, "player");
-        if(!isSpawned || style.getBillboardMode() != BillboardConstraints.FIXED) return null;
-        final Transform t = __calcTransform();
-
-
-        // Calculate the world coordinates of the display's origin
-        //! Left rotation and scale are ignored as they doesn't affect this
-        final Vector3f origin = __calcEntityVisualOrigin(t);
-        if(canvas != null && canvas.getContext() instanceof HudContext hud) origin.add(hud.__calcVisualShiftGlobal());
-
-
-        // Check view intersection with the display's box
-        final Vector3f corner1 = new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot()));
-        final Vector3f corner2 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot()));
-        final Vector3f corner3 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
-        final Vector3f corner4 = new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
-        return GeometryUtils.findLineRectangleIntersection(
-            player.getEyePosition().toVector3f(),
-            player.getViewVector(1f).toVector3f(),
-            new Vector3f[]{ corner1, corner2, corner3, corner4 },
-            calculateIntersectionCoords
-        );
+        if(style.getBillboardMode() != BillboardConstraints.FIXED) return null;
+        return checkIntersection(player, calculateIntersectionCoords);
     }
 
 
 
 
-    /**
-     * Calculates the distance from the player's eyes this element is at, regardless of position.
-     * @param player The player.
-     * @return The distance from the player's eyes, in blocks.
-     *     Returns a negative value if the element is behind the player.
-     *     Returns Double.MAX_VALUE if the player is not looking at the element's hitbox.
-     *     Returns Double.MAX_VALUE if the element is not using FIXED billboard mode.
-     */
+    @Override
     public double getIntersectionLength(final @NotNull Player player) {
         assert Require.nonNull(player, "player");
-        if(!isSpawned || style.getBillboardMode() != BillboardConstraints.FIXED) return Double.MAX_VALUE;
-        final Transform t = __calcTransform();
-
-
-        // Calculate the world coordinates of the display's origin
-        //! Left rotation and scale are ignored as they doesn't affect this
-        final Vector3f origin = __calcEntityVisualOrigin(t);
-        if(canvas != null && canvas.getContext() instanceof HudContext hud) origin.add(hud.__calcVisualShiftGlobal());
-
-
-        // Check view intersection with the display's box
-        final Vector3f corner1 = new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot()));
-        final Vector3f corner2 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot()));
-        final Vector3f corner3 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
-        final Vector3f corner4 = new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
-        return GeometryUtils.getLineRectangleIntersectionDistance(
-            player.getEyePosition().toVector3f(),
-            player.getViewVector(1f).toVector3f(),
-            new Vector3f[]{ corner1, corner2, corner3, corner4 }
-        );
-    }
-
-
-
-
-    /**
-     * A special method that can be used to override the width of the hitbox of this element, without changing the visual dimensions.
-     * <p>
-     * This specifies the distance from the center of the element to its left edge.
-     * By default, this is equivalent to {@code getAbsSize().x / 2f}
-     */
-    public float getInteractionSizeLeft() {
-        return getAbsSize().x / 2f;
-    }
-
-    /**
-     * A special method that can be used to override the width of the hitbox of this element, without changing the visual dimensions.
-     * <p>
-     * This specifies the distance from the center of the element to its right edge.
-     * By default, this is equivalent to {@code getAbsSize().x / 2f}
-     */
-    public float getInteractionSizeRight() {
-        return getAbsSize().x / 2f;
+        if(style.getBillboardMode() != BillboardConstraints.FIXED) return Double.MAX_VALUE;
+        return super.getIntersectionLength(player);
     }
 
 

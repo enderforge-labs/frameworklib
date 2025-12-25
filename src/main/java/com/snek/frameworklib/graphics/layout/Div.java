@@ -7,17 +7,23 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3d;
+import org.joml.Vector3f;
 
+import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.data_types.animations.Animation;
+import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.core.Canvas;
+import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
+import com.snek.frameworklib.utils.GeometryUtils;
+import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -39,6 +45,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 /**
  * The most basic graphic element. It can contain and manage any amount of elements.
+ * It can also be used to detect clicks, scroll events and hovering.
  * <p>
  * By default, divs are invisible and don't exist in the minecraft level nor on the client.
  * They have a 2D size, a 2D position and alignment options.
@@ -52,12 +59,14 @@ public class Div {
     protected final @NotNull List<@NotNull Div> children = new ArrayList<>();
 
 
-    // Element data
+    // Element state
     protected boolean isSpawned = false;
     protected boolean isNew = true;
+    private   boolean isHovered = false;
+    public final RateLimiter hoverRateLimiter = new RateLimiter();
 
 
-    // Graphics data
+    // Layout data
     protected final @NotNull Vector2f localSize = new Vector2f(1, 1);
     protected final @NotNull Vector2f localPos  = new Vector2f(0, 0);
     protected final @NotNull Vector2f absSize   = new Vector2f(1, 1);
@@ -137,6 +146,15 @@ public class Div {
      */
     public boolean isNew() {
         return isNew;
+    }
+
+
+    /**
+     * Checks if this element is currently being hovered on.
+     * @return True if the element is being hovered on, false otherwise.
+     */
+    public boolean isHovered() {
+        return isHovered;
     }
 
 
@@ -627,4 +645,177 @@ public class Div {
     public @NotNull Vector2f   getAbsPos    () { return absPos;   }
     public @NotNull AlignmentX getAlignmentX() { return alignmentX; }
     public @NotNull AlignmentY getAlignmentY() { return alignmentY; }
+
+
+
+
+
+
+
+
+    /**
+     * Calculates the final transform to apply to the entity.
+     * <p>
+     * This should take into account the element's position, alignment options, Z-index and visual transform.
+     * <p>
+     * If not overridden, this returns an empty transform.
+     * @return The transform.
+     */
+    public @NotNull Transform __calcTransform() {
+        return new Transform();
+    }
+
+
+    /**
+     * Calculates the world coordinates of the origin of this element.
+     * @param _transform The transform to use when calculating the coordinates.
+     * @return The origin of the element.
+     */
+    public @NotNull Vector3f __calcVisualOrigin(final @NotNull Transform _transform) {
+        assert Require.nonNull(_transform, "transform");
+        final Vector3d spawnPos = canvas.getContext().getSpawnPos();
+        return
+            new Vector3f(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getUi().z_layer_spacing.getValue())
+            .rotate(_transform.getGlobalRot())
+            .add(new Vector3f((float)spawnPos.x, (float)spawnPos.y, (float)spawnPos.z))
+        ;
+    }
+
+
+
+
+
+
+    /**
+     * Updates the new hover state of the element with the specified value, then executes the specified callbacks.
+     * @param player The player to check the view of.
+     */
+    public void updateHoverState(final @NotNull Player player) {
+        assert Require.nonNull(player, "player");
+        final boolean hoverStateNext = checkIntersection(player, false) != null;
+
+        // Update current state and run hover state change callbacks if needed
+        if(isHovered != hoverStateNext && hoverRateLimiter.attempt()) {
+            isHovered = hoverStateNext;
+            if(isHovered) {
+                if(this instanceof Hoverable h) h.onHoverEnter(player);
+                if(canvas.getContext() instanceof HudContext hud) {
+                    hud.resetInactivityTimer();
+                }
+            }
+            else {
+                if(this instanceof Hoverable h) h.onHoverExit(player);
+                if(canvas.getContext() instanceof HudContext hud) {
+                    hud.resetInactivityTimer();
+                }
+            }
+        }
+
+        // Call hover tick callback
+        if(this instanceof Hoverable h && isHovered) {
+            h.onHoverTick(player);
+        }
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Checks if a player is looking at this element.
+     * <p>
+     * More specifically, it checks if the view vector of the player intersects
+     * with the bounding box of this UI element, from any direction or distance.
+     * @param player The player.
+     * @param calculateIntersectionCoords Whether to calculate the coordinates of the intersection.
+     * @return The 2d coordinates of the intersection if the view intersects the element
+     *     (or (0, 0) if {@code calculateIntersectionCoords == false}),
+     *     null otherwise.
+     *     Returns null if the element is not using FIXED billboard mode.
+     */
+    public @Nullable Vector2f checkIntersection(final @NotNull Player player, final boolean calculateIntersectionCoords) {
+        assert Require.nonNull(player, "player");
+        if(!isSpawned) return null;
+        final Transform t = __calcTransform();
+
+
+        // Calculate the world coordinates of the display's origin
+        //! Left rotation and scale are ignored as they doesn't affect this
+        final Vector3f origin = __calcVisualOrigin(t);
+        if(canvas != null && canvas.getContext() instanceof HudContext hud) origin.add(hud.__calcVisualShiftGlobal());
+
+
+        // Check view intersection with the display's box
+        final Vector3f corner1 = new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot()));
+        final Vector3f corner2 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot()));
+        final Vector3f corner3 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
+        final Vector3f corner4 = new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
+        return GeometryUtils.findLineRectangleIntersection(
+            player.getEyePosition().toVector3f(),
+            player.getViewVector(1f).toVector3f(),
+            new Vector3f[]{ corner1, corner2, corner3, corner4 },
+            calculateIntersectionCoords
+        );
+    }
+
+
+
+
+    /**
+     * Calculates the distance from the player's eyes this element is at, regardless of position.
+     * @param player The player.
+     * @return The distance from the player's eyes, in blocks.
+     *     Returns a negative value if the element is behind the player.
+     *     Returns Double.MAX_VALUE if the player is not looking at the element's hitbox.
+     *     Returns Double.MAX_VALUE if the element is not using FIXED billboard mode.
+     */
+    public double getIntersectionLength(final @NotNull Player player) {
+        assert Require.nonNull(player, "player");
+        if(!isSpawned) return Double.MAX_VALUE;
+        final Transform t = __calcTransform();
+
+
+        // Calculate the world coordinates of the display's origin
+        //! Left rotation and scale are ignored as they doesn't affect this
+        final Vector3f origin = __calcVisualOrigin(t);
+        if(canvas != null && canvas.getContext() instanceof HudContext hud) origin.add(hud.__calcVisualShiftGlobal());
+
+
+        // Check view intersection with the display's box
+        final Vector3f corner1 = new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot()));
+        final Vector3f corner2 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot()));
+        final Vector3f corner3 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
+        final Vector3f corner4 = new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
+        return GeometryUtils.getLineRectangleIntersectionDistance(
+            player.getEyePosition().toVector3f(),
+            player.getViewVector(1f).toVector3f(),
+            new Vector3f[]{ corner1, corner2, corner3, corner4 }
+        );
+    }
+
+
+
+
+    /**
+     * A special method that can be used to override the width of the hitbox of this element, without changing the visual dimensions.
+     * <p>
+     * This specifies the distance from the center of the element to its left edge.
+     * By default, this is equivalent to {@code getAbsSize().x / 2f}
+     */
+    public float getInteractionSizeLeft() {
+        return getAbsSize().x / 2f;
+    }
+
+    /**
+     * A special method that can be used to override the width of the hitbox of this element, without changing the visual dimensions.
+     * <p>
+     * This specifies the distance from the center of the element to its right edge.
+     * By default, this is equivalent to {@code getAbsSize().x / 2f}
+     */
+    public float getInteractionSizeRight() {
+        return getAbsSize().x / 2f;
+    }
 }
