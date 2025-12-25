@@ -81,6 +81,11 @@ public abstract class TextInputElm extends FancyButtonElm {
     }
 
 
+    @Override
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
+        forceTextUpdate();
+        super.spawn(pos, animate);
+    }
 
     //TODO maybe change the entity's text directly like how text elements do it with scrollings?
     //TODO it might make the logic simpler. though it has to be compatible with the scrolling text resolution
