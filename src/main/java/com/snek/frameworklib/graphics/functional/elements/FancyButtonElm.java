@@ -11,7 +11,6 @@ import com.snek.frameworklib.graphics.functional.styles.FancyButtonElmStyle;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -118,13 +117,4 @@ public abstract class FancyButtonElm extends FancyTextElm implements Clickable, 
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         base.onClick(this, click, coords);
     }
-
-
-
-
-    /**
-     * Updates the displayed text.
-     * @param textOverride If not null, it replaces the displayed text.
-     */
-    public abstract void updateDisplay(@Nullable Component textOverride);
 }

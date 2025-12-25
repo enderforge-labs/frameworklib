@@ -26,6 +26,9 @@ import net.minecraft.world.inventory.ClickAction;
 
 /**
  * A generic text input class that allows the user to enter a string input through the chat after clicking the element.
+ * <p>
+ * This element automatically handles style.text updates.
+ * Don't call {@code .setText} directly. Use {@link #setDIsplayedText(Component)} instead.
  */
 public abstract class TextInputElm extends FancyButtonElm {
     public static final int CURSOR_TOGGLE_DELAY = 10;
@@ -34,6 +37,9 @@ public abstract class TextInputElm extends FancyButtonElm {
     private       @Nullable TaskHandler inputStateHandler = null;
     private                 boolean     cursorToggleState = true;
     private                 boolean     inputState        = false;
+
+
+    private @Nullable Component displayedText = null;
 
 
 
@@ -76,6 +82,16 @@ public abstract class TextInputElm extends FancyButtonElm {
 
 
 
+    /**
+     * Changes the text displayed in the element when it leaves the input state.
+     * @param displayedText The text to display. Can be null.
+     */
+    public void setDisplayedText(final @Nullable Component displayedText) {
+        this.displayedText = displayedText;
+    }
+
+
+
 
     @Override
     public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
@@ -99,7 +115,8 @@ public abstract class TextInputElm extends FancyButtonElm {
             inputState = true;
             cursorToggleState = true;
             inputStateHandler = Scheduler.loop(0, CURSOR_TOGGLE_DELAY, () -> {
-                updateDisplay(new Txt(cursorToggleState ? "|" : " ").get());
+                getStyle(TextInputElmStyle.class).setText(new Txt(cursorToggleState ? "|" : " ").get());
+                flushStyle();
                 cursorToggleState = !cursorToggleState;
             });
         }
@@ -115,7 +132,8 @@ public abstract class TextInputElm extends FancyButtonElm {
         if(inputState) {
             inputState = false;
             if(inputStateHandler != null) inputStateHandler.cancel();
-            updateDisplay(null);
+            getStyle(TextInputElmStyle.class).setText(displayedText);
+            flushStyle();
         }
     }
 
