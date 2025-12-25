@@ -65,6 +65,10 @@ public class ItemElm extends Elm {
         Map.entry(Items.SHIELD.getDescriptionId(),  Pair.from(
             ItemDisplayContext.GROUND,
             new Transform().scale(2.5f).moveY(-0.15f).rotY((float)Math.PI)
+        )),
+        Map.entry(Items.PLAYER_HEAD.getDescriptionId(),  Pair.from(
+            ItemDisplayContext.NONE,
+            new Transform().rotY((float)Math.PI)
         ))
     ));
 
