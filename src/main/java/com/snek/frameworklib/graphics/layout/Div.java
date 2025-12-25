@@ -720,7 +720,8 @@ public class Div {
 
 
         // Shift the origin to find the corners and rotate them by the context's current rotation
-        final float rotation = canvas.getContext().getRotationRadians();
+        //! Add pi to the rotation to account for the displays being rotated by 180° by default
+        final float rotation = canvas.getContext().getRotationRadians() + (float)Math.PI;
         return new Vector3f[] {
             new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotateY(rotation)),
             new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotateY(rotation)),
