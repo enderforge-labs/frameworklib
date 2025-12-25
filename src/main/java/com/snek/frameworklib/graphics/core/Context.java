@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.input.HoverReceiver;
@@ -55,7 +54,7 @@ public abstract sealed class Context permits HudContext, UiContext {
     protected @Nullable InteractionBlocker interactionBlocker = null;
     protected @Nullable Canvas             activeCanvas       = null;
     private   @NotNull Vector3d            spawnPos           = new Vector3d(0);
-    protected boolean spawned      = false;
+    protected boolean spawned = false;
     private   int     lastRotation = 0;
     public abstract int calcRot();
 

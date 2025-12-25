@@ -50,14 +50,6 @@ public class ItemElmStyle extends ElmStyle {
 
 
 
-    @Override
-    public @NotNull Transform getDefaultTransform() {
-        return super.getDefaultTransform().rotY((float)Math.PI);
-    }
-
-
-
-
     public @NotNull ItemStack getDefaultItem() { return Items.AIR.getDefaultInstance(); }
     public void resetItem() { item = Flagged.from(getDefaultItem()); }
     public void setItem(final @NotNull ItemStack item) {
