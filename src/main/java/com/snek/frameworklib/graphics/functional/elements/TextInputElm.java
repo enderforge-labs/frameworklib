@@ -82,12 +82,22 @@ public abstract class TextInputElm extends FancyButtonElm {
 
 
 
+    //TODO maybe change the entity's text directly like how text elements do it with scrollings?
+    //TODO it might make the logic simpler. though it has to be compatible with the scrolling text resolution
+
+    //TODO maybe change the entity's text directly like how text elements do it with scrollings?
+    //TODO it might make the logic simpler. though it has to be compatible with the scrolling text resolution
+
     /**
      * Changes the text displayed in the element when it leaves the input state.
      * @param displayedText The text to display. Can be null.
      */
     public void setDisplayedText(final @Nullable Component displayedText) {
         this.displayedText = displayedText;
+    }
+    public void forceTextUpdate() {
+        getStyle(TextInputElmStyle.class).setText(displayedText);
+        flushStyle();
     }
 
 
@@ -132,8 +142,7 @@ public abstract class TextInputElm extends FancyButtonElm {
         if(inputState) {
             inputState = false;
             if(inputStateHandler != null) inputStateHandler.cancel();
-            getStyle(TextInputElmStyle.class).setText(displayedText);
-            flushStyle();
+            forceTextUpdate();
         }
     }
 
