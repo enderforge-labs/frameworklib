@@ -52,21 +52,21 @@ public class ItemElm extends Elm {
 
     // Item transform exceptions
     private static final @NotNull Map<
-        @NotNull String,
+        @NotNull Item,
         @Nullable Pair<
             @NotNull ItemDisplayContext,
             @NotNull Transform
         >
     > transformExceptions = new HashMap<>(Map.ofEntries(
-        Map.entry(Items.TRIDENT.getDescriptionId(), Pair.from(
+        Map.entry(Items.TRIDENT, Pair.from(
             ItemDisplayContext.GUI,
             new Transform()
         )),
-        Map.entry(Items.SHIELD.getDescriptionId(),  Pair.from(
+        Map.entry(Items.SHIELD,  Pair.from(
             ItemDisplayContext.GROUND,
             new Transform().scale(2.5f).moveY(-0.15f).rotY((float)Math.PI)
         )),
-        Map.entry(Items.PLAYER_HEAD.getDescriptionId(),  Pair.from(
+        Map.entry(Items.PLAYER_HEAD,  Pair.from(
             ItemDisplayContext.NONE,
             new Transform().rotY((float)Math.PI)
         ))
@@ -75,7 +75,7 @@ public class ItemElm extends Elm {
 
     // Tag transform exceptions
     private static final @NotNull Map<
-        @NotNull TagKey<@NotNull Item>,
+        @NotNull TagKey<Item>,
         @Nullable Pair<
             @NotNull ItemDisplayContext,
             @NotNull Transform
@@ -153,7 +153,7 @@ public class ItemElm extends Elm {
     public @NotNull Transform __calcTransform() {
 
         // Retrieve parent transformation and exception. Item exceptions have priority over tag exceptions
-        Pair<ItemDisplayContext, Transform> exception = transformExceptions.get(getThisStyle().getItem().getItem().getDescriptionId());
+        Pair<ItemDisplayContext, Transform> exception = transformExceptions.get(getThisStyle().getItem().getItem());
         if(exception == null) for(var entry : tagTransformExceptions.entrySet()) {
             if(getThisStyle().getItem().is(entry.getKey())) {
                 exception = entry.getValue();
