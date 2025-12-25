@@ -2,6 +2,7 @@ package com.snek.frameworklib.graphics.basic.styles;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.elements.ItemElm;
@@ -44,6 +45,14 @@ public class ItemElmStyle extends ElmStyle {
     public void flagAll() {
         editItem();
         super.flagAll();
+    }
+
+
+
+
+    @Override
+    public @NotNull Transform getDefaultTransform() {
+        return super.getDefaultTransform().rotY((float)Math.PI);
     }
 
 
