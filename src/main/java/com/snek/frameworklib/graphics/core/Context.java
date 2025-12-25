@@ -71,7 +71,7 @@ public abstract sealed class Context permits HudContext, UiContext {
 
 
     public float getRotationRadians() {
-        return (float)Math.toRadians((getRotation() + 4) % 8 * -45f);
+        return (float)Math.toRadians(lastRotation * -45d);
     }
 
 

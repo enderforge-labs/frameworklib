@@ -209,6 +209,7 @@ public non-sealed class HudContext extends Context {
     }
 
 
+
     /**
      * Calculates the translation needed to go from the player's eye position to the desired HUD origin coordinates.
      * @return The translation calculated in the global frame.
