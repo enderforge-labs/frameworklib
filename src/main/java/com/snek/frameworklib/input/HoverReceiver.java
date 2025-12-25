@@ -18,7 +18,6 @@ import com.snek.frameworklib.debug.DebugCheck;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.debug.UiDebugWindow;
 import com.snek.frameworklib.graphics.core.Context;
-import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.UtilityClassBase;
 
@@ -79,9 +78,7 @@ public final class HoverReceiver extends UtilityClassBase {
         assert Require.nonNull(div, "div");
         assert Require.nonNull(player, "player");
 
-        if(div instanceof Elm e) {
-            e.checkIntersection(player, false);
-        }
+        div.checkIntersection(player, false);
         for(final Div c : div.getChildren()) {
             traceElements(c, player);
         }

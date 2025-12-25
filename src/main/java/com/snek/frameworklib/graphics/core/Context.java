@@ -11,6 +11,7 @@ import org.joml.Vector3d;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
+import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.input.HoverReceiver;
 
 import net.minecraft.server.level.ServerLevel;
@@ -81,8 +82,8 @@ public abstract sealed class Context permits HudContext, UiContext {
 
 
     // Optimization structures
-    private @Nullable Elm targetedElm = null;
-    public  @Nullable Elm getTargetedElm() { return targetedElm; }
+    private @Nullable Div targetedElm = null;
+    public  @Nullable Div getTargetedElm() { return targetedElm; }
 
 
 
@@ -259,7 +260,7 @@ public abstract sealed class Context permits HudContext, UiContext {
 
             // If it's still being hovered on, check if its child elements are being hovered and update them
             if(targetedElm.isHovered()) {
-                final Elm targetedChild = targetedElm.findTargetedChild(player);
+                final Div targetedChild = targetedElm.findTargetedChild(player);
                 if(targetedChild != null) {
                     targetedElm = targetedChild;
                     targetedElm.updateHoverState(player);

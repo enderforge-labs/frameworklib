@@ -612,7 +612,7 @@ public abstract class Elm extends Div {
     public @Nullable Vector2f checkIntersection(final @NotNull Player player, final boolean calculateIntersectionCoords) {
         assert Require.nonNull(player, "player");
         if(style.getBillboardMode() != BillboardConstraints.FIXED) return null;
-        return checkIntersection(player, calculateIntersectionCoords);
+        return super.checkIntersection(player, calculateIntersectionCoords);
     }
 
 

@@ -368,21 +368,21 @@ public class Div {
     /**
      * Finds the element that the player is looking at.
      * <p>
-     * This method skips non-Elm elements and elements that are not hoverable, not clickable and not scrollable.
+     * This method skips elements that are not hoverable, not clickable and not scrollable.
      * @param player The player.
      * @return The element being looked at, or null if the player isnt looking at any of the elements.
      */
-    public @Nullable Elm findTargetedElement(final @NotNull Player player) {
+    public @Nullable Div findTargetedElement(final @NotNull Player player) {
         assert Require.nonNull(player, "player");
 
-        if((this instanceof Hoverable || this instanceof Clickable || this instanceof Scrollable) && this instanceof Elm e) {
-            if(e.checkIntersection(player, false) != null) {
-                final Elm targetedChild = findTargetedChild(player);
+        if(this instanceof Hoverable || this instanceof Clickable || this instanceof Scrollable) {
+            if(checkIntersection(player, false) != null) {
+                final Div targetedChild = findTargetedChild(player);
                 if(targetedChild != null) {
                     return targetedChild;
                 }
                 else {
-                    return e;
+                    return this;
                 }
             }
             else {
@@ -398,15 +398,15 @@ public class Div {
     /**
      * Finds the child element that the player is looking at.
      * <p>
-     * This method skips non-Elm elements and elements that are not hoverable, not clickable and not scrollable.
+     * This method skips elements that are not hoverable, not clickable and not scrollable.
      * @param player The player.
      * @return The element being looked at, or null if the player isnt looking at any of the elements.
      */
-    public @Nullable Elm findTargetedChild(final @NotNull Player player) {
+    public @Nullable Div findTargetedChild(final @NotNull Player player) {
         assert Require.nonNull(player, "player");
 
         for(final Div elm : children) {
-            final Elm r = elm.findTargetedElement(player);
+            final Div r = elm.findTargetedElement(player);
             if(r != null) return r;
         }
         return null;
