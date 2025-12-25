@@ -4,7 +4,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3d;
+import org.joml.Vector3f;
 
+import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
@@ -222,6 +224,21 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
         else applyAnimationRecursive(animation); //TODO replace with a single applyAnimationRecursive
     }
 
+
+
+
+    /**
+     * Calculates the world coordinates of the origin of this element.
+     * @param _transform The transform to use when calculating the coordinates.
+     * @return The origin of the element.
+     */
+    public @NotNull Vector3f __calcVisualOrigin() {
+        final Vector3d spawnPos = canvas.getContext().getSpawnPos();
+        return
+            new Vector3f(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getUi().z_layer_spacing.getValue())
+            .add(new Vector3f((float)spawnPos.x, (float)spawnPos.y, (float)spawnPos.z))
+        ;
+    }
 
 
 

@@ -18,7 +18,6 @@ import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.HudContext;
-import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
@@ -651,32 +650,18 @@ public class Div {
 
 
 
-
-
-    /**
-     * Calculates the final transform to apply to the entity.
-     * <p>
-     * This should take into account the element's position, alignment options, Z-index and visual transform.
-     * <p>
-     * If not overridden, this returns an empty transform.
-     * @return The transform.
-     */
-    public @NotNull Transform __calcTransform() {
-        return new Transform();
-    }
-
-
     /**
      * Calculates the world coordinates of the origin of this element.
-     * @param _transform The transform to use when calculating the coordinates.
+     * <p>
+     * This doesn't take into account context-level translations.
      * @return The origin of the element.
      */
-    public @NotNull Vector3f __calcVisualOrigin(final @NotNull Transform _transform) {
-        assert Require.nonNull(_transform, "transform");
+    public @NotNull Vector3f __calcVisualOrigin() {
+        if(canvas == null) return new Vector3f();
         final Vector3d spawnPos = canvas.getContext().getSpawnPos();
         return
             new Vector3f(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getUi().z_layer_spacing.getValue())
-            .rotate(_transform.getGlobalRot())
+            .rotateY(canvas.getContext().getRotationRadians()) //! Rotation applied to Z-index translation
             .add(new Vector3f((float)spawnPos.x, (float)spawnPos.y, (float)spawnPos.z))
         ;
     }
@@ -718,6 +703,33 @@ public class Div {
     }
 
 
+    /**
+    * Calculates the world coordinates of the 4 corners of the element.
+    * <p>
+    * This method takes into account anything that might affect their position.
+    * @return The coorindates of the 4 corners, in the order: BottomLeft, BottomRight, TopRight, TopLeft.
+    */
+    public @NotNull Vector3f[] __calcCornerCoords() {
+        if(canvas == null) return new Vector3f[]{ new Vector3f(), new Vector3f(), new Vector3f(), new Vector3f() };
+
+
+        // Calculate the world coordinates of the display's origin
+        //! Left rotation and scale are ignored as they doesn't affect this
+        final Vector3f origin = __calcVisualOrigin();
+        if(canvas.getContext() instanceof HudContext hud) origin.add(hud.__calcVisualShiftGlobal());
+
+
+        // Shift the origin to find the corners and rotate them by the context's current rotation
+        final float rotation = canvas.getContext().getRotationRadians();
+        return new Vector3f[] {
+            new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotateY(rotation)),
+            new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotateY(rotation)),
+            new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotateY(rotation)).add(0, getAbsSize().y, 0),
+            new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotateY(rotation)).add(0, getAbsSize().y, 0)
+        };
+    }
+
+
 
 
 
@@ -739,24 +751,12 @@ public class Div {
     public @Nullable Vector2f checkIntersection(final @NotNull Player player, final boolean calculateIntersectionCoords) {
         assert Require.nonNull(player, "player");
         if(!isSpawned) return null;
-        final Transform t = __calcTransform();
 
-
-        // Calculate the world coordinates of the display's origin
-        //! Left rotation and scale are ignored as they doesn't affect this
-        final Vector3f origin = __calcVisualOrigin(t);
-        if(canvas != null && canvas.getContext() instanceof HudContext hud) origin.add(hud.__calcVisualShiftGlobal());
-
-
-        // Check view intersection with the display's box
-        final Vector3f corner1 = new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot()));
-        final Vector3f corner2 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot()));
-        final Vector3f corner3 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
-        final Vector3f corner4 = new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
+        // Calculate the positions of the 4 corners and compute the intersection
         return GeometryUtils.findLineRectangleIntersection(
             player.getEyePosition().toVector3f(),
             player.getViewVector(1f).toVector3f(),
-            new Vector3f[]{ corner1, corner2, corner3, corner4 },
+            __calcCornerCoords(),
             calculateIntersectionCoords
         );
     }
@@ -775,24 +775,13 @@ public class Div {
     public double getIntersectionLength(final @NotNull Player player) {
         assert Require.nonNull(player, "player");
         if(!isSpawned) return Double.MAX_VALUE;
-        final Transform t = __calcTransform();
 
 
-        // Calculate the world coordinates of the display's origin
-        //! Left rotation and scale are ignored as they doesn't affect this
-        final Vector3f origin = __calcVisualOrigin(t);
-        if(canvas != null && canvas.getContext() instanceof HudContext hud) origin.add(hud.__calcVisualShiftGlobal());
-
-
-        // Check view intersection with the display's box
-        final Vector3f corner1 = new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot()));
-        final Vector3f corner2 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot()));
-        final Vector3f corner3 = new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
-        final Vector3f corner4 = new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotate(t.getRot()).rotate(t.getGlobalRot())).add(0, getAbsSize().y, 0);
+        // Calculate the positions of the 4 corners and compute the intersection distance
         return GeometryUtils.getLineRectangleIntersectionDistance(
             player.getEyePosition().toVector3f(),
             player.getViewVector(1f).toVector3f(),
-            new Vector3f[]{ corner1, corner2, corner3, corner4 }
+            __calcCornerCoords()
         );
     }
 

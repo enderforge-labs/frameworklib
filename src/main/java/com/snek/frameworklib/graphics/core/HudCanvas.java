@@ -2,7 +2,10 @@ package com.snek.frameworklib.graphics.core;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 
+import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.debug.Require;
@@ -45,6 +48,19 @@ public non-sealed class HudCanvas extends Canvas {
     ) {
         super(hud, height, heightTop, heightBottom, bgStyle, backStyle);
     }
+
+
+
+    //TODO
+    // @Override
+    // public @NotNull Vector3f __calcVisualOrigin() {
+    //     final Vector3d spawnPos = canvas.getContext().getSpawnPos();
+    //     return
+    //         new Vector3f(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getUi().z_layer_spacing.getValue())
+    //         .rotate(_transform.getGlobalRot())
+    //         .add(new Vector3f((float)spawnPos.x, (float)spawnPos.y, (float)spawnPos.z))
+    //     ;
+    // }
 
 
 

@@ -23,7 +23,6 @@ import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Easing;
 import com.snek.frameworklib.utils.Txt;
-import com.snek.frameworklib.utils.scheduler.RateLimiter;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 import net.minecraft.server.level.ServerLevel;
@@ -233,14 +232,16 @@ public abstract class Elm extends Div {
     //TODO this needs caching. Use a Flagged value to cache the transform and update it when any of its variables change
     //TODO this needs caching. Use a Flagged value to cache the transform and update it when any of its variables change
     //TODO all subclasses too
-    @Override
+    /**
+     * Calculates the final transform to apply to the entity.
+     * <p>
+     * This should take into account the element's position, alignment options, Z-index and visual transform.
+     * @return The transform.
+     */
     public @NotNull Transform __calcTransform() {
         assert Require.nonNull(style, "style");
         assert Require.nonNull(style.getTransform(), "style transform");
-        return
-            style.getTransform().copy()
-            .move(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getUi().z_layer_spacing.getValue())
-        ;
+        return style.getTransform().copy().move(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getUi().z_layer_spacing.getValue());
     }
 
 

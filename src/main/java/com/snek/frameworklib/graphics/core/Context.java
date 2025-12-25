@@ -70,6 +70,11 @@ public abstract sealed class Context permits HudContext, UiContext {
     public abstract  float              getInteractionBlockerSize();
 
 
+    public float getRotationRadians() {
+        return (float)Math.toRadians((getRotation() + 4) % 8 * -45f);
+    }
+
+
     // Setters
     public void setSpawnPos(final @NotNull Vector3d spawnPos) {
         assert Require.nonNull(spawnPos, "spawn position");

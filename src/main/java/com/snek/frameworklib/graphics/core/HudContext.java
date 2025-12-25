@@ -209,14 +209,12 @@ public non-sealed class HudContext extends Context {
     }
 
 
-
-
     /**
      * Calculates the translation needed to go from the player's eye position to the desired HUD origin coordinates.
      * @return The translation calculated in the global frame.
      */
     public @NotNull Vector3f __calcVisualShiftGlobal() {
-        final float rotation = (float)Math.toRadians((getRotation() + 4) % 8 * -45f);
+        final float rotation = getRotationRadians();
         final Vector3f direction = new Vector3f((float)Math.sin(rotation), 0, (float)Math.cos(rotation));
         return direction.mul(HUD_DISTANCE).sub(0, 0.5f, 0);
     }
