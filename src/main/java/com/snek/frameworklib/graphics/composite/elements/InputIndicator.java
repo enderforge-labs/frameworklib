@@ -93,12 +93,12 @@ public class InputIndicator extends Div {
         // If the description is not null and the display is hidden, show it and update the text
         if(description != null) {
             text.getStyle(SimpleTextElmStyle.class).setText(new Txt(description).lightGray().get());
-            super.spawn(canvas.getContext().getSpawnPos(), false);
+            super.spawn(canvas.getContext().getSpawnPos(), true);
         }
 
         // If the description is null and the display is visible, hide it.
         else {
-            super.despawn(false);
+            super.despawn(true);
         }
     }
 }
