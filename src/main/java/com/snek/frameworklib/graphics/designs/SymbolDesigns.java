@@ -42,10 +42,10 @@ public final class SymbolDesigns extends UtilityClassBase {
 
 
     public static final @NotNull PolylineData[] ArrowsPointingLeftRight = {
-        ArrowPointingLeft [0].copy().shiftY(+0.25f),
-        ArrowPointingLeft [1].copy().shiftY(+0.25f),
-        ArrowPointingRight[0].copy().shiftY(-0.25f),
-        ArrowPointingRight[1].copy().shiftY(-0.25f)
+        ArrowPointingLeft [0].copy().shiftY(+0.3f),
+        ArrowPointingLeft [1].copy().shiftY(+0.3f),
+        ArrowPointingRight[0].copy().shiftY(-0.3f),
+        ArrowPointingRight[1].copy().shiftY(-0.3f)
     };
     public static final @NotNull PolylineData[] ArrowsPointingUpDown = {
         ArrowsPointingLeftRight[0].copy().shift(-0.5f, -0.5f).rotate((float)Math.PI / 2f).shift(0.5f, 0.5f),
