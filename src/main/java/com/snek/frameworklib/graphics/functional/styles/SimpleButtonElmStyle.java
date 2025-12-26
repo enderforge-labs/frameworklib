@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3i;
 
 import com.snek.frameworklib.data_types.animations.Animation;
+import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
@@ -75,18 +76,14 @@ public class SimpleButtonElmStyle extends PanelElmStyle {
 
 
     // Default value providers
-    public @Nullable Animation getDefaultHoverPrimerAnimation() {
-        return __base_ButtonElmStyle.DEFAULT_HOVER_PRIMER_ANIMATION;
-    }
-    public @Nullable Animation getDefaultHoverEnterAnimation () {
-        return __base_ButtonElmStyle.DEFAULT_HOVER_ENTER_ANIMATION;
-    }
-    public @Nullable Animation getDefaultHoverLeaveAnimation () {
-        return __base_ButtonElmStyle.DEFAULT_HOVER_LEAVE_ANIMATION;
-    }
-    public @Nullable Animation getDefaultHoverInversePrimerAnimation() {
-        return __base_ButtonElmStyle.DEFAULT_HOVER_INVERSE_PRIMER_ANIMATION;
-    }
+    public static final @Nullable Animation DEFAULT_HOVER_PRIMER_ANIMATION = new Animation(
+        new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+        .additiveTransform(new Transform().scaleX(__base_ButtonElmStyle.HIDDEN_W))
+    );
+    public @Nullable Animation getDefaultHoverPrimerAnimation       () { return new Animation(DEFAULT_HOVER_PRIMER_ANIMATION); }
+    public @Nullable Animation getDefaultHoverEnterAnimation        () { return new Animation(DEFAULT_HOVER_PRIMER_ANIMATION).invert(); }
+    public @Nullable Animation getDefaultHoverLeaveAnimation        () { return new Animation(DEFAULT_HOVER_PRIMER_ANIMATION); }
+    public @Nullable Animation getDefaultHoverInversePrimerAnimation() { return new Animation(DEFAULT_HOVER_PRIMER_ANIMATION).invert(); }
 
 
 

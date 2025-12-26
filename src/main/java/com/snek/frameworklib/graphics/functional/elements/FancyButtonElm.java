@@ -83,8 +83,8 @@ public abstract class FancyButtonElm extends FancyTextElm implements Clickable, 
 
     @Override
     public void finalizeDespawn() {
-        super.finalizeDespawn();
         base.finalizeDespawn(this, getThisStyle().getHoverInversePrimerAnimation());
+        super.finalizeDespawn();
     }
 
 
