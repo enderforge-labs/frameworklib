@@ -313,6 +313,10 @@ public abstract sealed class Context permits HudContext, UiContext {
         LinkedList<Context> contexts = getActiveContexts().get(player);
         if(contexts == null) return null;
 
+        //TODO implement max context reach distance config. check for it here
+        //TODO implement max context reach distance config. check for it here
+        //TODO implement max context reach distance config. check for it here
+        //TODO implement max context reach distance config. check for it here
         // Find top-most context
         @Nullable Context topMost = null;
         double bestDistance = Double.MAX_VALUE;

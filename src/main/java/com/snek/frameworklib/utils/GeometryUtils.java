@@ -209,21 +209,25 @@ public final class GeometryUtils extends UtilityClassBase {
         assert Require.nonNull(corners, "corners");
         assert Require.condition(corners.length == 4, "corner array must contain exactly 4 points");
 
+//BUG this didnt actully fix it
+//TODO changing order does change the behaviour of the hover detection. try testing that stuff
+//TODO changing order does change the behaviour of the hover detection. try testing that stuff
+//TODO changing order does change the behaviour of the hover detection. try testing that stuff
 
         // Calculate the plane normal from the first three corners
-        Vector3f edge1 = new Vector3f(corners[1]).sub(corners[0]);
-        Vector3f edge2 = new Vector3f(corners[2]).sub(corners[0]);
+        Vector3f edge1 = new Vector3f(corners[1]).sub(corners[0]); // BottomRight - BottomLeft (right)
+        Vector3f edge2 = new Vector3f(corners[3]).sub(corners[0]); // TopLeft     - BottomLeft (up)
         Vector3f planeNormal = new Vector3f(edge1).cross(edge2).normalize();
 
         // Check if line is parallel to plane
-        float denominator = planeNormal.dot(lineDirection);
+        double denominator = planeNormal.dot(lineDirection);
         if(Math.abs(denominator) < 1e-6f) {
             return Double.MAX_VALUE; //! Line is parallel to plane
         }
 
         // Calculate distance to plane intersection
         Vector3f toPlane = new Vector3f(corners[0]).sub(lineOrigin);
-        float distance = toPlane.dot(planeNormal) / denominator;
+        double distance = toPlane.dot(planeNormal) / denominator;
 
         if(findLineRectangleIntersection(lineOrigin, lineDirection, corners, false) != null) return distance;
         else return Double.MAX_VALUE;

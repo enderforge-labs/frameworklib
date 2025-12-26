@@ -215,7 +215,7 @@ public non-sealed class HudContext extends Context {
      * @return The translation calculated in the global frame.
      */
     public @NotNull Vector3f __calcVisualShiftGlobal() {
-        final float rotation = getRotationRadians();
+        final float rotation = getRotationRadians() + (float)Math.PI; //! Add PI to align 0° to East(-Z)
         final Vector3f direction = new Vector3f((float)Math.sin(rotation), 0, (float)Math.cos(rotation));
         return direction.mul(HUD_DISTANCE).sub(0, 0.5f, 0);
     }

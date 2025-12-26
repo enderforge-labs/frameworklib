@@ -160,6 +160,7 @@ public final class MinecraftUtils extends UtilityClassBase {
         final var result = ItemStack.CODEC.encode(item, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).result();
         if(result.isEmpty()) {
             FrameworkLib.LOGGER.error("Could not serialize item stack", new RuntimeException());
+            return null;
         }
         return result.get().toString();
     }
@@ -177,6 +178,7 @@ public final class MinecraftUtils extends UtilityClassBase {
         final var result = ItemStack.CODEC.decode(JsonOps.INSTANCE, JsonParser.parseString(serializedItem)).result();
         if(result.isEmpty()) {
             FrameworkLib.LOGGER.error("Could not deserialize item stack", new RuntimeException());
+            return null;
         }
         return result.get().getFirst();
     }
