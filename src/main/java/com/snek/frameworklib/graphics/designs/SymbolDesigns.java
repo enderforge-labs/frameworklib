@@ -14,6 +14,49 @@ import com.snek.frameworklib.utils.UtilityClassBase;
 
 
 public final class SymbolDesigns extends UtilityClassBase {
+    public static final @NotNull PolylineData[] ArrowPointingLeft = {
+        new PolylineData(0.06f,
+            new Vector2f(1.0f,  0.5f),
+            new Vector2f(0.0f,  0.5f)
+        ),
+        new PolylineData(0.06f,
+            new Vector2f(0.2f, 0.7f),
+            new Vector2f(0.0f, 0.5f),
+            new Vector2f(0.2f, 0.3f)
+        )
+    };
+    public static final @NotNull PolylineData[] ArrowPointingRight = {
+        ArrowPointingLeft[0].copy().flipX(),
+        ArrowPointingLeft[1].copy().flipX()
+    };
+    public static final @NotNull PolylineData[] ArrowPointingUp = {
+        ArrowPointingLeft[0].copy().shift(-0.5f, -0.5f).rotate((float)Math.PI / 2f).shift(0.5f, 0.5f),
+        ArrowPointingLeft[1].copy().shift(-0.5f, -0.5f).rotate((float)Math.PI / 2f).shift(0.5f, 0.5f)
+    };
+    public static final @NotNull PolylineData[] ArrowPointingDown = {
+        ArrowPointingUp[0].copy().flipY(),
+        ArrowPointingUp[1].copy().flipY()
+    };
+
+
+
+
+    public static final @NotNull PolylineData[] ArrowsPointingLeftRight = {
+        ArrowPointingLeft [0].copy().shiftY(+0.25f),
+        ArrowPointingLeft [1].copy().shiftY(+0.25f),
+        ArrowPointingRight[0].copy().shiftY(-0.25f),
+        ArrowPointingRight[1].copy().shiftY(-0.25f)
+    };
+    public static final @NotNull PolylineData[] ArrowsPointingUpDown = {
+        ArrowsPointingLeftRight[0].copy().shift(-0.5f, -0.5f).rotate((float)Math.PI / 2f).shift(0.5f, 0.5f),
+        ArrowsPointingLeftRight[1].copy().shift(-0.5f, -0.5f).rotate((float)Math.PI / 2f).shift(0.5f, 0.5f),
+        ArrowsPointingLeftRight[2].copy().shift(-0.5f, -0.5f).rotate((float)Math.PI / 2f).shift(0.5f, 0.5f),
+        ArrowsPointingLeftRight[3].copy().shift(-0.5f, -0.5f).rotate((float)Math.PI / 2f).shift(0.5f, 0.5f)
+    };
+
+
+
+
     public static final @NotNull PolylineData[] Info = {
         new PolylineData(0.05f,
             new Vector2f(0.5f, 0.90f),
