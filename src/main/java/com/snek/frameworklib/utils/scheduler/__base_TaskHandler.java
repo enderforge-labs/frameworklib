@@ -90,7 +90,7 @@ public class __base_TaskHandler {
     /**
      * Immediately runs the task if it hasn't been cancelled.
      * <p>
-     * This flags the task as completed (unless this is a LoopTaskHandler).
+     * This flags the task as completed (unless this is a LoopTaskHandler, which doesn't support completion tracking).
      * <p>
      * Completed tasks cannot be ran again.
      */

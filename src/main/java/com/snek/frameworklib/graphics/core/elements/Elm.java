@@ -443,7 +443,7 @@ public abstract class Elm extends Div {
 
             // Force despawn finalization if the element is currently waiting for the despawn animation to end
             if(despawnFinalizerTaskHandler != null) {
-                //FIXME continue here
+                despawnFinalizerTaskHandler.compute();
             }
 
 
@@ -544,11 +544,13 @@ public abstract class Elm extends Div {
         assert Require.nonNull(style, "style");
         assert Require.nonNull(entity, "entity");
 
+
         // Start inverse primer animation
         final Animation inversePrimerAnimation = style.getInversePrimerAnimation();
         if(inversePrimerAnimation != null) {
             applyAnimationNow(inversePrimerAnimation);
         }
+
 
         // Remove tracking custom name. This lets the entity respawn freely without getting purged.
         entity.setCustomName(new Txt("removed").get());
@@ -556,6 +558,13 @@ public abstract class Elm extends Div {
             canvas.normalizeTransform(this);
             isTransformNormalized = true;
         }
+
+
+        // Clear remaining animation steps and queue state
+        futureDataQueue.clear();
+        elmUpdateQueue.remove(this);
+        isQueued = false;
+
 
         // Despawn the entity
         entity.despawn();
