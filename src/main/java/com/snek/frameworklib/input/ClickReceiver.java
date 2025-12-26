@@ -64,22 +64,23 @@ public final class ClickReceiver extends UtilityClassBase {
         if(player.isSpectator() || player.isDeadOrDying()) return InteractionResult.PASS;
 
 
-        // Handle limiter
-        RateLimiter limiter = clickLimiters.get(player.getUUID());
-        if(limiter == null) {
-            limiter = new RateLimiter();
-            clickLimiters.put(player.getUUID(), limiter);
-        }
-        if(limiter.attempt()) limiter.renewCooldown(2);
-        else return InteractionResult.FAIL;
-
-
-        // Send click to the player's contexts and return if one is present
+        // Send click to the player's contexts and return if one accepts the click event
         @Nullable Context context = HoverReceiver.getTargetedContext(player);
         if(context != null) {
-            if(context.forwardClick(player, clickType)) {
-                return InteractionResult.FAIL;
+
+            // Create limiter if needed
+            RateLimiter limiter = clickLimiters.get(player.getUUID());
+            if(limiter == null) {
+                limiter = new RateLimiter();
+                clickLimiters.put(player.getUUID(), limiter);
             }
+
+            // Attempt to click if the limiter allows for it
+            if(limiter.attempt()) context.forwardClick(player, clickType);
+            else limiter.renewCooldown(2);
+
+            // Return FAIL if the click was accepted (stops further event processing)
+            return InteractionResult.FAIL;
         }
 
 
