@@ -41,7 +41,6 @@ public abstract class TextInputElm extends FancyButtonElm {
 
 
     private @Nullable Component displayedText = null;
-    private @Nullable Component displayedCursor = null;
 
 
 
@@ -102,9 +101,11 @@ public abstract class TextInputElm extends FancyButtonElm {
 
     /**
      * Forces an update of the displayed text.
+     * <p>
+     * This method is automatically called one right before the element spawns into the level.
      */
     public void forceTextUpdate() {
-        Component text = inputState ? new Txt(cursorToggleState ? "|" : " ").get() : displayedText;
+        Component text = inputState ? new Txt(cursorToggleState ? "|" : " ").get() : (displayedText == null ? new Txt().get() : displayedText);
         getStyle(TextInputElmStyle.class).setText(text);
         flushStyle();
     }
