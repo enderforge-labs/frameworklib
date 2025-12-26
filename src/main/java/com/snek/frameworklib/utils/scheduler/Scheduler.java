@@ -23,7 +23,10 @@ import com.snek.frameworklib.utils.UtilityClassBase;
 public final class Scheduler extends UtilityClassBase {
     private Scheduler() {}
     private static long tickNum = 0;
-    private static final @NotNull PriorityQueue<@NotNull TaskHandler> taskQueue = new PriorityQueue<>(Comparator.comparingLong(e -> e.getTargetTick()));
+    private static final @NotNull PriorityQueue<@NotNull __base_TaskHandler> taskQueue = new PriorityQueue<>(
+        Comparator.comparingLong(e -> e.getTargetTick())
+    );
+
 
     /**
      * Returns the current tick number.
@@ -47,11 +50,11 @@ public final class Scheduler extends UtilityClassBase {
         while(taskQueue.peek().getTargetTick() <= tickNum) {
 
             // Execute it
-            final TaskHandler handler = taskQueue.poll();
+            final __base_TaskHandler handler = taskQueue.poll();
             handler.compute();
 
             // Renew task handler if it's a LoopTaskHadler and has not been cancelled
-            if(handler instanceof LoopTaskHandler h && !h.cancelled) {
+            if(handler instanceof LoopTaskHandler h && !h.isCancelled()) {
                 h.setTargetTick(tickNum + h.getInterval());
                 taskQueue.add(h);
             }

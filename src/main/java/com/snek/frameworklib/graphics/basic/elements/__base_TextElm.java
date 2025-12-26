@@ -17,8 +17,8 @@ import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.FontSize;
 import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.scheduler.LoopTaskHandler;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
-import com.snek.frameworklib.utils.scheduler.TaskHandler;
 
 import net.minecraft.server.level.ServerLevel;
 
@@ -59,7 +59,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
     // Scrolling text data
-    private TaskHandler textAutoScrollHandler = null;
+    private LoopTaskHandler textAutoScrollHandler = null;
     private int currentStartIndex = 0;
     private float boundaryElapsedIterations = 0;
     private int lastEnd = 0;

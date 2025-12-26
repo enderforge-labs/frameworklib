@@ -10,8 +10,8 @@ import com.snek.frameworklib.graphics.functional.styles.TextInputElmStyle;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.input.MessageReceiver;
 import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.scheduler.LoopTaskHandler;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
-import com.snek.frameworklib.utils.scheduler.TaskHandler;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -35,7 +35,7 @@ public abstract class TextInputElm extends FancyButtonElm {
     public static final int CURSOR_TOGGLE_DELAY = 10;
 
     private final @Nullable Component        clickFeedbackMessage;
-    private       @Nullable TaskHandler inputStateHandler = null;
+    private       @Nullable LoopTaskHandler inputStateHandler = null;
     private                 boolean     cursorToggleState = true;
     private                 boolean     inputState        = false;
 

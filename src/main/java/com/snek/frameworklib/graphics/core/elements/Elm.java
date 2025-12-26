@@ -24,6 +24,7 @@ import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Easing;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
+import com.snek.frameworklib.utils.scheduler.TaskHandler;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Display;
@@ -74,6 +75,8 @@ public abstract class Elm extends Div {
     protected int epsilonPolarity = 1;
 
 
+    // Despawn task handler
+    private @Nullable TaskHandler despawnFinalizerTaskHandler = null;
 
 
     // In-world data
@@ -438,6 +441,11 @@ public abstract class Elm extends Div {
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         if(!isSpawned) {
 
+            // Force despawn finalization if the element is currently waiting for the despawn animation to end
+            if(despawnFinalizerTaskHandler != null) {
+                //FIXME continue here
+            }
+
 
             // Denormalize transform
             if(canvas != null && isTransformNormalized) {
@@ -507,9 +515,10 @@ public abstract class Elm extends Div {
             final Animation despawnAnimation = style.getDespawnAnimation();
             if(despawnAnimation != null) {
                 if(animate) {
+
+                    // Delay despawn finalization to allow the despawn animation to complete
                     applyAnimation(despawnAnimation);
-                    Scheduler.schedule(despawnAnimation.getTotalDuration(), this::finalizeDespawn);
-                    //FIXME save in a handler and cancel this or something when the entity respawns
+                    despawnFinalizerTaskHandler = Scheduler.schedule(despawnAnimation.getTotalDuration(), this::finalizeDespawn);
                 }
                 else {
                     applyAnimationNow(despawnAnimation);

@@ -16,7 +16,7 @@ import com.snek.frameworklib.debug.Require;
  * <p>
  * Instances of this class are returned by the Scheduler's methods.
  */
-public class LoopTaskHandler extends TaskHandler {
+public class LoopTaskHandler extends __base_TaskHandler {
     private final long interval;
     public long getInterval() { return interval; }
 
