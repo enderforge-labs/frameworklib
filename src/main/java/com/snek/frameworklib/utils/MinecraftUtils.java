@@ -564,6 +564,37 @@ public final class MinecraftUtils extends UtilityClassBase {
 
 
 
+    /**
+     * Retrieves the ID of the provided item.
+     * @param item The item.
+     * @return The item's ID as a String.
+     */
+    public static @NotNull String getItemId(final @NotNull ItemStack item) {
+        return getItemKey(item).toString();
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Retrieves the ID key of the provided item.
+     * @param item The item.
+     * @return The item's ID key.
+     */
+    public static @NotNull ResourceLocation getItemKey(final @NotNull ItemStack item) {
+        return BuiltInRegistries.ITEM.getKey(item.getItem());
+    }
+
+
+
+
+
+
+
 
     /**
      * Converts entity coordinates (double) to block coordinates (int).
