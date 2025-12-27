@@ -138,8 +138,7 @@ public final class MinecraftUtils extends UtilityClassBase {
             final ByteBuffer buffer = ByteBuffer.wrap(Arrays.copyOf(hash, 16));
             return new UUID(buffer.getLong(), buffer.getLong());
         } catch(final NoSuchAlgorithmException e) {
-            FrameworkLib.LOGGER.error("Could not create item hash", new RuntimeException());
-            return null;
+            throw new AssertionError("SHA-256 algorithm not available", e);
         }
     }
 
@@ -152,12 +151,15 @@ public final class MinecraftUtils extends UtilityClassBase {
 
     /**
      * Computes the serialized form of an ItemStack.
-     * @return The serialized ItemStack as a String.
+     * <p>
+     * Logs an error if the item cannot be serialized.
+     * @param item The item stack to serialize.
+     * @return The serialized ItemStack as a String, or null if it couldn't be serialized.
      */
-    public static @NotNull String serializeItem(final @NotNull ItemStack item) {
+    public static @Nullable String serializeItem(final @NotNull ItemStack item) {
         assert Require.nonNull(item, "item");
 
-        final var result = ItemStack.CODEC.encode(item, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).result();
+        final var result = ItemStack.CODEC.encodeStart(JsonOps.INSTANCE, item).result();
         if(result.isEmpty()) {
             FrameworkLib.LOGGER.error("Could not serialize item stack", new RuntimeException());
             return null;
@@ -170,9 +172,12 @@ public final class MinecraftUtils extends UtilityClassBase {
 
     /**
      * Computes the ItemStack form of a serialized item.
-     * @return The deserialized ItemStack.
+     * <p>
+     * Logs an error if the item cannot be deserialized.
+     * @param serializedItem The serialized item to deserialize.
+     * @return The deserialized ItemStack, or null if it couldn't be deserialized.
      */
-    public static @NotNull ItemStack deserializeItem(final @NotNull String serializedItem) {
+    public static @Nullable ItemStack deserializeItem(final @NotNull String serializedItem) {
         assert Require.nonNull(serializedItem, "serializedItem");
 
         final var result = ItemStack.CODEC.decode(JsonOps.INSTANCE, JsonParser.parseString(serializedItem)).result();
