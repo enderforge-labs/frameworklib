@@ -330,7 +330,7 @@ public abstract class Elm extends Div {
      * @param shift the amount of future data to skip before applying this transition.
      * @return The amount of future data this transition affected.
      */
-    private int __applyAnimationTransition(final @NotNull Transition transition, final int shift) {
+    protected int __applyAnimationTransition(final @NotNull Transition transition, final int shift) {
         assert Require.nonNull(transition, "transition");
         assert Require.nonNegative(shift, "shift");
 
