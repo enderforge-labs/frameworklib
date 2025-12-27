@@ -68,6 +68,26 @@ public class Animation {
      * Notice: Background color, Background alpha, and opacity values are not affected.
      * @return {@code this}.
      */
+    public @NotNull Animation invertWithEasing() {
+        assert Require.notEmpty(transitions, "transition list");
+
+        for(final Transition t : transitions) {
+            assert Require.nonNull(t, "transition");
+            t.invertWithEasing();
+        }
+        Collections.reverse(transitions);
+        return this;
+    }
+
+
+    /**
+     * Inverts each of the transitions and flips their order, without changing its easing function.
+     * <p>
+     * This makes the animation look like it's being played backwards, but keeping the same rate of change over time as the original one.
+     * <p>
+     * Notice: Background color, Background alpha, and opacity values are not affected.
+     * @return {@code this}.
+     */
     public @NotNull Animation invert() {
         assert Require.notEmpty(transitions, "transition list");
 

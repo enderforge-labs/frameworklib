@@ -85,17 +85,36 @@ public class Transition {
      * Notice: Background color, Background alpha, and opacity values are not affected.
      * @return {@code this}.
      */
-    public @NotNull Transition invert() {
+    public @NotNull Transition invertWithEasing() {
         assert Require.nonNull(easing, "easing function");
+
+        // Invert transforms
+        invert();
+
+        // Invert easing
+        final Easing original = easing;
+        easing = new Easing(n -> { return 1f - original.compute(1f - n); });
+
+        // Return
+        return this;
+    }
+
+
+
+    /**
+     * Inverts this transition without changing its easing function.
+     * <p>
+     * This makes the transition look like it's being played backwards, but keeping the same rate of change over time as the original one.
+     * <p>
+     * Notice: Background color, Background alpha, and opacity values are not affected.
+     * @return {@code this}.
+     */
+    public @NotNull Transition invert() {
 
         // Invert transforms
         if(d.hasTransform  ()) d.getTransform  ().invert();
         if(d.hasTransformFg()) d.getTransformFg().invert();
         if(d.hasTransformBg()) d.getTransformBg().invert();
-
-        // Invert easing
-        final Easing original = easing;
-        easing = new Easing((n) -> { return original.compute(1f - n); });
 
         // Return
         return this;

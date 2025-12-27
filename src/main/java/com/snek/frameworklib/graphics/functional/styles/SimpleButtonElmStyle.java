@@ -81,9 +81,9 @@ public class SimpleButtonElmStyle extends PanelElmStyle {
         .additiveTransform(new Transform().scaleX(__base_ButtonElmStyle.HIDDEN_W))
     );
     public @Nullable Animation getDefaultHoverPrimerAnimation       () { return new Animation(DEFAULT_HOVER_PRIMER_ANIMATION); }
-    public @Nullable Animation getDefaultHoverEnterAnimation        () { return new Animation(DEFAULT_HOVER_PRIMER_ANIMATION).invert(); }
+    public @Nullable Animation getDefaultHoverEnterAnimation        () { return new Animation(DEFAULT_HOVER_PRIMER_ANIMATION).invertWithEasing(); }
     public @Nullable Animation getDefaultHoverLeaveAnimation        () { return new Animation(DEFAULT_HOVER_PRIMER_ANIMATION); }
-    public @Nullable Animation getDefaultHoverInversePrimerAnimation() { return new Animation(DEFAULT_HOVER_PRIMER_ANIMATION).invert(); }
+    public @Nullable Animation getDefaultHoverInversePrimerAnimation() { return new Animation(DEFAULT_HOVER_PRIMER_ANIMATION).invertWithEasing(); }
 
 
 
