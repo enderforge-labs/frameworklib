@@ -11,7 +11,6 @@ import org.joml.Vector3f;
 
 import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.data_types.animations.Animation;
-import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;

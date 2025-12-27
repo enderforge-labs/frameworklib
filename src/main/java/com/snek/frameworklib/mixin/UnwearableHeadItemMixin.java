@@ -26,15 +26,18 @@ import net.minecraft.world.item.Items;
 public class UnwearableHeadItemMixin {
     private UnwearableHeadItemMixin() {}
 
-
     /**
      * Inject getEquipmentSlotForItem in order to return MAINHAND as the intended slot for unwearable heads.
      * This makes Minecraft cancel the equip action, avoiding duplication issues.
      * The client is sent update packets automatically.
+     * <p>
+     * Notice: This doesn't work in creative mode. Creative mode players can wear any head they want.
      */
     @Inject(method = "getEquipmentSlotForItem", at = @At("HEAD"), cancellable = true)
     private static void _getEquipmentSlotForItem(ItemStack item, CallbackInfoReturnable<EquipmentSlot> cir) {
+        System.out.println("METHOD CALLED WITH: " + item);
         if(item.is(Items.PLAYER_HEAD) && MinecraftUtils.hasTag(item, MinecraftUtils.UNWEARABLE_TAG)) {
+            System.out.println("BLOCKING EQUIP");
             cir.setReturnValue(EquipmentSlot.MAINHAND);
         }
     }

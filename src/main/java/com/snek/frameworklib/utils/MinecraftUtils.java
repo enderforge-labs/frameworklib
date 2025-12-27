@@ -272,6 +272,7 @@ public final class MinecraftUtils extends UtilityClassBase {
      * Returns an ItemStack containing a player head with texture the specified skin ID.
      * @param skin The Base-64 skin ID.
      * @param wearable Whether the item stack should be equippable in the helmet slot.
+     *     Notice: This doesn't work in creative mode. Creative mode players can wear any head they want.
      * @return The head as an ItemStack of count 1.
      */
     public static @NotNull ItemStack createCustomHead(final @NotNull String skin, final boolean wearable) {
