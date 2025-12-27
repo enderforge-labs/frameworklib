@@ -35,9 +35,7 @@ public class UnwearableHeadItemMixin {
      */
     @Inject(method = "getEquipmentSlotForItem", at = @At("HEAD"), cancellable = true)
     private static void _getEquipmentSlotForItem(ItemStack item, CallbackInfoReturnable<EquipmentSlot> cir) {
-        System.out.println("METHOD CALLED WITH: " + item);
         if(item.is(Items.PLAYER_HEAD) && MinecraftUtils.hasTag(item, MinecraftUtils.UNWEARABLE_TAG)) {
-            System.out.println("BLOCKING EQUIP");
             cir.setReturnValue(EquipmentSlot.MAINHAND);
         }
     }
