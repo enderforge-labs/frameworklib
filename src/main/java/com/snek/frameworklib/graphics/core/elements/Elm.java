@@ -563,7 +563,10 @@ public abstract class Elm extends Div {
 
 
         // Clear remaining animation steps and queue state
-        futureDataQueue.clear();
+        if(!futureDataQueue.isEmpty()) {
+            __applyTransitionStep(futureDataQueue.getLast());
+            futureDataQueue.clear();
+        }
         elmUpdateQueue.remove(this);
         isQueued = false;
 
