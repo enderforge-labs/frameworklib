@@ -81,7 +81,10 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
 
-    //TODO comment
+    /**
+     * Recalculates the total text size cache.
+     * This represents the size of the text that is stored in the element's text, in pixels.
+     */
     public void updateTotTextSizeCache() {
         final Vector2f s = __calcTextSizeCache(getStyle(SimpleTextElmStyle.class).getText().getString());
         entityTotSizeCacheX = s.x;
@@ -90,7 +93,10 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
 
-    //TODO comment
+    /**
+     * Recalculates the visual text size cache.
+     * This represents the size of the text that is currently displayed by the entity in the level, in pixels.
+     */
     public void updateVisualTextSizeCache() {
         final Vector2f s = __calcTextSizeCache(getTextDisplay().getText().getString());
         entityVisualSizeCacheX = s.x;
@@ -100,7 +106,11 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
 
-    //TODO comment
+    /**
+     * Calculates the size of the provided string, in pixels.
+     * @param string The string to measure.
+     * @return The calculated size.
+     */
     public Vector2f __calcTextSizeCache(final @NotNull String string) {
         assert Require.nonNull(string, "string");
 
@@ -128,7 +138,6 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
         // Calculate line height
         final int lineNum = lines.length;
-        // entitySizeCacheY = (lineNum == 1 ? 0f : lineNum - 1) * 2 + lineNum * (float)FontSize.getHeight(); //TODO remove if not used
         final float y = lineNum * (float)FontSize.getHeight();
 
 
