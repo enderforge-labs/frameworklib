@@ -27,9 +27,6 @@ import net.minecraft.world.inventory.ClickAction;
  */
 public abstract class SimpleButtonElm extends PanelElm implements Clickable, Hoverable {
     __base_ButtonElm base;
-    private @NotNull SimpleButtonElmStyle getThisStyle() {
-        return getStyle(SimpleButtonElmStyle.class);
-    }
 
 
 
@@ -77,13 +74,13 @@ public abstract class SimpleButtonElm extends PanelElm implements Clickable, Hov
     @Override
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         super.spawn(pos, animate);
-        base.spawn(this, getThisStyle().getHoverPrimerAnimation());
+        base.spawn(this, getStyle(SimpleButtonElmStyle.class).getHoverPrimerAnimation());
     }
 
 
     @Override
     public void finalizeDespawn() {
-        base.finalizeDespawn(this, getThisStyle().getHoverInversePrimerAnimation());
+        base.finalizeDespawn(this, getStyle(SimpleButtonElmStyle.class).getHoverInversePrimerAnimation());
         super.finalizeDespawn();
     }
 
@@ -92,7 +89,7 @@ public abstract class SimpleButtonElm extends PanelElm implements Clickable, Hov
 
     @Override
     public void onHoverEnter(final @NotNull Player player) {
-        base.onHoverEnter(this, player, getThisStyle().getHoverEnterAnimation());
+        base.onHoverEnter(this, player, getStyle(SimpleButtonElmStyle.class).getHoverEnterAnimation());
     }
 
     @Override
@@ -102,7 +99,7 @@ public abstract class SimpleButtonElm extends PanelElm implements Clickable, Hov
 
     @Override
     public void onHoverExit(final @Nullable Player player) {
-        base.onHoverExit(this, getThisStyle().getHoverLeaveAnimation());
+        base.onHoverExit(this, getStyle(SimpleButtonElmStyle.class).getHoverLeaveAnimation());
     }
 
 

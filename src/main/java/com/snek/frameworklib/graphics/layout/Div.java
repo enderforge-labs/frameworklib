@@ -346,11 +346,10 @@ public class Div {
             }
         }
 
-        //TODO check if this is actually needed. it prob was here to stop clicks from removing elements while iterating the tree
         // If not, send the click event to all children until one of them accepts it
+        //! Use a copy of the array to avoid issues with elements that remove themselves or add/remove siblings in click events
         final List<Div> _children = new ArrayList<>(children);
         for(final Div elm : _children) {
-        // for(final Div elm : children) { //TODO
             if(elm.forwardClick(player, clickType)) {
                 return true;
             }
