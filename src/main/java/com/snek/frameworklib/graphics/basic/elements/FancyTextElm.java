@@ -125,7 +125,7 @@ public non-sealed class FancyTextElm extends __base_TextElm {
         return
             initialTransform.copy()
             .apply(getThisStyle().getTransformFg())
-            .moveZ((getZIndex() + 1) * Configs.getUi().z_layer_spacing.getValue())
+            .moveZ((getZIndex() + 1) * Configs.getGraphics().z_layer_spacing.getValue())
         ;
     }
 

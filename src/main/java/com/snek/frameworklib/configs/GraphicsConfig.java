@@ -13,7 +13,7 @@ import com.snek.frameworkconfig.fields.ValueConfigField;
 /**
  * Configuration data for the graphics system.
  */
-public class UiConfig implements ConfigFile {
+public class GraphicsConfig implements ConfigFile {
     public final ValueConfigField<Float> z_layer_spacing = new ValueConfigField<>(
         new String[] {
             "The distance between UI Z-Layers.",

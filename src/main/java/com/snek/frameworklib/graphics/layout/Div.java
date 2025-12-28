@@ -597,7 +597,7 @@ public class Div {
         if(canvas == null) return new Vector3f();
         final Vector3d spawnPos = canvas.getContext().getSpawnPos();
         return
-            new Vector3f(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getUi().z_layer_spacing.getValue())
+            new Vector3f(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getGraphics().z_layer_spacing.getValue())
             .rotateY(canvas.getContext().getRotationRadians()) //! Rotation applied to Z-index translation
             .add(new Vector3f((float)spawnPos.x, (float)spawnPos.y, (float)spawnPos.z))
         ;

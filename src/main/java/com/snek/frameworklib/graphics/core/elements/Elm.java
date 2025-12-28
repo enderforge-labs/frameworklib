@@ -244,7 +244,7 @@ public abstract class Elm extends Div {
     public @NotNull Transform __calcTransform() {
         assert Require.nonNull(style, "style");
         assert Require.nonNull(style.getTransform(), "style transform");
-        return style.getTransform().copy().move(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getUi().z_layer_spacing.getValue());
+        return style.getTransform().copy().move(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getGraphics().z_layer_spacing.getValue());
     }
 
 

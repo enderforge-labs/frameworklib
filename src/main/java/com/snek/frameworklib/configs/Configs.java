@@ -21,12 +21,12 @@ public final class Configs extends UtilityClassBase {
     private Configs() {}
 
     // Data
-    private static @NotNull UiConfig          ui   = null;
-    private static @NotNull PerformanceConfig perf = null;
+    private static @NotNull GraphicsConfig    graphics = null;
+    private static @NotNull PerformanceConfig perf     = null;
 
     // Getters
-    public static @NotNull UiConfig          getUi  () { return ui;   }
-    public static @NotNull PerformanceConfig getPerf() { return perf; }
+    public static @NotNull GraphicsConfig    getGraphics() { return graphics; }
+    public static @NotNull PerformanceConfig getPerf    () { return perf;     }
 
 
 
@@ -35,10 +35,10 @@ public final class Configs extends UtilityClassBase {
      * Loads the configuration files or creates new ones if they are missing.
      */
     public static void loadConfigs() {
-        ui   = ConfigManager.loadConfig("UiConfig",    UiConfig.class,          FrameworkLib.LIB_ID); //TODO rename ui config to "graphics"
-        perf = ConfigManager.loadConfig("Performance", PerformanceConfig.class, FrameworkLib.LIB_ID);
+        graphics = ConfigManager.loadConfig("Graphics",    GraphicsConfig.class,    FrameworkLib.LIB_ID);
+        perf     = ConfigManager.loadConfig("Performance", PerformanceConfig.class, FrameworkLib.LIB_ID);
 
-        assert Require.nonNull(ui, "ui config data");
-        assert Require.nonNull(perf, "perf config data");
+        assert Require.nonNull(graphics, "graphics config data");
+        assert Require.nonNull(perf,     "performance config data");
     }
 }
