@@ -236,8 +236,10 @@ public class Div {
      * <p>
      * Partial steps at the end of the animation are expanded to cover the entire step.
      * @param animation The animation to apply.
+     * @param recursive Whether to apply the animation to this element's children recursively, instead of only to itself.
+     * @param interpolate Whether to respect the animation's duration and easing. Passing {@code false} applies the animation instantly.
      */
-    public void applyAnimation(final @NotNull Animation animation) {
+    public void applyAnimation(final @NotNull Animation animation, final boolean recursive, final boolean interpolate) {
         assert Require.nonNull(animation, "animation");
         // Empty
     }
@@ -246,81 +248,16 @@ public class Div {
      * <p>
      * Partial steps at the end of the transition are expanded to cover the entire step.
      * @param transition The transition to apply.
+     * @param recursive Whether to apply the animation to this element's children recursively, instead of only to itself.
+     * @param interpolate Whether to respect the animation's duration and easing. Passing {@code false} applies the animation instantly.
      */
-    public final void applyAnimation(final @NotNull Transition transition) {
+    public final void applyAnimation(final @NotNull Transition transition, final boolean recursive, final boolean interpolate) {
         assert Require.nonNull(transition, "transition");
-        applyAnimation(new Animation(transition));
+        applyAnimation(new Animation(transition), recursive, interpolate);
     }
 
 
 
-
-    /**
-     * Instantly applies an animation to this element, ignoring transition times and easings.
-     * @param animation The animation to apply.
-     */
-    public void applyAnimationNow(final @NotNull Animation animation) {
-        assert Require.nonNull(animation, "animation");
-        // Empty
-    }
-    /**
-     * Instantly applies a transition to this element, ignoring transition times and easings.
-     * @param transition The transition to apply.
-     */
-    public final void applyAnimationNow(final @NotNull Transition transition) {
-        assert Require.nonNull(transition, "transition");
-        applyAnimationNow(new Animation(transition));
-    }
-
-
-
-
-    /**
-     * Applies an animation to this element and all of its children.
-     * <p>
-     * Partial steps at the end of the animation are expanded to cover the entire step.
-     * @param animation The animation to apply.
-     */
-    public final void applyAnimationRecursive(final @NotNull Animation animation) {
-        assert Require.nonNull(animation, "animation");
-        applyAnimation(animation);
-        for(final Div elm : children) {
-            elm.applyAnimationRecursive(animation);
-        }
-    }
-    /**
-     * Applies a transition to this element and all of its children.
-     * <p>
-     * Partial steps at the end of the transition are expanded to cover the entire step.
-     * @param transition The transition to apply.
-     */
-    public final void applyAnimationRecursive(final @NotNull Transition transition) {
-        assert Require.nonNull(transition, "transition");
-        applyAnimationRecursive(new Animation(transition));
-    }
-
-
-
-
-    /**
-     * Instantly applies an animation to this element and all of its children, ignoring transition times and easings.
-     * @param animation The animation to apply.
-     */
-    public final void applyAnimationNowRecursive(final @NotNull Animation animation) {
-        assert Require.nonNull(animation, "animation");
-        applyAnimationNow(animation);
-        for(final Div elm : children) {
-            elm.applyAnimationNowRecursive(animation);
-        }
-    }
-    /**
-     * Instantly applies a transition to this element and all of its children, ignoring transition times and easings.
-     * @param transition The transition to apply.
-     */
-    public final void applyAnimationNowRecursive(final @NotNull Transition transition) {
-        assert Require.nonNull(transition, "transition");
-        applyAnimationNowRecursive(new Animation(transition));
-    }
 
 
 

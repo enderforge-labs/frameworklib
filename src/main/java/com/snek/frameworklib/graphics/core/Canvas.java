@@ -168,10 +168,10 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
             final Transform transformBack   = new Transform().scaleY(newHeightBack  ).moveY(newPosBack  ).rotY((float)Math.PI).moveX(1f);
             final Transform transformTop    = new Transform().scaleY(newHeightTop   ).moveY(newPosTop   );
             final Transform transformBottom = new Transform().scaleY(newHeightBottom).moveY(newPosBottom);
-            bg    .applyAnimationNow(new Transition().additiveTransform(transformBg));
-            back  .applyAnimationNow(new Transition().additiveTransform(transformBack));
-            top   .applyAnimationNow(new Transition().additiveTransform(transformTop));
-            bottom.applyAnimationNow(new Transition().additiveTransform(transformBottom));
+            bg    .applyAnimation(new Transition().additiveTransform(transformBg),     false, false);
+            back  .applyAnimation(new Transition().additiveTransform(transformBack),   false, false);
+            top   .applyAnimation(new Transition().additiveTransform(transformTop),    false, false);
+            bottom.applyAnimation(new Transition().additiveTransform(transformBottom), false, false);
         }
 
 
@@ -197,10 +197,10 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
             final Transform transformBack   = new Transform().scaleY(newHeightBack   / prevCanvas.newHeightBack  ).moveY(newPosBack   - prevCanvas.newPosBack  );
             final Transform transformTop    = new Transform().scaleY(newHeightTop    / prevCanvas.newHeightTop   ).moveY(newPosTop    - prevCanvas.newPosTop   );
             final Transform transformBottom = new Transform().scaleY(newHeightBottom / prevCanvas.newHeightBottom).moveY(newPosBottom - prevCanvas.newPosBottom);
-            bg    .applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformBg));
-            back  .applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformBack));
-            top   .applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformTop));
-            bottom.applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformBottom));
+            bg    .applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformBg),     false, true);
+            back  .applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformBack),   false, true);
+            top   .applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformTop),    false, true);
+            bottom.applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformBottom), false, true);
         }
     }
 
@@ -211,15 +211,14 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      * Updates the rotation of the canvas.
      * @param from The current rotation.
      * @param to The target rotation.
-     * @param instant Whether the rotation should be instantaneous or animated.
+     * @param animate Whether the rotation should be animated or instantaneous.
      */
-    protected void rotate(final int from, final int to, final boolean instant) {
+    protected void rotate(final int from, final int to, final boolean animate) {
         assert Require.inRange(from, 0, 7, "starting rotation");
         assert Require.inRange(to,   0, 7, "target rotation");
 
         final Animation animation = calcCanvasRotationAnimation(from, to);
-        if(instant) applyAnimationNowRecursive(animation);
-        else applyAnimationRecursive(animation); //TODO replace with a single applyAnimationRecursive
+        applyAnimation(animation, true, animate);
     }
 
 
@@ -232,7 +231,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      */
     public void denormalizeTransform(final @NotNull Div elm) {
         assert Require.nonNull(elm, "element");
-        elm.applyAnimationNow(calcCanvasRotationAnimation(0, context.getRotation()));
+        elm.applyAnimation(calcCanvasRotationAnimation(0, context.getRotation()), false, false);
     }
 
 
@@ -246,7 +245,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      */
     public void normalizeTransform(final @NotNull Div elm) {
         assert Require.nonNull(elm, "element");
-        elm.applyAnimationNow(calcCanvasRotationAnimation(context.getRotation(), 0));
+        elm.applyAnimation(calcCanvasRotationAnimation(context.getRotation(), 0), false, false);
     }
 
 

@@ -59,7 +59,7 @@ public final class __base_ButtonElm {
 
         clickRateLimiter.renewCooldown(INITIAL_COOLDOWN);
         if(hoverPrimerAanimation != null) {
-            _this.applyAnimationNow(hoverPrimerAanimation);
+            _this.applyAnimation(hoverPrimerAanimation, false, false);
         }
     }
 
@@ -72,7 +72,7 @@ public final class __base_ButtonElm {
 
         // Start inverse hover primer aniamtion
         if(inverseHoverPrimerAanimation != null) {
-            _this.applyAnimationNow(inverseHoverPrimerAanimation);
+            _this.applyAnimation(inverseHoverPrimerAanimation, false, false);
         }
     }
 
@@ -85,7 +85,7 @@ public final class __base_ButtonElm {
         assert Require.nonNull(player, "player");
 
         if(animation != null) {
-            _this.applyAnimation(animation);
+            _this.applyAnimation(animation, false, true);
         }
     }
 
@@ -113,7 +113,7 @@ public final class __base_ButtonElm {
 
         // Start hover exit animation
         if(animation != null) {
-            _this.applyAnimation(animation);
+            _this.applyAnimation(animation, false, true);
             _this.hoverRateLimiter.renewCooldown(animation.getTotalDuration());
         }
 

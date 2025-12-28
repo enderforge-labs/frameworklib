@@ -253,69 +253,23 @@ public abstract class Elm extends Div {
 
 
 
-    /**
-     * Instantly calculates animation steps and adds this element to the update queue.
-     * <p>
-     * Partial steps at the end of the animation are expanded to cover the entire step.
-     * @param animation The animation to apply.
-     */
     @Override
-    public void applyAnimation(final @NotNull Animation animation) {
-        super.applyAnimation(animation);
+    public void applyAnimation(final @NotNull Animation animation, final boolean recursive, final boolean interpolate) {
+        super.applyAnimation(animation, recursive, interpolate);
 
-        // Add element to the update queue and update the queued state
-        if(!isQueued) {
-            elmUpdateQueue.add(this);
-            isQueued = true;
-            queueLingerTicks = QUEUE_LINGER_TICKS;
+        if(interpolate) {
+            // Add element to the update queue and update the queued state
+            if(!isQueued) {
+                elmUpdateQueue.add(this);
+                isQueued = true;
+                queueLingerTicks = QUEUE_LINGER_TICKS;
+            }
         }
 
         // Apply each transition one at a time
         int shift = 0;
         for(final Transition transition : animation.getTransitions()) {
-            shift += __applyAnimationTransition(transition, shift);
-        }
-    }
-
-
-
-
-    @Override
-    public void applyAnimationNow(final @NotNull Animation animation) {
-        super.applyAnimationNow(animation);
-
-        // Apply each transition one at a time
-        for(final Transition transition : animation.getTransitions()) {
-            __applyAnimationTransitionNow(transition);
-        }
-    }
-
-
-    /**
-     * Helper function.
-     * <p>
-     * Instantly calculates the result of a single transition and applies it to the element.
-     * @param t The transition to apply.
-     */
-    protected void __applyAnimationTransitionNow(final @NotNull Transition t) {
-        assert Require.nonNull(t, "transition");
-
-        // Calculate step and apply it instantly
-        final TransitionStep step = t.createStep(1);
-        final InterpolatedData data = __generateInterpolatedData();
-        data.apply(step);
-        __applyTransitionStep(data);
-        flushStyle();
-
-        // Update existing future data if present. Instantly start the interpolation otherwise
-        if(futureDataQueue.isEmpty()) {
-            entity.setInterpolationDuration(0);
-            entity.setStartInterpolation();
-        }
-        else {
-            for(final InterpolatedData d : futureDataQueue) {
-                d.apply(step);
-            }
+            shift += __applyAnimationTransition(transition, interpolate, shift);
         }
     }
 
@@ -327,51 +281,74 @@ public abstract class Elm extends Div {
      * <p>
      * Instantly calculates the steps of a single transition and adds them to this element's future data.
      * @param transition The transition to apply.
+     * @param interpolate Whether to respect the transition's duration and easing. Passing {@code false} applies the transition instantly.
      * @param shift the amount of future data to skip before applying this transition.
      * @return The amount of future data this transition affected.
      */
-    protected int __applyAnimationTransition(final @NotNull Transition transition, final int shift) {
+    protected int __applyAnimationTransition(final @NotNull Transition transition, final boolean interpolate, final int shift) {
         assert Require.nonNull(transition, "transition");
         assert Require.nonNegative(shift, "shift");
 
 
-        // Calculate transition as a list of steps
-        final List<TransitionStep> animationSteps = new ArrayList<>();
-        final int time = transition.getDuration();            // The duration of this transition
-        final Easing e = transition.getEasing();
-        final Integer refreshTime = Configs.getPerf().animation_refresh_time.getValue();
-        for(int i = 0; i == 0 || i < time; i += refreshTime) {
-            final float factor = (float)e.compute(Math.min(1d, (double)(i + refreshTime) / time));
-            animationSteps.add(transition.createStep(factor));
-        }
+        if(!interpolate) {
+            // Calculate step and apply it instantly
+            final TransitionStep step = transition.createStep(1);
+            final InterpolatedData data = __generateInterpolatedData();
+            data.apply(step);
+            __applyTransitionStep(data);
+            flushStyle();
 
-
-        // Create the necessary amount of future data before applying the steps
-        futureDataQueue.getOrAdd(
-            shift + animationSteps.size() - 1,
-            () -> {
-                return futureDataQueue.isEmpty() ?
-                __generateInterpolatedData() :
-                __generateInterpolatedData(futureDataQueue.size() - 1);
+            // Update existing future data if present. Instantly start the interpolation otherwise
+            if(futureDataQueue.isEmpty()) {
+                entity.setInterpolationDuration(0);
+                entity.setStartInterpolation();
             }
-        );
-
-
-        // Update existing future data
-        int j = 0;
-        for(; j < animationSteps.size(); ++j) {
-            futureDataQueue.get(j + shift).apply(animationSteps.get(j));
+            else {
+                for(final InterpolatedData d : futureDataQueue) {
+                    d.apply(step);
+                }
+            }
+            return 0;
         }
+        else {
+            // Calculate transition as a list of steps
+            final List<TransitionStep> animationSteps = new ArrayList<>();
+            final int time = transition.getDuration();            // The duration of this transition
+            final Easing e = transition.getEasing();
+            final Integer refreshTime = Configs.getPerf().animation_refresh_time.getValue();
+            for(int i = 0; i == 0 || i < time; i += refreshTime) {
+                final float factor = (float)e.compute(Math.min(1d, (double)(i + refreshTime) / time));
+                animationSteps.add(transition.createStep(factor));
+            }
 
-        // If the amount of future data is larger than the amount of steps, apply the last step to the remaining data
-        final TransitionStep lastStep = animationSteps.get(animationSteps.size() - 1);
-        for(; j + shift < futureDataQueue.size(); ++j) {
-            futureDataQueue.get(j + shift).apply(lastStep);
+
+            // Create the necessary amount of future data before applying the steps
+            futureDataQueue.getOrAdd(
+                shift + animationSteps.size() - 1,
+                () -> {
+                    return futureDataQueue.isEmpty() ?
+                    __generateInterpolatedData() :
+                    __generateInterpolatedData(futureDataQueue.size() - 1);
+                }
+            );
+
+
+            // Update existing future data
+            int j = 0;
+            for(; j < animationSteps.size(); ++j) {
+                futureDataQueue.get(j + shift).apply(animationSteps.get(j));
+            }
+
+            // If the amount of future data is larger than the amount of steps, apply the last step to the remaining data
+            final TransitionStep lastStep = animationSteps.get(animationSteps.size() - 1);
+            for(; j + shift < futureDataQueue.size(); ++j) {
+                futureDataQueue.get(j + shift).apply(lastStep);
+            }
+
+
+            // Return transition width
+            return animationSteps.size();
         }
-
-
-        // Return transition width
-        return animationSteps.size();
     }
 
 
@@ -457,12 +434,11 @@ public abstract class Elm extends Div {
             // Handle primer and spawn animations
             final Animation primerAnimation = style.getPrimerAnimation();
             if(primerAnimation != null) {
-                applyAnimationNow(primerAnimation);
+                applyAnimation(primerAnimation, false, true);
             }
             final Animation spawnAnimation = style.getSpawnAnimation();
             if(spawnAnimation != null) {
-                if(animate) applyAnimation(spawnAnimation);
-                else applyAnimationNow(spawnAnimation);
+                applyAnimation(spawnAnimation, false, animate);
             }
 
 
@@ -514,16 +490,11 @@ public abstract class Elm extends Div {
             // Handle animations
             final Animation despawnAnimation = style.getDespawnAnimation();
             if(despawnAnimation != null) {
-                if(animate) {
+                applyAnimation(despawnAnimation, false, animate);
 
-                    // Delay despawn finalization to allow the despawn animation to complete
-                    applyAnimation(despawnAnimation);
-                    despawnFinalizerTaskHandler = Scheduler.schedule(despawnAnimation.getTotalDuration(), this::finalizeDespawn);
-                }
-                else {
-                    applyAnimationNow(despawnAnimation);
-                    finalizeDespawn();
-                }
+                // Delay despawn finalization to allow the despawn animation to complete
+                if(animate) despawnFinalizerTaskHandler = Scheduler.schedule(despawnAnimation.getTotalDuration(), this::finalizeDespawn);
+                else finalizeDespawn();
             }
 
 
@@ -550,7 +521,7 @@ public abstract class Elm extends Div {
         // Start inverse primer animation
         final Animation inversePrimerAnimation = style.getInversePrimerAnimation();
         if(inversePrimerAnimation != null) {
-            applyAnimationNow(inversePrimerAnimation);
+            applyAnimation(inversePrimerAnimation, false, false);
         }
 
 

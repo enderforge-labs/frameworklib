@@ -436,8 +436,8 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
             final double moveAmountR = currentStartIndex == 0 ? 0 : FontSize.getStringWidth(textString.substring(lastEnd, end));
             final @NotNull Transform transform0 = new Transform().moveX((float)((+moveAmountL + moveAmountR) / 2 * xScale));
             final @NotNull Transform transform1 = new Transform().moveX((float)((-moveAmountL - moveAmountR) / 2 * xScale));
-            applyAnimationNow(new Transition(                            ).additiveTransform(transform0));
-            applyAnimation   (new Transition(SCROLL_DELAY - 1, Easings.linear).additiveTransform(transform1));
+            applyAnimation(new Transition(                                ).additiveTransform(transform0), false, false);
+            applyAnimation(new Transition(SCROLL_DELAY - 1, Easings.linear).additiveTransform(transform1), false, true);
         }
 
 

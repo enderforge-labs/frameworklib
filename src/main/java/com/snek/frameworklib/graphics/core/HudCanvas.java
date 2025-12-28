@@ -51,14 +51,14 @@ public non-sealed class HudCanvas extends Canvas {
 
     @Override
     public void denormalizeTransform(final @NotNull Div elm) {
-        elm.applyAnimationNow(new Transition().additiveTransform(new Transform().move(getHudContext().__calcVisualShiftLocal())));
+        elm.applyAnimation(new Transition().additiveTransform(new Transform().move(getHudContext().__calcVisualShiftLocal())), false, false);
         super.denormalizeTransform(elm);
     }
 
 
     @Override
     public void normalizeTransform(final @NotNull Div elm) {
-        elm.applyAnimationNow(new Transition().additiveTransform(new Transform().move(getHudContext().__calcVisualShiftLocal().mul(-1))));
+        elm.applyAnimation(new Transition().additiveTransform(new Transform().move(getHudContext().__calcVisualShiftLocal().mul(-1))), false, false);
         super.normalizeTransform(elm);
     }
 }
