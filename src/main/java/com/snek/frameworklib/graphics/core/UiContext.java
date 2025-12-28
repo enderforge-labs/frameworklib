@@ -73,7 +73,7 @@ public non-sealed class UiContext extends Context {
                 if(getSpawnPos().distance(playerPos) > POS_UPDATE_DISTANCE) {
 
                     // Rotate the canvas and update the current rotation
-                    activeCanvas.rotate(getRotation(), newRot, false);
+                    activeCanvas.rotate(getRotation(), newRot, true);
                     canvasRotationLimiter.renewCooldown(Canvas.CANVAS_ROTATION_TIME);
                     setRotation(newRot);
                 }

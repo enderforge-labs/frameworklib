@@ -135,7 +135,7 @@ public non-sealed class HudContext extends Context {
 
                 // Rotate the canvas and set the new rotation
                 if(activeCanvas != null) {
-                    activeCanvas.rotate(getRotation(), newRot, true); //FIXME make it disappear and reappear instead
+                    activeCanvas.rotate(getRotation(), newRot, false); //FIXME make it disappear and reappear instead
                 }
                 setRotation(newRot);
             }
