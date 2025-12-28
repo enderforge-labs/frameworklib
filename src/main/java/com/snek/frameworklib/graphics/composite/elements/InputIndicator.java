@@ -3,6 +3,7 @@ package com.snek.frameworklib.graphics.composite.elements;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
+import org.joml.Vector3d;
 
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
@@ -66,6 +67,15 @@ public class InputIndicator extends Div {
         e.setSize(new Vector2f(1 - MOUSE_SIZE.x - BUTTON_TEXT_SPACING, 1f));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
         text = (SimpleTextElm)e;
+    }
+
+
+
+
+    @Override
+    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
+        // Empty
+        //TODO i think the spawned flag isnt getting updated correctly
     }
 
 

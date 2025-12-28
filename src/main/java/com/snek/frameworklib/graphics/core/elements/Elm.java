@@ -77,6 +77,8 @@ public abstract class Elm extends Div {
 
     // Despawn task handler
     private @Nullable TaskHandler despawnFinalizerTaskHandler = null;
+    // protected boolean despawning = false; //TODO remove
+    // //! ^ True when the entity is currently despawning but not yet fully despawned. During this time, spawned = false but despawning = true //TODO remove
 
 
     // In-world data
@@ -250,13 +252,24 @@ public abstract class Elm extends Div {
 
 
 
+    /**
+     * Checks if the element is currently being despawned.
+     * <p>
+     * This means that the element is flagged as not spawned, but the entity is still present in the level,
+     * waiting for the despawn animation to end.
+     * @return
+     */
+    public boolean isBeingDespawned() {
+        return despawnFinalizerTaskHandler != null && !despawnFinalizerTaskHandler.isComplete();
+    }
+
 
 
 
     @Override
     public void applyAnimation(final @NotNull Animation animation, final boolean recursive, final boolean interpolate, final boolean skipNonSpawned) {
         super.applyAnimation(animation, recursive, interpolate, skipNonSpawned);
-        if(skipNonSpawned && !isSpawned()) return;
+        if(skipNonSpawned && !isSpawned() && !isBeingDespawned()) return;
 
 
         // If the animation is not to be applied instantly, add element to the update queue and update the queued state
@@ -420,7 +433,7 @@ public abstract class Elm extends Div {
         if(!isSpawned) {
 
             // Force despawn finalization if the element is currently waiting for the despawn animation to end
-            if(despawnFinalizerTaskHandler != null) {
+            if(isBeingDespawned()) {
                 despawnFinalizerTaskHandler.compute();
             }
 
@@ -483,9 +496,9 @@ public abstract class Elm extends Div {
     public void despawn(final boolean animate) {
         if(isSpawned) {
 
-            // Call superclass spawn
-            super.despawn(animate);
-            assert Require.nonNull(style, "style");
+            // Call superclass's despawn
+            super.despawn(false);
+            // despawning = true; //TODO remove
 
 
             // Handle animations
@@ -512,7 +525,9 @@ public abstract class Elm extends Div {
     /**
      * A helper method that finalizes the despawning process.
      * <p>
-     * It resets the tracking name, normalizes the transform and removes the entities from the level.
+     * It applies the inverse primer animation, resets the tracking name, normalizes the transform and removes the entities from the level.
+     * <p>
+     * It also forces all of the remaining animations to complete instantly and clear the future data queue.
      */
     public void finalizeDespawn() {
         assert Require.nonNull(style, "style");
@@ -528,6 +543,9 @@ public abstract class Elm extends Div {
 
         // Remove tracking custom name. This lets the entity respawn freely without getting purged.
         entity.setCustomName(new Txt("removed").get());
+
+
+        // Normalize transform
         if(canvas != null && !isTransformNormalized) {
             canvas.normalizeTransform(this);
             isTransformNormalized = true;
@@ -545,6 +563,7 @@ public abstract class Elm extends Div {
 
         // Despawn the entity
         entity.despawn();
+        // despawning = false;  //TODO remove
     }
 
 

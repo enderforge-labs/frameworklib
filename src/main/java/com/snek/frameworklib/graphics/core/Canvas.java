@@ -218,7 +218,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
         assert Require.inRange(to,   0, 7, "target rotation");
 
         final Animation animation = calcCanvasRotationAnimation(from, to);
-        applyAnimation(animation, true, animate);
+        applyAnimation(animation, true, animate, true);
     }
 
 
