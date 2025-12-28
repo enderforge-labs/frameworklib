@@ -3,14 +3,11 @@ package com.snek.frameworklib.graphics.composite.elements;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
-import org.joml.Vector3d;
 
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
-import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.layout.Div;
-import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
@@ -68,17 +65,7 @@ public class InputIndicator extends Div {
         e = addChild(new SimpleTextElm(level, new InputIndicator_Text_S()));
         e.setSize(new Vector2f(1 - MOUSE_SIZE.x - BUTTON_TEXT_SPACING, 1f));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
-        ((Elm)e).getStyle(SimpleTextElmStyle.class).setTextAlignment(TextAlignment.LEFT);
         text = (SimpleTextElm)e;
-    }
-
-
-
-
-    @Override
-    public void spawn(@NotNull final Vector3d pos, final boolean animate) {
-        // Empty
-        //! Spawning and despawning is controlled by updateDisplay()
     }
 
 
@@ -93,12 +80,12 @@ public class InputIndicator extends Div {
         // If the description is not null and the display is hidden, show it and update the text
         if(description != null) {
             text.getStyle(SimpleTextElmStyle.class).setText(new Txt(description).lightGray().get());
-            super.spawn(canvas.getContext().getSpawnPos(), true);
+            for(final Div c : children) c.spawn(canvas.getContext().getSpawnPos(), true);
         }
 
         // If the description is null and the display is visible, hide it.
         else {
-            super.despawn(true);
+            for(final Div c : children) c.despawn(true);
         }
     }
 }

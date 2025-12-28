@@ -3,6 +3,7 @@ package com.snek.frameworklib.graphics.composite.styles;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.frameworklib.data_types.animations.Transform;
+import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 
 
@@ -29,5 +30,11 @@ public class InputIndicator_Text_S extends SimpleTextElmStyle {
     @Override
     public @NotNull Transform getDefaultTransform() {
         return super.getDefaultTransform().scale(0.5f);
+    }
+
+
+    @Override
+    public @NotNull TextAlignment getDefaultTextAlignment() {
+        return TextAlignment.LEFT;
     }
 }
