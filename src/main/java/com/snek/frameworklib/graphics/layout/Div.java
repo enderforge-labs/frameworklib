@@ -241,7 +241,9 @@ public class Div {
      */
     public void applyAnimation(final @NotNull Animation animation, final boolean recursive, final boolean interpolate) {
         assert Require.nonNull(animation, "animation");
-        // Empty
+        if(recursive) for (Div c : children) {
+            c.applyAnimation(animation, recursive, interpolate);
+        }
     }
     /**
      * Applies a transition to this element.
