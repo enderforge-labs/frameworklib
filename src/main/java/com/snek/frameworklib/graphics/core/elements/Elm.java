@@ -434,7 +434,7 @@ public abstract class Elm extends Div {
             // Handle primer and spawn animations
             final Animation primerAnimation = style.getPrimerAnimation();
             if(primerAnimation != null) {
-                applyAnimation(primerAnimation, false, true);
+                applyAnimation(primerAnimation, false, false);
             }
             final Animation spawnAnimation = style.getSpawnAnimation();
             if(spawnAnimation != null) {
