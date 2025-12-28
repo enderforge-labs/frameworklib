@@ -107,7 +107,7 @@ public final class Utils extends UtilityClassBase {
             // Run task
             try {
                 task.run();
-            } catch(Exception e) {
+            } catch(final Exception e) {
                 FrameworkLib.LOGGER.error("Async task failed", e);
             }
 

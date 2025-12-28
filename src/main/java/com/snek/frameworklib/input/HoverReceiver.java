@@ -106,7 +106,7 @@ public final class HoverReceiver extends UtilityClassBase {
             // Send updates to contexts that have not been hovered on in the last full batch
             final Set<Context> diff = new HashSet<>(prevUpdatedContexts);
             diff.removeAll(updatedContexts);
-            for(Context context : diff) {
+            for(final Context context : diff) {
                 context.forwardHover(context.getPlayer());
             }
 
@@ -152,9 +152,9 @@ public final class HoverReceiver extends UtilityClassBase {
         if(DebugCheck.isDebug()) {
             UiDebugWindow.getW().repaint();
             SwingUtilities.invokeLater(() -> {
-                BufferStrategy bs = UiDebugWindow.getFrame().getBufferStrategy();
+                final BufferStrategy bs = UiDebugWindow.getFrame().getBufferStrategy();
                 if(bs != null) {
-                    Graphics g = bs.getDrawGraphics();
+                    final Graphics g = bs.getDrawGraphics();
                     UiDebugWindow.getW().paint(g);
                     g.dispose();
                     bs.show();
@@ -182,7 +182,7 @@ public final class HoverReceiver extends UtilityClassBase {
 
 
         // Update context
-        @Nullable Context topMost = Context.findTopMostContext(player);
+        final @Nullable Context topMost = Context.findTopMostContext(player);
         if(topMost != null) {
             targetedContexts.put(player, topMost);
         }

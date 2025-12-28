@@ -33,12 +33,12 @@ public class HoverableDiv extends Div implements Hoverable {
     }
 
     @Override
-    public void onHoverEnter(@NotNull Player player) {
+    public void onHoverEnter(@NotNull final Player player) {
         // Empty
     }
 
     @Override
-    public void onHoverExit(@Nullable Player player) {
+    public void onHoverExit(@Nullable final Player player) {
         // Empty
     }
 }

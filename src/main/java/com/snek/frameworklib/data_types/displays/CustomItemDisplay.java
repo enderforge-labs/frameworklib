@@ -27,7 +27,7 @@ public class CustomItemDisplay extends CustomDisplay {
         assert Require.nonNull(heldEntity, "held entity");
         return (ItemDisplay)heldEntity;
     }
-    private @NotNull ItemDisplayAccessorMixin getAccessibleDisplay() {
+    private @NotNull ItemDisplayAccessorMixin getAccessibleItemDisplay() {
         assert Require.nonNull(heldEntity, "held entity");
         return (ItemDisplayAccessorMixin)heldEntity;
     }
@@ -62,7 +62,7 @@ public class CustomItemDisplay extends CustomDisplay {
      */
     public void setItemStack(final @NotNull ItemStack itemStack) {
         assert Require.nonNull(itemStack, "item stack");
-        getAccessibleDisplay().invokeSetItemStack(itemStack);
+        getAccessibleItemDisplay().invokeSetItemStack(itemStack);
     }
 
 
@@ -74,7 +74,7 @@ public class CustomItemDisplay extends CustomDisplay {
      */
     public void setDisplayType(final @NotNull ItemDisplayContext displayType) {
         assert Require.nonNull(displayType, "item display type");
-        getAccessibleDisplay().invokeSetDisplayType(displayType);
+        getAccessibleItemDisplay().invokeSetDisplayType(displayType);
     }
 
 
@@ -83,6 +83,6 @@ public class CustomItemDisplay extends CustomDisplay {
      * @return The current display type.
      */
     public @NotNull ItemDisplayContext getDisplayType() {
-        return getAccessibleDisplay().invokeGetDisplayType();
+        return getAccessibleItemDisplay().invokeGetDisplayType();
     }
 }

@@ -28,7 +28,7 @@ import net.minecraft.network.chat.Style;
  * Use {@link #get()} to create a MutableText from this object's data.
  */
 public class Txt {
-    private MutableComponent rawText;
+    private final MutableComponent rawText;
     private Style style;
     private int _length;
     public int length() { return _length; }
@@ -401,7 +401,7 @@ public class Txt {
             final int localEnd = Math.min(contentLen, end - pos);
 
             if(localStart < localEnd) {
-                String substring = content.substring(localStart, localEnd);
+                final String substring = content.substring(localStart, localEnd);
                 parts.add(Component.literal(substring).setStyle(effectiveStyle));
             }
         }

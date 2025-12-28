@@ -41,11 +41,11 @@ public class CommandStackTraceMixin {
 
 
     private void onCommandExecutionException(
-        ParseResults<CommandSourceStack> parseResults,
-        String command,
-        CallbackInfoReturnable<Integer> cir,
-        CommandSourceStack source,
-        Exception exception
+        final ParseResults<CommandSourceStack> parseResults,
+        final String command,
+        final CallbackInfoReturnable<Integer> cir,
+        final CommandSourceStack source,
+        final Exception exception
     ) {
         FrameworkLib.LOGGER.error(
             "Command \"{}\" from \"{}\" threw an exception:",

@@ -3,7 +3,6 @@ package com.snek.frameworklib.data_types.graphics;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.jetbrains.annotations.NotNull;
@@ -142,7 +141,7 @@ public class PolylineData {
             Stream.concat(
                 Stream.of(point1, point2),
                 Arrays.stream(points)
-            ).collect(Collectors.toList())
+            ).toList()
         );
     }
 

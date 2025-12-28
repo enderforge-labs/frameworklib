@@ -338,7 +338,7 @@ public class Div {
         assert Require.nonNull(clickType, "click type");
 
         // If this element accepts the click, run callback and return
-        if(this instanceof Clickable e) {
+        if(this instanceof final Clickable e) {
             final Vector2f coords = e.attemptClick(player, clickType);
             if(coords != null) {
                 e.onClick(player, clickType, coords);
@@ -563,7 +563,7 @@ public class Div {
      */
     public void updateAbsPos() {
         updateAbsPosSelf();
-        for(Div c : children) c.updateAbsPos();
+        for(final Div c : children) c.updateAbsPos();
     }
 
 
@@ -652,7 +652,7 @@ public class Div {
      * Calculates the world coordinates of the origin of this element.
      * <p>
      * This doesn't take into account context-level translations.
-     * @return The origin of the element.
+     * @return The origin of the element, or (0, 0, 0) if this element isn't part of a {@link Canvas}.
      */
     public @NotNull Vector3f __calcVisualOrigin() {
         if(canvas == null) return new Vector3f();
@@ -681,21 +681,21 @@ public class Div {
         if(isHovered != hoverStateNext && hoverRateLimiter.attempt()) {
             isHovered = hoverStateNext;
             if(isHovered) {
-                if(this instanceof Hoverable h) h.onHoverEnter(player);
-                if(canvas.getContext() instanceof HudContext hud) {
+                if(this instanceof final Hoverable h) h.onHoverEnter(player);
+                if(canvas.getContext() instanceof final HudContext hud) {
                     hud.resetInactivityTimer();
                 }
             }
             else {
-                if(this instanceof Hoverable h) h.onHoverExit(player);
-                if(canvas.getContext() instanceof HudContext hud) {
+                if(this instanceof final Hoverable h) h.onHoverExit(player);
+                if(canvas.getContext() instanceof final HudContext hud) {
                     hud.resetInactivityTimer();
                 }
             }
         }
 
         // Call hover tick callback
-        if(this instanceof Hoverable h && isHovered) {
+        if(this instanceof final Hoverable h && isHovered) {
             h.onHoverTick(player);
         }
     }
@@ -714,7 +714,7 @@ public class Div {
         // Calculate the world coordinates of the display's origin
         //! Left rotation and scale are ignored as they doesn't affect this
         final Vector3f origin = __calcVisualOrigin();
-        if(canvas.getContext() instanceof HudContext hud) origin.add(hud.__calcVisualShiftGlobal());
+        if(canvas.getContext() instanceof final HudContext hud) origin.add(hud.__calcVisualShiftGlobal());
 
 
         // Shift the origin to find the corners and rotate them by the context's current rotation

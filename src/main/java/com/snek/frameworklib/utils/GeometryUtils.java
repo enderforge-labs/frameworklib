@@ -157,10 +157,10 @@ public final class GeometryUtils extends UtilityClassBase {
         // Bilinear form: P(u,v) = (1-v)[(1-u)p1 + u*p2] + v[(1-u)p4 + u*p3]
         // Rearranged: P = a + b*u + c*v + d*u*v
 
-        Vector2f a = new Vector2f(p[0]);
-        Vector2f b = new Vector2f(p[1].x - p[0].x, p[1].y - p[0].y);
-        Vector2f c = new Vector2f(p[3].x - p[0].x, p[3].y - p[0].y);
-        Vector2f d = new Vector2f(p[0].x - p[1].x + p[2].x - p[3].x, p[0].y - p[1].y + p[2].y - p[3].y);
+        final Vector2f a = new Vector2f(p[0]);
+        final Vector2f b = new Vector2f(p[1].x - p[0].x, p[1].y - p[0].y);
+        final Vector2f c = new Vector2f(p[3].x - p[0].x, p[3].y - p[0].y);
+        final Vector2f d = new Vector2f(p[0].x - p[1].x + p[2].x - p[3].x, p[0].y - p[1].y + p[2].y - p[3].y);
 
         // Iterative solution using Newton-Raphson
         float u = 0.5f;
@@ -215,19 +215,19 @@ public final class GeometryUtils extends UtilityClassBase {
 //TODO changing order does change the behaviour of the hover detection. try testing that stuff
 
         // Calculate the plane normal from the first three corners
-        Vector3f edge1 = new Vector3f(corners[1]).sub(corners[0]); // BottomRight - BottomLeft (right)
-        Vector3f edge2 = new Vector3f(corners[3]).sub(corners[0]); // TopLeft     - BottomLeft (up)
-        Vector3f planeNormal = new Vector3f(edge1).cross(edge2).normalize();
+        final Vector3f edge1 = new Vector3f(corners[1]).sub(corners[0]); // BottomRight - BottomLeft (right)
+        final Vector3f edge2 = new Vector3f(corners[3]).sub(corners[0]); // TopLeft     - BottomLeft (up)
+        final Vector3f planeNormal = new Vector3f(edge1).cross(edge2).normalize();
 
         // Check if line is parallel to plane
-        double denominator = planeNormal.dot(lineDirection);
+        final double denominator = planeNormal.dot(lineDirection);
         if(Math.abs(denominator) < 1e-6f) {
             return Double.MAX_VALUE; //! Line is parallel to plane
         }
 
         // Calculate distance to plane intersection
-        Vector3f toPlane = new Vector3f(corners[0]).sub(lineOrigin);
-        double distance = toPlane.dot(planeNormal) / denominator;
+        final Vector3f toPlane = new Vector3f(corners[0]).sub(lineOrigin);
+        final double distance = toPlane.dot(planeNormal) / denominator;
 
         if(findLineRectangleIntersection(lineOrigin, lineDirection, corners, false) != null) return distance;
         else return Double.MAX_VALUE;

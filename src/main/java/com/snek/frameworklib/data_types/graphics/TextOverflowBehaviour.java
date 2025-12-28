@@ -24,7 +24,7 @@ public enum TextOverflowBehaviour {
 
 
     private final String text;
-    TextOverflowBehaviour(String text) {
+    TextOverflowBehaviour(final String text) {
         this.text = text;
     }
 

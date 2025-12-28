@@ -154,7 +154,7 @@ public class ItemElm extends Elm {
 
         // Retrieve parent transformation and exception. Item exceptions have priority over tag exceptions
         Pair<ItemDisplayContext, Transform> exception = transformExceptions.get(getThisStyle().getItem().getItem());
-        if(exception == null) for(var entry : tagTransformExceptions.entrySet()) {
+        if(exception == null) for(final var entry : tagTransformExceptions.entrySet()) {
             if(getThisStyle().getItem().is(entry.getKey())) {
                 exception = entry.getValue();
                 break;
@@ -173,7 +173,7 @@ public class ItemElm extends Elm {
 
 
     @Override
-    public void spawn(@NotNull Vector3d pos, boolean animate) {
+    public void spawn(@NotNull final Vector3d pos, final boolean animate) {
         super.spawn(pos, animate);
     }
     @Override

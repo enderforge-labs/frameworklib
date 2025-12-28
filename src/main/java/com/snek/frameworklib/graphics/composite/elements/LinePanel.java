@@ -59,7 +59,7 @@ public final class LinePanel extends PanelElm {
 
 
     @Override
-    public Vector2f checkIntersection(final @NotNull Player player, boolean calculateIntersectionCoords) {
+    public Vector2f checkIntersection(final @NotNull Player player, final boolean calculateIntersectionCoords) {
         return null;
     }
 

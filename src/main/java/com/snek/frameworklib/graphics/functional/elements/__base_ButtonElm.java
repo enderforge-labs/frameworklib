@@ -98,7 +98,7 @@ public final class __base_ButtonElm {
         assert Require.nonNull(player, "player");
 
         // Update input displays if present
-        if(_this.getCanvas() instanceof InputIndicatorCanvas c) {
+        if(_this.getCanvas() instanceof final InputIndicatorCanvas c) {
             c.getLmbIndicator().updateDisplay(lmbActionName);
             c.getRmbIndicator().updateDisplay(rmbActionName);
         }
@@ -118,7 +118,7 @@ public final class __base_ButtonElm {
         }
 
         // Update input displays if present
-        if(_this.getCanvas() instanceof InputIndicatorCanvas c) {
+        if(_this.getCanvas() instanceof final InputIndicatorCanvas c) {
             c.getLmbIndicator().updateDisplay(null);
             c.getRmbIndicator().updateDisplay(null);
         }

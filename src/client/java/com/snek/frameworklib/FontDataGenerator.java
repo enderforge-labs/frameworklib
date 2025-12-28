@@ -49,7 +49,6 @@ public abstract class FontDataGenerator {
      */
     public static void generate() {
 
-
         // Retrieve text renderer from the client instance and create the generated package
         final Font renderer = Minecraft.getInstance().font;
         final Path dirPath = FabricLoader.getInstance().getConfigDir().resolve(PACKAGE_PATH);

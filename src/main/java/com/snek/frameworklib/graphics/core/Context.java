@@ -241,7 +241,7 @@ public abstract sealed class Context permits HudContext, UiContext {
         assert Require.nonNull(player, "player");
         if(activeCanvas == null) return;
 
-        if(targetedElm != null && targetedElm instanceof Scrollable s) {
+        if(targetedElm != null && targetedElm instanceof final Scrollable s) {
             s.onScroll(player, scrollAmount);
         }
     }
@@ -310,7 +310,7 @@ public abstract sealed class Context permits HudContext, UiContext {
         assert Require.nonNull(player, "player");
 
         // Get all contexts
-        LinkedList<Context> contexts = getActiveContexts().get(player);
+        final LinkedList<Context> contexts = getActiveContexts().get(player);
         if(contexts == null) return null;
 
         //TODO implement max context reach distance config. check for it here

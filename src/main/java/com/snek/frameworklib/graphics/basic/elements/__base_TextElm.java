@@ -119,7 +119,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
         // If lines are present, find the longest one and save its length
         double maxWidth = 0;
-        for(String line : lines) {
+        for(final String line : lines) {
             final double w = FontSize.getStringWidth(line);
             if(w > maxWidth) maxWidth = w;
         }
@@ -294,12 +294,12 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
     private @NotNull Transform calcForegroundTransform() {
-        /**/ if(this instanceof SimpleTextElm e) { return                     e.__calcTransform();  }
-        else if(this instanceof FancyTextElm  e) { return e.__calcTransformFg(e.__calcTransform()); }
+        /**/ if(this instanceof final SimpleTextElm e) { return                     e.__calcTransform();  }
+        else if(this instanceof final FancyTextElm  e) { return e.__calcTransformFg(e.__calcTransform()); }
 
         //! This is never actually called. __base_TextElm is a sealed class that only permits SimpleTextElm and FancyTextElm
         assert Require.fail("calcForegroundTransform called on invalid class");
-        return null;
+        throw new RuntimeException();
     }
 
 
@@ -468,7 +468,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
     @Override
-    public void spawn(Vector3d pos, final boolean animate) {
+    public void spawn(final Vector3d pos, final boolean animate) {
         if(!isSpawned) {
             updateTotTextSizeCache();
             //! This forces the visual text to update.

@@ -2,7 +2,7 @@ package com.snek.frameworklib.debug;
 
 import java.util.Collection;
 import java.util.Objects;
-import java.util.function.Supplier;
+import java.util.function.BooleanSupplier;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -67,9 +67,9 @@ public final class Require extends UtilityClassBase {
      * @param message The error message to display if checks fail.
      * @return True.
      */
-    public static boolean condition(final @NotNull Supplier<@NotNull Boolean> condition, final @NotNull String message) {
+    public static boolean condition(final @NotNull BooleanSupplier condition, final @NotNull String message) {
         if(DebugCheck.isDebug()) {
-            final Boolean c = condition.get();
+            final Boolean c = condition.getAsBoolean();
             if(c == null || !c) {
                 throw new IllegalStateException("Debug check failed: " + message);
             }

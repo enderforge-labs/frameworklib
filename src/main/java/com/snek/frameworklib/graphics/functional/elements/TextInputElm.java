@@ -105,7 +105,7 @@ public abstract class TextInputElm extends FancyButtonElm {
      * This method is automatically called one right before the element spawns into the level.
      */
     public void forceTextUpdate() {
-        Component text = inputState ? new Txt(cursorToggleState ? "|" : " ").get() : (displayedText == null ? new Txt().get() : displayedText);
+        final Component text = inputState ? new Txt(cursorToggleState ? "|" : " ").get() : (displayedText == null ? new Txt().get() : displayedText);
         getStyle(TextInputElmStyle.class).setText(text);
         flushStyle();
     }

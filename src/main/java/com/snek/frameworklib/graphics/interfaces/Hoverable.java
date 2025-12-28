@@ -34,7 +34,7 @@ public interface Hoverable {
      * This method is called once for each player that is currently being checked, regardless of the result of said check.
      * @param player The player.
      */
-    public default void onHoverTick(@NotNull Player player) {}
+    public default void onHoverTick(@NotNull final Player player) {}
 
 
     /**

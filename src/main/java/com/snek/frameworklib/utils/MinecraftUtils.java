@@ -92,18 +92,18 @@ public final class MinecraftUtils extends UtilityClassBase {
         assert Require.nonNull(substring, "substring");
 
 
-        if(tag instanceof CompoundTag c) {
-            for(String key : c.getAllKeys()) {
+        if(tag instanceof final CompoundTag c) {
+            for(final String key : c.getAllKeys()) {
                 if(key.contains(substring)) return true;
                 if(nbtContainsSubstring(c.get(key), substring)) return true;
             }
         }
-        else if(tag instanceof ListTag l) {
-            for(Tag e : l) {
+        else if(tag instanceof final ListTag l) {
+            for(final Tag e : l) {
                 if(nbtContainsSubstring(e, substring)) return true;
             }
         }
-        else if(tag instanceof StringTag s) {
+        else if(tag instanceof final StringTag s) {
             if(s.getAsString().contains(substring)) return true;
         }
         return false;
@@ -224,7 +224,7 @@ public final class MinecraftUtils extends UtilityClassBase {
         assert Require.nonNull(stack, "stack");
         assert Require.nonNull(tagKey, "tag key");
 
-        CompoundTag nbt = stack.getTag();
+        final CompoundTag nbt = stack.getTag();
         return nbt != null && nbt.getBoolean(tagKey);
     }
 
@@ -335,7 +335,7 @@ public final class MinecraftUtils extends UtilityClassBase {
 
         // Create the texture list NBT using the provided Base64 texture ID
         final ListTag NBT_textures = new ListTag();
-        for(Property property : gp.getProperties().get("textures")) {
+        for(final Property property : gp.getProperties().get("textures")) {
             final CompoundTag NBT_texture = new CompoundTag();
             NBT_texture.putString("Value", property.getValue());
             NBT_textures.add(NBT_texture);
@@ -484,7 +484,7 @@ public final class MinecraftUtils extends UtilityClassBase {
 
 
         // Potions
-        else if(item.getItem() instanceof PotionItem e) {
+        else if(item.getItem() instanceof final PotionItem e) {
             final Potion potion = PotionUtils.getPotion(item);
             final String prefix = e instanceof SplashPotionItem ? "Splash" : (e instanceof LingeringPotionItem ? "Lingering" : "");
 
@@ -524,7 +524,7 @@ public final class MinecraftUtils extends UtilityClassBase {
 
 
         // Player heads
-        else if(item.getItem() instanceof PlayerHeadItem e) {
+        else if(item.getItem() instanceof final PlayerHeadItem e) {
             return new Txt(e.getName(item)).white().get();
         }
 

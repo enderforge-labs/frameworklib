@@ -54,7 +54,7 @@ public final class Scheduler extends UtilityClassBase {
             handler.compute();
 
             // Renew task handler if it's a LoopTaskHadler and has not been cancelled
-            if(handler instanceof LoopTaskHandler h && !h.isCancelled()) {
+            if(handler instanceof final LoopTaskHandler h && !h.isCancelled()) {
                 h.setTargetTick(tickNum + h.getInterval());
                 taskQueue.add(h);
             }
@@ -78,7 +78,7 @@ public final class Scheduler extends UtilityClassBase {
         assert Require.positive(interval, "interval");
         assert Require.nonNull(task, "task");
 
-        @NotNull LoopTaskHandler handler = new LoopTaskHandler(task, tickNum + delay, interval);
+        final @NotNull LoopTaskHandler handler = new LoopTaskHandler(task, tickNum + delay, interval);
         taskQueue.add(handler);
         return handler;
     }
@@ -96,7 +96,7 @@ public final class Scheduler extends UtilityClassBase {
         assert Require.nonNull(task, "task");
         assert Require.nonNegative(delay, "delay");
 
-        @NotNull TaskHandler handler = new TaskHandler(task, tickNum + delay);
+        final @NotNull TaskHandler handler = new TaskHandler(task, tickNum + delay);
         taskQueue.add(handler);
         return handler;
     }

@@ -65,7 +65,7 @@ public final class ClickReceiver extends UtilityClassBase {
 
 
         // Send click to the player's contexts and return if one accepts the click event
-        @Nullable Context context = HoverReceiver.getTargetedContext(player);
+        final @Nullable Context context = HoverReceiver.getTargetedContext(player);
         if(context != null) {
 
             // Create limiter if needed

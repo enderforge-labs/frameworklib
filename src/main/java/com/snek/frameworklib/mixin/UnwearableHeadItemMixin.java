@@ -34,7 +34,7 @@ public class UnwearableHeadItemMixin {
      * Notice: This doesn't work in creative mode. Creative mode players can wear any head they want.
      */
     @Inject(method = "getEquipmentSlotForItem", at = @At("HEAD"), cancellable = true)
-    private static void _getEquipmentSlotForItem(ItemStack item, CallbackInfoReturnable<EquipmentSlot> cir) {
+    private static void _getEquipmentSlotForItem(final ItemStack item, final CallbackInfoReturnable<EquipmentSlot> cir) {
         if(item.is(Items.PLAYER_HEAD) && MinecraftUtils.hasTag(item, MinecraftUtils.UNWEARABLE_TAG)) {
             cir.setReturnValue(EquipmentSlot.MAINHAND);
         }

@@ -111,7 +111,7 @@ public abstract class SimpleButtonElm extends PanelElm implements Clickable, Hov
     }
 
     @Override
-    public void onClick(@NotNull Player player, @NotNull ClickAction click, final @NotNull Vector2f coords) {
+    public void onClick(@NotNull final Player player, @NotNull final ClickAction click, final @NotNull Vector2f coords) {
         base.onClick(this, click, coords);
     }
 }

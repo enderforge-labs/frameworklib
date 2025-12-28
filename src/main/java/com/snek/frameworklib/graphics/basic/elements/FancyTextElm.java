@@ -203,7 +203,7 @@ public non-sealed class FancyTextElm extends __base_TextElm {
                     final Transform tFg = __calcTransformFg(t);
                     if(getThisStyle().getTextAlignment() == TextAlignment.LEFT ) tFg.moveX(-(getAbsSize().x - calcVisualEntityWidth()) / 2f);
                     if(getThisStyle().getTextAlignment() == TextAlignment.RIGHT) tFg.moveX(+(getAbsSize().x - calcVisualEntityWidth()) / 2f);
-                    tFg.moveY((getAbsSize().y - calcTotEntityHeightWithMargins()) / 2f); //TODO idk if this is correct or needed
+                    tFg.moveY((getAbsSize().y - calcTotEntityHeightWithMargins()) / 2f);
                     fg.setTransformation(tFg.moveZ(EPSILON * epsilonPolarity).toMinecraftTransform());
                     fFg.unflag();
                 }
@@ -295,7 +295,7 @@ public non-sealed class FancyTextElm extends __base_TextElm {
         );
     }
     @Override
-    protected @NotNull InterpolatedData __generateInterpolatedData(int index) {
+    protected @NotNull InterpolatedData __generateInterpolatedData(final int index) {
         final InterpolatedData fd = futureDataQueue.get(index);
         return new InterpolatedData(
             fd.getTransform().copy(),

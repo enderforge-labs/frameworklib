@@ -17,7 +17,7 @@ public enum TextAlignment {
 
 
     private final String text;
-    TextAlignment(String text) {
+    TextAlignment(final String text) {
         this.text = text;
     }
 

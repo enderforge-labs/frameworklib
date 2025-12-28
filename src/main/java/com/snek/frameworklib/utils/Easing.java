@@ -19,7 +19,7 @@ import com.snek.frameworklib.debug.Require;
  * This is meant for interpolation easings.
  */
 public final class Easing {
-    private @NotNull UnaryOperator<@NotNull Double> f;
+    private final @NotNull UnaryOperator<@NotNull Double> f;
 
 
     /**

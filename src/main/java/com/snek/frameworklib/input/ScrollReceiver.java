@@ -77,11 +77,11 @@ public final class ScrollReceiver extends UtilityClassBase {
 
         // Send scroll event if the context is scrollable
         if(context != null) {
-            if(context.getTargetedElm() instanceof Scrollable s) {
+            if(context.getTargetedElm() instanceof final Scrollable s) {
                 s.onScroll(player, scrollAmount);
 
                 // Update inactivity timer
-                if(context instanceof HudContext hud) {
+                if(context instanceof final HudContext hud) {
                     hud.resetInactivityTimer();
                 }
             }

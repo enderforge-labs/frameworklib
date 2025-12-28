@@ -165,7 +165,7 @@ public class PanelElm extends Elm {
 
 
     @Override
-    public void spawn(@NotNull Vector3d pos, boolean animate) {
+    public void spawn(@NotNull final Vector3d pos, final boolean animate) {
         super.spawn(pos, animate);
     }
     @Override

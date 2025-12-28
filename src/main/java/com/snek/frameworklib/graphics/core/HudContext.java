@@ -59,10 +59,10 @@ public non-sealed class HudContext extends Context {
 
     public void teleportElement(final @NotNull Div div) {
         assert Require.nonNull(div, "element");
-        if(div instanceof Elm e) {
+        if(div instanceof final Elm e) {
             e.getEntity().teleport(getSpawnPos());
         }
-        for(Div c : div.getChildren()) {
+        for(final Div c : div.getChildren()) {
             teleportElement(c);
         }
     }

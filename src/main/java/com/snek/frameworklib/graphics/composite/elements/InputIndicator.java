@@ -76,7 +76,7 @@ public class InputIndicator extends Div {
 
 
     @Override
-    public void spawn(@NotNull Vector3d pos, boolean animate) {
+    public void spawn(@NotNull final Vector3d pos, final boolean animate) {
         // Empty
         //! Spawning and despawning is controlled by updateDisplay()
     }

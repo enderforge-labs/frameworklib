@@ -31,7 +31,7 @@ public class CustomTextDisplay extends CustomDisplay {
         assert Require.nonNull(heldEntity, "held entity");
         return (TextDisplay)heldEntity;
     }
-    private @NotNull TextDisplayAccessorMixin getAccessibleDisplay() {
+    private @NotNull TextDisplayAccessorMixin getAccessibleTextDisplay() {
         assert Require.nonNull(heldEntity, "held entity");
         return (TextDisplayAccessorMixin)heldEntity;
     }
@@ -142,7 +142,7 @@ public class CustomTextDisplay extends CustomDisplay {
         assert Require.nonNull(text, "text");
 
         final boolean hideText = noTextUnderA26 && lastAlpha[0] < 26 && lastAlpha[1] < 26;
-        getAccessibleDisplay().invokeSetText(hideText ? EMPTY_TEXT : text);
+        getAccessibleTextDisplay().invokeSetText(hideText ? EMPTY_TEXT : text);
         textCache = text.copy();
     }
 
@@ -155,7 +155,7 @@ public class CustomTextDisplay extends CustomDisplay {
      */
     public void setLineWidth(final int width) {
         assert Require.positive(width, "line width");
-        getAccessibleDisplay().invokeSetLineWidth(width);
+        getAccessibleTextDisplay().invokeSetLineWidth(width);
     }
 
 
@@ -173,7 +173,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * @return The current line width.
      */
     public int getLineWidth() {
-        return getAccessibleDisplay().invokeGetLineWidth();
+        return getAccessibleTextDisplay().invokeGetLineWidth();
     }
 
 
@@ -183,7 +183,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * @return The text value.
      */
     public @NotNull Component getTrueText() {
-        return getAccessibleDisplay().invokeGetText();
+        return getAccessibleTextDisplay().invokeGetText();
     }
 
 
@@ -208,17 +208,17 @@ public class CustomTextDisplay extends CustomDisplay {
 
         if(a < 26) {
             if(noTextUnderA26 && lastAlpha[1] < 26) {
-                getAccessibleDisplay().invokeSetText(EMPTY_TEXT);
+                getAccessibleTextDisplay().invokeSetText(EMPTY_TEXT);
             }
             else {
-                getAccessibleDisplay().invokeSetText(textCache);
+                getAccessibleTextDisplay().invokeSetText(textCache);
                 a = 26;
             }
         }
         else if(lastAlpha[1] >= 26 && lastAlpha[2] < 26) {
-            getAccessibleDisplay().invokeSetText(textCache);
+            getAccessibleTextDisplay().invokeSetText(textCache);
         }
-        getAccessibleDisplay().invokeSetTextOpacity((byte)(a > 127 ? a - 256 : a));
+        getAccessibleTextDisplay().invokeSetTextOpacity((byte)(a > 127 ? a - 256 : a));
     }
 
 
@@ -227,7 +227,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * @return The current text opacity.
      */
     public int getTextOpacity() {
-        final int a = getAccessibleDisplay().invokeGetTextOpacity();
+        final int a = getAccessibleTextDisplay().invokeGetTextOpacity();
         return a < 0 ? a + 256 : a;
     }
 
@@ -244,7 +244,7 @@ public class CustomTextDisplay extends CustomDisplay {
         assert Require.inRange(argb.y, 0, 255, "background color red");
         assert Require.inRange(argb.z, 0, 255, "background color greeb");
         assert Require.inRange(argb.w, 0, 255, "background color blue");
-        getAccessibleDisplay().invokeSetBackground((argb.x << 24) | (argb.y << 16) | (argb.z << 8) | argb.w);
+        getAccessibleTextDisplay().invokeSetBackground((argb.x << 24) | (argb.y << 16) | (argb.z << 8) | argb.w);
     }
 
 
@@ -253,7 +253,7 @@ public class CustomTextDisplay extends CustomDisplay {
      * @return The current background color.
      */
     public @NotNull Vector4i getBackground() {
-        final int bg = getAccessibleDisplay().invokeGetBackground();
+        final int bg = getAccessibleTextDisplay().invokeGetBackground();
         return new Vector4i((bg >> 24) & 0xFF, (bg >> 16) & 0xFF, (bg >> 8) & 0xFF, bg & 0xFF);
     }
 
