@@ -254,17 +254,18 @@ public abstract class Elm extends Div {
 
 
     @Override
-    public void applyAnimation(final @NotNull Animation animation, final boolean recursive, final boolean interpolate) {
-        super.applyAnimation(animation, recursive, interpolate);
+    public void applyAnimation(final @NotNull Animation animation, final boolean recursive, final boolean interpolate, final boolean skipNonSpawned) {
+        super.applyAnimation(animation, recursive, interpolate, skipNonSpawned);
+        if(skipNonSpawned && !isSpawned()) return;
 
-        if(interpolate) {
-            // Add element to the update queue and update the queued state
-            if(!isQueued) {
-                elmUpdateQueue.add(this);
-                isQueued = true;
-                queueLingerTicks = QUEUE_LINGER_TICKS;
-            }
+
+        // If the animation is not to be applied instantly, add element to the update queue and update the queued state
+        if(interpolate && !isQueued) {
+            elmUpdateQueue.add(this);
+            isQueued = true;
+            queueLingerTicks = QUEUE_LINGER_TICKS;
         }
+
 
         // Apply each transition one at a time
         int shift = 0;

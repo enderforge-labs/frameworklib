@@ -238,13 +238,15 @@ public class Div {
      * @param animation The animation to apply.
      * @param recursive Whether to apply the animation to this element's children recursively, instead of only to itself.
      * @param interpolate Whether to respect the animation's duration and easing. Passing {@code false} applies the animation instantly.
+     * @param skipNonSpawned Whether to skip elements that are currently not spawned.
      */
-    public void applyAnimation(final @NotNull Animation animation, final boolean recursive, final boolean interpolate) {
+    public void applyAnimation(final @NotNull Animation animation, final boolean recursive, final boolean interpolate, final boolean skipNonSpawned) {
         assert Require.nonNull(animation, "animation");
         if(recursive) for (Div c : children) {
-            c.applyAnimation(animation, recursive, interpolate);
+            c.applyAnimation(animation, recursive, interpolate, skipNonSpawned);
         }
     }
+
     /**
      * Applies a transition to this element.
      * <p>
@@ -252,10 +254,39 @@ public class Div {
      * @param transition The transition to apply.
      * @param recursive Whether to apply the animation to this element's children recursively, instead of only to itself.
      * @param interpolate Whether to respect the animation's duration and easing. Passing {@code false} applies the animation instantly.
+     * @param skipNonSpawned Whether to skip elements that are currently not spawned.
+     */
+    public final void applyAnimation(final @NotNull Transition transition, final boolean recursive, final boolean interpolate, final boolean skipNonSpawned) {
+        assert Require.nonNull(transition, "transition");
+        applyAnimation(new Animation(transition), recursive, interpolate, skipNonSpawned);
+    }
+
+    /**
+     * Applies an animation to this element.
+     * <p>
+     * This method applies the transition to all specified elements, regardless of them being spawned.
+     * <p>
+     * Partial steps at the end of the animation are expanded to cover the entire step.
+     * @param animation The animation to apply.
+     * @param recursive Whether to apply the animation to this element's children recursively, instead of only to itself.
+     * @param interpolate Whether to respect the animation's duration and easing. Passing {@code false} applies the animation instantly.
+     */
+    public final void applyAnimation(final @NotNull Animation animation, final boolean recursive, final boolean interpolate) {
+        applyAnimation(animation, recursive, interpolate, false);
+    }
+
+    /**
+     * Applies a transition to this element.
+     * <p>
+     * This method applies the transition to all specified elements, regardless of them being spawned.
+     * <p>
+     * Partial steps at the end of the transition are expanded to cover the entire step.
+     * @param transition The transition to apply.
+     * @param recursive Whether to apply the animation to this element's children recursively, instead of only to itself.
+     * @param interpolate Whether to respect the animation's duration and easing. Passing {@code false} applies the animation instantly.
      */
     public final void applyAnimation(final @NotNull Transition transition, final boolean recursive, final boolean interpolate) {
-        assert Require.nonNull(transition, "transition");
-        applyAnimation(new Animation(transition), recursive, interpolate);
+        applyAnimation(transition, recursive, interpolate, false);
     }
 
 
