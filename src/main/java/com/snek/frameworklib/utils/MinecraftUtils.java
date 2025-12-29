@@ -1,5 +1,8 @@
 package com.snek.frameworklib.utils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -13,6 +16,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hasher;
+import com.google.common.hash.Hashing;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -25,6 +31,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -41,6 +48,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.LingeringPotionItem;
@@ -127,19 +135,35 @@ public final class MinecraftUtils extends UtilityClassBase {
      */
     public static @NotNull UUID calcItemUUID(final @NotNull ItemStack stack) {
         assert Require.nonNull(stack, "stack");
-        final CompoundTag nbt = stack.getTag();
-
         try {
-            final MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            digest.update(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString().getBytes(StandardCharsets.UTF_8));
-            if(nbt != null) {
-                digest.update(nbt.toString().getBytes(StandardCharsets.UTF_8));
+            final HashFunction hashFunction = Hashing.murmur3_128();
+            final Hasher hasher = hashFunction.newHasher();
+
+
+            // Hash the item ID
+            final String itemId = BuiltInRegistries.ITEM.getKey(stack.getItem()).toString();
+            hasher.putString(itemId, StandardCharsets.UTF_8);
+
+
+            // Write NBT binary data to bytes
+            //! Preallocate 4kb to handle complex items
+            final CompoundTag nbt = stack.getTag();
+            if (nbt != null) {
+                final ByteArrayOutputStream stream = new ByteArrayOutputStream(4096);
+                final DataOutputStream dataStream = new DataOutputStream(stream);
+                NbtIo.write(nbt, dataStream);
+                hasher.putBytes(stream.toByteArray());
             }
-            final byte[] hash = digest.digest();
-            final ByteBuffer buffer = ByteBuffer.wrap(Arrays.copyOf(hash, 16));
+
+
+            // Convert 128-bit hash to UUID
+            final byte[] hash = hasher.hash().asBytes();
+            final ByteBuffer buffer = ByteBuffer.wrap(hash);
             return new UUID(buffer.getLong(), buffer.getLong());
-        } catch(final NoSuchAlgorithmException e) {
-            throw new AssertionError("SHA-256 algorithm not available", e);
+
+
+        } catch(final IOException e) {
+            throw new AssertionError("An error occurred while generating an item's hash code", e);
         }
     }
 
