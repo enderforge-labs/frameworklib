@@ -576,6 +576,7 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @return The item's ID key.
      */
     public static @NotNull ResourceLocation getItemKey(final @NotNull ItemStack item) {
+        assert Require.nonNull(item, "item");
         return BuiltInRegistries.ITEM.getKey(item.getItem());
     }
 
@@ -594,6 +595,7 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @return The level's ID key.
      */
     public static @NotNull String getLevelId(final @NotNull ServerLevel level) {
+        assert Require.nonNull(level, "level");
         return getLevelKey(level).toString();
     }
 
@@ -614,12 +616,28 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @throws RuntimeException if the level Identifier is invalid or the ServerLevel cannot be found.
      */
     public static ServerLevel findLevelFromId(final @NotNull String levelId) throws RuntimeException {
+        assert Require.nonNull(levelId, "level id");
         for(final ServerLevel w : FrameworkLib.getServer().getAllLevels()) {
             if(getLevelId(w).equals(levelId)) {
                 return w;
             }
         }
         throw new RuntimeException("Invalid level id: Specified level \"" + levelId + "\" was not found");
+    }
+
+
+
+
+
+
+    /**
+     * Retrieves the {@link Player} instance of the player with uuid {@code playerUUID}.
+     * @param playerUuid The UUID of the player.
+     * @return The {@link Player} instance, or null if the player is not online.
+     */
+    public static @Nullable Player getPlayerFromUUID(final @NotNull UUID playerUuid) {
+        assert Require.nonNull(playerUuid, "player uuid");
+        return FrameworkLib.getServer().getPlayerList().getPlayer(playerUuid);
     }
 
 
