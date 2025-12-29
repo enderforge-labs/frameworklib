@@ -31,6 +31,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -559,11 +560,6 @@ public final class MinecraftUtils extends UtilityClassBase {
     }
 
 
-
-
-
-
-
     /**
      * Retrieves the ID of the provided item.
      * @param item The item.
@@ -574,12 +570,6 @@ public final class MinecraftUtils extends UtilityClassBase {
     }
 
 
-
-
-
-
-
-
     /**
      * Retrieves the ID key of the provided item.
      * @param item The item.
@@ -587,6 +577,49 @@ public final class MinecraftUtils extends UtilityClassBase {
      */
     public static @NotNull ResourceLocation getItemKey(final @NotNull ItemStack item) {
         return BuiltInRegistries.ITEM.getKey(item.getItem());
+    }
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Retrieves the ID key of the provided level.
+     * @param item The level.
+     * @return The level's ID key.
+     */
+    public static @NotNull String getLevelId(final @NotNull ServerLevel level) {
+        return getLevelKey(level).toString();
+    }
+
+
+    /**
+     * Retrieves the ID key of the provided level.
+     * @param item The level.
+     * @return The level's ID key.
+     */
+    public static @NotNull ResourceLocation getLevelKey(final @NotNull ServerLevel level) {
+        return level.dimension().location();
+    }
+
+
+    /**
+     * Tries find the ServerLevel the level identifier belongs to.
+     * @return The ServerLevel instance
+     * @throws RuntimeException if the level Identifier is invalid or the ServerLevel cannot be found.
+     */
+    public static ServerLevel findLevelFromId(final @NotNull String levelId) throws RuntimeException {
+        for(final ServerLevel w : FrameworkLib.getServer().getAllLevels()) {
+            if(getLevelId(w).equals(levelId)) {
+                return w;
+            }
+        }
+        throw new RuntimeException("Invalid level id: Specified level \"" + levelId + "\" was not found");
     }
 
 
