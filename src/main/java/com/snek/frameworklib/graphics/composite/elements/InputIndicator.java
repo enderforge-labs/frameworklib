@@ -1,9 +1,11 @@
 package com.snek.frameworklib.graphics.composite.elements;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
-import org.joml.Vector3d;
 
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
@@ -36,6 +38,9 @@ public class InputIndicator extends Div {
     public static final float BUTTON_TEXT_SPACING = 0.025f / 2f;                    // The distance between mouse display and text
     private final @NotNull SimpleTextElm text;
 
+    // Display data
+    private final List<Div> elmList = new ArrayList<>();
+    private boolean childrenSpawned = false;
 
 
 
@@ -51,7 +56,8 @@ public class InputIndicator extends Div {
 
 
         // Create mouse display element
-        final Div m = addChild(new PanelElm(level, new InputIndicator_MouseButtonDown_S()));
+        final Div m = new PanelElm(level, new InputIndicator_MouseButtonDown_S());
+        elmList.add(m);
         m.setSize(MOUSE_SIZE);
         m.setAlignment(AlignmentX.LEFT, AlignmentY.BOTTOM);
         {
@@ -63,7 +69,8 @@ public class InputIndicator extends Div {
 
 
         // Add text element
-        e = addChild(new SimpleTextElm(level, new InputIndicator_Text_S()));
+        e = new SimpleTextElm(level, new InputIndicator_Text_S());
+        elmList.add(e);
         e.setSize(new Vector2f(1 - MOUSE_SIZE.x - BUTTON_TEXT_SPACING, 1f));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
         text = (SimpleTextElm)e;
@@ -72,11 +79,11 @@ public class InputIndicator extends Div {
 
 
 
-    @Override
-    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
-        // Empty
-        //TODO i think the spawned flag isnt getting updated correctly
-    }
+    // @Override
+    // public void spawn(final @NotNull Vector3d pos, final boolean animate) {
+    //     // Empty
+    //     //TODO i think the spawned flag isnt getting updated correctly
+    // }
 
 
 
@@ -90,12 +97,33 @@ public class InputIndicator extends Div {
         // If the description is not null and the display is hidden, show it and update the text
         if(description != null) {
             text.getStyle(SimpleTextElmStyle.class).setText(new Txt(description).lightGray().get());
-            for(final Div c : children) c.spawn(canvas.getContext().getSpawnPos(), true);
+
+            // Add stored children (once)
+            if(children.isEmpty()) {
+                for(final Div e : elmList) {
+                    addChild(e);
+                }
+            }
+
+            // Spawn the children if needed
+            if(!childrenSpawned) {
+                for(final Div c : children) {
+                    c.spawn(canvas.getContext().getSpawnPos(), true);
+                }
+                childrenSpawned = true;
+            }
         }
 
         // If the description is null and the display is visible, hide it.
         else {
-            for(final Div c : children) c.despawn(true);
+
+            // Despawn the children if needed
+            if(childrenSpawned) {
+                for(final Div c : children) {
+                    c.despawn(true);
+                }
+                childrenSpawned = false;
+            }
         }
     }
 }
