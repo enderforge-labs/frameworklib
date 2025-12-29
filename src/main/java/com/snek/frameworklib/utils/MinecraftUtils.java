@@ -635,9 +635,19 @@ public final class MinecraftUtils extends UtilityClassBase {
      * @param playerUuid The UUID of the player.
      * @return The {@link Player} instance, or null if the player is not online.
      */
-    public static @Nullable Player getPlayerFromUUID(final @NotNull UUID playerUuid) {
+    public static @Nullable Player getPlayerByUUID(final @NotNull UUID playerUuid) {
         assert Require.nonNull(playerUuid, "player uuid");
         return FrameworkLib.getServer().getPlayerList().getPlayer(playerUuid);
+    }
+
+    /**
+     * Retrieves the {@link Player} instance of the player with name {@code playerName}.
+     * @param playerName The name of the player.
+     * @return The {@link Player} instance, or null if the player is not online.
+     */
+    public static @Nullable Player getPlayerByName(final @NotNull String playerName) {
+        assert Require.nonNull(playerName, "player uuid");
+        return FrameworkLib.getServer().getPlayerList().getPlayerByName(playerName);
     }
 
 
