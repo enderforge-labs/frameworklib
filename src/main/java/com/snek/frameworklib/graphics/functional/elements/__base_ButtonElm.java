@@ -33,6 +33,9 @@ public final class __base_ButtonElm {
     protected final @Nullable String lmbActionName;
     protected final @Nullable String rmbActionName;
 
+    // A limiter that stops the element from being hoverable while exiting the hover state
+    public final RateLimiter hoverCooldownLimiter = new RateLimiter();
+
 
 
     /**
@@ -52,7 +55,7 @@ public final class __base_ButtonElm {
 
 
     /**
-     * Shared override of spawn from Elm
+     * Shared override of spawn from Elm.
      */
     protected void spawn(final @NotNull Elm _this, final @Nullable Animation hoverPrimerAanimation) {
         assert Require.nonNull(_this, "_this");
@@ -65,7 +68,7 @@ public final class __base_ButtonElm {
 
 
     /**
-     * Shared override of finalizeDespawn from Elm
+     * Shared override of finalizeDespawn from Elm.
      */
     protected void finalizeDespawn(final @NotNull Elm _this, final @Nullable Animation inverseHoverPrimerAanimation) {
         assert Require.nonNull(_this, "_this");
@@ -77,8 +80,24 @@ public final class __base_ButtonElm {
     }
 
 
+
+
     /**
-     * Shared override of onHoverEnter from Hoverable
+     * Shared override of checkIntersection from Elm.
+     * ! Using boolean return instead of Vector2f as the calculation part is done by _this.super.checkIntersection.
+     * ! This method returns true if checkIntersection should return null.
+     */
+    public boolean checkIntersection(final @NotNull Elm _this, final @NotNull Player player) {
+        assert Require.nonNull(_this, "_this");
+        assert Require.nonNull(player, "player");
+        return !hoverCooldownLimiter.attempt();
+    }
+
+
+
+
+    /**
+     * Shared override of onHoverEnter from Hoverable.
      */
     protected void onHoverEnter(final @NotNull Elm _this, final @NotNull Player player, final @Nullable Animation animation) {
         assert Require.nonNull(_this, "_this");
@@ -91,7 +110,7 @@ public final class __base_ButtonElm {
 
 
     /**
-     * Shared override of onHoverTick from Hoverable
+     * Shared override of onHoverTick from Hoverable.
      */
     protected void onHoverTick(final @NotNull Elm _this, final @NotNull Player player) {
         assert Require.nonNull(_this, "_this");
@@ -106,15 +125,15 @@ public final class __base_ButtonElm {
 
 
     /**
-     * Shared override of onHoverExit from Hoverable
+     * Shared override of onHoverExit from Hoverable.
      */
     protected void onHoverExit(final @NotNull Elm _this, final @Nullable Animation animation) {
         assert Require.nonNull(_this, "_this");
 
-        // Start hover exit animation
+        // Start hover exit animation and reset the hover cooldown
         if(animation != null) {
             _this.applyAnimation(animation, false, true);
-            _this.hoverCooldownLimiter.renewCooldown(animation.getTotalDuration());
+            hoverCooldownLimiter.renewCooldown(animation.getTotalDuration());
         }
 
         // Update input displays if present
@@ -126,7 +145,7 @@ public final class __base_ButtonElm {
 
 
     /**
-     * Shared override of attemptClick from Clickable
+     * Shared override of attemptClick from Clickable.
      */
     protected @Nullable Vector2f attemptClick(final @NotNull Elm _this, final @NotNull Player player, final @NotNull ClickAction click) {
         assert Require.nonNull(_this, "_this");
@@ -140,7 +159,7 @@ public final class __base_ButtonElm {
 
 
     /**
-     * Shared override of onClick from Clickable
+     * Shared override of onClick from Clickable.
      */
     public void onClick(final @NotNull Elm _this, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
         assert Require.nonNull(_this, "_this");

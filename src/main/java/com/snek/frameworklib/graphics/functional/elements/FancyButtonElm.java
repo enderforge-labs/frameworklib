@@ -106,6 +106,15 @@ public abstract class FancyButtonElm extends FancyTextElm implements Clickable, 
 
 
     @Override
+    public @Nullable Vector2f checkIntersection(final @NotNull Player player, final boolean calculateIntersectionCoords) {
+        if(base.checkIntersection(this, player)) return null;
+        return super.checkIntersection(player, calculateIntersectionCoords);
+    }
+
+
+
+
+    @Override
     public @Nullable Vector2f attemptClick(final @NotNull Player player, final @NotNull ClickAction click) {
         return base.attemptClick(this, player, click);
     }

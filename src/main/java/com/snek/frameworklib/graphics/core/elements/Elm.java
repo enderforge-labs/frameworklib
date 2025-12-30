@@ -64,7 +64,7 @@ public abstract class Elm extends Div {
     private   static final @NotNull List<Elm> elmUpdateQueue = new ArrayList<>();   // The list of instances with pending transition steps
     protected        final @NotNull IndexedArrayDeque<InterpolatedData> futureDataQueue = new IndexedArrayDeque<>(); // The list of transition steps to apply to this instance in the next ticks. 1 for each update tick
     private boolean isQueued = false;                                               // Whether this instance is queued for updates. Updated manually
-    private int queueLingerTicks = 0;
+    private int queueLingerTicks = 0;                                               // Amount of extra ticks the object stays in the update queue
 
 
     // Forced imperceptible changes applied to the entity's interpolated data.
@@ -621,6 +621,7 @@ public abstract class Elm extends Div {
     public @Nullable Vector2f checkIntersection(final @NotNull Player player, final boolean calculateIntersectionCoords) {
         assert Require.nonNull(player, "player");
         if(style.getBillboardMode() != BillboardConstraints.FIXED) return null;
+
         return super.checkIntersection(player, calculateIntersectionCoords);
     }
 

@@ -106,6 +106,15 @@ public abstract class SimpleButtonElm extends PanelElm implements Clickable, Hov
 
 
     @Override
+    public @Nullable Vector2f checkIntersection(final @NotNull Player player, final boolean calculateIntersectionCoords) {
+        if(base.checkIntersection(this, player)) return null;
+        return super.checkIntersection(player, calculateIntersectionCoords);
+    }
+
+
+
+
+    @Override
     public @NotNull Vector2f attemptClick(final @NotNull Player player, final @NotNull ClickAction click) {
         return base.attemptClick(this, player, click);
     }

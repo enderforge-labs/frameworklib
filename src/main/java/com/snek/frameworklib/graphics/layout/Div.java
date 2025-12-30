@@ -61,7 +61,6 @@ public class Div {
     protected boolean isSpawned = false;
     protected boolean isNew = true;
     private   boolean isHovered = false;
-    public final RateLimiter hoverCooldownLimiter = new RateLimiter();
 
 
     // Layout data
@@ -663,12 +662,6 @@ public class Div {
 
         // Update current state and run hover state change callbacks if needed
         if(isHovered != nextState) {
-
-            //! Skip hover enter routine if the element is currently exiting the hover state
-            //! The element will automatically get scanned again during the first tick after it finishes exiting
-            if(nextState && !hoverCooldownLimiter.attempt()) return;
-
-
             isHovered = nextState;
             if(isHovered) {
                 if(this instanceof final Hoverable h) h.onHoverEnter(player);
@@ -677,22 +670,15 @@ public class Div {
                 }
             }
             else {
-                if(this instanceof final Hoverable h) h.onHoverExit(player);
+                if(this instanceof final Hoverable h) {
+                    h.onHoverExit(player);
+                }
                 if(canvas.getContext() instanceof final HudContext hud) {
                     hud.resetInactivityTimer();
                 }
             }
         }
     }
-
-    // /**
-    //  * Updates the new hover state of the element, then executes the required callbacks.
-    //  * @param player The player.
-    //  */
-    // public void updateHoverState(final @NotNull Player player) {
-    //     assert Require.nonNull(player, "player");
-    //     updateHoverState(player, checkIntersection(player, false) != null);
-    // }
 
 
 
