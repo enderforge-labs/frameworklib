@@ -252,14 +252,8 @@ public abstract class Elm extends Div {
 
 
 
-    /**
-     * Checks if the element is currently being despawned.
-     * <p>
-     * This means that the element is flagged as not spawned, but the entity is still present in the level,
-     * waiting for the despawn animation to end.
-     * @return True if the element is currently being despawned, false otherwise.
-     */
-    public boolean isBeingDespawned() {
+    @Override
+    public boolean isDespawning() {
         return despawnFinalizerTaskHandler != null && !despawnFinalizerTaskHandler.isComplete();
     }
 
@@ -269,7 +263,7 @@ public abstract class Elm extends Div {
     @Override
     public void applyAnimation(final @NotNull Animation animation, final boolean recursive, final boolean interpolate, final boolean skipNonSpawned) {
         super.applyAnimation(animation, recursive, interpolate, skipNonSpawned);
-        if(skipNonSpawned && (!isSpawned() && !isBeingDespawned())) return;
+        if(skipNonSpawned && (!isSpawned() && !isDespawning())) return;
 
 
         // If the animation is not to be applied instantly, add element to the update queue and update the queued state
@@ -433,7 +427,7 @@ public abstract class Elm extends Div {
         if(!isSpawned) {
 
             // Force despawn finalization if the element is currently waiting for the despawn animation to end
-            if(isBeingDespawned()) {
+            if(isDespawning()) {
                 despawnFinalizerTaskHandler.compute();
             }
 

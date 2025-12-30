@@ -114,7 +114,7 @@ public final class __base_ButtonElm {
         // Start hover exit animation
         if(animation != null) {
             _this.applyAnimation(animation, false, true);
-            _this.hoverRateLimiter.renewCooldown(animation.getTotalDuration());
+            _this.hoverCooldownLimiter.renewCooldown(animation.getTotalDuration());
         }
 
         // Update input displays if present

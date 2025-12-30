@@ -61,7 +61,7 @@ public class Div {
     protected boolean isSpawned = false;
     protected boolean isNew = true;
     private   boolean isHovered = false;
-    public final RateLimiter hoverRateLimiter = new RateLimiter();
+    public final RateLimiter hoverCooldownLimiter = new RateLimiter();
 
 
     // Layout data
@@ -637,19 +637,39 @@ public class Div {
 
 
 
+    /**
+     * Checks if the element is currently being despawned.
+     * <p>
+     * This means that the element is flagged as not spawned, but the entity is still present in the level,
+     * waiting for the despawn animation to end.
+     * @return True if the element is currently being despawned, false otherwise.
+     */
+    public boolean isDespawning() {
+        return false;
+    }
+
+
 
 
     /**
-     * Updates the new hover state of the element with the specified value, then executes the specified callbacks.
-     * @param player The player to check the view of.
+     * Updates the hover state of the element, then executes any required callbacks.
+     * <p>
+     * This method doesn't account for hover exit animation timings. Make sure to not update it while the element is exiting.
+     * @param player The player.
+     * @param nextState The next hover state to set.
      */
-    public void updateHoverState(final @NotNull Player player) {
+    public void updateHoverState(final @NotNull Player player, final boolean nextState) {
         assert Require.nonNull(player, "player");
-        final boolean hoverStateNext = checkIntersection(player, false) != null;
 
         // Update current state and run hover state change callbacks if needed
-        if(isHovered != hoverStateNext && hoverRateLimiter.attempt()) {
-            isHovered = hoverStateNext;
+        if(isHovered != nextState) {
+
+            //! Skip hover enter routine if the element is currently exiting the hover state
+            //! The element will automatically get scanned again during the first tick after it finishes exiting
+            if(nextState && !hoverCooldownLimiter.attempt()) return;
+
+
+            isHovered = nextState;
             if(isHovered) {
                 if(this instanceof final Hoverable h) h.onHoverEnter(player);
                 if(canvas.getContext() instanceof final HudContext hud) {
@@ -663,12 +683,18 @@ public class Div {
                 }
             }
         }
-
-        // Call hover tick callback
-        if(this instanceof final Hoverable h && isHovered) {
-            h.onHoverTick(player);
-        }
     }
+
+    // /**
+    //  * Updates the new hover state of the element, then executes the required callbacks.
+    //  * @param player The player.
+    //  */
+    // public void updateHoverState(final @NotNull Player player) {
+    //     assert Require.nonNull(player, "player");
+    //     updateHoverState(player, checkIntersection(player, false) != null);
+    // }
+
+
 
 
     /**

@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3d;
 
 import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.input.HoverReceiver;
@@ -258,35 +259,55 @@ public abstract sealed class Context permits HudContext, UiContext {
         if(activeCanvas == null) return;
 
 
-        // If a targeted element is present, update its hover state
+        // If a targeted element is present
         if(targetedElm != null) {
-            targetedElm.updateHoverState(player);
+            // Check it and its children again
+            //! Current hover state of targetedElm is always true here
+            final Div newTargetedElm = targetedElm.findTargetedElement(player);
 
-            // If it's still being hovered on, check if its child elements are being hovered and update them
-            if(targetedElm.isHovered()) {
-                final Div targetedChild = targetedElm.findTargetedChild(player);
-                if(targetedChild != null) {
-                    targetedElm = targetedChild;
-                    targetedElm.updateHoverState(player);
-                }
-            }
-            // If it's no longer being hovered on, check if a new element is being hovered
-            else {
+
+            // If none of them are being hovered on anymore, update the parent and check if a new element is being hovered
+            //! activeCanvas.findTargetedElement() automatically skips the entire tree of targetedElm and avoids redundant calculations
+            if(newTargetedElm == null) {
+                targetedElm.updateHoverState(player, false);
                 targetedElm = activeCanvas.findTargetedElement(player);
 
                 // If said element exists, send an update to it
                 if(targetedElm != null) {
-                    targetedElm.updateHoverState(player);
+                    targetedElm.updateHoverState(player, true);
+                    tickTargetedElm();
                 }
             }
+
+            // If any of its child elements is being hovered, update the parent, then set the new targetedElm reference and update the targeted child
+            else if(newTargetedElm != targetedElm) {
+                targetedElm.updateHoverState(player, false);
+                targetedElm = newTargetedElm;
+                targetedElm.updateHoverState(player, true);
+                tickTargetedElm();
+            }
+
+            // If the element is still being hovered directly, call the hover tick callback
+            else {
+                tickTargetedElm();
+            }
         }
+
 
         // If a targeted element is not present, check if a new element is being hovered
         else {
             targetedElm = activeCanvas.findTargetedElement(player);
 
             // If said element exists, send an update to it
-            if(targetedElm != null) targetedElm.updateHoverState(player);
+            if(targetedElm != null) {
+                targetedElm.updateHoverState(player, true);
+                tickTargetedElm();
+            }
+        }
+    }
+    private final void tickTargetedElm() {
+        if(targetedElm instanceof final Hoverable h) {
+            h.onHoverTick(player);
         }
     }
 
