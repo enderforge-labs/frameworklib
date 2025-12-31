@@ -97,13 +97,10 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      * @param height The total height of the canvas.
      * @param heightTop The height of the top border.
      * @param heightBottom The height of the bottom border.
-     * @param bgStyle The style of the default background element.
-     * @param bgStyle The style of the default back panel element.
      */
     protected Canvas(
         final @NotNull Context context,
-        final float height, final float heightTop, final float heightBottom,
-        final @Nullable PanelElmStyle bgStyle, final @Nullable PanelElmStyle backStyle
+        final float height, final float heightTop, final float heightBottom
     ) {
         assert Require.nonNull(context, "context");
         assert Require.nonNegative(height, "background height");
@@ -142,10 +139,10 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
 
             // Create the elements
-            bg     = (Elm)addChild(new PanelElm(level, bgStyle   == null ? new PanelElmStyle() : bgStyle));
-            back   = (Elm)addChild(new PanelElm(level, backStyle == null ? new PanelElmStyle() : backStyle));
-            top    = (Elm)addChild(new CanvasBorder(level));
-            bottom = (Elm)addChild(new CanvasBorder(level));
+            bg     = (Elm)addChild(createNewBgElement    (level));
+            back   = (Elm)addChild(createNewBackElement  (level));
+            top    = (Elm)addChild(createNewTopElement   (level));
+            bottom = (Elm)addChild(createNewBottomElement(level));
 
 
             // Set their size, position and alignments
@@ -303,4 +300,12 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
             super.spawn(pos, animate);
         }
     }
+
+
+
+
+    public PanelElm createNewBgElement    (final @NotNull ServerLevel level) { return new PanelElm(level, new PanelElmStyle()); }
+    public PanelElm createNewBackElement  (final @NotNull ServerLevel level) { return new PanelElm(level, new PanelElmStyle()); }
+    public PanelElm createNewTopElement   (final @NotNull ServerLevel level) { return new CanvasBorder(level); } //TODO remove CanvasBorder element. move default height to Canvas
+    public PanelElm createNewBottomElement(final @NotNull ServerLevel level) { return new CanvasBorder(level); }
 }
