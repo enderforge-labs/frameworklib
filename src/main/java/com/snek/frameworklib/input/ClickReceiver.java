@@ -75,9 +75,12 @@ public final class ClickReceiver extends UtilityClassBase {
                 clickLimiters.put(player.getUUID(), limiter);
             }
 
-            // Attempt to click if the limiter allows for it
-            if(limiter.attempt()) context.forwardClick(player, clickType);
-            else limiter.renewCooldown(2);
+            // Attempt to click if the limiter allows for it. Then renew the cooldown if the click was accepted
+            if(limiter.attempt()) {
+                if(context.forwardClick(player, clickType)) {
+                    limiter.renewCooldown(2);
+                }
+            }
 
             // Return FAIL if the click was accepted (stops further event processing)
             return InteractionResult.FAIL;
