@@ -21,7 +21,6 @@ import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.utils.GeometryUtils;
-import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -702,10 +701,10 @@ public class Div {
         // Shift the origin to find the corners and rotate them by the context's current rotation
         final float rotation = canvas.getContext().getRotationRadians();
         return new Vector3f[] {
-            new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotateY(rotation)),
-            new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotateY(rotation)),
-            new Vector3f(origin).add(new Vector3f(getInteractionSizeRight(), 0, 0).rotateY(rotation)).add(0, getAbsSize().y, 0),
-            new Vector3f(origin).sub(new Vector3f(getInteractionSizeLeft (), 0, 0).rotateY(rotation)).add(0, getAbsSize().y, 0)
+            new Vector3f(origin).add(-getInteractionSizeLeft (), -getInteractionSizeBottom(), 0).rotateY(rotation),
+            new Vector3f(origin).add(+getInteractionSizeRight(), -getInteractionSizeBottom(), 0).rotateY(rotation),
+            new Vector3f(origin).add(+getInteractionSizeRight(), +getInteractionSizeTop(),    0).rotateY(rotation),
+            new Vector3f(origin).add(-getInteractionSizeLeft (), +getInteractionSizeTop(),    0).rotateY(rotation)
         };
     }
 
@@ -786,5 +785,25 @@ public class Div {
      */
     public float getInteractionSizeRight() {
         return getAbsSize().x / 2f;
+    }
+
+    /**
+     * A special method that can be used to override the height of the hitbox of this element, without changing the visual dimensions.
+     * <p>
+     * This specifies the distance the hitbox extends upwards for from the bottom edge of the element.
+     * By default, this is equivalent to {@code getAbsSize().y}
+     */
+    public float getInteractionSizeTop() {
+        return getAbsSize().y;
+    }
+
+    /**
+     * A special method that can be used to override the height of the hitbox of this element, without changing the visual dimensions.
+     * <p>
+     * This specifies the distance the hitbox extends downwards for from the bottom edge of the element.
+     * By default, this is equivalent to {@code 0}
+     */
+    public float getInteractionSizeBottom() {
+        return 0;
     }
 }
