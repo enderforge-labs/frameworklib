@@ -98,10 +98,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      * @param heightTop The height of the top border.
      * @param heightBottom The height of the bottom border.
      */
-    protected Canvas(
-        final @NotNull Context context,
-        final float height, final float heightTop, final float heightBottom
-    ) {
+    protected Canvas(final @NotNull Context context, final float height, final float heightTop, final float heightBottom) {
         assert Require.nonNull(context, "context");
         assert Require.nonNegative(height, "background height");
         assert Require.nonNegative(heightTop, "top element height");
