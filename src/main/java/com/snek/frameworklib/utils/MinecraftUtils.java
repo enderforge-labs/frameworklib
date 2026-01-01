@@ -366,7 +366,7 @@ public final class MinecraftUtils extends UtilityClassBase {
         final CompoundTag NBT_properties = new CompoundTag();
         NBT_properties.put("textures", NBT_textures);
 
-        // Create SkullPwner NBT tag
+        // Create SkullOwner NBT tag
         final CompoundTag NBT_skullOwner = new CompoundTag();
         NBT_skullOwner.putUUID("Id", gp.getId());
         NBT_skullOwner.put("Properties", NBT_properties);

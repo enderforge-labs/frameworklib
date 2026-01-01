@@ -209,11 +209,6 @@ public final class GeometryUtils extends UtilityClassBase {
         assert Require.nonNull(corners, "corners");
         assert Require.condition(corners.length == 4, "corner array must contain exactly 4 points");
 
-//BUG this didnt actully fix it
-//TODO changing order does change the behaviour of the hover detection. try testing that stuff
-//TODO changing order does change the behaviour of the hover detection. try testing that stuff
-//TODO changing order does change the behaviour of the hover detection. try testing that stuff
-
         // Calculate the plane normal from the first three corners
         final Vector3f edge1 = new Vector3f(corners[1]).sub(corners[0]); // BottomRight - BottomLeft (right)
         final Vector3f edge2 = new Vector3f(corners[3]).sub(corners[0]); // TopLeft     - BottomLeft (up)

@@ -1,11 +1,14 @@
 package com.snek.frameworklib;
 
+import java.nio.file.Path;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.snek.frameworkconfig.FrameworkConfig;
+import com.snek.frameworklib.cache.PlayerDataCache;
 import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.core.Context;
@@ -26,9 +29,12 @@ import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.level.storage.LevelResource;
 
 
 
@@ -46,6 +52,14 @@ public class FrameworkLib implements ModInitializer {
     public static final String LIB_ID = "frameworklib";
     public static final @NotNull Logger LOGGER = LoggerFactory.getLogger(LIB_ID);
     public static final ResourceLocation PHASE_ID = new ResourceLocation(LIB_ID, "phase_id");
+
+
+    public static Path getStorageDir(final @NotNull String modId) {
+        return FrameworkLib.getServer().getWorldPath(LevelResource.ROOT).resolve("data/" + modId);
+    }
+    public static Path getConfigDir(final @NotNull String modId) {
+        return FabricLoader.getInstance().getConfigDir().resolve(modId);
+    }
 
 
     // Server instance
@@ -78,8 +92,18 @@ public class FrameworkLib implements ModInitializer {
             });
 
 
+            // Register player login callbacks
+            ServerPlayConnectionEvents.JOIN.register((handler, sender, _server) -> {
+                PlayerDataCache.onPlayerJoin(handler.getPlayer());
+            });
+
+
             // Read config files
             Configs.loadConfigs();
+
+
+            // Read caches files
+            PlayerDataCache.loadAllCaches();
         });
 
 

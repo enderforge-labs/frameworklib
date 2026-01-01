@@ -24,10 +24,10 @@ import com.snek.frameworklib.utils.UtilityClassBase;
 
 
 
-/** //TODO update comment. these can be used together with assertions
+/**
  * Debug-only validation checks.
  * <p>
- * This is meant to be used as a replacement for Java's assertions.
+ * This can be used in conjunction with Java's assertions or as a substitute.
  * <p>
  * These methods have little cost in production, but not always none.
  * All of the parameters are evaluated before the check (apart from the supplier parameter of {@link #(Supplier, String)}).
