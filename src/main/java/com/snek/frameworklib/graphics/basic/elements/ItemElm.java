@@ -66,22 +66,19 @@ public class ItemElm extends Elm {
             ItemDisplayContext.GROUND,
             new Transform().scale(2.5f).moveY(-0.15f).rotY((float)Math.PI)
         )),
-        Map.entry(Items.PLAYER_HEAD, Pair.from(
-            ItemDisplayContext.NONE,
-            new Transform().rotY((float)Math.PI)
-        )),
-        Map.entry(Items.CHEST, Pair.from(
-            ItemDisplayContext.NONE,
-            new Transform().rotY((float)Math.PI)
-        )),
-        Map.entry(Items.TRAPPED_CHEST, Pair.from(
-            ItemDisplayContext.NONE,
-            new Transform().rotY((float)Math.PI)
-        )),
-        Map.entry(Items.ENDER_CHEST, Pair.from(
-            ItemDisplayContext.NONE,
-            new Transform().rotY((float)Math.PI)
-        ))
+
+        Map.entry(Items.PLAYER_HEAD,           Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
+        Map.entry(Items.PIGLIN_HEAD,           Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
+        Map.entry(Items.ZOMBIE_HEAD,           Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
+        Map.entry(Items.DRAGON_HEAD,           Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
+        Map.entry(Items.CREEPER_HEAD,          Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
+        Map.entry(Items.SKELETON_SKULL,        Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
+        Map.entry(Items.WITHER_SKELETON_SKULL, Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
+
+
+        Map.entry(Items.CHEST,         Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
+        Map.entry(Items.TRAPPED_CHEST, Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
+        Map.entry(Items.ENDER_CHEST,   Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI)))
     ));
 
 
