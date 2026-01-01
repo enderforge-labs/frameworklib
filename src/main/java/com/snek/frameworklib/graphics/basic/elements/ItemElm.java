@@ -17,13 +17,10 @@ import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 
 
@@ -51,6 +48,7 @@ public class ItemElm extends Elm {
 
 
 
+
     // Item transform exceptions
     private static final @NotNull Map<
         @NotNull Item,
@@ -59,27 +57,18 @@ public class ItemElm extends Elm {
             @NotNull Transform
         >
     > transformExceptions = new HashMap<>(Map.ofEntries(
-        Map.entry(Items.TRIDENT, Pair.from(
-            ItemDisplayContext.GUI,
-            new Transform()
-        )),
-        Map.entry(Items.SHIELD, Pair.from(
-            ItemDisplayContext.GROUND,
-            new Transform().scale(2.5f).moveY(-0.15f).rotY((float)Math.PI)
-        ))
-
-        // Map.entry(Items.PLAYER_HEAD,           Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
-        // Map.entry(Items.PIGLIN_HEAD,           Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
-        // Map.entry(Items.ZOMBIE_HEAD,           Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
-        // Map.entry(Items.DRAGON_HEAD,           Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
-        // Map.entry(Items.CREEPER_HEAD,          Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
-        // Map.entry(Items.SKELETON_SKULL,        Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
-        // Map.entry(Items.WITHER_SKELETON_SKULL, Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
+        // Map.entry(Items.TRIDENT, Pair.from(
+        //     ItemDisplayContext.GUI,
+        //     new Transform()
+        // )),
+        // Map.entry(Items.SHIELD, Pair.from(
+        //     ItemDisplayContext.GROUND,
+        //     new Transform().scale(2.5f).moveY(-0.15f).rotY((float)Math.PI)
+        // )),
 
 
-        // Map.entry(Items.CHEST,         Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
-        // Map.entry(Items.TRAPPED_CHEST, Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
-        // Map.entry(Items.ENDER_CHEST,   Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI)))
+        // Map.entry(Items.LECTERN,        Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
+        // Map.entry(Items.CARVED_PUMPKIN, Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI)))
     ));
 
 
@@ -93,14 +82,18 @@ public class ItemElm extends Elm {
             @NotNull Transform
         >
     > tagTransformExceptions = new HashMap<>(Map.ofEntries(
-        Map.entry(ItemTags.BANNERS, Pair.from(
-            ItemDisplayContext.NONE,
-            new Transform().scale(0.6f).moveY(-0.08f).rotY((float)Math.PI)
-        )),
-        Map.entry(ItemTags.BEDS, Pair.from(
-            ItemDisplayContext.GROUND,
-            new Transform().scale(2.5f).moveY(-0.14f)
-        ))
+        // Map.entry(ItemTags.BANNERS, Pair.from(
+        //     ItemDisplayContext.NONE,
+        //     new Transform().scale(0.6f).moveY(-0.08f).rotY((float)Math.PI)
+        // )),
+        // Map.entry(ItemTags.BEDS, Pair.from(
+        //     ItemDisplayContext.GROUND,
+        //     new Transform().scale(2.5f).moveY(-0.14f)
+        // )),
+        // Map.entry(ItemTags.FENCES, Pair.from(
+        //     ItemDisplayContext.GROUND,
+        //     new Transform().rotY((float)Math.PI)
+        // ))
     ));
 
 
@@ -161,6 +154,10 @@ public class ItemElm extends Elm {
 
 
 
+
+
+
+
     @Override
     public @NotNull Transform __calcTransform() {
 
@@ -173,22 +170,21 @@ public class ItemElm extends Elm {
             }
         }
 
-        // Update the entity's display type
-        getThisEntity().setDisplayType(exception == null ? ItemDisplayContext.NONE : exception.getFirst());
+        // Update the entity's display context
+        //! Use FIXED for consistent scales and orientations (FIXED = item frame)
+        //! Other contexts are all over the place, especially for vanilla items
+        //! Writing an exception for every single item is unfeasable
+        getThisEntity().setDisplayType(exception == null ? ItemDisplayContext.FIXED : exception.getFirst());
 
 
-        // Calculate the parent transform and rotate block items by 180°
+        // Calculate the parent transform and apply the transformexception if needed
         final Transform t = super.__calcTransform();
-        if(getThisStyle().getItem().getItem() instanceof BlockItem) t.rotY((float)Math.PI);
-
-
-        // Apply the transformexception if needed
         return exception == null ? t : t.apply(exception.getSecond());
-
-
-        //FIXME shield and other y-translated items don't go up enough when the edit animation is triggered
-        //FIXME ^ y translation doesn't scale with y size so the final translation looks greater on smaller scales
     }
+
+
+
+
 
 
 
