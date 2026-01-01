@@ -18,9 +18,9 @@ import com.google.common.hash.Hasher;
 import com.google.common.hash.Hashing;
 import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import com.mojang.serialization.JsonOps;
 import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.cache.PlayerDataCache;
 import com.snek.frameworklib.debug.Require;
 
 import net.minecraft.core.Holder;
@@ -349,18 +349,15 @@ public final class MinecraftUtils extends UtilityClassBase {
     public static @Nullable ItemStack getOfflinePlayerHead(final @NotNull UUID uuid) {
         assert Require.nonNull(uuid, "uuid");
 
-        // Fetch player profile cache
-        final Optional<GameProfile> profile = FrameworkLib.getServer().getProfileCache().get(uuid);
-        if(profile.isEmpty()) return null;
-        final GameProfile gp = profile.get();
+        // Try to get the cached texture data. Return null if it's not available
+        final @Nullable String textureData = PlayerDataCache.getPlayerTexture(uuid);
+        if(textureData == null) return null;
 
         // Create the texture list NBT using the provided Base64 texture ID
         final ListTag NBT_textures = new ListTag();
-        for(final Property property : gp.getProperties().get("textures")) {
-            final CompoundTag NBT_texture = new CompoundTag();
-            NBT_texture.putString("Value", property.getValue());
-            NBT_textures.add(NBT_texture);
-        }
+        final CompoundTag NBT_texture = new CompoundTag();
+        NBT_texture.putString("Value", textureData);
+        NBT_textures.add(NBT_texture);
 
         // Create the properties NBT
         final CompoundTag NBT_properties = new CompoundTag();
@@ -368,7 +365,7 @@ public final class MinecraftUtils extends UtilityClassBase {
 
         // Create SkullOwner NBT tag
         final CompoundTag NBT_skullOwner = new CompoundTag();
-        NBT_skullOwner.putUUID("Id", gp.getId());
+        NBT_skullOwner.putUUID("Id", uuid);
         NBT_skullOwner.put("Properties", NBT_properties);
 
         // Create ItemStack with the retrieved data
@@ -376,8 +373,6 @@ public final class MinecraftUtils extends UtilityClassBase {
         head.getOrCreateTag().put("SkullOwner", NBT_skullOwner);
         return head;
     }
-    //FIXME skins of offline players aren't actually retrieved because the texture data is not loaded.
-    //FIXME Caching it manually might be necessary. if cached, use createCustomHead with the base-64 texture value instead of the player cache
 
 
 
