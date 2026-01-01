@@ -69,8 +69,22 @@ public class ItemElm extends Elm {
         Map.entry(Items.PLAYER_HEAD, Pair.from(
             ItemDisplayContext.NONE,
             new Transform().rotY((float)Math.PI)
+        )),
+        Map.entry(Items.CHEST, Pair.from(
+            ItemDisplayContext.NONE,
+            new Transform().rotY((float)Math.PI)
+        )),
+        Map.entry(Items.TRAPPED_CHEST, Pair.from(
+            ItemDisplayContext.NONE,
+            new Transform().rotY((float)Math.PI)
+        )),
+        Map.entry(Items.ENDER_CHEST, Pair.from(
+            ItemDisplayContext.NONE,
+            new Transform().rotY((float)Math.PI)
         ))
     ));
+
+
 
 
     // Tag transform exceptions
