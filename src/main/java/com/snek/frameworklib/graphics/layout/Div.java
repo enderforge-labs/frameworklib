@@ -701,10 +701,10 @@ public class Div {
         // Shift the origin to find the corners and rotate them by the context's current rotation
         final float rotation = canvas.getContext().getRotationRadians();
         return new Vector3f[] {
-            new Vector3f(origin).add(-getInteractionSizeLeft (), -getInteractionSizeBottom(), 0).rotateY(rotation),
-            new Vector3f(origin).add(+getInteractionSizeRight(), -getInteractionSizeBottom(), 0).rotateY(rotation),
-            new Vector3f(origin).add(+getInteractionSizeRight(), +getInteractionSizeTop(),    0).rotateY(rotation),
-            new Vector3f(origin).add(-getInteractionSizeLeft (), +getInteractionSizeTop(),    0).rotateY(rotation)
+            new Vector3f(-getInteractionSizeLeft (), -getInteractionSizeBottom(), 0).rotateY(rotation).add(origin),
+            new Vector3f(+getInteractionSizeRight(), -getInteractionSizeBottom(), 0).rotateY(rotation).add(origin),
+            new Vector3f(+getInteractionSizeRight(), +getInteractionSizeTop(),    0).rotateY(rotation).add(origin),
+            new Vector3f(-getInteractionSizeLeft (), +getInteractionSizeTop(),    0).rotateY(rotation).add(origin)
         };
     }
 
