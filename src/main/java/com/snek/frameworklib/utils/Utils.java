@@ -234,7 +234,7 @@ public final class Utils extends UtilityClassBase {
      * @param amount The amount to format.
      * @return The formatted price.
      */
-    public static @NotNull String formatAmount(final double amount) {
+    public static @NotNull String formatAmount(final long amount) {
         assert Require.nonNegative(amount, "amount");
         return formatAmount(amount, false, true);
     }
@@ -246,7 +246,7 @@ public final class Utils extends UtilityClassBase {
      * @param thousandsSeparator Whether to use a separator between thousands.
      * @return The formatted price.
      */
-    public static @NotNull String formatAmount(final double amount, final boolean x, final boolean thousandsSeparator) {
+    public static @NotNull String formatAmount(final long amount, final boolean x, final boolean thousandsSeparator) {
         assert Require.nonNegative(amount, "amount");
         final String r;
 
