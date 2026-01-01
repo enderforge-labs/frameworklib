@@ -62,11 +62,11 @@ public class ItemElm extends Elm {
             ItemDisplayContext.GUI,
             new Transform()
         )),
-        Map.entry(Items.SHIELD,  Pair.from(
+        Map.entry(Items.SHIELD, Pair.from(
             ItemDisplayContext.GROUND,
             new Transform().scale(2.5f).moveY(-0.15f).rotY((float)Math.PI)
         )),
-        Map.entry(Items.PLAYER_HEAD,  Pair.from(
+        Map.entry(Items.PLAYER_HEAD, Pair.from(
             ItemDisplayContext.NONE,
             new Transform().rotY((float)Math.PI)
         ))
