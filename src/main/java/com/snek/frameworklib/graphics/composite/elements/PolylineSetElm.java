@@ -92,7 +92,7 @@ public class PolylineSetElm extends Div {
         final LinePanel e = (LinePanel)addChild(new LinePanel(level));      // Create the panel
         e.setSize(new Vector2f(len, l.getWidth()));                         // Set the size to match the line's length and width
         e.setPos(                                                           // Set the position
-            new Vector2f(_a)                                                     // Start by moving the origin (center of lower edge) the first point
+            new Vector2f(_a)                                                    // Start by moving the origin (center of lower edge) the first point
             .add(new Vector2f(-(1 - len) / 2f, 0f))                             // Move it horizontally to align the bottom left edge with the point
             .add(new Vector2f(normal.y, -normal.x).mul(l.getWidth() / 2f))      // Center the line to its width
         );
@@ -112,5 +112,21 @@ public class PolylineSetElm extends Div {
             new Transition(Math.max(1, (int)(animationTime)), Easings.sineOut)
             .additiveTransform(new Transform().scaleX(1f / LINE_SPAWNING_SCALE))
         ));
+    }
+
+
+
+
+    @Override
+    public void updateAbsSizeSelf() {
+        final Vector2f adjustedLocalSize = new Vector2f(Math.min(localSize.x, localSize.y));
+        if(parent == null) {
+            absSize.set(adjustedLocalSize);
+        }
+        else {
+            final Vector2f adjustedParentAbsSize = new Vector2f(Math.min(parent.getAbsSize().x, parent.getAbsSize().y));
+            absSize.set(new Vector2f(adjustedParentAbsSize).mul(adjustedLocalSize));
+        }
+        updateAbsPosSelf();
     }
 }
