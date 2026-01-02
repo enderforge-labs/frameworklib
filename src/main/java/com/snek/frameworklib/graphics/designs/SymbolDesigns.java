@@ -105,7 +105,7 @@ public final class SymbolDesigns extends UtilityClassBase {
             new Vector2f(0.4f, 0.6f)
         ).shift(0.04f, -0.01f),
         new PolylineData(0.03f,
-            DesignPrimitives.createCircle(0.4f, false, 6)
+            DesignPrimitives.createCircle(0.4f, 6)
         ).rotate((float)Math.toRadians(45)).shift(0.5f, 0.4f)
     };
     public static final @NotNull PolylineData[] CircularArrowCW = {

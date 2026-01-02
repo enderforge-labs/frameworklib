@@ -19,7 +19,7 @@ public final class ItemDesigns extends UtilityClassBase {
             new Vector2f(0.7f, 0.3f),
             new Vector2f(1.0f, 0.0f)
         ),
-        new PolylineData(0.03f,
+        new PolylineData(0.03f, true,
             DesignPrimitives.createCircle(0.4f)
         ).shift(0.4f, 1 - 0.4f)
     };
@@ -34,12 +34,11 @@ public final class ItemDesigns extends UtilityClassBase {
             new Vector2f(0.9f, 0.0f),
             new Vector2f(0.9f, 0.7f)
         ),
-        new PolylineData(0.05f,
+        new PolylineData(0.05f, true,
             new Vector2f(0.0f, 1.0f),
             new Vector2f(0.0f, 0.7f),
             new Vector2f(1.0f, 0.7f),
-            new Vector2f(1.0f, 1.0f),
-            new Vector2f(0.0f, 1.0f)
+            new Vector2f(1.0f, 1.0f)
         ),
         new PolylineData(0.05f,
             new Vector2f(0.4f, 0.4f),
@@ -55,7 +54,7 @@ public final class ItemDesigns extends UtilityClassBase {
             new Vector2f(0.5f, 0.7f),
             new Vector2f(0.5f, 0.3f)
         ),
-        new PolylineData(0.03f,
+        new PolylineData(0.03f, true,
             DesignPrimitives.createCircle(0.5f)
         ).shift(0.5f, 0.5f)
     };
@@ -92,12 +91,11 @@ public final class ItemDesigns extends UtilityClassBase {
 
 
     public static final @NotNull PolylineData[] MinecraftChest = {
-        new PolylineData(0.07f,
+        new PolylineData(0.07f, true,
             new Vector2f(0.0f, 0.0f),
             new Vector2f(0.0f, 1.0f),
             new Vector2f(1.0f, 1.0f),
-            new Vector2f(1.0f, 0.0f),
-            new Vector2f(0.0f, 0.0f)
+            new Vector2f(1.0f, 0.0f)
         ),
         new PolylineData(0.06f,
             new Vector2f(0.0f, 0.66f),
@@ -113,13 +111,12 @@ public final class ItemDesigns extends UtilityClassBase {
 
 
     public static final @NotNull PolylineData[] PriceTag = {
-        new PolylineData(0.03f,
+        new PolylineData(0.03f, true,
             new Vector2f(1.0f, 0.6f),
             new Vector2f(0.4f, 0.0f),
             new Vector2f(0.0f, 0.0f),
             new Vector2f(0.0f, 0.4f),
-            new Vector2f(0.6f, 1.0f),
-            new Vector2f(1.0f, 0.6f)
+            new Vector2f(0.6f, 1.0f)
         )
     };
 
@@ -135,7 +132,7 @@ public final class ItemDesigns extends UtilityClassBase {
             new Vector2f(1.0f, 0.2f),
             new Vector2f(1.0f, 0.0f)
         ),
-        new PolylineData(0.03f,
+        new PolylineData(0.03f, true,
             DesignPrimitives.createCircle(0.2f)
         ).shift(0.5f, 0.85f)
     };
