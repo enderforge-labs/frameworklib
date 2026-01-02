@@ -31,7 +31,7 @@ public final class DesignPrimitives extends UtilityClassBase {
         // Create segments by rotating around the origin
         final int _segments = Math.min(8, Math.max(segments, 1));
         final @NotNull List<@NotNull Vector2f> r = new ArrayList<>(_segments);
-        for(int i = 0; i <= _segments; ++i) {
+        for(int i = 0; i < _segments; ++i) {
             r.add(GeometryUtils.rotateVec2(
                 new Vector2f(0, radius),
                 (float)Math.toRadians(-45) * (i + 0.5f)

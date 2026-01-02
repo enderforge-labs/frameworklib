@@ -1,5 +1,6 @@
 package com.snek.frameworklib.graphics.composite.elements;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -48,16 +49,18 @@ public class PolylineSetElm extends Div {
         // Create lines and add them to the children list
         for(final PolylineData l : polylines) {
             float previousLen = 0f;
-            final List<Vector2f> points = l.getPoints();
+
+            // Calculate actual list of points (account for cyclic parameter)
+            final List<Vector2f> points = new ArrayList<>(l.getPoints());
+            if(l.isCyclic()) points.add(points.get(0));
+
+            // Draw each segment one by one
             for(int i = 0; i < points.size() - 1; ++i) {
                 final Vector2f a = points.get(i);
                 final Vector2f b = points.get(i + 1);
-                createLine(
-                    level, l, a, b,
-                    i > 0                 ? points.get(i - 1) : null,
-                    i < points.size() - 2 ? points.get(i + 2) : null,
-                    previousLen
-                );
+                final Vector2f prev = i > 0                 ? points.get(i - 1) : (l.isCyclic() ? points.get(points.size() - 2)  : null);
+                final Vector2f next = i < points.size() - 2 ? points.get(i + 2) : (l.isCyclic() ? points.get(1)                  : null);
+                createLine(level, l, a, b, prev, next, previousLen);
                 previousLen += a.distance(b);
             }
         }

@@ -59,7 +59,7 @@ public final class SymbolDesigns extends UtilityClassBase {
 
     public static final @NotNull PolylineData[] Info = {
         new PolylineData(0.05f,
-            new Vector2f(0.5f, 0.8f),
+            new Vector2f(0.5f, 0.85f),
             new Vector2f(0.5f, 1.00f)
         ),
         new PolylineData(0.05f,
@@ -87,7 +87,7 @@ public final class SymbolDesigns extends UtilityClassBase {
         ),
         new PolylineData(0.05f,
             new Vector2f(0.3f, 1.0f),
-            new Vector2f(0.3f, 0.5f)
+            new Vector2f(0.3f, 0.6f)
         ),
         new PolylineData(0.05f,
             new Vector2f(0.7f, 0.0f),
@@ -105,7 +105,7 @@ public final class SymbolDesigns extends UtilityClassBase {
             new Vector2f(0.4f, 0.6f)
         ).shift(0.04f, -0.01f),
         new PolylineData(0.03f,
-            DesignPrimitives.createCircle(0.4f, 6)
+            DesignPrimitives.createCircle(0.4f, 7)
         ).rotate((float)Math.toRadians(45)).shift(0.5f, 0.4f)
     };
     public static final @NotNull PolylineData[] CircularArrowCW = {
