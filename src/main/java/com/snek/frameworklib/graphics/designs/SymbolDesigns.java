@@ -59,7 +59,7 @@ public final class SymbolDesigns extends UtilityClassBase {
 
     public static final @NotNull PolylineData[] Info = {
         new PolylineData(0.05f,
-            new Vector2f(0.5f, 0.9f),
+            new Vector2f(0.5f, 0.8f),
             new Vector2f(0.5f, 1.00f)
         ),
         new PolylineData(0.05f,
@@ -139,12 +139,12 @@ public final class SymbolDesigns extends UtilityClassBase {
 
     public static final @NotNull PolylineData[] Cross = {
         new PolylineData(0.05f,
-            new Vector2f(0.5f, 0.0f),
-            new Vector2f(0.5f, 1.0f)
+            new Vector2f(0.5f, 0.05f),
+            new Vector2f(0.5f, 0.95f)
         ),
         new PolylineData(0.05f,
-            new Vector2f(0.0f, 0.5f),
-            new Vector2f(1.0f, 0.5f)
+            new Vector2f(0.05f, 0.5f),
+            new Vector2f(0.95f, 0.5f)
         )
     };
     public static final @NotNull PolylineData[] CrossSmall = {
@@ -163,12 +163,12 @@ public final class SymbolDesigns extends UtilityClassBase {
 
     public static final @NotNull PolylineData[] DiagonalCross = {
         new PolylineData(0.05f,
-            new Vector2f(0f, 0f),
-            new Vector2f(1f, 1f)
+            new Vector2f(0.05f, 0.05f),
+            new Vector2f(0.95f, 0.95f)
         ),
         new PolylineData(0.05f,
-            new Vector2f(0f, 1f),
-            new Vector2f(1f, 0f)
+            new Vector2f(0.05f, 0.95f),
+            new Vector2f(0.95f, 0.05f)
         )
     };
     public static final @NotNull PolylineData[] DiagonalCrossSmall = {

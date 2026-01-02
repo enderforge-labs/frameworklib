@@ -90,8 +90,10 @@ public class PolylineSetElm extends Div {
         assert Require.nonNegative(previousLen, "previous length");
 
 
+        // Calculate normal
+        final Vector2f normal = b.sub(a, new Vector2f()).normalize();
+
         // Calculate adjusted segments (account for joint length)
-        final Vector2f normal = b.sub(a, new Vector2f()).normalize(new Vector2f());
         final float edgeA = prevPoint == null ? 0 : GeometryUtils.calcJointLength(prevPoint, a, b, l.getWidth());
         final float edgeB = nextPoint == null ? 0 : GeometryUtils.calcJointLength(a, b, nextPoint, l.getWidth());
         final Vector2f directionalEdgeA = normal.mul(-edgeA, new Vector2f());
