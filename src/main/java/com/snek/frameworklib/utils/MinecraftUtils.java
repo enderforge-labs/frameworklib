@@ -43,7 +43,6 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
@@ -220,21 +219,64 @@ public final class MinecraftUtils extends UtilityClassBase {
      * Attempts to give items to a player, without modifying the stack's count.
      * <p>
      * Items are split into stacks as needed. Existing partial stacks are filled first.
+     * <p>
+     * Unlike Minecraft's Inventory.add(ItemStack), this method doesn't delete items if the player is in creative mode.
+     * <p>
+     * Giving AIR has no effect on the player's inventory and always returns {@code 0}.
      * @param player The player.
      * @param item The item to give. This stack's count is ignored and never modified.
-     * @param count The number of items to give. This can safely exceed the integer limit.
+     * @param count The number of items to give. This can safely exceed the integer limit but must be > 0.
      * @return The amount of items that couldn't fit in the inventory.
      */
     public static long attemptGive(final @NotNull Player player, final @NotNull ItemStack item, final long count) {
         assert Require.nonNull(player, "player");
         assert Require.nonNull(item, "item");
+        assert Require.positive(count, "count");
+        if(item.is(Items.AIR)) return 0;
 
-        final Inventory inv = player.getInventory();
-        final int maxAmount = item.getItem().getMaxStackSize() * inv.items.size();
-        final int giveAmount = Math.min(count > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)count, maxAmount);
-        final ItemStack stackCopy = item.copyWithCount(giveAmount);
-        inv.add(stackCopy);
-        return stackCopy.getCount() + Math.max(count - giveAmount, 0);
+
+        // Retrieve the player's inventory and compute stack size
+        final var stacks = player.getInventory().items;
+        final int stackSize = item.getMaxStackSize();
+        long left = count;
+
+
+        // For each item stack in the player's inventory
+        for(final ItemStack stack : stacks) {
+
+            // If the stack is identical, try to fill it
+            if(ItemStack.isSameItemSameTags(stack, item)) {
+                final int stackCount = stack.getCount();
+                final int intLeft = left <= Integer.MAX_VALUE ? (int)left : Integer.MAX_VALUE;
+                final int giveAmount = Math.min(stackSize - stackCount, intLeft);
+                if(giveAmount > 0) {
+                    stack.setCount(stackCount + giveAmount);
+                    left -= giveAmount;
+                    if(left <= 0) break;
+                }
+            }
+        }
+
+
+        // If there are items left to give, loop through the inventory's stacks again
+        if(left > 0) for(int i = 0; i < stacks.size(); ++i) {
+            final ItemStack stack = stacks.get(i);
+
+            // If the stack is empty, try to fill it with the item
+            if(stack.isEmpty()) {
+                final int intLeft = left <= Integer.MAX_VALUE ? (int)left : Integer.MAX_VALUE;
+                final int giveAmount = Math.min(stackSize, intLeft);
+                if(giveAmount > 0) {
+                    stacks.set(i, item.copyWithCount(giveAmount));
+                    left -= giveAmount;
+                    if(left <= 0) break;
+                }
+            }
+        }
+
+
+        // Return the amount of items that didn't fit
+        return left;
     }
 
 
