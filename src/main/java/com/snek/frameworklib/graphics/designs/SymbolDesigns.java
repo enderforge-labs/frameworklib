@@ -59,12 +59,12 @@ public final class SymbolDesigns extends UtilityClassBase {
 
     public static final @NotNull PolylineData[] Info = {
         new PolylineData(0.05f,
-            new Vector2f(0.5f, 0.95f),
+            new Vector2f(0.5f, 0.9f),
             new Vector2f(0.5f, 1.00f)
         ),
         new PolylineData(0.05f,
-            new Vector2f(0.35f, 0.7f),
-            new Vector2f(0.5f, 0.7f),
+            new Vector2f(0.3f, 0.6f),
+            new Vector2f(0.5f, 0.6f),
             new Vector2f(0.5f, 0.0f)
         ),
         new PolylineData(0.05f,
@@ -103,7 +103,7 @@ public final class SymbolDesigns extends UtilityClassBase {
             new Vector2f(0.4f, 1.0f),
             new Vector2f(0.2f, 0.8f),
             new Vector2f(0.4f, 0.6f)
-        ),
+        ).shift(0.04f, -0.01f),
         new PolylineData(0.03f,
             DesignPrimitives.createCircle(0.4f, false, 6)
         ).rotate((float)Math.toRadians(45)).shift(0.5f, 0.4f)
@@ -139,12 +139,12 @@ public final class SymbolDesigns extends UtilityClassBase {
 
     public static final @NotNull PolylineData[] Cross = {
         new PolylineData(0.05f,
-            new Vector2f(0.5f, 0.1f),
-            new Vector2f(0.5f, 0.9f)
+            new Vector2f(0.5f, 0.0f),
+            new Vector2f(0.5f, 1.0f)
         ),
         new PolylineData(0.05f,
-            new Vector2f(0.1f, 0.5f),
-            new Vector2f(0.9f, 0.5f)
+            new Vector2f(0.0f, 0.5f),
+            new Vector2f(1.0f, 0.5f)
         )
     };
     public static final @NotNull PolylineData[] CrossSmall = {
@@ -163,12 +163,12 @@ public final class SymbolDesigns extends UtilityClassBase {
 
     public static final @NotNull PolylineData[] DiagonalCross = {
         new PolylineData(0.05f,
-            new Vector2f(0.1f, 0.1f),
-            new Vector2f(0.9f, 0.9f)
+            new Vector2f(0f, 0f),
+            new Vector2f(1f, 1f)
         ),
         new PolylineData(0.05f,
-            new Vector2f(0.1f, 0.9f),
-            new Vector2f(0.9f, 0.1f)
+            new Vector2f(0f, 1f),
+            new Vector2f(1f, 0f)
         )
     };
     public static final @NotNull PolylineData[] DiagonalCrossSmall = {
@@ -212,10 +212,10 @@ public final class SymbolDesigns extends UtilityClassBase {
         new Vector2f(+0.15f, -0.05f)
     );
     public static final @NotNull PolylineData[] ArrowHeadsPointingOut = {
-        __ArrowHeadSmall.copy().shiftY(0.5f).rotate((float)Math.toRadians(  0)).shift(0.5f, 0.5f),
-        __ArrowHeadSmall.copy().shiftY(0.5f).rotate((float)Math.toRadians( 90)).shift(0.5f, 0.5f),
-        __ArrowHeadSmall.copy().shiftY(0.5f).rotate((float)Math.toRadians(180)).shift(0.5f, 0.5f),
-        __ArrowHeadSmall.copy().shiftY(0.5f).rotate((float)Math.toRadians(270)).shift(0.5f, 0.5f)
+        __ArrowHeadSmall.copy().shiftY(0.45f).rotate((float)Math.toRadians(  0)).shift(0.5f, 0.5f),
+        __ArrowHeadSmall.copy().shiftY(0.45f).rotate((float)Math.toRadians( 90)).shift(0.5f, 0.5f),
+        __ArrowHeadSmall.copy().shiftY(0.45f).rotate((float)Math.toRadians(180)).shift(0.5f, 0.5f),
+        __ArrowHeadSmall.copy().shiftY(0.45f).rotate((float)Math.toRadians(270)).shift(0.5f, 0.5f)
     };
     public static final @NotNull PolylineData[] ArrowHeadsPointingIn = {
         __ArrowHeadSmall.copy().rotate((float)(Math.PI)).shiftX(0.5f).rotate((float)Math.toRadians(  0)).shift(0.5f, 0.5f),
