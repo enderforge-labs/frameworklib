@@ -286,7 +286,7 @@ public class Txt {
     }
 
     /**
-     * Concatenates a chat to this Txt.
+     * Concatenates a char to this Txt.
      * @param c The char value.
      * @return This.
      */
