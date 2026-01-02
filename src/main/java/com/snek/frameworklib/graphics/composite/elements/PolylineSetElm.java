@@ -3,6 +3,7 @@ package com.snek.frameworklib.graphics.composite.elements;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
 import com.snek.frameworklib.data_types.animations.Animation;
@@ -12,6 +13,7 @@ import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Easings;
+import com.snek.frameworklib.utils.GeometryUtils;
 
 import net.minecraft.server.level.ServerLevel;
 
@@ -50,7 +52,12 @@ public class PolylineSetElm extends Div {
             for(int i = 0; i < points.size() - 1; ++i) {
                 final Vector2f a = points.get(i);
                 final Vector2f b = points.get(i + 1);
-                createLine(level, l, a, b, previousLen);
+                createLine(
+                    level, l, a, b,
+                    i > 0                 ? points.get(i - 1) : null,
+                    i < points.size() - 2 ? points.get(i + 2) : null,
+                    previousLen
+                );
                 previousLen += a.distance(b);
             }
         }
@@ -65,9 +72,17 @@ public class PolylineSetElm extends Div {
      * @param l The polyline data that specifies color, opacity and width.
      * @param a The first point of the line.
      * @param b The second point of the line.
+     * @param prevPoint The point before 'a' in the polyline (use null if this is the first segment).
+     * @param nextPoint The point after 'b' in the polyline (use null if this is the last segment).
      * @param previousLen The total length of the lines that precede this line.
      */
-    private void createLine(final @NotNull ServerLevel level, final @NotNull PolylineData l, final @NotNull Vector2f a, final @NotNull Vector2f b, final float previousLen) {
+
+    private void createLine(
+        final @NotNull ServerLevel level, final @NotNull PolylineData l,
+        final @NotNull Vector2f a, final @NotNull Vector2f b,
+        final @Nullable Vector2f prevPoint, final @Nullable Vector2f nextPoint,
+        final float previousLen
+    ) {
         assert Require.nonNull(level, "level");
         assert Require.nonNull(l, "polyline data");
         assert Require.nonNull(a, "first point");
@@ -75,11 +90,14 @@ public class PolylineSetElm extends Div {
         assert Require.nonNegative(previousLen, "previous length");
 
 
-        // Calculate the normalized direction of the line and add the new point positions taking into account the edge value
+        // Calculate adjusted segments (account for joint length)
         final Vector2f normal = b.sub(a, new Vector2f()).normalize(new Vector2f());
-        final Vector2f directionalEdge = normal.mul(l.getEdge(), new Vector2f());
-        final Vector2f _a = a.sub(directionalEdge, new Vector2f());
-        final Vector2f _b = b.add(directionalEdge, new Vector2f());
+        final float edgeA = prevPoint == null ? 0 : GeometryUtils.calcJointLength(prevPoint, a, b, l.getWidth());
+        final float edgeB = nextPoint == null ? 0 : GeometryUtils.calcJointLength(a, b, nextPoint, l.getWidth());
+        final Vector2f directionalEdgeA = normal.mul(-edgeA, new Vector2f());
+        final Vector2f directionalEdgeB = normal.mul(edgeB, new Vector2f());
+        final Vector2f _a = a.add(directionalEdgeA, new Vector2f());
+        final Vector2f _b = b.add(directionalEdgeB, new Vector2f());
 
 
         // Calculate line direction, length and angle
@@ -93,24 +111,24 @@ public class PolylineSetElm extends Div {
         e.setSize(new Vector2f(len, l.getWidth()));                         // Set the size to match the line's length and width
         e.setPos(                                                           // Set the position
             new Vector2f(_a)                                                    // Start by moving the origin (center of lower edge) the first point
-            .add(new Vector2f(-(1 - len) / 2f, 0f))                             // Move it horizontally to align the bottom left edge with the point
-            .add(new Vector2f(normal.y, -normal.x).mul(l.getWidth() / 2f))      // Center the line to its width
+                .add(new Vector2f(-(1 - len) / 2f, 0f))                             // Move it horizontally to align the bottom left edge with the point
+                .add(new Vector2f(normal.y, -normal.x).mul(l.getWidth() / 2f))      // Center the line to its width
         );
 
 
         // Change its color and rotate it by overwriting the primer animation and spawning animation
         e.getStyle().setPrimerAnimation(new Animation(
             new Transition()
-            .targetBgColor(l.getColor())
-            .targetBgAlpha(l.getAlpha())
-            .additiveTransform(new Transform().rotZ(angle).scaleX(LINE_SPAWNING_SCALE))
+                .targetBgColor(l.getColor())
+                .targetBgAlpha(l.getAlpha())
+                .additiveTransform(new Transform().rotZ(angle).scaleX(LINE_SPAWNING_SCALE))
         ));
         final float waitTime      = SPAWN_ANIMATION_TIME / (l.getTotLen() / previousLen);
         final float animationTime = SPAWN_ANIMATION_TIME / (l.getTotLen() / len);
         e.getStyle().setSpawnAnimation(new Animation(
             new Transition(            (int)(waitTime     ),  Easings.linear),
             new Transition(Math.max(1, (int)(animationTime)), Easings.sineOut)
-            .additiveTransform(new Transform().scaleX(1f / LINE_SPAWNING_SCALE))
+                .additiveTransform(new Transform().scaleX(1f / LINE_SPAWNING_SCALE))
         ));
     }
 
