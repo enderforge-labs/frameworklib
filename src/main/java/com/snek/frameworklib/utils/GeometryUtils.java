@@ -256,4 +256,42 @@ public final class GeometryUtils extends UtilityClassBase {
         }
         return true;
     }
+
+
+
+
+    /**
+     * Calculates the length to add to the end of the segments A-B and C-B in order to make their edges meet in a single point.
+     * <p>
+     * This takes into account the width of the segments.
+     * @param a The first point (start of first segment).
+     * @param b The second point (end of first segment, start of second segment).
+     * @param c The third point (end of second segment).
+     * @param w The width of the segments.
+     * @return The calculated additional length
+     */
+    public static float calcJointLength(final @NotNull Vector2f a, final @NotNull Vector2f b, final @NotNull Vector2f c, final float w) {
+
+        // Calculate direction vectors
+        final Vector2f ab = new Vector2f(b.x - a.x, b.y - a.y).normalize();
+        final Vector2f cb = new Vector2f(b.x - c.x, b.y - c.y).normalize();
+
+        // Calculate the angle between the two segments
+        float dot = ab.x * cb.x + ab.y * cb.y;
+
+        // Clamp dot product to avoid numerical errors with acos
+        dot = Math.max(-1.0f, Math.min(1.0f, dot));
+
+        // Calculate the angle
+        final float angle = (float) Math.acos(dot);
+
+        // Handle straight line case (no extension needed)
+        if (Math.abs(angle) < 0.001f || Math.abs(angle - Math.PI) < 0.001f) {
+            return 0.0f;
+        }
+
+        // Calculate half-width offset needed based on miter joint geometry
+        final float halfAngle = angle / 2.0f;
+        return (w / 2.0f) / (float) Math.tan(halfAngle);
+    }
 }
