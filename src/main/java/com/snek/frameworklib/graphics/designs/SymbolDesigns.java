@@ -59,17 +59,17 @@ public final class SymbolDesigns extends UtilityClassBase {
 
     public static final @NotNull PolylineData[] Info = {
         new PolylineData(0.05f,
-            new Vector2f(0.5f, 0.90f),
-            new Vector2f(0.5f, 0.95f)
+            new Vector2f(0.5f, 0.95f),
+            new Vector2f(0.5f, 1.00f)
         ),
         new PolylineData(0.05f,
-            new Vector2f(0.35f, 0.6f),
-            new Vector2f(0.5f, 0.6f),
-            new Vector2f(0.5f, 0.1f)
+            new Vector2f(0.35f, 0.7f),
+            new Vector2f(0.5f, 0.7f),
+            new Vector2f(0.5f, 0.0f)
         ),
         new PolylineData(0.05f,
-            new Vector2f(0.2f, 0.1f),
-            new Vector2f(0.8f, 0.1f)
+            new Vector2f(0.2f, 0f),
+            new Vector2f(0.8f, 0f)
         )
     };
 
