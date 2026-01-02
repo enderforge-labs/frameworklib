@@ -201,7 +201,7 @@ public class PolylineData {
      * @param points The list of points.
      */
     public PolylineData(final float edge, final @NotNull List<Vector2f> points) {
-        this(DEFAULT_COLOR, DEFAULT_ALPHA, DEFAULT_WIDTH, edge, false, points);
+        this(DEFAULT_COLOR, DEFAULT_ALPHA, DEFAULT_WIDTH, edge, points);
     }
     /**
      * Creates a new PolylineData using the specified points and default color, alpha, and line width.
