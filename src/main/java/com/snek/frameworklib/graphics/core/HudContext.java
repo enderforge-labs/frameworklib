@@ -11,6 +11,7 @@ import org.joml.Vector3f;
 
 import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.graphics.basic.elements.FancyTextElm;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.MinecraftUtils;
@@ -61,6 +62,9 @@ public non-sealed class HudContext extends Context {
         assert Require.nonNull(div, "element");
         if(div instanceof final Elm e) {
             e.getEntity().teleport(getSpawnPos());
+            if(e instanceof FancyTextElm g) {
+                g.getFgEntity().teleport(getSpawnPos());
+            }
         }
         for(final Div c : div.getChildren()) {
             teleportElement(c);
