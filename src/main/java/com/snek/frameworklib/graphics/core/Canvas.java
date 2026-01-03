@@ -38,12 +38,20 @@ import net.minecraft.server.level.ServerLevel;
  * The base class for canvases.
  * <p>
  * A canvas is the main container for graphic elements.
+ * It provides a background element, a top and bottom border, a back panel and support for simple toolbars.
+ * <p>
  * Each menu screen should have its own canvas.
  * <p>
- * This is sealed as {@link HudCanvas} and {@link UiCanvas} are the only possible types of canvases.
+ * This class is sealed as {@link HudCanvas} and {@link UiCanvas} are the only possible types of canvases.
  * Specialized types must inherit from either of them.
  */
 public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
+
+    // Default layout
+    public static final float TITLE_H                = 0.1f;
+    public static final float TOOLBAR_H              = 0.12f;
+    public static final float TOOLBAR_BUTTON_SPACING = 0.04f;
+    public static final float TOOLBAR_BUTTON_SHIFT   = TOOLBAR_H + TOOLBAR_BUTTON_SPACING;
 
 
     // Core data
@@ -63,16 +71,12 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
     protected final @NotNull Elm bottom;
 
     // Getters
-    public @NotNull Elm     getBg       () { assert Require.nonNull(bg,      "bg");      return bg;      }
-    public @NotNull Elm     getBack     () { assert Require.nonNull(back,    "back");    return back;    }
-    public @NotNull Elm     getTop      () { assert Require.nonNull(top,     "top");     return top;     }
-    public @NotNull Elm     getBottom   () { assert Require.nonNull(bottom,  "bottom");  return bottom;  }
-    public @NotNull Context getContext  () { assert Require.nonNull(context, "context"); return context; }
-    public @NotNull ServerLevel getLevel() {
-        assert Require.nonNull(context, "context");
-        assert Require.nonNull(context.getLevel(), "context level");
-        return context.getLevel();
-    }
+    public @NotNull Elm     getBg       () { assert Require.nonNull(bg,      "bg");      return bg;                 }
+    public @NotNull Elm     getBack     () { assert Require.nonNull(back,    "back");    return back;               }
+    public @NotNull Elm     getTop      () { assert Require.nonNull(top,     "top");     return top;                }
+    public @NotNull Elm     getBottom   () { assert Require.nonNull(bottom,  "bottom");  return bottom;             }
+    public @NotNull Context getContext  () { assert Require.nonNull(context, "context"); return context;            }
+    public @NotNull ServerLevel getLevel() { assert Require.nonNull(context, "context"); return context.getLevel(); }
 
     // Height cache
     private final float newHeightBg;
@@ -197,6 +201,30 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
             bottom.applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformBottom), false, true);
         }
     }
+
+
+
+
+    /**
+     * Places the provided buttons on the toolbar, calculating their size and position automatically.
+     * <p>
+     * This method is meant to be called by the constructor.
+     * @param buttons The buttons to place. Must contain at least 1 element.
+     */
+    protected void setToolbarButtons(final @NotNull Div[] buttons) {
+        assert Require.notEmpty(buttons, "buttons");
+
+        for(int i = 0; i < buttons.length; ++i) {
+            final Div e = bg.addChild(buttons[i]);
+            e.setSize(new Vector2f(TOOLBAR_H));
+            e.setPosX(TOOLBAR_BUTTON_SHIFT * (i - (int)(buttons.length / 2f + 0.0001f)));
+            e.setAlignmentY(AlignmentY.BOTTOM);
+        }
+    }
+
+
+
+
 
 
 
