@@ -64,13 +64,13 @@ public final class SymbolDesigns extends UtilityClassBase {
             new Vector2f(0.5f, 1.00f)
         ),
         new PolylineData(
-            new Vector2f(0.3f, 0.6f),
+            new Vector2f(0.2f, 0.6f),
             new Vector2f(0.5f, 0.6f),
             new Vector2f(0.5f, 0.0f)
         ),
         new PolylineData(
-            new Vector2f(0.2f, 0f),
-            new Vector2f(0.8f, 0f)
+            new Vector2f(0.1f, 0f),
+            new Vector2f(0.9f, 0f)
         )
     };
 
