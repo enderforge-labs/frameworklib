@@ -250,7 +250,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      * Updates the text displayed in the title element, if one exists.
      * @param titleText The new text to display.
      */
-    protected void updateTitle(final @NotNull Component titleText) {
+    public void updateTitle(final @NotNull Component titleText) {
         if(title != null) {
             title.updateDisplay(titleText);
         }
@@ -261,7 +261,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      * Updates the text displayed in the title element, if one exists.
      * @param titleText The new text to display.
      */
-    protected void updateTitle(final @NotNull String titleText) {
+    public void updateTitle(final @NotNull String titleText) {
         updateTitle(new Txt(titleText).white().get());
     }
 
