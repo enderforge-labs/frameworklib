@@ -28,8 +28,8 @@ public class InputIndicator_Text_S extends SimpleTextElmStyle {
 
 
     @Override
-    public @NotNull Transform getDefaultTransform() {
-        return super.getDefaultTransform().scale(0.5f);
+    public int getDefaultFontSize() {
+        return 6;
     }
 
 
