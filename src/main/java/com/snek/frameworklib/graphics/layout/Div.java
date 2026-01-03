@@ -24,6 +24,7 @@ import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.utils.GeometryUtils;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 
@@ -234,22 +235,19 @@ public class Div {
     /**
      * Adds a new {@link PolylineSetElm} to this element.
      * <p>
-     * This method only works on elements that are part of a {@link Canvas}.
-     * <p>
      * This method is meant to be called by the constructor.
+     * @param level The level to spawn the design entities in.
      * @param designData The design to use for the PolylineSetElm.
-     * @return The newly created {@link PolylineSetElm}, or null if the element isn't part of a canvas.
+     * @return The newly created {@link PolylineSetElm}.
      */
-    protected PolylineSetElm addDesign(final @NotNull PolylineData[] designData) {
-        if(canvas != null) {
-            final Div e = addChild(new PolylineSetElm(canvas.getLevel(), designData));
-            e.setSize(new Vector2f(DEFAULT_DESIGN_SIZE));
-            e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
-            return (PolylineSetElm)e;
-        }
-        else {
-            return null;
-        }
+    protected @NotNull PolylineSetElm addDesign(final ServerLevel level, final @NotNull PolylineData[] designData) {
+        assert Require.nonNull(level, "level");
+        assert Require.notEmpty(designData, "design data");
+
+        final Div e = addChild(new PolylineSetElm(level, designData));
+        e.setSize(new Vector2f(DEFAULT_DESIGN_SIZE));
+        e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
+        return (PolylineSetElm)e;
     }
 
 
