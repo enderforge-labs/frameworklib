@@ -90,6 +90,16 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
 
 
     @Override
+    public @NotNull Transform __calcTransform() {
+
+        // Scale to font size
+        return super.__calcTransform().scale(getThisStyle().getFontSize() * SimpleTextElmStyle.TEXT_FONT_FACTOR);
+    }
+
+
+
+
+    @Override
     public void flushStyle() {
 
 
@@ -117,11 +127,14 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
 
         // Handle transform calculations separately
         {
-            final Flagged<Transform> f = getThisStyle().getFlaggedTransform();
-            if(f.isFlagged() || getThisStyle().getFlaggedTextAlignment().isFlagged() || getThisStyle().getFlaggedText().isFlagged()) {
+            final Flagged<Transform>     f  = getThisStyle().getFlaggedTransform();
+            final Flagged<TextAlignment> fa = getThisStyle().getFlaggedTextAlignment();
+            final Flagged<Component>     ft = getThisStyle().getFlaggedText();
+            final Flagged<Integer>       fs = getThisStyle().getFlaggedFontSize();
+            if(f.isFlagged() || fa.isFlagged() || ft.isFlagged() || fs.isFlagged()) {
                 final Transform t = __calcTransform();
-                if(getThisStyle().getTextAlignment() == TextAlignment.LEFT ) t.moveX(-(getAbsSize().x - calcVisualEntityWidth()) / 2f);
-                if(getThisStyle().getTextAlignment() == TextAlignment.RIGHT) t.moveX(+(getAbsSize().x - calcVisualEntityWidth()) / 2f);
+                if(fa.get() == TextAlignment.LEFT ) t.moveX(-(getAbsSize().x - calcVisualEntityWidth()) / 2f);
+                if(fa.get() == TextAlignment.RIGHT) t.moveX(+(getAbsSize().x - calcVisualEntityWidth()) / 2f);
                 t.moveY((getAbsSize().y - calcTotEntityHeightWithMargins()) / 2f);
                 getThisEntity().setTransformation(t.moveZ(EPSILON * epsilonPolarity).toMinecraftTransform());
                 f.unflag();
@@ -179,19 +192,9 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
 
 
     @Override
-    public void spawn(final @NotNull Vector3d pos, final boolean animate) {
-        super.spawn(pos, animate);
-    }
-    @Override
     protected void prepareEntityForSpawn(final @NotNull Vector3d pos) {
         getThisEntity().setBackground(new Vector4i(0, 0, 0, 0));
         getThisEntity().setLineWidth(Integer.MAX_VALUE);
-    }
-
-
-    @Override
-    public void despawn(final boolean animate) {
-        super.despawn(animate);
     }
 
 

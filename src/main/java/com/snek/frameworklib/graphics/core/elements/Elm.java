@@ -240,7 +240,7 @@ public abstract class Elm extends Div {
     /**
      * Calculates the final transform to apply to the entity.
      * <p>
-     * This should take into account the element's position, alignment options, Z-index and visual transform.
+     * This should take into account the element's position, alignment options (for text), Z-index and visual transform.
      * @return The transform.
      */
     public @NotNull Transform __calcTransform() {

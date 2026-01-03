@@ -144,14 +144,6 @@ public class PanelElm extends Elm {
 
 
     @Override
-    public boolean stepTransition() {
-        return super.stepTransition();
-    }
-
-
-
-
-    @Override
     public @NotNull Transform __calcTransform() {
         final Transform t = super.__calcTransform();
         return t.copy()
@@ -164,10 +156,6 @@ public class PanelElm extends Elm {
 
 
 
-    @Override
-    public void spawn(@NotNull final Vector3d pos, final boolean animate) {
-        super.spawn(pos, animate);
-    }
     @Override
     protected void prepareEntityForSpawn(final @NotNull Vector3d pos) {
         getThisEntity().setText(new Txt().get());

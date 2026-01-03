@@ -17,6 +17,7 @@ import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.styles.ConfigurableFancyTextElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.utils.Txt;
 
@@ -113,27 +114,31 @@ public non-sealed class FancyTextElm extends __base_TextElm {
 
     /**
      * Helper function. Calculates the final transformation that is applied to the foreground entity.
-     * @param initialTransform The value to start from.
      * <p>
-     * This is usually the transform shared between background and foreground.
+     * This is the transform used by the foreground element.
      * <p>
      * The shared transform is returned by {@link #__calcTransform()}.
+     * @param initialTransform The value to start from.
      * @return The final transformation.
      */
     public @NotNull Transform __calcTransformFg(final @NotNull Transform initialTransform) {
         assert Require.nonNull(initialTransform, "initial transform");
         return
             initialTransform.copy()
-            .apply(getThisStyle().getTransformFg())
+            .apply(getThisStyle().getTransformFg())                                     // Apply specified foreground transform
+            .scale(getThisStyle().getFontSize() * SimpleTextElmStyle.TEXT_FONT_FACTOR)  // Scale to font size
             .moveZ((getZIndex() + 1) * Configs.getGraphics().z_layer_spacing.getValue())
+            //!^ Add 1 Z-layer to the forground entity so it's not covered by the background
         ;
     }
 
     /**
      * Helper function. Calculates the final transformation that is applied to the background entity.
+     * <p>
+     * This is the transform used by the background element.
+     * <p>
+     * The shared transform is returned by {@link #__calcTransform()}.
      * @param initialTransform The value to start from.
-     * <p> This is usually the transform shared between background and foreground.
-     * <p> The shared transform is returned by {@link #__calcTransform()}.
      * @return The final transformation.
      */
     public @NotNull Transform __calcTransformBg(final @NotNull Transform initialTransform) {
@@ -186,10 +191,13 @@ public non-sealed class FancyTextElm extends __base_TextElm {
 
         // Handle transforms
         {
-            final Flagged<Transform> f   = getThisStyle().getFlaggedTransform();
-            final Flagged<Transform> fFg = getThisStyle().getFlaggedTransformFg();
-            final Flagged<Transform> fBg = getThisStyle().getFlaggedTransformBg();
-            final boolean fgNeedsUpdate = f.isFlagged() || fFg.isFlagged() || getThisStyle().getFlaggedTextAlignment().isFlagged() || getThisStyle().getFlaggedText().isFlagged();
+            final Flagged<Transform>     f  = getThisStyle().getFlaggedTransform();
+            final Flagged<TextAlignment> fa = getThisStyle().getFlaggedTextAlignment();
+            final Flagged<Component>     ft = getThisStyle().getFlaggedText();
+            final Flagged<Integer>       fs = getThisStyle().getFlaggedFontSize();
+            final Flagged<Transform>     fFg = getThisStyle().getFlaggedTransformFg();
+            final Flagged<Transform>     fBg = getThisStyle().getFlaggedTransformBg();
+            final boolean fgNeedsUpdate = f.isFlagged() || fFg.isFlagged() || fa.isFlagged() || ft.isFlagged() || fs.isFlagged();
             final boolean bgNeedsUpdate = f.isFlagged() || fBg.isFlagged();
             if(f.isFlagged()) f.unflag();
 
@@ -201,8 +209,8 @@ public non-sealed class FancyTextElm extends __base_TextElm {
                 // Update foreground transform if necessary
                 if(fgNeedsUpdate) {
                     final Transform tFg = __calcTransformFg(t);
-                    if(getThisStyle().getTextAlignment() == TextAlignment.LEFT ) tFg.moveX(-(getAbsSize().x - calcVisualEntityWidth()) / 2f);
-                    if(getThisStyle().getTextAlignment() == TextAlignment.RIGHT) tFg.moveX(+(getAbsSize().x - calcVisualEntityWidth()) / 2f);
+                    if(fa.get() == TextAlignment.LEFT ) tFg.moveX(-(getAbsSize().x - calcVisualEntityWidth()) / 2f);
+                    if(fa.get() == TextAlignment.RIGHT) tFg.moveX(+(getAbsSize().x - calcVisualEntityWidth()) / 2f);
                     tFg.moveY((getAbsSize().y - calcTotEntityHeightWithMargins()) / 2f);
                     fg.setTransformation(tFg.moveZ(EPSILON * epsilonPolarity).toMinecraftTransform());
                     fFg.unflag();
