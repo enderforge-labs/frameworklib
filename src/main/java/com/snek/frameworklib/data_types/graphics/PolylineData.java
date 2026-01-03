@@ -34,7 +34,6 @@ public class PolylineData {
     private @NotNull Vector3i color;
     private int alpha;
     private float width;
-    private float edge;
     private boolean cyclic;
     private final @NotNull List<@NotNull Vector2f> points;
     private final float totLen;
@@ -43,7 +42,6 @@ public class PolylineData {
     public @NotNull Vector3i                getColor () { return color;  }
     public int                              getAlpha () { return alpha;  }
     public float                            getWidth () { return width;  }
-    public float                            getEdge  () { return edge;   }
     public boolean                          isCyclic () { return cyclic; }
     public @NotNull List<@NotNull Vector2f> getPoints() { return points; }
     public float                            getTotLen() { return totLen; }
@@ -65,11 +63,6 @@ public class PolylineData {
         this.width = width;
         return this;
     }
-    public @NotNull PolylineData withEdge(final float edge) {
-        assert Require.nonNegative(edge,  "edge");
-        this.edge  = edge;
-        return this;
-    }
 
 
 
@@ -79,17 +72,15 @@ public class PolylineData {
      * @param color The color of the line.
      * @param alpha The opacity of the line.
      * @param width The width of the line.
-     * @param edge  The additional width to add on each end of each line
      * @param points The list of points.
      */
     public PolylineData(
         final @NotNull Vector3i color,
         final int alpha,
         final float width,
-        final float edge,
         final @NotNull List<Vector2f> points
     ) {
-        this(color, alpha, width, edge, false, points);
+        this(color, alpha, width, false, points);
     }
 
     /**
@@ -97,7 +88,6 @@ public class PolylineData {
      * @param color The color of the line.
      * @param alpha The opacity of the line.
      * @param width The width of the line.
-     * @param edge  The additional width to add on each end of each line
      * @param cyclic Whether the polyline is cyclic. Cyclic polylines have their first and last points connected.
      * @param points The list of points.
      */
@@ -105,7 +95,6 @@ public class PolylineData {
         final @NotNull Vector3i color,
         final int alpha,
         final float width,
-        final float edge,
         final boolean cyclic,
         final @NotNull List<Vector2f> points
     ) {
@@ -114,14 +103,12 @@ public class PolylineData {
         assert Require.inRange(color.y, 0, 255, "color blue");
         assert Require.inRange(color.z, 0, 255, "color green");
         assert Require.inRange(alpha, 0, 255, "alpha");
-        assert Require.nonNegative(edge, "edge");
         assert Require.nonNull(points, "point list");
 
         // Save basic data
         this.color  = new Vector3i(color);
         this.alpha  = alpha;
         this.width  = width;
-        this.edge   = edge;
         this.cyclic = cyclic;
 
         // Save points
@@ -131,11 +118,11 @@ public class PolylineData {
         }
 
         // Calculate total length
-        float totLen = 0;
+        float _totLen = 0;
         for(int i = 0; i < this.points.size() - 1; ++i) {
-            totLen += this.points.get(i).distance(this.points.get(i + 1));
+            _totLen += this.points.get(i).distance(this.points.get(i + 1));
         }
-        this.totLen = totLen;
+        this.totLen = _totLen;
     }
 
 
@@ -146,7 +133,6 @@ public class PolylineData {
      * @param color The color of the line.
      * @param alpha The opacity of the line.
      * @param width The width of the line.
-     * @param edge  The additional width to add on each end of each line
      * @param point1 The coordinates of the first point of the line.
      * @param point2 The coordinates of the second point of the line.
      * @param points An optional list of coordinates for additional points.
@@ -155,12 +141,11 @@ public class PolylineData {
         final @NotNull Vector3i color,
         final int alpha,
         final float width,
-        final float edge,
         final @NotNull Vector2f point1,
         final @NotNull Vector2f point2,
         final @NotNull Vector2f... points
     ) {
-        this(color, alpha, width, edge, false, point1, point2, points);
+        this(color, alpha, width, false, point1, point2, points);
     }
 
     /**
@@ -168,7 +153,6 @@ public class PolylineData {
      * @param color The color of the line.
      * @param alpha The opacity of the line.
      * @param width The width of the line.
-     * @param edge  The additional width to add on each end of each line
      * @param cyclic Whether the polyline is cyclic. Cyclic polylines have their first and last points connected.
      * @param point1 The coordinates of the first point of the line.
      * @param point2 The coordinates of the second point of the line.
@@ -178,13 +162,12 @@ public class PolylineData {
         final @NotNull Vector3i color,
         final int alpha,
         final float width,
-        final float edge,
         final boolean cyclic,
         final @NotNull Vector2f point1,
         final @NotNull Vector2f point2,
         final @NotNull Vector2f... points
     ) {
-        this(color, alpha, width, edge, cyclic,
+        this(color, alpha, width, cyclic,
             Stream.concat(
                 Stream.of(point1, point2),
                 Arrays.stream(points)
@@ -197,20 +180,18 @@ public class PolylineData {
 
     /**
      * Creates a new non-cyclic PolylineData using the specified points and default color, alpha, and line width.
-     * @param edge  The additional width to add on each end of each line
      * @param points The list of points.
      */
-    public PolylineData(final float edge, final @NotNull List<Vector2f> points) {
-        this(DEFAULT_COLOR, DEFAULT_ALPHA, DEFAULT_WIDTH, edge, points);
+    public PolylineData(final @NotNull List<Vector2f> points) {
+        this(DEFAULT_COLOR, DEFAULT_ALPHA, DEFAULT_WIDTH, points);
     }
     /**
      * Creates a new PolylineData using the specified points and default color, alpha, and line width.
-     * @param edge  The additional width to add on each end of each line
      * @param cyclic Whether the polyline is cyclic. Cyclic polylines have their first and last points connected.
      * @param points The list of points.
      */
-    public PolylineData(final float edge, final boolean cyclic, final @NotNull List<Vector2f> points) {
-        this(DEFAULT_COLOR, DEFAULT_ALPHA, DEFAULT_WIDTH, edge, cyclic, points);
+    public PolylineData(final boolean cyclic, final @NotNull List<Vector2f> points) {
+        this(DEFAULT_COLOR, DEFAULT_ALPHA, DEFAULT_WIDTH, cyclic, points);
     }
 
 
@@ -218,36 +199,32 @@ public class PolylineData {
 
     /**
      * Creates a new non-cyclic PolylineData using the specified points and default color, alpha, and line width.
-     * @param edge  The additional width to add on each end of each line
      * @param point1 The coordinates of the first point of the line.
      * @param point2 The coordinates of the second point of the line.
      * @param points An optional list of coordinates for additional points.
      */
     public PolylineData(
-        final float edge,
         final @NotNull Vector2f point1,
         final @NotNull Vector2f point2,
         final @NotNull Vector2f... points
     ) {
-        this(DEFAULT_COLOR, DEFAULT_ALPHA, DEFAULT_WIDTH, edge, point1, point2, points);
+        this(DEFAULT_COLOR, DEFAULT_ALPHA, DEFAULT_WIDTH, point1, point2, points);
     }
 
     /**
      * Creates a new PolylineData using the specified points and default color, alpha, and line width.
-     * @param edge  The additional width to add on each end of each line
      * @param cyclic Whether the polyline is cyclic. Cyclic polylines have their first and last points connected.
      * @param point1 The coordinates of the first point of the line.
      * @param point2 The coordinates of the second point of the line.
      * @param points An optional list of coordinates for additional points.
      */
     public PolylineData(
-        final float edge,
         final boolean cyclic,
         final @NotNull Vector2f point1,
         final @NotNull Vector2f point2,
         final @NotNull Vector2f... points
     ) {
-        this(DEFAULT_COLOR, DEFAULT_ALPHA, DEFAULT_WIDTH, edge, cyclic, point1, point2, points);
+        this(DEFAULT_COLOR, DEFAULT_ALPHA, DEFAULT_WIDTH, cyclic, point1, point2, points);
     }
 
 
@@ -390,6 +367,6 @@ public class PolylineData {
      * @return A copy of this data.
      */
     public @NotNull PolylineData copy() {
-        return new PolylineData(color, alpha, width, edge, points);
+        return new PolylineData(color, alpha, width, points);
     }
 }

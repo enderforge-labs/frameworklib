@@ -13,13 +13,14 @@ import com.snek.frameworklib.utils.UtilityClassBase;
 
 
 
+@SuppressWarnings("java:S2386")
 public final class SymbolDesigns extends UtilityClassBase {
     public static final @NotNull PolylineData[] ArrowPointingLeft = {
-        new PolylineData(0.06f,
+        new PolylineData(
             new Vector2f(1.0f,  0.5f),
             new Vector2f(0.0f,  0.5f)
         ),
-        new PolylineData(0.06f,
+        new PolylineData(
             new Vector2f(0.2f, 0.7f),
             new Vector2f(0.0f, 0.5f),
             new Vector2f(0.2f, 0.3f)
@@ -58,16 +59,16 @@ public final class SymbolDesigns extends UtilityClassBase {
 
 
     public static final @NotNull PolylineData[] Info = {
-        new PolylineData(0.05f,
+        new PolylineData(
             new Vector2f(0.5f, 0.85f),
             new Vector2f(0.5f, 1.00f)
         ),
-        new PolylineData(0.05f,
+        new PolylineData(
             new Vector2f(0.3f, 0.6f),
             new Vector2f(0.5f, 0.6f),
             new Vector2f(0.5f, 0.0f)
         ),
-        new PolylineData(0.05f,
+        new PolylineData(
             new Vector2f(0.2f, 0f),
             new Vector2f(0.8f, 0f)
         )
@@ -77,19 +78,19 @@ public final class SymbolDesigns extends UtilityClassBase {
 
 
     public static final @NotNull PolylineData[] Settings = {
-        new PolylineData(0.05f,
+        new PolylineData(
             new Vector2f(0.0f, 0.2f),
             new Vector2f(1.0f, 0.2f)
         ),
-        new PolylineData(0.05f,
+        new PolylineData(
             new Vector2f(1.0f, 0.8f),
             new Vector2f(0.0f, 0.8f)
         ),
-        new PolylineData(0.05f,
+        new PolylineData(
             new Vector2f(0.3f, 1.0f),
             new Vector2f(0.3f, 0.6f)
         ),
-        new PolylineData(0.05f,
+        new PolylineData(
             new Vector2f(0.7f, 0.0f),
             new Vector2f(0.7f, 0.4f)
         )
@@ -99,12 +100,12 @@ public final class SymbolDesigns extends UtilityClassBase {
 
 
     public static final @NotNull PolylineData[] CircularArrowCCW = {
-        new PolylineData(0.05f,
+        new PolylineData(
             new Vector2f(0.4f, 1.0f),
             new Vector2f(0.2f, 0.8f),
             new Vector2f(0.4f, 0.6f)
         ).shift(0.04f, -0.01f),
-        new PolylineData(0.03f,
+        new PolylineData(
             DesignPrimitives.createCircle(0.4f, 7)
         ).rotate((float)Math.toRadians(45)).shift(0.5f, 0.4f)
     };
@@ -117,13 +118,13 @@ public final class SymbolDesigns extends UtilityClassBase {
 
 
     public static final @NotNull PolylineData[] GraphUp = {
-        new PolylineData(0.04f,
+        new PolylineData(
             new Vector2f(0.0f, 0.0f),
             new Vector2f(0.3f, 0.4f),
             new Vector2f(0.7f, 0.4f),
             new Vector2f(1.0f, 0.9f).sub(0.02f, 0.05f)
         ),
-        new PolylineData(0.06f,
+        new PolylineData(
             new Vector2f(-0.25f, -0.00f),
             new Vector2f(+0.00f, -0.00f),
             new Vector2f(+0.00f, -0.25f)
@@ -138,21 +139,21 @@ public final class SymbolDesigns extends UtilityClassBase {
 
 
     public static final @NotNull PolylineData[] Cross = {
-        new PolylineData(0.05f,
+        new PolylineData(
             new Vector2f(0.5f, 0.05f),
             new Vector2f(0.5f, 0.95f)
         ),
-        new PolylineData(0.05f,
+        new PolylineData(
             new Vector2f(0.05f, 0.5f),
             new Vector2f(0.95f, 0.5f)
         )
     };
     public static final @NotNull PolylineData[] CrossSmall = {
-        new PolylineData(0.05f,
+        new PolylineData(
             new Vector2f(0.5f, 0.2f),
             new Vector2f(0.5f, 0.8f)
         ),
-        new PolylineData(0.05f,
+        new PolylineData(
             new Vector2f(0.2f, 0.5f),
             new Vector2f(0.8f, 0.5f)
         )
@@ -162,21 +163,21 @@ public final class SymbolDesigns extends UtilityClassBase {
 
 
     public static final @NotNull PolylineData[] DiagonalCross = {
-        new PolylineData(0.05f,
+        new PolylineData(
             new Vector2f(0.05f, 0.05f),
             new Vector2f(0.95f, 0.95f)
         ),
-        new PolylineData(0.05f,
+        new PolylineData(
             new Vector2f(0.05f, 0.95f),
             new Vector2f(0.95f, 0.05f)
         )
     };
     public static final @NotNull PolylineData[] DiagonalCrossSmall = {
-        new PolylineData(0.05f,
+        new PolylineData(
             new Vector2f(0.2f, 0.2f),
             new Vector2f(0.8f, 0.8f)
         ),
-        new PolylineData(0.05f,
+        new PolylineData(
             new Vector2f(0.2f, 0.8f),
             new Vector2f(0.8f, 0.2f)
         )
@@ -186,13 +187,13 @@ public final class SymbolDesigns extends UtilityClassBase {
 
 
     public static final @NotNull PolylineData[] CurvedArrowPointingLeft = {
-        new PolylineData(0.06f,
+        new PolylineData(
             new Vector2f(0.6f,  0.3f),
             new Vector2f(1.0f,  0.3f),
             new Vector2f(1.0f,  0.7f),
             new Vector2f(0.05f, 0.7f)
         ),
-        new PolylineData(0.06f,
+        new PolylineData(
             new Vector2f(0.2f, 0.9f),
             new Vector2f(0.0f, 0.7f),
             new Vector2f(0.2f, 0.5f)
@@ -206,7 +207,7 @@ public final class SymbolDesigns extends UtilityClassBase {
 
 
 
-    private static final @NotNull PolylineData __ArrowHeadSmall = new PolylineData(0.06f,
+    private static final @NotNull PolylineData __ArrowHeadSmall = new PolylineData(
         new Vector2f(-0.15f, -0.05f),
         new Vector2f(+0.0f,  +0.05f),
         new Vector2f(+0.15f, -0.05f)
@@ -238,7 +239,7 @@ public final class SymbolDesigns extends UtilityClassBase {
 
 
 
-    private static final @NotNull PolylineData __ArrowHeadLarge = new PolylineData(0.06f,
+    private static final @NotNull PolylineData __ArrowHeadLarge = new PolylineData(
         new Vector2f(-0.15f, -0.3f),
         new Vector2f(+0.15f, +0.0f),
         new Vector2f(-0.15f, +0.3f)

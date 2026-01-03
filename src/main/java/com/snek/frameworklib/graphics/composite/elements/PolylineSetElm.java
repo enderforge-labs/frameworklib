@@ -41,6 +41,7 @@ public class PolylineSetElm extends Div {
      * Creates a new PolylineSetElm.
      * @param polylines The list of polylines.
      */
+    @SuppressWarnings("java:S2583")
     public PolylineSetElm(final @NotNull ServerLevel level, final @NotNull PolylineData... polylines) {
         super();
         assert Require.nonNull(level, "level");
