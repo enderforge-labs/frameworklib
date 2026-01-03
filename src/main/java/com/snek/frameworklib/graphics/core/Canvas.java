@@ -14,10 +14,13 @@ import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
+import com.snek.frameworklib.graphics.core.elements.CanvasTitle;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Easings;
+import com.snek.frameworklib.utils.Txt;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 
 
@@ -49,9 +52,12 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
     // Default layout
     public static final float TITLE_H                = 0.1f;
+    public static final float TITLE_W                = 0.9f;
     public static final float TOOLBAR_H              = 0.12f;
     public static final float TOOLBAR_BUTTON_SPACING = 0.04f;
     public static final float TOOLBAR_BUTTON_SHIFT   = TOOLBAR_H + TOOLBAR_BUTTON_SPACING;
+
+
 
 
     // Core data
@@ -64,11 +70,14 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
 
 
+    // Elements
+    protected final @Nullable CanvasTitle title;
+
     // Inherited elements
-    protected final @NotNull Elm bg;
-    protected final @NotNull Elm back;
-    protected final @NotNull Elm top;
-    protected final @NotNull Elm bottom;
+    protected final @NotNull PanelElm bg;
+    protected final @NotNull PanelElm back;
+    protected final @NotNull PanelElm top;
+    protected final @NotNull PanelElm bottom;
 
     // Getters
     public @NotNull Elm     getBg       () { assert Require.nonNull(bg,      "bg");      return bg;                 }
@@ -98,11 +107,14 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
     /**
      * Creates a new Canvas.
      * @param context The context to assign this canvas to.
+     * @param defaultTitle The text to display in the title element.
+     *     If null, no title element is created.
+     *     This value can be later changed using {@link #updateTitle(Component)}
      * @param height The total height of the canvas.
      * @param heightTop The height of the top border.
      * @param heightBottom The height of the bottom border.
      */
-    protected Canvas(final @NotNull Context context, final float height, final float heightTop, final float heightBottom) {
+    protected Canvas(final @NotNull Context context, final @Nullable Component defaultTitle, final float height, final float heightTop, final float heightBottom) {
         assert Require.nonNull(context, "context");
         assert Require.nonNegative(height, "background height");
         assert Require.nonNegative(heightTop, "top element height");
@@ -140,10 +152,10 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
 
             // Create the elements
-            bg     = (Elm)addChild(createNewBgElement    (level));
-            back   = (Elm)addChild(createNewBackElement  (level));
-            top    = (Elm)addChild(createNewTopElement   (level));
-            bottom = (Elm)addChild(createNewBottomElement(level));
+            bg     = (PanelElm)addChild(createNewBgElement    (level));
+            back   = (PanelElm)addChild(createNewBackElement  (level));
+            top    = (PanelElm)addChild(createNewTopElement   (level));
+            bottom = (PanelElm)addChild(createNewBottomElement(level));
 
 
             // Set their size, position and alignments
@@ -184,10 +196,10 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
 
             // Inherit the elements
-            bg     = (Elm)addChild(prevCanvas.getBg());
-            back   = (Elm)addChild(prevCanvas.getBack());
-            top    = (Elm)addChild(prevCanvas.getTop());
-            bottom = (Elm)addChild(prevCanvas.getBottom());
+            bg     = (PanelElm)addChild(prevCanvas.getBg());
+            back   = (PanelElm)addChild(prevCanvas.getBack());
+            top    = (PanelElm)addChild(prevCanvas.getTop());
+            bottom = (PanelElm)addChild(prevCanvas.getBottom());
 
 
             // Animate them to match the specified visual dimensions
@@ -200,9 +212,58 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
             top   .applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformTop),    false, true);
             bottom.applyAnimation(new Transition(SPAWN_SIZE_TIME, Easings.expOut).additiveTransform(transformBottom), false, true);
         }
+
+
+
+
+        // Add title element
+        if(defaultTitle != null) {
+            final Div e = bg.addChild(new CanvasTitle(level, defaultTitle));
+            e.setSize(new Vector2f(TITLE_W, TITLE_H));
+            e.setAlignment(AlignmentX.CENTER, AlignmentY.TOP);
+            title = (CanvasTitle)e;
+        }
+        else {
+            title = null;
+        }
     }
 
 
+    /**
+     * Creates a new Canvas.
+     * @param context The context to assign this canvas to.
+     * @param defaultTitle The text to display in the title element.
+     *     If null, no title element is created.
+     *     This value can be later changed using {@link #updateTitle(Component)}
+     * @param height The total height of the canvas.
+     * @param heightTop The height of the top border.
+     * @param heightBottom The height of the bottom border.
+     */
+    protected Canvas(final @NotNull Context context, final @Nullable String defaultTitle, final float height, final float heightTop, final float heightBottom) {
+        this(context, defaultTitle == null ? null : new Txt(defaultTitle).white().bold().get(), height, heightTop, heightBottom);
+    }
+
+
+
+
+    /**
+     * Updates the text displayed in the title element, if one exists.
+     * @param titleText The new text to display.
+     */
+    protected void updateTitle(final @NotNull Component titleText) {
+        if(title != null) {
+            title.updateDisplay(titleText);
+        }
+    }
+
+
+    /**
+     * Updates the text displayed in the title element, if one exists.
+     * @param titleText The new text to display.
+     */
+    protected void updateTitle(final @NotNull String titleText) {
+        updateTitle(new Txt(titleText).white().get());
+    }
 
 
     /**
