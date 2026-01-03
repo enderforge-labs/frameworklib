@@ -352,12 +352,22 @@ public non-sealed class FancyTextElm extends __base_TextElm {
 
 
     @Override
-    public boolean stepTransition() {
-        final boolean r = super.stepTransition();
-        getThisStyle().editTransform();
-        getFgEntity().setInterpolationDuration(Configs.getPerf().animation_refresh_time.getValue());
-        getFgEntity().setStartInterpolation();
-        getFgEntity().tick();
-        return r;
+    public void stepTransition() {
+
+        // Flush style of the foreground entity and start a new minecraft interpolation
+        //! This is the same operation that's in super.stepTransition(), but for the foreground entity
+        if(!futureDataQueue.isEmpty()) {
+            flushStyle();
+            getFgEntity().setInterpolationDuration(Configs.getPerf().animation_refresh_time.getValue());
+            getFgEntity().setStartInterpolation();
+
+            // Tick foreground entity.
+            //! Text displays need to be ticked to keep the opacity calculations consistent
+            //! Same as SimpleTextElm
+            getFgEntity().tick();
+        }
+
+        // Call superclass's stepTransition
+        super.stepTransition();
     }
 }

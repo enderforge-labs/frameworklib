@@ -64,7 +64,6 @@ public abstract class Elm extends Div {
     private   static final @NotNull List<Elm> elmUpdateQueue = new ArrayList<>();   // The list of instances with pending transition steps
     protected        final @NotNull IndexedArrayDeque<InterpolatedData> futureDataQueue = new IndexedArrayDeque<>(); // The list of transition steps to apply to this instance in the next ticks. 1 for each update tick
     private boolean isQueued = false;                                               // Whether this instance is queued for updates. Updated manually
-    private int queueLingerTicks = 0;                                               // Amount of extra ticks the object stays in the update queue
 
 
     // Forced imperceptible changes applied to the entity's interpolated data.
@@ -77,8 +76,6 @@ public abstract class Elm extends Div {
 
     // Despawn task handler
     private @Nullable TaskHandler despawnFinalizerTaskHandler = null;
-    // protected boolean despawning = false; //TODO remove
-    // //! ^ True when the entity is currently despawning but not yet fully despawned. During this time, spawned = false but despawning = true //TODO remove
 
 
     // In-world data
@@ -270,7 +267,6 @@ public abstract class Elm extends Div {
         if(interpolate && !isQueued) {
             elmUpdateQueue.add(this);
             isQueued = true;
-            queueLingerTicks = QUEUE_LINGER_TICKS;
         }
 
 
@@ -569,45 +565,42 @@ public abstract class Elm extends Div {
 
     /**
      * Processes the first step of the scheduled transitions of this Elm.
-     * @return false if the element has been removed from the update queue, true otherwise.
+     * <p>
+     * This method also removes the element from the update queue if it finished playing its transitions.
      */
-    protected boolean stepTransition() {
+    protected void stepTransition() {
         assert Require.nonNull(entity, "entity");
 
         // Apply step and update the entity
         if(!futureDataQueue.isEmpty()) {
             __applyTransitionStep(futureDataQueue.removeFirst());
+
+            // Flush style and start a new minecraft interpolation
+            flushStyle();
+            entity.setInterpolationDuration(Configs.getPerf().animation_refresh_time.getValue());
+            entity.setStartInterpolation();
         }
-        flushStyle();
-        entity.setInterpolationDuration(Configs.getPerf().animation_refresh_time.getValue());
-        entity.setStartInterpolation();
 
 
-        // Remove the element from the update queue if no steps are left and linger ticks have ran out
+        // Remove the element from the update queue if no steps are left
         if(futureDataQueue.isEmpty()) {
-            if(queueLingerTicks > 0) {
-                --queueLingerTicks;
-            }
-            else {
-                elmUpdateQueue.remove(this);
-                isQueued = false;
-            }
-            return false;
+            elmUpdateQueue.remove(this);
+            isQueued = false;
         }
-        return true;
     }
 
 
 
 
     /**
-     * Processes the first step of the scheduled transitions of all the queued elements.
+     * Processes the first step of the scheduled transitions of all the queued elements
      * <p>
      * Must be called at the end of the tick every {@code Configs.getPerf().animation_refresh_time} ticks.
      */
     public static void processUpdateQueue() {
-        for(int i = 0; i < elmUpdateQueue.size();) {
-            if(elmUpdateQueue.get(i).stepTransition()) ++i;
+        final List<Elm> snapshot = new ArrayList<>(elmUpdateQueue);
+        for(final Elm e : snapshot) {
+            e.stepTransition();
         }
     }
 

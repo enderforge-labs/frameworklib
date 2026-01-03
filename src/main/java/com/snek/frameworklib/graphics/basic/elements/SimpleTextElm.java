@@ -199,9 +199,8 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
 
 
     @Override
-    public boolean stepTransition() {
-        final boolean r = super.stepTransition();
+    public void stepTransition() {
+        super.stepTransition();
         getThisEntity().tick();
-        return r;
     }
 }
