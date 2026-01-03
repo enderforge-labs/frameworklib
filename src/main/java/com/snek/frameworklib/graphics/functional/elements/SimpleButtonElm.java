@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3d;
 
+import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.functional.styles.SimpleButtonElmStyle;

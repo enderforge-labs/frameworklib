@@ -14,7 +14,9 @@ import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
+import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
@@ -48,6 +50,7 @@ import net.minecraft.world.inventory.ClickAction;
  * They have a 2D size, a 2D position and alignment options.
  */
 public class Div {
+    public static final float DEFAULT_DESIGN_SIZE = 0.6f;
 
 
     // Tree data
@@ -224,6 +227,29 @@ public class Div {
      */
     public @NotNull List<@NotNull Div> getChildren() {
         return children;
+    }
+
+
+
+    /**
+     * Adds a new {@link PolylineSetElm} to this element.
+     * <p>
+     * This method only works on elements that are part of a {@link Canvas}.
+     * <p>
+     * This method is meant to be called by the constructor.
+     * @param designData The design to use for the PolylineSetElm.
+     * @return The newly created {@link PolylineSetElm}, or null if the element isn't part of a canvas.
+     */
+    protected PolylineSetElm addDesign(final @NotNull PolylineData[] designData) {
+        if(canvas != null) {
+            final Div e = addChild(new PolylineSetElm(canvas.getLevel(), designData));
+            e.setSize(new Vector2f(DEFAULT_DESIGN_SIZE));
+            e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
+            return (PolylineSetElm)e;
+        }
+        else {
+            return null;
+        }
     }
 
 
