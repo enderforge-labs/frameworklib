@@ -120,4 +120,11 @@ public class FancyButtonElmStyle extends FancyTextElmStyle {
     public @Nullable Animation editHoverEnterAnimation        () { return hoverEnterAnimation        .edit(); }
     public @Nullable Animation editHoverLeaveAnimation        () { return hoverLeaveAnimation        .edit(); }
     public @Nullable Animation editHoverInversePrimerAnimation() { return hoverInversePrimerAnimation.edit(); }
+
+
+    // With setters
+    public @NotNull FancyButtonElmStyle withHoverPrimerAnimation       (final @Nullable Animation hoverPrimerAnimation       ) { setHoverPrimerAnimation       (hoverPrimerAnimation       ); return this; }
+    public @NotNull FancyButtonElmStyle withHoverEnterAnimation        (final @Nullable Animation hoverEnterAnimation        ) { setHoverEnterAnimation        (hoverEnterAnimation        ); return this; }
+    public @NotNull FancyButtonElmStyle withHoverLeaveAnimation        (final @Nullable Animation hoverLeaveAnimation        ) { setHoverLeaveAnimation        (hoverLeaveAnimation        ); return this; }
+    public @NotNull FancyButtonElmStyle withHoverInversePrimerAnimation(final @Nullable Animation hoverInversePrimerAnimation) { setHoverInversePrimerAnimation(hoverInversePrimerAnimation); return this; }
 }

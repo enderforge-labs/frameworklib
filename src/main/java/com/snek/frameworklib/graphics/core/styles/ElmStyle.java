@@ -111,7 +111,6 @@ public class ElmStyle {
         assert Require.nonNull(billboardMode, "billboard mode");
         this.billboardMode.set(billboardMode);
     }
-
     public void setPrimerAnimation       (final @Nullable Animation animation) { this.primerAnimation       .set(animation); }
     public void setSpawnAnimation        (final @Nullable Animation animation) { this.spawnAnimation        .set(animation); }
     public void setDespawnAnimation      (final @Nullable Animation animation) { this.despawnAnimation      .set(animation); }
@@ -146,4 +145,14 @@ public class ElmStyle {
     public @Nullable Animation           editSpawnAnimation  () { return spawnAnimation        .edit(); }
     public @Nullable Animation           editDespawnAnimation() { return despawnAnimation      .edit(); }
     public @Nullable Animation    editInversePrimerAnimation () { return inversePrimerAnimation.edit(); }
+
+
+    // With setters
+    public @NotNull ElmStyle withTransform             (final @NotNull  Transform            transform    ) { setTransform             (transform    ); return this; }
+    public @NotNull ElmStyle withViewRange             (final           float                viewRange    ) { setViewRange             (viewRange    ); return this; }
+    public @NotNull ElmStyle withBillboardMode         (final @NotNull  BillboardConstraints billboardMode) { setBillboardMode         (billboardMode); return this; }
+    public @NotNull ElmStyle withPrimerAnimation       (final @Nullable Animation            animation    ) { setPrimerAnimation       (animation    ); return this; }
+    public @NotNull ElmStyle withSpawnAnimation        (final @Nullable Animation            animation    ) { setSpawnAnimation        (animation    ); return this; }
+    public @NotNull ElmStyle withDespawnAnimation      (final @Nullable Animation            animation    ) { setDespawnAnimation      (animation    ); return this; }
+    public @NotNull ElmStyle withInversePrimerAnimation(final @Nullable Animation            animation    ) { setInversePrimerAnimation(animation    ); return this; }
 }

@@ -149,4 +149,11 @@ public class SimpleButtonElmStyle extends PanelElmStyle {
     public @Nullable Animation editHoverEnterAnimation        () { return hoverEnterAnimation        .edit(); }
     public @Nullable Animation editHoverLeaveAnimation        () { return hoverLeaveAnimation        .edit(); }
     public @Nullable Animation editHoverInversePrimerAnimation() { return hoverInversePrimerAnimation.edit(); }
+
+
+    // With setters
+    public @NotNull SimpleButtonElmStyle withHoverPrimerAnimation       (final @Nullable Animation hoverPrimerAnimation       ) { setHoverPrimerAnimation       (hoverPrimerAnimation       ); return this; }
+    public @NotNull SimpleButtonElmStyle withHoverEnterAnimation        (final @Nullable Animation hoverEnterAnimation        ) { setHoverEnterAnimation        (hoverEnterAnimation        ); return this; }
+    public @NotNull SimpleButtonElmStyle withHoverLeaveAnimation        (final @Nullable Animation hoverLeaveAnimation        ) { setHoverLeaveAnimation        (hoverLeaveAnimation        ); return this; }
+    public @NotNull SimpleButtonElmStyle withHoverInversePrimerAnimation(final @Nullable Animation hoverInversePrimerAnimation) { setHoverInversePrimerAnimation(hoverInversePrimerAnimation); return this; }
 }

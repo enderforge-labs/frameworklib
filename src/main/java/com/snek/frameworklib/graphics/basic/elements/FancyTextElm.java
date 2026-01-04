@@ -15,7 +15,6 @@ import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.graphics.basic.styles.ConfigurableFancyTextElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
@@ -68,22 +67,6 @@ public non-sealed class FancyTextElm extends __base_TextElm {
 
 
 
-
-    /**
-     * Creates a new FancyTextElm using a default style configured with the specified text and overflow behaviour.
-     * @param level The level in which to place the element.
-     * @param defaultText The default text of the style.
-     * @param defaultOverflowBehaviour The default overflow behaviour of the style.
-     */
-    public FancyTextElm(
-        final @NotNull ServerLevel level,
-        final @NotNull Component defaultText,
-        final @NotNull TextAlignment defaultTextAlignment,
-        final @NotNull TextOverflowBehaviour defaultOverflowBehaviour
-    ) {
-        super(level, new CustomTextDisplay(level), new ConfigurableFancyTextElmStyle(defaultText, defaultTextAlignment, defaultOverflowBehaviour));
-        text = new CustomTextDisplay(level);
-    }
 
 
     /**

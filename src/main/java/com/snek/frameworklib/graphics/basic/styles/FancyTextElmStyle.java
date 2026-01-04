@@ -100,18 +100,21 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
 
 
 
+    // Default
     public @NotNull Vector3i  getDefaultBgColor    () { return new Vector3i(20, 2, 20); }
     public          int       getDefaultBgAlpha    () { return 130; }
     public @NotNull Transform getDefaultTransformFg() { return new Transform(); }
     public @NotNull Transform getDefaultTransformBg() { return new Transform(); }
 
 
+    // Reset
     public void resetBgColor     () { bgColor     = Flagged.from(getDefaultBgColor    ()); }
     public void resetBgAlpha     () { bgAlpha     = Flagged.from(getDefaultBgAlpha    ()); }
     public void resetTransformFg () { transformFg = Flagged.from(getDefaultTransformFg()); }
     public void resetTransformBg () { transformBg = Flagged.from(getDefaultTransformBg()); }
 
 
+    // Set
     public void setBgColor(final @NotNull Vector3i bgColor) {
         assert Require.nonNull(bgColor, "background color");
         assert Require.inRange(bgColor.x, 0, 255, "background color red");
@@ -133,20 +136,30 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
     }
 
 
+    // Get flagged
     public @NotNull Flagged<@NotNull Vector3i>  getFlaggedBgColor    () { return bgColor; }
     public @NotNull Flagged<@NotNull Integer>   getFlaggedBgAlpha    () { return bgAlpha; }
     public @NotNull Flagged<@NotNull Transform> getFlaggedTransformFg() { return transformFg; }
     public @NotNull Flagged<@NotNull Transform> getFlaggedTransformBg() { return transformBg; }
 
 
+    // Get
     public @NotNull Vector3i  getBgColor    () { return bgColor    .get(); }
     public          int       getBgAlpha    () { return bgAlpha    .get(); }
     public @NotNull Transform getTransformFg() { return transformFg.get(); }
     public @NotNull Transform getTransformBg() { return transformBg.get(); }
 
 
+    // Edit
     public @NotNull Vector3i  editBgColor    () { return bgColor    .edit(); }
     public          int       editBgAlpha    () { return bgAlpha    .edit(); }
     public @NotNull Transform editTransformFg() { return transformFg.edit(); }
     public @NotNull Transform editTransformBg() { return transformBg.edit(); }
+
+
+    // With
+    public @NotNull FancyTextElmStyle withBgColor    (final @NotNull Vector3i  bgColor    ) { setBgColor    (bgColor    ); return this; }
+    public @NotNull FancyTextElmStyle withBgAlpha    (final          int       bgAlpha    ) { setBgAlpha    (bgAlpha    ); return this; }
+    public @NotNull FancyTextElmStyle withTransformFg(final @NotNull Transform transformFg) { setTransformFg(transformFg); return this; }
+    public @NotNull FancyTextElmStyle withTransformBg(final @NotNull Transform transformBg) { setTransformBg(transformBg); return this; }
 }

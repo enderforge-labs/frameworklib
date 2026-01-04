@@ -11,7 +11,6 @@ import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.graphics.basic.styles.ConfigurableSimpleTextElmStyle;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 
@@ -51,21 +50,6 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
 
 
 
-
-    /**
-     * Creates a new SimpleTextElm using a default style configured with the specified text and overflow behaviour.
-     * @param level The level in which to place the element.
-     * @param defaultText The default text of the style.
-     * @param defaultOverflowBehaviour The default overflow behaviour of the style.
-     */
-    public SimpleTextElm(
-        final @NotNull ServerLevel level,
-        final @NotNull Component defaultText,
-        final @NotNull TextAlignment defaultTextAlignment,
-        final @NotNull TextOverflowBehaviour defaultOverflowBehaviour
-    ) {
-        super(level, new CustomTextDisplay(level), new ConfigurableSimpleTextElmStyle(defaultText, defaultTextAlignment, defaultOverflowBehaviour));
-    }
 
 
     /**

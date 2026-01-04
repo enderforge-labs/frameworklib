@@ -22,12 +22,35 @@ public class CanvasTitle extends SimpleTextElm {
     /**
      * Creates a new TitleElm.
      * @param level The level to create this element in.
+     * @param defaultText The initial text to display when the element is created. This will replace the text specified in the style.
+     * @param style The style to use. Its text overflow behaviour is automatically set to SCROLL.
+     */
+    public CanvasTitle(final @NotNull ServerLevel level, final @NotNull Component defaultText, final @NotNull SimpleTextElmStyle style) {
+        super(level, style
+            .withText(defaultText)
+            .withTextAlignment(TextAlignment.CENTER)
+            .withTextOverflowBehaviour(TextOverflowBehaviour.SCROLL)
+        );
+    }
+
+    /**
+     * Creates a new TitleElm.
+     * @param level The level to create this element in.
+     * @param defaultText The initial text to display when the element is created. This will replace the text specified in the style.
+     * @param style The style to use. Its text overflow behaviour is automatically set to SCROLL.
+     */
+    public CanvasTitle(final @NotNull ServerLevel level, final @NotNull String defaultText, final @NotNull SimpleTextElmStyle style) {
+        this(level, Component.literal(defaultText), style);
+    }
+
+    /**
+     * Creates a new TitleElm.
+     * @param level The level to create this element in.
      * @param defaultText The initial text to display when the element is created.
      */
     public CanvasTitle(final @NotNull ServerLevel level, final @NotNull Component defaultText) {
-        super(level, defaultText, TextAlignment.CENTER, TextOverflowBehaviour.SCROLL);
+        this(level, defaultText, new SimpleTextElmStyle());
     }
-
 
     /**
      * Creates a new TitleElm.
@@ -37,6 +60,8 @@ public class CanvasTitle extends SimpleTextElm {
     public CanvasTitle(final @NotNull ServerLevel level, final @NotNull String defaultText) {
         this(level, Component.literal(defaultText));
     }
+
+
 
 
     /**

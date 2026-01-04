@@ -164,4 +164,12 @@ public class SimpleTextElmStyle extends ElmStyle {
     public @NotNull TextAlignment         editTextAlignment        () { return textAlignment        .edit(); }
     public          int                   editTextOpacity          () { return textOpacity          .edit(); }
     public          int                   editFontSize             () { return fontSize             .edit(); }
+
+
+    // With setters
+    public @NotNull SimpleTextElmStyle withText                 (final @NotNull Component             text                 ) { setText                 (text                 ); return this; }
+    public @NotNull SimpleTextElmStyle withTextOverflowBehaviour(final @NotNull TextOverflowBehaviour textOverflowBehaviour) { setTextOverflowBehaviour(textOverflowBehaviour); return this; }
+    public @NotNull SimpleTextElmStyle withTextAlignment        (final @NotNull TextAlignment         textAlignment        ) { setTextAlignment        (textAlignment        ); return this; }
+    public @NotNull SimpleTextElmStyle withTextOpacity          (final          int                   textOpacity          ) { setTextOpacity          (textOpacity          ); return this; }
+    public @NotNull SimpleTextElmStyle withFontSize             (final          int                   fontSize             ) { setFontSize             (fontSize             ); return this; }
 }

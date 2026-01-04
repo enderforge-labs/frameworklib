@@ -53,6 +53,7 @@ public class ItemElmStyle extends ElmStyle {
 
 
 
+    // Default
     public @NotNull ItemStack          getDefaultItem          () { return Items.AIR.getDefaultInstance(); }
     public @NotNull ItemDisplayContext getDefaultDisplayContext() { return ItemDisplayContext.FIXED; }
     //! ^ Use FIXED for consistent scales and orientations (FIXED = item frame)
@@ -60,22 +61,38 @@ public class ItemElmStyle extends ElmStyle {
     //! Writing an exception for every single item is unfeasable
 
 
+    // Reset
     public void resetItem          () { item           = Flagged.from(getDefaultItem()); }
     public void resetDisplayContext() { displayContext = Flagged.from(getDefaultDisplayContext()); }
 
 
-    public void setItem          (final @NotNull ItemStack                    item) { assert Require.nonNull(item, "item"); this.item.set(item); }
-    public void setDisplayContext(final @NotNull ItemDisplayContext displayContext) { assert Require.nonNull(displayContext, "display context"); this.displayContext.set(displayContext); }
+    // Set
+    public void setItem(final @NotNull ItemStack item) {
+        assert Require.nonNull(item, "item");
+        this.item.set(item);
+    }
+    public void setDisplayContext(final @NotNull ItemDisplayContext displayContext) {
+        assert Require.nonNull(displayContext, "display context");
+        this.displayContext.set(displayContext);
+    }
 
 
+    // Get flagged
     public @NotNull Flagged<@NotNull ItemStack>          getFlaggedItem          () { return item; }
     public @NotNull Flagged<@NotNull ItemDisplayContext> getFlaggedDisplayContext() { return displayContext; }
 
 
+    // Get
     public @NotNull ItemStack          getItem          () { return item.get(); }
     public @NotNull ItemDisplayContext getDisplayContext() { return displayContext.get(); }
 
 
+    // Edit
     public @NotNull ItemStack          editItem          () { return item.edit(); }
     public @NotNull ItemDisplayContext editDisplayContext() { return displayContext.edit(); }
+
+
+    // With
+    public @NotNull ItemElmStyle withItem          (final @NotNull ItemStack                    item) { setItem          (item);           return this; }
+    public @NotNull ItemElmStyle withDisplayContext(final @NotNull ItemDisplayContext displayContext) { setDisplayContext(displayContext); return this; }
 }

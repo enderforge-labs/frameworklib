@@ -92,14 +92,17 @@ public class PanelElmStyle extends ElmStyle {
 
 
 
+    // Default
     public @NotNull Vector3i getDefaultColor() { return new Vector3i(20, 2, 20); }
     public          int      getDefaultAlpha() { return 255; }
 
 
+    // Reset
     public void resetColor() { color = Flagged.from(getDefaultColor()); }
     public void resetAlpha() { alpha = Flagged.from(getDefaultAlpha()); }
 
 
+    // Set
     public void setColor(final @NotNull Vector3i color ) {
         assert Require.nonNull(color, "color");
         assert Require.inRange(color.x, 0, 255, "color red");
@@ -113,14 +116,22 @@ public class PanelElmStyle extends ElmStyle {
     }
 
 
+    // Get flagged
     public @NotNull Flagged<@NotNull Vector3i> getFlaggedColor() { return color; }
     public @NotNull Flagged<@NotNull Integer>  getFlaggedAlpha() { return alpha; }
 
 
+    // Get
     public @NotNull Vector3i getColor() { return color.get(); }
     public          int      getAlpha() { return alpha.get(); }
 
 
+    // Edit
     public @NotNull Vector3i editColor() { return color.edit(); }
     public          int      editAlpha() { return alpha.edit(); }
+
+
+    // With
+    public @NotNull PanelElmStyle withColor(final @NotNull Vector3i color) { setColor(color); return this; }
+    public @NotNull PanelElmStyle withAlpha(final          int      alpha) { setAlpha(alpha); return this; }
 }
