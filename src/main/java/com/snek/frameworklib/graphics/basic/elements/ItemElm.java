@@ -108,7 +108,7 @@ public class ItemElm extends Elm {
      * @param level The level in which to place the element.
      * @param style The custom style.
      */
-    protected ItemElm(final @NotNull ServerLevel level, final @NotNull ElmStyle style) {
+    public ItemElm(final @NotNull ServerLevel level, final @NotNull ElmStyle style) {
         super(level, new CustomItemDisplay(level), style);
     }
 
