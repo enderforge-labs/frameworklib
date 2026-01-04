@@ -235,12 +235,12 @@ public class Div {
     /**
      * Adds a new {@link PolylineSetElm} to this element.
      * <p>
-     * This method is meant to be called by the constructor.
+     * This can be called by the constructor.
      * @param level The level to spawn the design entities in.
      * @param designData The design to use for the PolylineSetElm.
      * @return The newly created {@link PolylineSetElm}.
      */
-    protected @NotNull PolylineSetElm addDesign(final ServerLevel level, final @NotNull PolylineData[] designData) {
+    public @NotNull PolylineSetElm addDesign(final ServerLevel level, final @NotNull PolylineData[] designData) {
         assert Require.nonNull(level, "level");
         assert Require.notEmpty(designData, "design data");
 
