@@ -135,6 +135,14 @@ public class ItemElm extends Elm {
         }}
 
 
+        // Apply display context
+        { final Flagged<ItemDisplayContext> f = getThisStyle().getFlaggedDisplayContext();
+        if(f.isFlagged()) {
+            getThisEntity().setDisplayType(f.get());
+            f.unflag();
+        }}
+
+
         // Handle transform calculations separately
         {
             final Flagged<Transform> f = getThisStyle().getFlaggedTransform();
@@ -170,31 +178,19 @@ public class ItemElm extends Elm {
             }
         }
 
-        // Update the entity's display context
-        //! Use FIXED for consistent scales and orientations (FIXED = item frame)
-        //! Other contexts are all over the place, especially for vanilla items
-        //! Writing an exception for every single item is unfeasable
-        getThisEntity().setDisplayType(exception == null ? ItemDisplayContext.FIXED : exception.getFirst());
-
-
-        // Calculate the parent transform and apply the transformexception if needed
+        // Calculate the parent transform and apply the transform exception if needed
         final Transform t = super.__calcTransform();
-        return exception == null ? t : t.apply(exception.getSecond());
+        if(exception != null && getThisStyle().getDisplayContext() == exception.getFirst()) {
+            t.apply(exception.getSecond());
+        }
+        return t;
     }
 
 
 
 
-
-
-
-
-    @Override
-    public void spawn(@NotNull final Vector3d pos, final boolean animate) {
-        super.spawn(pos, animate);
-    }
     @Override
     protected void prepareEntityForSpawn(final @NotNull Vector3d pos) {
-        getThisEntity().setDisplayType(ItemDisplayContext.NONE);
+        // Empty
     }
 }

@@ -7,6 +7,7 @@ import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.elements.ItemElm;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -22,6 +23,7 @@ import net.minecraft.world.item.Items;
  */
 public class ItemElmStyle extends ElmStyle {
     private @NotNull Flagged<@NotNull ItemStack> item = null;
+    private @NotNull Flagged<@NotNull ItemDisplayContext> displayContext = null;
 
 
 
@@ -37,25 +39,43 @@ public class ItemElmStyle extends ElmStyle {
     @Override
     public void resetAll() {
         resetItem();
+        resetDisplayContext();
         super.resetAll();
     }
 
     @Override
     public void flagAll() {
         editItem();
+        editDisplayContext();
         super.flagAll();
     }
 
 
 
 
-    public @NotNull ItemStack getDefaultItem() { return Items.AIR.getDefaultInstance(); }
-    public void resetItem() { item = Flagged.from(getDefaultItem()); }
-    public void setItem(final @NotNull ItemStack item) {
-        assert Require.nonNull(item, "item");
-        this.item.set(item);
-    }
-    public @NotNull Flagged<@NotNull ItemStack> getFlaggedItem() { return item; }
-    public @NotNull ItemStack getItem() { return item.get(); }
-    public @NotNull ItemStack editItem() { return item.edit(); }
+    public @NotNull ItemStack          getDefaultItem          () { return Items.AIR.getDefaultInstance(); }
+    public @NotNull ItemDisplayContext getDefaultDisplayContext() { return ItemDisplayContext.FIXED; }
+    //! ^ Use FIXED for consistent scales and orientations (FIXED = item frame)
+    //! Other contexts are all over the place, especially for vanilla items
+    //! Writing an exception for every single item is unfeasable
+
+
+    public void resetItem          () { item           = Flagged.from(getDefaultItem()); }
+    public void resetDisplayContext() { displayContext = Flagged.from(getDefaultDisplayContext()); }
+
+
+    public void setItem          (final @NotNull ItemStack                    item) { assert Require.nonNull(item, "item"); this.item.set(item); }
+    public void setDisplayContext(final @NotNull ItemDisplayContext displayContext) { assert Require.nonNull(displayContext, "display context"); this.displayContext.set(displayContext); }
+
+
+    public @NotNull Flagged<@NotNull ItemStack>          getFlaggedItem          () { return item; }
+    public @NotNull Flagged<@NotNull ItemDisplayContext> getFlaggedDisplayContext() { return displayContext; }
+
+
+    public @NotNull ItemStack          getItem          () { return item.get(); }
+    public @NotNull ItemDisplayContext getDisplayContext() { return displayContext.get(); }
+
+
+    public @NotNull ItemStack          editItem          () { return item.edit(); }
+    public @NotNull ItemDisplayContext editDisplayContext() { return displayContext.edit(); }
 }
