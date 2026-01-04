@@ -145,17 +145,17 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
 
 
     // Get flagged
-    public @NotNull Flagged<@NotNull Vector3i>  getFlaggedBgColor    () { return bgColor; }
-    public @NotNull Flagged<@NotNull Integer>   getFlaggedBgAlpha    () { return bgAlpha; }
-    public @NotNull Flagged<@NotNull Transform> getFlaggedTransformFg() { return transformFg; }
-    public @NotNull Flagged<@NotNull Transform> getFlaggedTransformBg() { return transformBg; }
+    public final @NotNull Flagged<@NotNull Vector3i>  getFlaggedBgColor    () { return bgColor; }
+    public final @NotNull Flagged<@NotNull Integer>   getFlaggedBgAlpha    () { return bgAlpha; }
+    public final @NotNull Flagged<@NotNull Transform> getFlaggedTransformFg() { return transformFg; }
+    public final @NotNull Flagged<@NotNull Transform> getFlaggedTransformBg() { return transformBg; }
 
 
     // Get
-    public @NotNull Vector3i  getBgColor    () { return bgColor    .get(); }
-    public          int       getBgAlpha    () { return bgAlpha    .get(); }
-    public @NotNull Transform getTransformFg() { return transformFg.get(); }
-    public @NotNull Transform getTransformBg() { return transformBg.get(); }
+    public final @NotNull Vector3i  getBgColor    () { return bgColor    .get(); }
+    public final          int       getBgAlpha    () { return bgAlpha    .get(); }
+    public final @NotNull Transform getTransformFg() { return transformFg.get(); }
+    public final @NotNull Transform getTransformBg() { return transformBg.get(); }
 
 
     // Edit

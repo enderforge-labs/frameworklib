@@ -26,7 +26,7 @@ public class TextInputElmStyle extends FancyButtonElmStyle {
 
 
     @Override
-    public @NotNull TextOverflowBehaviour getTextOverflowBehaviour() {
+    public @NotNull TextOverflowBehaviour getDefaultTextOverflowBehaviour() {
         return TextOverflowBehaviour.SCROLL;
     }
 }

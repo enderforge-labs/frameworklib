@@ -125,13 +125,13 @@ public class PanelElmStyle extends ElmStyle {
 
 
     // Get flagged
-    public @NotNull Flagged<@NotNull Vector3i> getFlaggedColor() { return color; }
-    public @NotNull Flagged<@NotNull Integer>  getFlaggedAlpha() { return alpha; }
+    public final @NotNull Flagged<@NotNull Vector3i> getFlaggedColor() { return color; }
+    public final @NotNull Flagged<@NotNull Integer>  getFlaggedAlpha() { return alpha; }
 
 
     // Get
-    public @NotNull Vector3i getColor() { return color.get(); }
-    public          int      getAlpha() { return alpha.get(); }
+    public final @NotNull Vector3i getColor() { return color.get(); }
+    public final          int      getAlpha() { return alpha.get(); }
 
 
     // Edit

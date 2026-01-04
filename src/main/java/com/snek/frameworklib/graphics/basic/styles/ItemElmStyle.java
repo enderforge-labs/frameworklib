@@ -86,13 +86,13 @@ public class ItemElmStyle extends ElmStyle {
 
 
     // Get flagged
-    public @NotNull Flagged<@NotNull ItemStack>          getFlaggedItem          () { return item; }
-    public @NotNull Flagged<@NotNull ItemDisplayContext> getFlaggedDisplayContext() { return displayContext; }
+    public final @NotNull Flagged<@NotNull ItemStack>          getFlaggedItem          () { return item; }
+    public final @NotNull Flagged<@NotNull ItemDisplayContext> getFlaggedDisplayContext() { return displayContext; }
 
 
     // Get
-    public @NotNull ItemStack          getItem          () { return item.get(); }
-    public @NotNull ItemDisplayContext getDisplayContext() { return displayContext.get(); }
+    public final @NotNull ItemStack          getItem          () { return item.get(); }
+    public final @NotNull ItemDisplayContext getDisplayContext() { return displayContext.get(); }
 
 
     // Edit

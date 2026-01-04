@@ -110,17 +110,17 @@ public class FancyButtonElmStyle extends FancyTextElmStyle {
 
 
     // Flagged getters
-    public @Nullable Flagged<@NotNull Animation> getFlaggedHoverPrimerAnimation       () { return hoverPrimerAnimation       ;}
-    public @Nullable Flagged<@NotNull Animation> getFlaggedHoverEnterAnimation        () { return hoverEnterAnimation        ;}
-    public @Nullable Flagged<@NotNull Animation> getFlaggedHoverLeaveAnimation        () { return hoverLeaveAnimation        ;}
-    public @Nullable Flagged<@NotNull Animation> getFlaggedHoverInversePrimerAnimation() { return hoverInversePrimerAnimation;}
+    public final @Nullable Flagged<@NotNull Animation> getFlaggedHoverPrimerAnimation       () { return hoverPrimerAnimation       ;}
+    public final @Nullable Flagged<@NotNull Animation> getFlaggedHoverEnterAnimation        () { return hoverEnterAnimation        ;}
+    public final @Nullable Flagged<@NotNull Animation> getFlaggedHoverLeaveAnimation        () { return hoverLeaveAnimation        ;}
+    public final @Nullable Flagged<@NotNull Animation> getFlaggedHoverInversePrimerAnimation() { return hoverInversePrimerAnimation;}
 
 
     // Getters
-    public @Nullable Animation getHoverPrimerAnimation       () { return hoverPrimerAnimation       .get(); }
-    public @Nullable Animation getHoverEnterAnimation        () { return hoverEnterAnimation        .get(); }
-    public @Nullable Animation getHoverLeaveAnimation        () { return hoverLeaveAnimation        .get(); }
-    public @Nullable Animation getHoverInversePrimerAnimation() { return hoverInversePrimerAnimation.get(); }
+    public final @Nullable Animation getHoverPrimerAnimation       () { return hoverPrimerAnimation       .get(); }
+    public final @Nullable Animation getHoverEnterAnimation        () { return hoverEnterAnimation        .get(); }
+    public final @Nullable Animation getHoverLeaveAnimation        () { return hoverLeaveAnimation        .get(); }
+    public final @Nullable Animation getHoverInversePrimerAnimation() { return hoverInversePrimerAnimation.get(); }
 
 
     // Edit getters

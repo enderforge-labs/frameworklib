@@ -152,19 +152,19 @@ public class SimpleTextElmStyle extends ElmStyle {
 
 
     // Flagged getters
-    public @NotNull Flagged<@NotNull Component>             getFlaggedText                 () { return text;                  }
-    public @NotNull Flagged<@NotNull TextOverflowBehaviour> getFlaggedTextOverflowBehaviour() { return textOverflowBehaviour; }
-    public @NotNull Flagged<@NotNull TextAlignment>         getFlaggedTextAlignment        () { return textAlignment;         }
-    public @NotNull Flagged<@NotNull Integer>               getFlaggedTextOpacity          () { return textOpacity;           }
-    public @NotNull Flagged<@NotNull Integer>               getFlaggedFontSize             () { return fontSize;              }
+    public final @NotNull Flagged<@NotNull Component>             getFlaggedText                 () { return text;                  }
+    public final @NotNull Flagged<@NotNull TextOverflowBehaviour> getFlaggedTextOverflowBehaviour() { return textOverflowBehaviour; }
+    public final @NotNull Flagged<@NotNull TextAlignment>         getFlaggedTextAlignment        () { return textAlignment;         }
+    public final @NotNull Flagged<@NotNull Integer>               getFlaggedTextOpacity          () { return textOpacity;           }
+    public final @NotNull Flagged<@NotNull Integer>               getFlaggedFontSize             () { return fontSize;              }
 
 
     // Getters
-    public @NotNull Component             getText                 () { return text                 .get(); }
-    public @NotNull TextOverflowBehaviour getTextOverflowBehaviour() { return textOverflowBehaviour.get(); }
-    public @NotNull TextAlignment         getTextAlignment        () { return textAlignment        .get(); }
-    public          int                   getTextOpacity          () { return textOpacity          .get(); }
-    public          int                   getFontSize             () { return fontSize             .get(); }
+    public final @NotNull Component             getText                 () { return text                 .get(); }
+    public final @NotNull TextOverflowBehaviour getTextOverflowBehaviour() { return textOverflowBehaviour.get(); }
+    public final @NotNull TextAlignment         getTextAlignment        () { return textAlignment        .get(); }
+    public final          int                   getTextOpacity          () { return textOpacity          .get(); }
+    public final          int                   getFontSize             () { return fontSize             .get(); }
 
 
     // Edit getters
