@@ -31,10 +31,18 @@ public class FancyButtonElmStyle extends FancyTextElmStyle {
 
 
     /**
-     * Creates a new ButtonElmStyle.
+     * Creates a new FancyButtonElmStyle.
+     */
+    public FancyButtonElmStyle(final boolean reset) {
+        super(false);
+        if(reset) resetAll();
+    }
+
+    /**
+     * Creates a new FancyButtonElmStyle.
      */
     public FancyButtonElmStyle() {
-        super();
+        this(true);
     }
 
 

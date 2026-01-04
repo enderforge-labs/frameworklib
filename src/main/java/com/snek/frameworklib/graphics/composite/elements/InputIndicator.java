@@ -9,6 +9,7 @@ import org.joml.Vector2f;
 
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
+import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
@@ -16,7 +17,6 @@ import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.composite.styles.InputIndicator_MouseButtonDown_S;
 import com.snek.frameworklib.graphics.composite.styles.InputIndicator_MouseButtonUp_S;
-import com.snek.frameworklib.graphics.composite.styles.InputIndicator_Text_S;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.server.level.ServerLevel;
@@ -69,21 +69,15 @@ public class InputIndicator extends Div {
 
 
         // Add text element
-        e = new SimpleTextElm(level, new InputIndicator_Text_S());
+        e = new SimpleTextElm(level, new SimpleTextElmStyle()
+            .withFontSize(6)
+            .withTextAlignment(TextAlignment.LEFT)
+        );
         elmList.add(e);
         e.setSize(new Vector2f(1 - MOUSE_SIZE.x - BUTTON_TEXT_SPACING, 1f));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
         text = (SimpleTextElm)e;
     }
-
-
-
-
-    // @Override
-    // public void spawn(final @NotNull Vector3d pos, final boolean animate) {
-    //     // Empty
-    //     //TODO i think the spawned flag isnt getting updated correctly
-    // }
 
 
 

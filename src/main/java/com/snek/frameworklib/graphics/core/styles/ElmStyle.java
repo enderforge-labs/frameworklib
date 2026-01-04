@@ -42,8 +42,15 @@ public class ElmStyle {
     /**
      * Creates a new ElmStyle.
      */
+    public ElmStyle(final boolean reset) {
+        if(reset) resetAll();
+    }
+
+    /**
+     * Creates a new ElmStyle.
+     */
     public ElmStyle() {
-        // Empty
+        this(true);
     }
 
 

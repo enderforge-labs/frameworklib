@@ -161,7 +161,6 @@ public abstract class Elm extends Div {
         this.level  = level;
         this.entity = entity;
         this.style  = style;
-        this.style.resetAll();
     }
 
 

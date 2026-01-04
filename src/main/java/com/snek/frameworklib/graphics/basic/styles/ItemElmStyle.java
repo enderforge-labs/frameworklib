@@ -31,8 +31,16 @@ public class ItemElmStyle extends ElmStyle {
     /**
      * Creates a new ItemElmStyle.
      */
+    public ItemElmStyle(final boolean reset) {
+        super(false);
+        if(reset) resetAll();
+    }
+
+    /**
+     * Creates a new ItemElmStyle.
+     */
     public ItemElmStyle() {
-        super();
+        this(true);
     }
 
 

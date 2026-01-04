@@ -33,8 +33,16 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
     /**
      * Creates a new FancyTextElmStyle.
      */
+    public FancyTextElmStyle(final boolean reset) {
+        super(false);
+        if(reset) resetAll();
+    }
+
+    /**
+     * Creates a new FancyTextElmStyle.
+     */
     public FancyTextElmStyle() {
-        super();
+        this(true);
     }
 
 

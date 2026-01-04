@@ -30,12 +30,19 @@ public class SimpleButtonElmStyle extends PanelElmStyle {
 
 
 
+    /**
+     * Creates a new SimpleButtonElmStyle.
+     */
+    public SimpleButtonElmStyle(final boolean reset) {
+        super(false);
+        if(reset) resetAll();
+    }
 
     /**
      * Creates a new SimpleButtonElmStyle.
      */
     public SimpleButtonElmStyle() {
-        super();
+        this(true);
     }
 
 

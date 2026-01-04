@@ -33,8 +33,16 @@ public class PanelElmStyle extends ElmStyle {
     /**
      * Creates a new PanelElmStyle.
      */
+    public PanelElmStyle(final boolean reset) {
+        super(false);
+        if(reset) resetAll();
+    }
+
+    /**
+     * Creates a new PanelElmStyle.
+     */
     public PanelElmStyle() {
-        super();
+        this(true);
     }
 
 

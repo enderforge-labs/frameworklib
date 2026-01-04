@@ -41,11 +41,20 @@ public class SimpleTextElmStyle extends ElmStyle {
     private @NotNull Flagged<@NotNull Integer>               fontSize              = null;
 
 
+
+    /**
+     * Creates a new SimpleTextElmStyle.
+     */
+    public SimpleTextElmStyle(final boolean reset) {
+        super(false);
+        if(reset) resetAll();
+    }
+
     /**
      * Creates a new SimpleTextElmStyle.
      */
     public SimpleTextElmStyle() {
-        super();
+        this(true);
     }
 
 
