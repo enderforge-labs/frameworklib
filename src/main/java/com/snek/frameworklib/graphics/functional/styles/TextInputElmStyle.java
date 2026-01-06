@@ -20,8 +20,16 @@ public class TextInputElmStyle extends FancyButtonElmStyle {
     /**
      * Creates a new TextInputElmStyle.
      */
+    public TextInputElmStyle(final boolean reset) {
+        super(false);
+        if(reset) resetAll();
+    }
+
+    /**
+     * Creates a new TextInputElmStyle.
+     */
     public TextInputElmStyle() {
-        super();
+        this(true);
     }
 
 
