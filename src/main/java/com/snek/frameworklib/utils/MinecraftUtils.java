@@ -76,7 +76,7 @@ import net.minecraft.world.phys.Vec3;
  */
 public final class MinecraftUtils extends UtilityClassBase {
     private MinecraftUtils() {}
-    public static final @NotNull UUID HEAD_OWNER_UUID  = UUID.fromString("e58d5427-a51e-4ea5-9938-20fa7bd90e52");
+    public static final @NotNull UUID HEAD_OWNER_UUID  = UUID.fromString("def00000-0000-0000-0000-000000000000");
     public static final @NotNull String UNWEARABLE_TAG = FrameworkLib.LIB_ID + ".PlayerHeadItem.unwearable";
 
 
