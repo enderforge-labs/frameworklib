@@ -232,6 +232,28 @@ public class Div {
 
 
 
+
+    /**
+     * Adds a new {@link PolylineSetElm} to this element.
+     * <p>
+     * This can be called by the constructor.
+     * @param level The level to spawn the design entities in.
+     * @param designData The design to use for the PolylineSetElm.
+     * @param designSize The size of the {@link PolylineSetElm} element. Defaults to {@link #DEFAULT_DESIGN_SIZE}.
+     * @return The newly created {@link PolylineSetElm}.
+     */
+    public @NotNull PolylineSetElm addDesign(final ServerLevel level, final @NotNull PolylineData[] designData, final float designSize) {
+        assert Require.nonNull(level, "level");
+        assert Require.notEmpty(designData, "design data");
+        assert Require.nonNegative(designSize, "design size");
+
+        final Div e = addChild(new PolylineSetElm(level, designData));
+        e.setSize(new Vector2f(designSize));
+        e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
+        return (PolylineSetElm)e;
+    }
+
+
     /**
      * Adds a new {@link PolylineSetElm} to this element.
      * <p>
@@ -241,13 +263,7 @@ public class Div {
      * @return The newly created {@link PolylineSetElm}.
      */
     public @NotNull PolylineSetElm addDesign(final ServerLevel level, final @NotNull PolylineData[] designData) {
-        assert Require.nonNull(level, "level");
-        assert Require.notEmpty(designData, "design data");
-
-        final Div e = addChild(new PolylineSetElm(level, designData));
-        e.setSize(new Vector2f(DEFAULT_DESIGN_SIZE));
-        e.setAlignment(AlignmentX.CENTER, AlignmentY.CENTER);
-        return (PolylineSetElm)e;
+        return addDesign(level, designData, DEFAULT_DESIGN_SIZE);
     }
 
 
