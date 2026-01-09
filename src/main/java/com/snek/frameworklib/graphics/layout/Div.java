@@ -180,7 +180,7 @@ public class Div {
      */
     public @NotNull Div addChild(final @NotNull Div elm) {
         assert Require.nonNull(elm, "element");
-        assert Require.condition(children.contains(elm), "Element is already a child of this parent");
+        assert Require.condition(!children.contains(elm), "Element is already a child of this parent");
 
         elm.parent = this;
         elm.setCanvas(canvas);
@@ -202,7 +202,7 @@ public class Div {
      */
     public @NotNull Div removeChild(final @NotNull Div elm) {
         assert Require.nonNull(elm, "element");
-        assert Require.condition(!children.contains(elm), "Element is not a child of this parent");
+        assert Require.condition(children.contains(elm), "Element is not a child of this parent");
 
         elm.parent = null;
         elm.updateAbsSize();
