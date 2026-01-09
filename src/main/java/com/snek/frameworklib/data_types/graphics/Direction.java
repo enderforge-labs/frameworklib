@@ -34,7 +34,7 @@ public enum Direction {
         return name;
     }
 
-    public double getEighths() {
+    public int getEighths() {
         return eighths;
     }
 
