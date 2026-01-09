@@ -184,8 +184,11 @@ public class Div {
 
         elm.parent = this;
         elm.setCanvas(canvas);
-        elm.updateAbsSize(); //TODO idk if this is needed, though it most likely is
-        elm.updateAbsPos();
+        elm.updateAbsSize();
+        // elm.updateAbsPos();
+        //TODO make size, position and zindex updates flags. Only actually update them when their values are requested (if needed).
+        //TODO make sure to update all the parents too, all the way to the root. but only if they need to be updated
+        //! updateAbsPos call not needed as updateAbsSize already does that on its own
         elm.updateZIndex();
         children.add(elm);
         return elm;
@@ -202,8 +205,11 @@ public class Div {
         assert Require.condition(!children.contains(elm), "Element is not a child of this parent");
 
         elm.parent = null;
-        elm.updateAbsSize(); //TODO idk if this is needed, though it most likely is
-        elm.updateAbsPos();
+        elm.updateAbsSize();
+        // elm.updateAbsPos();
+        //TODO make size, position and zindex updates flags. Only actually update them when their values are requested (if needed).
+        //TODO make sure to update all the parents too, all the way to the root. but only if they need to be updated
+        //! updateAbsPos call not needed as updateAbsSize already does that on its own
         elm.updateZIndex();
         children.remove(elm);
         return elm;
@@ -216,8 +222,9 @@ public class Div {
     public void clearChildren() {
         for(final Div elm : children) {
             elm.parent = null;
-            elm.updateAbsSize(); //TODO idk if this is needed, though it most likely is
-            elm.updateAbsPos();
+            elm.updateAbsSize();
+            // elm.updateAbsPos();
+            //! updateAbsPos call not needed as updateAbsSize already does that on its own
             elm.updateZIndex();
         }
         children.clear();

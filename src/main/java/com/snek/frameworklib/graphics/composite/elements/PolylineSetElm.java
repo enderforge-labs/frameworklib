@@ -97,6 +97,7 @@ public class PolylineSetElm extends Div {
         // Calculate normal
         final Vector2f normal = b.sub(a, new Vector2f()).normalize();
 
+
         // Calculate adjusted segments (account for joint length)
         final float edgeA = prevPoint == null ? 0 : GeometryUtils.calcJointLength(prevPoint, a, b, l.getWidth());
         final float edgeB = nextPoint == null ? 0 : GeometryUtils.calcJointLength(a, b, nextPoint, l.getWidth());
@@ -121,7 +122,8 @@ public class PolylineSetElm extends Div {
                 .add(new Vector2f(normal.y, -normal.x).mul(l.getWidth() / 2f))      // Center the line to its width
         );
 
-
+//BUG the inverse primer animation isn't recalculated
+//BUG that messes up respawns
         // Change its color and rotate it by overwriting the primer animation and spawning animation
         e.getStyle().setPrimerAnimation(new Animation(
             new Transition()
