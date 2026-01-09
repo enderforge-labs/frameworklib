@@ -2,15 +2,13 @@ package com.snek.frameworklib.graphics.composite.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
-import org.joml.Vector3i;
 
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
-import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
+import com.snek.frameworklib.graphics.composite.styles.LinePanel_S;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
-import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -37,8 +35,8 @@ public final class LinePanel extends PanelElm {
      * Creates a new LinePanel.
      * @param level The level to create this element in.
      */
-    public LinePanel(final @NotNull ServerLevel level) {
-        super(level, new PanelElmStyle().withColor(new Vector3i(Txt.COLOR_WHITE)));
+    public LinePanel(final @NotNull ServerLevel level, final @NotNull LinePanel_S style) {
+        super(level, style);
         assert Require.notInstanceOf(this, Clickable .class, "line panel instance");
         assert Require.notInstanceOf(this, Scrollable.class, "line panel instance");
         assert Require.notInstanceOf(this, Hoverable .class, "line panel instance");

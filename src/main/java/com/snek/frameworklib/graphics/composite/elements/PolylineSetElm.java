@@ -7,13 +7,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
-import com.snek.frameworklib.data_types.animations.Animation;
-import com.snek.frameworklib.data_types.animations.Transform;
-import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.graphics.composite.styles.LinePanel_S;
 import com.snek.frameworklib.graphics.layout.Div;
-import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.GeometryUtils;
 
 import net.minecraft.server.level.ServerLevel;
@@ -31,10 +28,6 @@ import net.minecraft.server.level.ServerLevel;
  * Each polyline is defined by a list of 2 or more points and has configurable color, opacity and width.
  */
 public class PolylineSetElm extends Div {
-    public static final float LINE_SPAWNING_SCALE  = 0.00001f;
-    public static final int   SPAWN_ANIMATION_TIME = 10;
-
-
 
 
     /**
@@ -78,20 +71,20 @@ public class PolylineSetElm extends Div {
      * @param b The second point of the line.
      * @param prevPoint The point before 'a' in the polyline (use null if this is the first segment).
      * @param nextPoint The point after 'b' in the polyline (use null if this is the last segment).
-     * @param previousLen The total length of the lines that precede this line.
+     * @param prevLen The total length of the lines that precede this line.
      */
 
     private void createLine(
         final @NotNull ServerLevel level, final @NotNull PolylineData l,
         final @NotNull Vector2f a, final @NotNull Vector2f b,
         final @Nullable Vector2f prevPoint, final @Nullable Vector2f nextPoint,
-        final float previousLen
+        final float prevLen
     ) {
         assert Require.nonNull(level, "level");
         assert Require.nonNull(l, "polyline data");
         assert Require.nonNull(a, "first point");
         assert Require.nonNull(b, "second point");
-        assert Require.nonNegative(previousLen, "previous length");
+        assert Require.nonNegative(prevLen, "previous length");
 
 
         // Calculate normal
@@ -114,30 +107,13 @@ public class PolylineSetElm extends Div {
 
 
         // Create the panel and set its size and position
-        final LinePanel e = (LinePanel)addChild(new LinePanel(level));      // Create the panel
+        final LinePanel e = (LinePanel)addChild(new LinePanel(level, new LinePanel_S(l, angle, prevLen, len)));
         e.setSize(new Vector2f(len, l.getWidth()));                         // Set the size to match the line's length and width
         e.setPos(                                                           // Set the position
             new Vector2f(_a)                                                    // Start by moving the origin (center of lower edge) the first point
                 .add(new Vector2f(-(1 - len) / 2f, 0f))                             // Move it horizontally to align the bottom left edge with the point
                 .add(new Vector2f(normal.y, -normal.x).mul(l.getWidth() / 2f))      // Center the line to its width
         );
-
-//BUG the inverse primer animation isn't recalculated
-//BUG that messes up respawns
-        // Change its color and rotate it by overwriting the primer animation and spawning animation
-        e.getStyle().setPrimerAnimation(new Animation(
-            new Transition()
-                .targetBgColor(l.getColor())
-                .targetBgAlpha(l.getAlpha())
-                .additiveTransform(new Transform().rotZ(angle).scaleX(LINE_SPAWNING_SCALE))
-        ));
-        final float waitTime      = SPAWN_ANIMATION_TIME / (l.getTotLen() / previousLen);
-        final float animationTime = SPAWN_ANIMATION_TIME / (l.getTotLen() / len);
-        e.getStyle().setSpawnAnimation(new Animation(
-            new Transition(            (int)(waitTime     ),  Easings.linear),
-            new Transition(Math.max(1, (int)(animationTime)), Easings.sineOut)
-                .additiveTransform(new Transform().scaleX(1f / LINE_SPAWNING_SCALE))
-        ));
     }
 
 
