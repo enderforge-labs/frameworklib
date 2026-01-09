@@ -31,7 +31,7 @@ public class PanelTextStyle extends TextStyle {
 
 
     /**
-     * Creates a new FancyTextElmStyle.
+     * Creates a new PanelTextStyle.
      */
     public PanelTextStyle(final boolean reset) {
         super(false);
@@ -39,7 +39,7 @@ public class PanelTextStyle extends TextStyle {
     }
 
     /**
-     * Creates a new FancyTextElmStyle.
+     * Creates a new PanelTextStyle.
      */
     public PanelTextStyle() {
         this(true);

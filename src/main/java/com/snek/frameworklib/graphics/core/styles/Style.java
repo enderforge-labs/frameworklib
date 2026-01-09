@@ -40,14 +40,14 @@ public class Style {
 
 
     /**
-     * Creates a new ElmStyle.
+     * Creates a new Style.
      */
     public Style(final boolean reset) {
         if(reset) resetAll();
     }
 
     /**
-     * Creates a new ElmStyle.
+     * Creates a new Style.
      */
     public Style() {
         this(true);

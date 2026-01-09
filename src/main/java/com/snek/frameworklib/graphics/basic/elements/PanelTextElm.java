@@ -69,7 +69,7 @@ public non-sealed class PanelTextElm extends __base_TextElm {
 
 
     /**
-     * Creates a new FancyTextElm using a custom style.
+     * Creates a new TextElm using a custom style.
      * @param level The level in which to place the element.
      * @param style The custom style.
      */
@@ -80,7 +80,7 @@ public non-sealed class PanelTextElm extends __base_TextElm {
 
 
     /**
-     * Creates a new FancyTextElm using the default style.
+     * Creates a new TextElm using the default style.
      * @param level The level in which to place the element.
      */
     public PanelTextElm(final @NotNull ServerLevel level) {

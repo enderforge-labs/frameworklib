@@ -31,7 +31,7 @@ public class PanelStyle extends Style {
 
 
     /**
-     * Creates a new PanelElmStyle.
+     * Creates a new PanelStyle.
      */
     public PanelStyle(final boolean reset) {
         super(false);
@@ -39,7 +39,7 @@ public class PanelStyle extends Style {
     }
 
     /**
-     * Creates a new PanelElmStyle.
+     * Creates a new PanelStyle.
      */
     public PanelStyle() {
         this(true);

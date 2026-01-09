@@ -36,7 +36,7 @@ public class ItemStyle extends Style {
 
 
     /**
-     * Creates a new ItemElmStyle.
+     * Creates a new ItemStyle.
      */
     public ItemStyle(final boolean reset) {
         super(false);
@@ -44,7 +44,7 @@ public class ItemStyle extends Style {
     }
 
     /**
-     * Creates a new ItemElmStyle.
+     * Creates a new ItemStyle.
      */
     public ItemStyle() {
         this(true);
