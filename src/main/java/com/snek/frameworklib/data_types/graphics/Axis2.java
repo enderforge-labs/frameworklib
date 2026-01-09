@@ -77,7 +77,7 @@ public enum Axis2 {
         };
     }
 
-    @SuppressWarnings("java:S1301")
+    @SuppressWarnings("java:S1301") //! Switch can be replaced with if-else. This is kept as a switch for consistency with Axis3
     public void set(final @NotNull Vector2f v, final float n) {
         switch(this) {
             case X: v.x = n; break;
@@ -85,7 +85,7 @@ public enum Axis2 {
         }
     }
 
-    @SuppressWarnings("java:S1301")
+    @SuppressWarnings("java:S1301") //! Switch can be replaced with if-else. This is kept as a switch for consistency with Axis3
     public void set(final @NotNull Vector2d v, final double n) {
         switch(this) {
             case X: v.x = n; break;
@@ -93,7 +93,7 @@ public enum Axis2 {
         }
     }
 
-    @SuppressWarnings("java:S1301")
+    @SuppressWarnings("java:S1301") //! Switch can be replaced with if-else. This is kept as a switch for consistency with Axis3
     public void set(final @NotNull Vector2i v, final int n) {
         switch(this) {
             case X: v.x = n; break;
@@ -101,7 +101,7 @@ public enum Axis2 {
         }
     }
 
-    @SuppressWarnings("java:S1301")
+    @SuppressWarnings("java:S1301") //! Switch can be replaced with if-else. This is kept as a switch for consistency with Axis3
     public void set(final @NotNull Vector3f v, final float n) {
         switch(this) {
             case X: v.x = n; break;
@@ -109,7 +109,7 @@ public enum Axis2 {
         }
     }
 
-    @SuppressWarnings("java:S1301")
+    @SuppressWarnings("java:S1301") //! Switch can be replaced with if-else. This is kept as a switch for consistency with Axis3
     public void set(final @NotNull Vector3d v, final double n) {
         switch(this) {
             case X: v.x = n; break;

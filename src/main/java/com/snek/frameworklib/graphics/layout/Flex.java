@@ -5,6 +5,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.frameworklib.data_types.graphics.Axis2;
+import com.snek.frameworklib.debug.Require;
 
 
 
@@ -24,6 +25,7 @@ public class Flex extends Div {
 
     public Flex(final @NotNull Axis2 axis) {
         super();
+        assert Require.nonNull(axis, "axis");
         this.axis = axis;
     }
 

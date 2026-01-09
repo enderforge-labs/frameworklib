@@ -13,7 +13,7 @@ import com.snek.frameworklib.utils.UtilityClassBase;
 
 
 
-@SuppressWarnings("java:S2386")
+@SuppressWarnings("java:S2386") //! Public mutable members
 public final class SymbolDesigns extends UtilityClassBase {
     public static final @NotNull PolylineData[] ArrowPointingLeft = {
         new PolylineData(
