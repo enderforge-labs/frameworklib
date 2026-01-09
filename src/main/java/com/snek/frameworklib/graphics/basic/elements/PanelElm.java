@@ -12,7 +12,6 @@ import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
 import com.snek.frameworklib.graphics.core.elements.Elm;
-import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.server.level.ServerLevel;
@@ -62,7 +61,7 @@ public class PanelElm extends Elm {
      * @param level The level in which to place the element.
      * @param style The custom style.
      */
-    public PanelElm(final @NotNull ServerLevel level, final @NotNull ElmStyle style) {
+    public PanelElm(final @NotNull ServerLevel level, final @NotNull PanelElmStyle style) {
         super(level, new CustomTextDisplay(level), style);
     }
 

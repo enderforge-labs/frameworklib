@@ -12,7 +12,6 @@ import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
-import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -57,7 +56,7 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
      * @param level The level in which to place the element.
      * @param style The custom style.
      */
-    public SimpleTextElm(final @NotNull ServerLevel level, final @NotNull ElmStyle style) {
+    public SimpleTextElm(final @NotNull ServerLevel level, final @NotNull SimpleTextElmStyle style) {
         super(level, new CustomTextDisplay(level), style);
     }
 

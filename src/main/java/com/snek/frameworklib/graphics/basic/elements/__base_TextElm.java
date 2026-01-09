@@ -13,7 +13,6 @@ import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.generated.FontData;
 import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
 import com.snek.frameworklib.graphics.core.elements.Elm;
-import com.snek.frameworklib.graphics.core.styles.ElmStyle;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.FontSize;
 import com.snek.frameworklib.utils.Txt;
@@ -74,7 +73,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
      * @param entity The entity to use for the new element.
      * @param style The style to use.
      */
-    protected __base_TextElm(final @NotNull ServerLevel level, final @NotNull CustomDisplay entity, final @NotNull ElmStyle style) {
+    protected __base_TextElm(final @NotNull ServerLevel level, final @NotNull CustomDisplay entity, final @NotNull SimpleTextElmStyle style) {
         super(level, entity, style);
     }
 
