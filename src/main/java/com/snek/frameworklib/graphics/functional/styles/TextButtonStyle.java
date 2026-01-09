@@ -8,8 +8,7 @@ import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
-import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
-import com.snek.frameworklib.graphics.core.styles.ElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.PanelTextStyle;
 import com.snek.frameworklib.utils.Easings;
 
 
@@ -20,9 +19,9 @@ import com.snek.frameworklib.utils.Easings;
 
 
 /**
- * The default tyle of the generic {@Link SimpleButtonElm} element.
+ * The default style of the generic {@Link ButtonElm} element.
  */
-public class SimpleButtonElmStyle extends PanelElmStyle {
+public class TextButtonStyle extends PanelTextStyle {
     private @Nullable Flagged<Animation> hoverPrimerAnimation         = null;
     private @Nullable Flagged<Animation> hoverEnterAnimation          = null;
     private @Nullable Flagged<Animation> hoverLeaveAnimation          = null;
@@ -30,18 +29,19 @@ public class SimpleButtonElmStyle extends PanelElmStyle {
 
 
 
+
     /**
-     * Creates a new SimpleButtonElmStyle.
+     * Creates a new TextButtonStyle.
      */
-    public SimpleButtonElmStyle(final boolean reset) {
+    public TextButtonStyle(final boolean reset) {
         super(false);
         if(reset) resetAll();
     }
 
     /**
-     * Creates a new SimpleButtonElmStyle.
+     * Creates a new TextButtonStyle.
      */
-    public SimpleButtonElmStyle() {
+    public TextButtonStyle() {
         this(true);
     }
 
@@ -70,13 +70,13 @@ public class SimpleButtonElmStyle extends PanelElmStyle {
 
 
     @Override
-    public @NotNull Vector3i getDefaultColor() {
-        return new Vector3i(__base_ButtonElmStyle.HOVER_COLOR);
+    public @NotNull Vector3i getDefaultBgColor() {
+        return new Vector3i(__base_ButtonStyle.HOVER_COLOR);
     }
 
     @Override
-    public int getDefaultAlpha() {
-        return __base_ButtonElmStyle.DEFAULT_BG_ALPHA;
+    public int getDefaultBgAlpha() {
+        return __base_ButtonStyle.DEFAULT_BG_ALPHA;
     }
 
 
@@ -84,8 +84,8 @@ public class SimpleButtonElmStyle extends PanelElmStyle {
 
     // Default value providers
     public static final @Nullable Animation DEFAULT_HOVER_PRIMER_ANIMATION = new Animation(
-        new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
-        .additiveTransform(new Transform().scaleX(__base_ButtonElmStyle.HIDDEN_W))
+        new Transition(__base_ButtonStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+        .additiveTransformBg(new Transform().scaleX(__base_ButtonStyle.HIDDEN_W))
     );
     public @Nullable Animation getDefaultHoverPrimerAnimation       () { return new Animation(DEFAULT_HOVER_PRIMER_ANIMATION); }
     public @Nullable Animation getDefaultHoverEnterAnimation        () { return new Animation(DEFAULT_HOVER_PRIMER_ANIMATION).invert(); }
@@ -95,38 +95,10 @@ public class SimpleButtonElmStyle extends PanelElmStyle {
 
 
 
-    @Override
-    public @Nullable Animation getDefaultPrimerAnimation() {
-        return new Animation(
-            new Transition(ElmStyle.D_TIME, Easings.sineOut)
-            .targetBgAlpha(0)
-            .targetOpacity(0)
-        );
-    }
-    @Override
-    public @Nullable Animation getDefaultSpawnAnimation() {
-        return new Animation(
-            new Transition(ElmStyle.S_TIME, Easings.sineOut)
-            .targetBgAlpha(getDefaultAlpha())
-            .targetOpacity(255)
-        );
-    }
-    @Override
-    public @Nullable Animation getDefaultDespawnAnimation() {
-        return new Animation(
-            new Transition(ElmStyle.D_TIME, Easings.sineOut)
-            .targetBgAlpha(0)
-            .targetOpacity(0)
-        );
-    }
-
-
-
-
     // Reset functions
-    public void resetHoverPrimerAnimation       () {        hoverPrimerAnimation = Flagged.from(getDefaultHoverPrimerAnimation       ()); }
-    public void resetHoverEnterAnimation        () {        hoverEnterAnimation  = Flagged.from(getDefaultHoverEnterAnimation        ()); }
-    public void resetHoverLeaveAnimation        () {        hoverLeaveAnimation  = Flagged.from(getDefaultHoverLeaveAnimation        ()); }
+    public void resetHoverPrimerAnimation       () { hoverPrimerAnimation        = Flagged.from(getDefaultHoverPrimerAnimation       ()); }
+    public void resetHoverEnterAnimation        () { hoverEnterAnimation         = Flagged.from(getDefaultHoverEnterAnimation        ()); }
+    public void resetHoverLeaveAnimation        () { hoverLeaveAnimation         = Flagged.from(getDefaultHoverLeaveAnimation        ()); }
     public void resetHoverInversePrimerAnimation() { hoverInversePrimerAnimation = Flagged.from(getDefaultHoverInversePrimerAnimation()); }
 
 
@@ -159,8 +131,8 @@ public class SimpleButtonElmStyle extends PanelElmStyle {
 
 
     // With setters
-    public @NotNull SimpleButtonElmStyle withHoverPrimerAnimation       (final @Nullable Animation hoverPrimerAnimation       ) { setHoverPrimerAnimation       (hoverPrimerAnimation       ); return this; }
-    public @NotNull SimpleButtonElmStyle withHoverEnterAnimation        (final @Nullable Animation hoverEnterAnimation        ) { setHoverEnterAnimation        (hoverEnterAnimation        ); return this; }
-    public @NotNull SimpleButtonElmStyle withHoverLeaveAnimation        (final @Nullable Animation hoverLeaveAnimation        ) { setHoverLeaveAnimation        (hoverLeaveAnimation        ); return this; }
-    public @NotNull SimpleButtonElmStyle withHoverInversePrimerAnimation(final @Nullable Animation hoverInversePrimerAnimation) { setHoverInversePrimerAnimation(hoverInversePrimerAnimation); return this; }
+    public @NotNull TextButtonStyle withHoverPrimerAnimation       (final @Nullable Animation hoverPrimerAnimation       ) { setHoverPrimerAnimation       (hoverPrimerAnimation       ); return this; }
+    public @NotNull TextButtonStyle withHoverEnterAnimation        (final @Nullable Animation hoverEnterAnimation        ) { setHoverEnterAnimation        (hoverEnterAnimation        ); return this; }
+    public @NotNull TextButtonStyle withHoverLeaveAnimation        (final @Nullable Animation hoverLeaveAnimation        ) { setHoverLeaveAnimation        (hoverLeaveAnimation        ); return this; }
+    public @NotNull TextButtonStyle withHoverInversePrimerAnimation(final @Nullable Animation hoverInversePrimerAnimation) { setHoverInversePrimerAnimation(hoverInversePrimerAnimation); return this; }
 }

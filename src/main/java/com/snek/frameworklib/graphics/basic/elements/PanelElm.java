@@ -10,7 +10,7 @@ import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.PanelStyle;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.utils.Txt;
 
@@ -35,10 +35,10 @@ public class PanelElm extends Elm {
         assert Require.instanceOf(getEntity(), CustomTextDisplay.class, "entity");
         return getEntity(CustomTextDisplay.class);
     }
-    private @NotNull PanelElmStyle getThisStyle () {
+    private @NotNull PanelStyle getThisStyle () {
         assert Require.nonNull(getStyle(), "style");
-        assert Require.instanceOf(getStyle(), PanelElmStyle.class, "style");
-        return getStyle (PanelElmStyle.class);
+        assert Require.instanceOf(getStyle(), PanelStyle.class, "style");
+        return getStyle (PanelStyle.class);
     }
 
 
@@ -61,7 +61,7 @@ public class PanelElm extends Elm {
      * @param level The level in which to place the element.
      * @param style The custom style.
      */
-    public PanelElm(final @NotNull ServerLevel level, final @NotNull PanelElmStyle style) {
+    public PanelElm(final @NotNull ServerLevel level, final @NotNull PanelStyle style) {
         super(level, new CustomTextDisplay(level), style);
     }
 
@@ -71,7 +71,7 @@ public class PanelElm extends Elm {
      * @param level The level in which to place the element.
      */
     public PanelElm(final @NotNull ServerLevel level) {
-        super(level, new CustomTextDisplay(level), new PanelElmStyle());
+        super(level, new CustomTextDisplay(level), new PanelStyle());
     }
 
 

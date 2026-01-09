@@ -13,8 +13,8 @@ import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
-import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.graphics.basic.elements.TextElm;
+import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 import com.snek.frameworklib.graphics.composite.styles.InputIndicator_MouseButtonDown_S;
 import com.snek.frameworklib.graphics.composite.styles.InputIndicator_MouseButtonUp_S;
 import com.snek.frameworklib.utils.Txt;
@@ -36,7 +36,7 @@ public class InputIndicator extends Div {
     public static final @NotNull Vector2f BUTTON_SIZE = new Vector2f(0.5f, 0.4f);   // The size of a mouse button compared to the mouse display
     public static final @NotNull Vector2f MOUSE_SIZE  = new Vector2f(0.025f, 1f);   // The size of the mouse display compared to the InputIndicator
     public static final float BUTTON_TEXT_SPACING = 0.025f / 2f;                    // The distance between mouse display and text
-    private final @NotNull SimpleTextElm text;
+    private final @NotNull TextElm text;
 
     // Display data
     private final List<Div> elmList = new ArrayList<>();
@@ -69,14 +69,14 @@ public class InputIndicator extends Div {
 
 
         // Add text element
-        e = new SimpleTextElm(level, new SimpleTextElmStyle()
+        e = new TextElm(level, new TextStyle()
             .withFontSize(6)
             .withTextAlignment(TextAlignment.LEFT)
         );
         elmList.add(e);
         e.setSize(new Vector2f(1 - MOUSE_SIZE.x - BUTTON_TEXT_SPACING, 1f));
         e.setAlignment(AlignmentX.RIGHT, AlignmentY.BOTTOM);
-        text = (SimpleTextElm)e;
+        text = (TextElm)e;
     }
 
 
@@ -90,7 +90,7 @@ public class InputIndicator extends Div {
 
         // If the description is not null and the display is hidden, show it and update the text
         if(description != null) {
-            text.getStyle(SimpleTextElmStyle.class).setText(new Txt(description).lightGray().get());
+            text.getStyle(TextStyle.class).setText(new Txt(description).lightGray().get());
 
             // Add stored children (once)
             if(children.isEmpty()) {

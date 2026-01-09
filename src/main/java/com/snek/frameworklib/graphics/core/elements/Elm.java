@@ -19,7 +19,7 @@ import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.containers.IndexedArrayDeque;
 import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.graphics.core.styles.ElmStyle;
+import com.snek.frameworklib.graphics.core.styles.Style;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Easing;
 import com.snek.frameworklib.utils.Txt;
@@ -81,7 +81,7 @@ public abstract class Elm extends Div {
     // In-world data
     protected final @NotNull ServerLevel   level;     // The level this Elm will be spawned in
     private   final @NotNull CustomDisplay entity;    // The display entity held by this element
-    private         @NotNull ElmStyle      style;     // The style of the element
+    private         @NotNull Style      style;     // The style of the element
     private boolean isTransformNormalized = true;
 
 
@@ -112,7 +112,7 @@ public abstract class Elm extends Div {
      * Retrieves the style used by this element.
      * @return The style.
      */
-    public @NotNull ElmStyle getStyle() {
+    public @NotNull Style getStyle() {
         assert Require.nonNull(style, "style");
         return style;
     }
@@ -134,7 +134,7 @@ public abstract class Elm extends Div {
      * {@link #flushStyle()} must be called in order to update the entities.
      * @param style The new style value.
      */
-    public void setStyle(final @NotNull ElmStyle style) {
+    public void setStyle(final @NotNull Style style) {
         assert Require.nonNull(style, "style");
         this.style = style;
     }
@@ -152,7 +152,7 @@ public abstract class Elm extends Div {
      * @param entity The display entity.
      * @param style The custom style.
      */
-    protected Elm(final @NotNull ServerLevel level, final @NotNull CustomDisplay entity, final @NotNull ElmStyle style) {
+    protected Elm(final @NotNull ServerLevel level, final @NotNull CustomDisplay entity, final @NotNull Style style) {
         super();
         assert Require.nonNull(level, "level");
         assert Require.nonNull(entity, "entity");

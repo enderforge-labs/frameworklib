@@ -20,7 +20,7 @@ import net.minecraft.world.entity.Display.BillboardConstraints;
 /**
  * The default style of the generic {@link Elm} element.
  */
-public class ElmStyle {
+public class Style {
     public static final int S_TIME = 5; // Spawn   animation time. Measured in ticks
     public static final int D_TIME = 5; // Despawn animation time. Measured in ticks
 
@@ -42,14 +42,14 @@ public class ElmStyle {
     /**
      * Creates a new ElmStyle.
      */
-    public ElmStyle(final boolean reset) {
+    public Style(final boolean reset) {
         if(reset) resetAll();
     }
 
     /**
      * Creates a new ElmStyle.
      */
-    public ElmStyle() {
+    public Style() {
         this(true);
     }
 
@@ -155,11 +155,11 @@ public class ElmStyle {
 
 
     // With setters
-    public @NotNull ElmStyle withTransform             (final @NotNull  Transform            transform    ) { setTransform             (transform    ); return this; }
-    public @NotNull ElmStyle withViewRange             (final           float                viewRange    ) { setViewRange             (viewRange    ); return this; }
-    public @NotNull ElmStyle withBillboardMode         (final @NotNull  BillboardConstraints billboardMode) { setBillboardMode         (billboardMode); return this; }
-    public @NotNull ElmStyle withPrimerAnimation       (final @Nullable Animation            animation    ) { setPrimerAnimation       (animation    ); return this; }
-    public @NotNull ElmStyle withSpawnAnimation        (final @Nullable Animation            animation    ) { setSpawnAnimation        (animation    ); return this; }
-    public @NotNull ElmStyle withDespawnAnimation      (final @Nullable Animation            animation    ) { setDespawnAnimation      (animation    ); return this; }
-    public @NotNull ElmStyle withInversePrimerAnimation(final @Nullable Animation            animation    ) { setInversePrimerAnimation(animation    ); return this; }
+    public @NotNull Style withTransform             (final @NotNull  Transform            transform    ) { setTransform             (transform    ); return this; }
+    public @NotNull Style withViewRange             (final           float                viewRange    ) { setViewRange             (viewRange    ); return this; }
+    public @NotNull Style withBillboardMode         (final @NotNull  BillboardConstraints billboardMode) { setBillboardMode         (billboardMode); return this; }
+    public @NotNull Style withPrimerAnimation       (final @Nullable Animation            animation    ) { setPrimerAnimation       (animation    ); return this; }
+    public @NotNull Style withSpawnAnimation        (final @Nullable Animation            animation    ) { setSpawnAnimation        (animation    ); return this; }
+    public @NotNull Style withDespawnAnimation      (final @Nullable Animation            animation    ) { setDespawnAnimation      (animation    ); return this; }
+    public @NotNull Style withInversePrimerAnimation(final @Nullable Animation            animation    ) { setInversePrimerAnimation(animation    ); return this; }
 }

@@ -6,7 +6,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.graphics.functional.styles.TextInputElmStyle;
+import com.snek.frameworklib.graphics.functional.styles.ChatInputStyle;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.input.MessageReceiver;
 import com.snek.frameworklib.utils.Txt;
@@ -26,12 +26,12 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 /**
- * A generic text input class that allows the user to enter a string input through the chat after clicking the element.
+ * A generic chat input element that allows the user to enter a string through the chat after clicking it.
  * <p>
  * This element automatically handles style.text updates.
  * Don't call {@code .setText} directly. Use {@link #setDIsplayedText(Component)} instead.
  */
-public abstract class TextInputElm extends FancyButtonElm {
+public abstract class ChatInputElm extends TextButtonElm {
     public static final int CURSOR_TOGGLE_DELAY = 10;
 
     private final @Nullable Component        clickFeedbackMessage;
@@ -46,19 +46,19 @@ public abstract class TextInputElm extends FancyButtonElm {
 
 
     /**
-     * Creates a new TextInputElm using a custom style.
+     * Creates a new ChatInputElm using a custom style.
      * @param level The level in which to place the element.
      * @param lmbActionName The name of the action associated with left clicks.
      * @param rmbActionName The name of the action associated with right clicks.
      * @param clickFeedbackMessage The message to show to the player when they click the element.
      * @param style The custom style.
      */
-    protected TextInputElm(
+    protected ChatInputElm(
         final @NotNull ServerLevel level,
         final @Nullable String lmbActionName,
         final @Nullable String rmbActionName,
         final @Nullable Component clickFeedbackMessage,
-        final @NotNull TextInputElmStyle style
+        final @NotNull ChatInputStyle style
     ) {
         super(level, lmbActionName, rmbActionName, 1, style);
         this.clickFeedbackMessage = clickFeedbackMessage;
@@ -66,19 +66,19 @@ public abstract class TextInputElm extends FancyButtonElm {
 
 
     /**
-     * Creates a new TextInputElm using the default style.
+     * Creates a new ChatInputElm using the default style.
      * @param level The level in which to place the element.
      * @param lmbActionName The name of the action associated with left clicks.
      * @param rmbActionName The name of the action associated with right clicks.
      * @param clickFeedbackMessage The message to show to the player when they click the element.
      */
-    protected TextInputElm(
+    protected ChatInputElm(
         final @NotNull ServerLevel level,
         final @Nullable String lmbActionName,
         final @Nullable String rmbActionName,
         final @Nullable Component clickFeedbackMessage
     ) {
-        this(level, lmbActionName, rmbActionName, clickFeedbackMessage, new TextInputElmStyle());
+        this(level, lmbActionName, rmbActionName, clickFeedbackMessage, new ChatInputStyle());
     }
 
 
@@ -106,7 +106,7 @@ public abstract class TextInputElm extends FancyButtonElm {
      */
     public void forceTextUpdate() {
         final Component text = inputState ? new Txt(cursorToggleState ? "|" : " ").get() : (displayedText == null ? new Txt().get() : displayedText);
-        getStyle(TextInputElmStyle.class).setText(text);
+        getStyle(ChatInputStyle.class).setText(text);
         flushStyle();
     }
 

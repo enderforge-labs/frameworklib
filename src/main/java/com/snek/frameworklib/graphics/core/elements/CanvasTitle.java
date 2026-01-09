@@ -4,8 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
-import com.snek.frameworklib.graphics.basic.elements.SimpleTextElm;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.graphics.basic.elements.TextElm;
+import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -17,7 +17,7 @@ import net.minecraft.server.level.ServerLevel;
 
 
 
-public class CanvasTitle extends SimpleTextElm {
+public class CanvasTitle extends TextElm {
 
     /**
      * Creates a new TitleElm.
@@ -25,7 +25,7 @@ public class CanvasTitle extends SimpleTextElm {
      * @param defaultText The initial text to display when the element is created. This will replace the text specified in the style.
      * @param style The style to use. Its text overflow behaviour is automatically set to SCROLL.
      */
-    public CanvasTitle(final @NotNull ServerLevel level, final @NotNull Component defaultText, final @NotNull SimpleTextElmStyle style) {
+    public CanvasTitle(final @NotNull ServerLevel level, final @NotNull Component defaultText, final @NotNull TextStyle style) {
         super(level, style
             .withText(defaultText)
             .withTextAlignment(TextAlignment.CENTER)
@@ -39,7 +39,7 @@ public class CanvasTitle extends SimpleTextElm {
      * @param defaultText The initial text to display when the element is created. This will replace the text specified in the style.
      * @param style The style to use. Its text overflow behaviour is automatically set to SCROLL.
      */
-    public CanvasTitle(final @NotNull ServerLevel level, final @NotNull String defaultText, final @NotNull SimpleTextElmStyle style) {
+    public CanvasTitle(final @NotNull ServerLevel level, final @NotNull String defaultText, final @NotNull TextStyle style) {
         this(level, Component.literal(defaultText), style);
     }
 
@@ -49,7 +49,7 @@ public class CanvasTitle extends SimpleTextElm {
      * @param defaultText The initial text to display when the element is created.
      */
     public CanvasTitle(final @NotNull ServerLevel level, final @NotNull Component defaultText) {
-        this(level, defaultText, new SimpleTextElmStyle());
+        this(level, defaultText, new TextStyle());
     }
 
     /**
@@ -69,7 +69,7 @@ public class CanvasTitle extends SimpleTextElm {
      * @param text The text to display.
      */
     public void updateDisplay(final @NotNull Component text) {
-        getStyle(SimpleTextElmStyle.class).setText(text);
+        getStyle(TextStyle.class).setText(text);
         flushStyle();
     }
 }

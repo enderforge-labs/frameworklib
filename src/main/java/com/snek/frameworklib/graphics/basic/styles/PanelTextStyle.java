@@ -9,8 +9,8 @@ import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.graphics.basic.elements.FancyTextElm;
-import com.snek.frameworklib.graphics.core.styles.ElmStyle;
+import com.snek.frameworklib.graphics.basic.elements.PanelTextElm;
+import com.snek.frameworklib.graphics.core.styles.Style;
 import com.snek.frameworklib.utils.Easings;
 
 
@@ -21,9 +21,9 @@ import com.snek.frameworklib.utils.Easings;
 
 
 /**
- * The default style of the generic {@link FancyTextElm} element.
+ * The default style of the generic {@link PanelTextElm} element.
  */
-public class FancyTextElmStyle extends SimpleTextElmStyle {
+public class PanelTextStyle extends TextStyle {
     private @NotNull Flagged<@NotNull Vector3i>  bgColor     = null;
     private @NotNull Flagged<@NotNull Integer>   bgAlpha     = null;
     private @NotNull Flagged<@NotNull Transform> transformFg = null;
@@ -33,7 +33,7 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
     /**
      * Creates a new FancyTextElmStyle.
      */
-    public FancyTextElmStyle(final boolean reset) {
+    public PanelTextStyle(final boolean reset) {
         super(false);
         if(reset) resetAll();
     }
@@ -41,7 +41,7 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
     /**
      * Creates a new FancyTextElmStyle.
      */
-    public FancyTextElmStyle() {
+    public PanelTextStyle() {
         this(true);
     }
 
@@ -57,7 +57,7 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
     @Override
     public @Nullable Animation getDefaultPrimerAnimation() {
         return new Animation(
-            new Transition(ElmStyle.D_TIME, Easings.sineOut)
+            new Transition(Style.D_TIME, Easings.sineOut)
             .targetBgAlpha(0)
             .targetOpacity(0)
             .additiveTransformFg(new Transform().moveX(SPAWN_ANIMATION_SHIFT))
@@ -68,7 +68,7 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
     @Override
     public @Nullable Animation getDefaultSpawnAnimation() {
         return new Animation(
-            new Transition(ElmStyle.S_TIME, Easings.sineOut)
+            new Transition(Style.S_TIME, Easings.sineOut)
             .targetBgAlpha(getDefaultBgAlpha())
             .targetOpacity(255)
             .additiveTransformFg(new Transform().moveX(-SPAWN_ANIMATION_SHIFT))
@@ -79,7 +79,7 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
     @Override
     public @Nullable Animation getDefaultDespawnAnimation() {
         return new Animation(
-            new Transition(ElmStyle.D_TIME, Easings.sineOut)
+            new Transition(Style.D_TIME, Easings.sineOut)
             .targetBgAlpha(0)
             .targetOpacity(0)
         );
@@ -166,8 +166,8 @@ public class FancyTextElmStyle extends SimpleTextElmStyle {
 
 
     // With
-    public @NotNull FancyTextElmStyle withBgColor    (final @NotNull Vector3i  bgColor    ) { setBgColor    (bgColor    ); return this; }
-    public @NotNull FancyTextElmStyle withBgAlpha    (final          int       bgAlpha    ) { setBgAlpha    (bgAlpha    ); return this; }
-    public @NotNull FancyTextElmStyle withTransformFg(final @NotNull Transform transformFg) { setTransformFg(transformFg); return this; }
-    public @NotNull FancyTextElmStyle withTransformBg(final @NotNull Transform transformBg) { setTransformBg(transformBg); return this; }
+    public @NotNull PanelTextStyle withBgColor    (final @NotNull Vector3i  bgColor    ) { setBgColor    (bgColor    ); return this; }
+    public @NotNull PanelTextStyle withBgAlpha    (final          int       bgAlpha    ) { setBgAlpha    (bgAlpha    ); return this; }
+    public @NotNull PanelTextStyle withTransformFg(final @NotNull Transform transformFg) { setTransformFg(transformFg); return this; }
+    public @NotNull PanelTextStyle withTransformBg(final @NotNull Transform transformBg) { setTransformBg(transformBg); return this; }
 }

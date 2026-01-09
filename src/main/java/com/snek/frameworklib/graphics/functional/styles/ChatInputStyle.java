@@ -12,23 +12,23 @@ import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 
 
 /**
- * The style of the generic TextInputElm UI element.
+ * The style of the generic ChatInputElm UI element.
  */
-public class TextInputElmStyle extends FancyButtonElmStyle {
+public class ChatInputStyle extends TextButtonStyle {
 
 
     /**
-     * Creates a new TextInputElmStyle.
+     * Creates a new ChatInputStyle.
      */
-    public TextInputElmStyle(final boolean reset) {
+    public ChatInputStyle(final boolean reset) {
         super(false);
         if(reset) resetAll();
     }
 
     /**
-     * Creates a new TextInputElmStyle.
+     * Creates a new ChatInputStyle.
      */
-    public TextInputElmStyle() {
+    public ChatInputStyle() {
         this(true);
     }
 

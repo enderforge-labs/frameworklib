@@ -10,7 +10,7 @@ import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
-import com.snek.frameworklib.graphics.core.styles.ElmStyle;
+import com.snek.frameworklib.graphics.core.styles.Style;
 import com.snek.frameworklib.utils.Easings;
 
 
@@ -23,7 +23,7 @@ import com.snek.frameworklib.utils.Easings;
 /**
  * The default style of the generic {@link PanelElm} element.
  */
-public class PanelElmStyle extends ElmStyle {
+public class PanelStyle extends Style {
     private @NotNull Flagged<@NotNull Vector3i> color = null;
     private @NotNull Flagged<@NotNull Integer>  alpha = null;
 
@@ -33,7 +33,7 @@ public class PanelElmStyle extends ElmStyle {
     /**
      * Creates a new PanelElmStyle.
      */
-    public PanelElmStyle(final boolean reset) {
+    public PanelStyle(final boolean reset) {
         super(false);
         if(reset) resetAll();
     }
@@ -41,7 +41,7 @@ public class PanelElmStyle extends ElmStyle {
     /**
      * Creates a new PanelElmStyle.
      */
-    public PanelElmStyle() {
+    public PanelStyle() {
         this(true);
     }
 
@@ -73,7 +73,7 @@ public class PanelElmStyle extends ElmStyle {
     @Override
     public @Nullable Animation getDefaultPrimerAnimation() {
         return new Animation(
-            new Transition(ElmStyle.S_TIME, Easings.sineOut)
+            new Transition(Style.S_TIME, Easings.sineOut)
             .targetBgAlpha(0)
             .targetBgColor(getDefaultColor())
         );
@@ -83,7 +83,7 @@ public class PanelElmStyle extends ElmStyle {
     @Override
     public @Nullable Animation getDefaultSpawnAnimation() {
         return new Animation(
-            new Transition(ElmStyle.S_TIME, Easings.sineOut)
+            new Transition(Style.S_TIME, Easings.sineOut)
             .targetBgAlpha(getDefaultAlpha())
         );
     }
@@ -92,7 +92,7 @@ public class PanelElmStyle extends ElmStyle {
     @Override
     public @Nullable Animation getDefaultDespawnAnimation() {
         return new Animation(
-            new Transition(ElmStyle.D_TIME, Easings.sineOut)
+            new Transition(Style.D_TIME, Easings.sineOut)
             .targetBgAlpha(0)
         );
     }
@@ -140,6 +140,6 @@ public class PanelElmStyle extends ElmStyle {
 
 
     // With
-    public @NotNull PanelElmStyle withColor(final @NotNull Vector3i color) { setColor(color); return this; }
-    public @NotNull PanelElmStyle withAlpha(final          int      alpha) { setAlpha(alpha); return this; }
+    public @NotNull PanelStyle withColor(final @NotNull Vector3i color) { setColor(color); return this; }
+    public @NotNull PanelStyle withAlpha(final          int      alpha) { setAlpha(alpha); return this; }
 }

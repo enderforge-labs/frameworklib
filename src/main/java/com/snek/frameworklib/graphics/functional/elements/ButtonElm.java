@@ -6,8 +6,8 @@ import org.joml.Vector2f;
 import org.joml.Vector3d;
 
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.graphics.basic.elements.FancyTextElm;
-import com.snek.frameworklib.graphics.functional.styles.FancyButtonElmStyle;
+import com.snek.frameworklib.graphics.basic.elements.PanelElm;
+import com.snek.frameworklib.graphics.functional.styles.ButtonStyle;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 
@@ -23,28 +23,30 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 /**
- * A generic button class with clicking and hovering capabilities and a configurable cooldown time.
+ * A generic button element with clicking and hovering capabilities and a configurable cooldown time.
+ * <p>
+ * This button cannot display text.
  */
-public abstract class FancyButtonElm extends FancyTextElm implements Clickable, Hoverable {
+public abstract class ButtonElm extends PanelElm implements Clickable, Hoverable {
     __base_ButtonElm base;
 
 
 
 
     /**
-     * Creates a new FancyButtonElm using a custom style.
-     * @param level The level in which to place the element
+     * Creates a new ButtonElm using a custom style.
+     * @param level The level in which to place the element.
      * @param lmbActionName The name of the action associated with left clicks.
      * @param rmbActionName The name of the action associated with right clicks.
      * @param clickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      * @param style The custom style.
      */
-    protected FancyButtonElm(
+    protected ButtonElm(
         final @NotNull ServerLevel level,
         final @Nullable String lmbActionName,
         final @Nullable String rmbActionName,
         final int clickCooldown,
-        final FancyButtonElmStyle style
+        final ButtonStyle style
     ) {
         super(level, style);
         assert Require.nonNegative(clickCooldown, "click cooldown");
@@ -53,19 +55,19 @@ public abstract class FancyButtonElm extends FancyTextElm implements Clickable, 
 
 
     /**
-     * Creates a new FancyButtonElm using the default style.
+     * Creates a new ButtonElm using the default style.
      * @param level The level in which to place the element.
      * @param lmbActionName The name of the action associated with left clicks.
      * @param rmbActionName The name of the action associated with right clicks.
      * @param lickCooldown The amount of ticks before the button becomes clickable again after being clicked.
      */
-    protected FancyButtonElm(
+    protected ButtonElm(
         final @NotNull ServerLevel level,
         final @Nullable String lmbActionName,
         final @Nullable String rmbActionName,
         final int clickCooldown
     ) {
-        this(level, lmbActionName, rmbActionName, clickCooldown, new FancyButtonElmStyle());
+        this(level, lmbActionName, rmbActionName, clickCooldown, new ButtonStyle());
     }
 
 
@@ -74,13 +76,13 @@ public abstract class FancyButtonElm extends FancyTextElm implements Clickable, 
     @Override
     public void spawn(final @NotNull Vector3d pos, final boolean animate) {
         super.spawn(pos, animate);
-        base.spawn(this, getStyle(FancyButtonElmStyle.class).getHoverPrimerAnimation());
+        base.spawn(this, getStyle(ButtonStyle.class).getHoverPrimerAnimation());
     }
 
 
     @Override
     public void finalizeDespawn() {
-        base.finalizeDespawn(this, getStyle(FancyButtonElmStyle.class).getHoverInversePrimerAnimation());
+        base.finalizeDespawn(this, getStyle(ButtonStyle.class).getHoverInversePrimerAnimation());
         super.finalizeDespawn();
     }
 
@@ -89,7 +91,7 @@ public abstract class FancyButtonElm extends FancyTextElm implements Clickable, 
 
     @Override
     public void onHoverEnter(final @NotNull Player player) {
-        base.onHoverEnter(this, player, getStyle(FancyButtonElmStyle.class).getHoverEnterAnimation());
+        base.onHoverEnter(this, player, getStyle(ButtonStyle.class).getHoverEnterAnimation());
     }
 
     @Override
@@ -99,7 +101,7 @@ public abstract class FancyButtonElm extends FancyTextElm implements Clickable, 
 
     @Override
     public void onHoverExit(final @Nullable Player player) {
-        base.onHoverExit(this, getStyle(FancyButtonElmStyle.class).getHoverLeaveAnimation());
+        base.onHoverExit(this, getStyle(ButtonStyle.class).getHoverLeaveAnimation());
     }
 
 
@@ -115,12 +117,12 @@ public abstract class FancyButtonElm extends FancyTextElm implements Clickable, 
 
 
     @Override
-    public @Nullable Vector2f attemptClick(final @NotNull Player player, final @NotNull ClickAction click) {
+    public @NotNull Vector2f attemptClick(final @NotNull Player player, final @NotNull ClickAction click) {
         return base.attemptClick(this, player, click);
     }
 
     @Override
-    public void onClick(final @NotNull Player player, final @NotNull ClickAction click, final @NotNull Vector2f coords) {
+    public void onClick(@NotNull final Player player, @NotNull final ClickAction click, final @NotNull Vector2f coords) {
         base.onClick(this, click, coords);
     }
 }

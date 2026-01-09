@@ -8,7 +8,8 @@ import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
-import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.PanelStyle;
+import com.snek.frameworklib.graphics.core.styles.Style;
 import com.snek.frameworklib.utils.Easings;
 
 
@@ -19,9 +20,9 @@ import com.snek.frameworklib.utils.Easings;
 
 
 /**
- * The default style of the generic {@Link ButtonElm} element.
+ * The default tyle of the generic {@Link ButtonElm} element.
  */
-public class FancyButtonElmStyle extends FancyTextElmStyle {
+public class ButtonStyle extends PanelStyle {
     private @Nullable Flagged<Animation> hoverPrimerAnimation         = null;
     private @Nullable Flagged<Animation> hoverEnterAnimation          = null;
     private @Nullable Flagged<Animation> hoverLeaveAnimation          = null;
@@ -29,19 +30,18 @@ public class FancyButtonElmStyle extends FancyTextElmStyle {
 
 
 
-
     /**
-     * Creates a new FancyButtonElmStyle.
+     * Creates a new ButtonStyle.
      */
-    public FancyButtonElmStyle(final boolean reset) {
+    public ButtonStyle(final boolean reset) {
         super(false);
         if(reset) resetAll();
     }
 
     /**
-     * Creates a new FancyButtonElmStyle.
+     * Creates a new ButtonStyle.
      */
-    public FancyButtonElmStyle() {
+    public ButtonStyle() {
         this(true);
     }
 
@@ -70,13 +70,13 @@ public class FancyButtonElmStyle extends FancyTextElmStyle {
 
 
     @Override
-    public @NotNull Vector3i getDefaultBgColor() {
-        return new Vector3i(__base_ButtonElmStyle.HOVER_COLOR);
+    public @NotNull Vector3i getDefaultColor() {
+        return new Vector3i(__base_ButtonStyle.HOVER_COLOR);
     }
 
     @Override
-    public int getDefaultBgAlpha() {
-        return __base_ButtonElmStyle.DEFAULT_BG_ALPHA;
+    public int getDefaultAlpha() {
+        return __base_ButtonStyle.DEFAULT_BG_ALPHA;
     }
 
 
@@ -84,8 +84,8 @@ public class FancyButtonElmStyle extends FancyTextElmStyle {
 
     // Default value providers
     public static final @Nullable Animation DEFAULT_HOVER_PRIMER_ANIMATION = new Animation(
-        new Transition(__base_ButtonElmStyle.HOVER_ANIMATION_TIME, Easings.expOut)
-        .additiveTransformBg(new Transform().scaleX(__base_ButtonElmStyle.HIDDEN_W))
+        new Transition(__base_ButtonStyle.HOVER_ANIMATION_TIME, Easings.expOut)
+        .additiveTransform(new Transform().scaleX(__base_ButtonStyle.HIDDEN_W))
     );
     public @Nullable Animation getDefaultHoverPrimerAnimation       () { return new Animation(DEFAULT_HOVER_PRIMER_ANIMATION); }
     public @Nullable Animation getDefaultHoverEnterAnimation        () { return new Animation(DEFAULT_HOVER_PRIMER_ANIMATION).invert(); }
@@ -95,10 +95,38 @@ public class FancyButtonElmStyle extends FancyTextElmStyle {
 
 
 
+    @Override
+    public @Nullable Animation getDefaultPrimerAnimation() {
+        return new Animation(
+            new Transition(Style.D_TIME, Easings.sineOut)
+            .targetBgAlpha(0)
+            .targetOpacity(0)
+        );
+    }
+    @Override
+    public @Nullable Animation getDefaultSpawnAnimation() {
+        return new Animation(
+            new Transition(Style.S_TIME, Easings.sineOut)
+            .targetBgAlpha(getDefaultAlpha())
+            .targetOpacity(255)
+        );
+    }
+    @Override
+    public @Nullable Animation getDefaultDespawnAnimation() {
+        return new Animation(
+            new Transition(Style.D_TIME, Easings.sineOut)
+            .targetBgAlpha(0)
+            .targetOpacity(0)
+        );
+    }
+
+
+
+
     // Reset functions
-    public void resetHoverPrimerAnimation       () { hoverPrimerAnimation        = Flagged.from(getDefaultHoverPrimerAnimation       ()); }
-    public void resetHoverEnterAnimation        () { hoverEnterAnimation         = Flagged.from(getDefaultHoverEnterAnimation        ()); }
-    public void resetHoverLeaveAnimation        () { hoverLeaveAnimation         = Flagged.from(getDefaultHoverLeaveAnimation        ()); }
+    public void resetHoverPrimerAnimation       () {        hoverPrimerAnimation = Flagged.from(getDefaultHoverPrimerAnimation       ()); }
+    public void resetHoverEnterAnimation        () {        hoverEnterAnimation  = Flagged.from(getDefaultHoverEnterAnimation        ()); }
+    public void resetHoverLeaveAnimation        () {        hoverLeaveAnimation  = Flagged.from(getDefaultHoverLeaveAnimation        ()); }
     public void resetHoverInversePrimerAnimation() { hoverInversePrimerAnimation = Flagged.from(getDefaultHoverInversePrimerAnimation()); }
 
 
@@ -131,8 +159,8 @@ public class FancyButtonElmStyle extends FancyTextElmStyle {
 
 
     // With setters
-    public @NotNull FancyButtonElmStyle withHoverPrimerAnimation       (final @Nullable Animation hoverPrimerAnimation       ) { setHoverPrimerAnimation       (hoverPrimerAnimation       ); return this; }
-    public @NotNull FancyButtonElmStyle withHoverEnterAnimation        (final @Nullable Animation hoverEnterAnimation        ) { setHoverEnterAnimation        (hoverEnterAnimation        ); return this; }
-    public @NotNull FancyButtonElmStyle withHoverLeaveAnimation        (final @Nullable Animation hoverLeaveAnimation        ) { setHoverLeaveAnimation        (hoverLeaveAnimation        ); return this; }
-    public @NotNull FancyButtonElmStyle withHoverInversePrimerAnimation(final @Nullable Animation hoverInversePrimerAnimation) { setHoverInversePrimerAnimation(hoverInversePrimerAnimation); return this; }
+    public @NotNull ButtonStyle withHoverPrimerAnimation       (final @Nullable Animation hoverPrimerAnimation       ) { setHoverPrimerAnimation       (hoverPrimerAnimation       ); return this; }
+    public @NotNull ButtonStyle withHoverEnterAnimation        (final @Nullable Animation hoverEnterAnimation        ) { setHoverEnterAnimation        (hoverEnterAnimation        ); return this; }
+    public @NotNull ButtonStyle withHoverLeaveAnimation        (final @Nullable Animation hoverLeaveAnimation        ) { setHoverLeaveAnimation        (hoverLeaveAnimation        ); return this; }
+    public @NotNull ButtonStyle withHoverInversePrimerAnimation(final @Nullable Animation hoverInversePrimerAnimation) { setHoverInversePrimerAnimation(hoverInversePrimerAnimation); return this; }
 }

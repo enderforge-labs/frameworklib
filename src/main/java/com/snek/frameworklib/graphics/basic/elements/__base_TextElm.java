@@ -11,7 +11,7 @@ import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.generated.FontData;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.FontSize;
@@ -29,11 +29,11 @@ import net.minecraft.server.level.ServerLevel;
 
 
 /**
- * The base class of {@link FancyTextElm} and {@link SimpleTextElm}.
+ * The base class of {@link PanelTextElm} and {@link TextElm}.
  * <p>
  * This class is sealed as the two subclasses are handled differently throughout the library's codebase.
  */
-public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, SimpleTextElm {
+public abstract sealed class __base_TextElm extends Elm permits PanelTextElm, TextElm {
 
     // Constants
     public static final char  ELLIPSIS_CHAR = '…';   // The ellipsis character to use when truncating text
@@ -73,7 +73,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
      * @param entity The entity to use for the new element.
      * @param style The style to use.
      */
-    protected __base_TextElm(final @NotNull ServerLevel level, final @NotNull CustomDisplay entity, final @NotNull SimpleTextElmStyle style) {
+    protected __base_TextElm(final @NotNull ServerLevel level, final @NotNull CustomDisplay entity, final @NotNull TextStyle style) {
         super(level, entity, style);
     }
 
@@ -85,7 +85,7 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
      * This represents the size of the text that is stored in the element's text, in pixels.
      */
     public void updateTotTextSizeCache() {
-        final Vector2f s = __calcTextSizeCache(getStyle(SimpleTextElmStyle.class).getText().getString());
+        final Vector2f s = __calcTextSizeCache(getStyle(TextStyle.class).getText().getString());
         entityTotSizeCacheX = s.x;
         entityTotSizeCacheY = s.y;
     }
@@ -302,10 +302,10 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
     private @NotNull Transform calcForegroundTransform() {
-        /**/ if(this instanceof final SimpleTextElm e) { return                     e.__calcTransform();  }
-        else if(this instanceof final FancyTextElm  e) { return e.__calcTransformFg(e.__calcTransform()); }
+        /**/ if(this instanceof final TextElm e) { return                     e.__calcTransform();  }
+        else if(this instanceof final PanelTextElm  e) { return e.__calcTransformFg(e.__calcTransform()); }
 
-        //! This is never actually called. __base_TextElm is a sealed class that only permits SimpleTextElm and FancyTextElm
+        //! This is never actually called. __base_TextElm is a sealed class that only permits TextElm and PanelTextElm
         assert Require.fail("calcForegroundTransform called on invalid class");
         throw new RuntimeException();
     }
@@ -331,8 +331,8 @@ public abstract sealed class __base_TextElm extends Elm permits FancyTextElm, Si
 
 
         // Cache data
-        final Txt text = new Txt(getStyle(SimpleTextElmStyle.class).getText());
-        final TextOverflowBehaviour behaviour = getStyle(SimpleTextElmStyle.class).getTextOverflowBehaviour();
+        final Txt text = new Txt(getStyle(TextStyle.class).getText());
+        final TextOverflowBehaviour behaviour = getStyle(TextStyle.class).getTextOverflowBehaviour();
         final float totWidth = calcTotEntityWidth();
         final float maxWidth = absSize.x;
 

@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
 import com.snek.frameworklib.data_types.animations.Transform;
-import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.PanelStyle;
 import com.snek.frameworklib.graphics.composite.elements.DualInputIndicator;
 import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
 
@@ -18,7 +18,7 @@ import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
 /**
  * The style of the MouseButtonUp UI element.
  */
-public class InputIndicator_MouseButtonUp_S extends PanelElmStyle {
+public class InputIndicator_MouseButtonUp_S extends PanelStyle {
     public static final float BUTTON_SCALE = 1.2f;
 
 

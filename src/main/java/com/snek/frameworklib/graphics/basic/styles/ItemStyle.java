@@ -9,7 +9,7 @@ import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.elements.ItemElm;
-import com.snek.frameworklib.graphics.core.styles.ElmStyle;
+import com.snek.frameworklib.graphics.core.styles.Style;
 import com.snek.frameworklib.utils.Easings;
 
 import net.minecraft.world.item.ItemDisplayContext;
@@ -26,7 +26,7 @@ import net.minecraft.world.item.Items;
 /**
  * The default style of the generic {@link ItemElm} element.
  */
-public class ItemElmStyle extends ElmStyle {
+public class ItemStyle extends Style {
     public static final float PRIMER_ANIMATION_SCALE = 0.00001f;
 
     private @NotNull Flagged<@NotNull ItemStack> item = null;
@@ -38,7 +38,7 @@ public class ItemElmStyle extends ElmStyle {
     /**
      * Creates a new ItemElmStyle.
      */
-    public ItemElmStyle(final boolean reset) {
+    public ItemStyle(final boolean reset) {
         super(false);
         if(reset) resetAll();
     }
@@ -46,7 +46,7 @@ public class ItemElmStyle extends ElmStyle {
     /**
      * Creates a new ItemElmStyle.
      */
-    public ItemElmStyle() {
+    public ItemStyle() {
         this(true);
     }
 
@@ -80,7 +80,7 @@ public class ItemElmStyle extends ElmStyle {
     @Override
     public @Nullable Animation getDefaultSpawnAnimation() {
         return new Animation(
-            new Transition(ElmStyle.S_TIME, Easings.sineOut)
+            new Transition(Style.S_TIME, Easings.sineOut)
             .additiveTransform(new Transform().scale(1f / PRIMER_ANIMATION_SCALE))
         );
     }
@@ -128,6 +128,6 @@ public class ItemElmStyle extends ElmStyle {
 
 
     // With
-    public @NotNull ItemElmStyle withItem          (final @NotNull ItemStack                    item) { setItem          (item);           return this; }
-    public @NotNull ItemElmStyle withDisplayContext(final @NotNull ItemDisplayContext displayContext) { setDisplayContext(displayContext); return this; }
+    public @NotNull ItemStyle withItem          (final @NotNull ItemStack                    item) { setItem          (item);           return this; }
+    public @NotNull ItemStyle withDisplayContext(final @NotNull ItemDisplayContext displayContext) { setDisplayContext(displayContext); return this; }
 }

@@ -15,8 +15,8 @@ import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.graphics.basic.styles.FancyTextElmStyle;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.PanelTextStyle;
+import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.network.chat.Component;
@@ -33,7 +33,7 @@ import net.minecraft.world.entity.Display.BillboardConstraints;
 /**
  * A text element that also has a configurable, animatable background color.
  */
-public non-sealed class FancyTextElm extends __base_TextElm {
+public non-sealed class PanelTextElm extends __base_TextElm {
 
     // In-world data
     private final @NotNull CustomDisplay text;
@@ -47,10 +47,10 @@ public non-sealed class FancyTextElm extends __base_TextElm {
         assert Require.instanceOf(getEntity(), CustomTextDisplay.class, "background entity");
         return getEntity(CustomTextDisplay.class);
     }
-    private @NotNull FancyTextElmStyle getThisStyle() {
+    private @NotNull PanelTextStyle getThisStyle() {
         assert Require.nonNull(getStyle(), "style");
-        assert Require.instanceOf(getStyle(), FancyTextElmStyle.class, "style");
-        return getStyle(FancyTextElmStyle.class);
+        assert Require.instanceOf(getStyle(), PanelTextStyle.class, "style");
+        return getStyle(PanelTextStyle.class);
     }
 
     @Override
@@ -73,7 +73,7 @@ public non-sealed class FancyTextElm extends __base_TextElm {
      * @param level The level in which to place the element.
      * @param style The custom style.
      */
-    public FancyTextElm(final @NotNull ServerLevel level, final @NotNull FancyTextElmStyle style) {
+    public PanelTextElm(final @NotNull ServerLevel level, final @NotNull PanelTextStyle style) {
         super(level, new CustomTextDisplay(level), style);
         text = new CustomTextDisplay(level);
     }
@@ -83,8 +83,8 @@ public non-sealed class FancyTextElm extends __base_TextElm {
      * Creates a new FancyTextElm using the default style.
      * @param level The level in which to place the element.
      */
-    public FancyTextElm(final @NotNull ServerLevel level) {
-        this(level, new FancyTextElmStyle());
+    public PanelTextElm(final @NotNull ServerLevel level) {
+        this(level, new PanelTextStyle());
     }
 
 
@@ -108,7 +108,7 @@ public non-sealed class FancyTextElm extends __base_TextElm {
         return
             initialTransform.copy()
             .apply(getThisStyle().getTransformFg())                                     // Apply specified foreground transform
-            .scale(getThisStyle().getFontSize() * SimpleTextElmStyle.TEXT_FONT_FACTOR)  // Scale to font size
+            .scale(getThisStyle().getFontSize() * TextStyle.TEXT_FONT_FACTOR)  // Scale to font size
             .moveZ((getZIndex() + 1) * Configs.getGraphics().z_layer_spacing.getValue())
             //!^ Add 1 Z-layer to the forground entity so it's not covered by the background
         ;
@@ -345,7 +345,7 @@ public non-sealed class FancyTextElm extends __base_TextElm {
 
             // Tick foreground entity.
             //! Text displays need to be ticked to keep the opacity calculations consistent
-            //! Same as SimpleTextElm
+            //! Same as TextElm
             getFgEntity().tick();
         }
 

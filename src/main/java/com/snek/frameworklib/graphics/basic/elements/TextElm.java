@@ -11,7 +11,7 @@ import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.graphics.basic.styles.SimpleTextElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -26,9 +26,9 @@ import net.minecraft.server.level.ServerLevel;
 /**
  * An element that can display text.
  * <p>
- * This class has transparent background. For a text element with background color, use {@link FancyTextElm}.
+ * This class has transparent background. For a text element with background color, use {@link PanelTextElm}.
  */
-public non-sealed class SimpleTextElm extends __base_TextElm {
+public non-sealed class TextElm extends __base_TextElm {
 
     // In-world data
     private @NotNull CustomTextDisplay  getThisEntity() {
@@ -36,10 +36,10 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
         assert Require.instanceOf(getEntity(), CustomTextDisplay.class, "entity");
         return getEntity(CustomTextDisplay.class);
     }
-    private @NotNull SimpleTextElmStyle getThisStyle () {
+    private @NotNull TextStyle getThisStyle () {
         assert Require.nonNull(getStyle(), "style");
-        assert Require.instanceOf(getStyle(), SimpleTextElmStyle.class, "style");
-        return getStyle(SimpleTextElmStyle.class);
+        assert Require.instanceOf(getStyle(), TextStyle.class, "style");
+        return getStyle(TextStyle.class);
     }
 
     @Override
@@ -52,21 +52,21 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
 
 
     /**
-     * Creates a new SimpleTextElm using a custom style.
+     * Creates a new TextElm using a custom style.
      * @param level The level in which to place the element.
      * @param style The custom style.
      */
-    public SimpleTextElm(final @NotNull ServerLevel level, final @NotNull SimpleTextElmStyle style) {
+    public TextElm(final @NotNull ServerLevel level, final @NotNull TextStyle style) {
         super(level, new CustomTextDisplay(level), style);
     }
 
 
     /**
-     * Creates a new SimpleTextElm using the default style.
+     * Creates a new TextElm using the default style.
      * @param level The level in which to place the element.
      */
-    public SimpleTextElm(final @NotNull ServerLevel level) {
-        super(level, new CustomTextDisplay(level), new SimpleTextElmStyle());
+    public TextElm(final @NotNull ServerLevel level) {
+        super(level, new CustomTextDisplay(level), new TextStyle());
     }
 
 
@@ -76,7 +76,7 @@ public non-sealed class SimpleTextElm extends __base_TextElm {
     public @NotNull Transform __calcTransform() {
 
         // Scale to font size
-        return super.__calcTransform().scale(getThisStyle().getFontSize() * SimpleTextElmStyle.TEXT_FONT_FACTOR);
+        return super.__calcTransform().scale(getThisStyle().getFontSize() * TextStyle.TEXT_FONT_FACTOR);
     }
 
 

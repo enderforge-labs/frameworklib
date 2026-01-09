@@ -12,7 +12,7 @@ import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.containers.Pair;
 import com.snek.frameworklib.data_types.displays.CustomItemDisplay;
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
+import com.snek.frameworklib.graphics.basic.styles.ItemStyle;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 
 import net.minecraft.server.level.ServerLevel;
@@ -38,10 +38,10 @@ public class ItemElm extends Elm {
         assert Require.instanceOf(getEntity(), CustomItemDisplay.class, "entity");
         return getEntity(CustomItemDisplay.class);
     }
-    private @NotNull ItemElmStyle getThisStyle () {
+    private @NotNull ItemStyle getThisStyle () {
         assert Require.nonNull(getStyle(), "style");
-        assert Require.instanceOf(getStyle(), ItemElmStyle.class, "style");
-        return getStyle (ItemElmStyle.class);
+        assert Require.instanceOf(getStyle(), ItemStyle.class, "style");
+        return getStyle (ItemStyle.class);
     }
 
 
@@ -107,7 +107,7 @@ public class ItemElm extends Elm {
      * @param level The level in which to place the element.
      * @param style The custom style.
      */
-    public ItemElm(final @NotNull ServerLevel level, final @NotNull ItemElmStyle style) {
+    public ItemElm(final @NotNull ServerLevel level, final @NotNull ItemStyle style) {
         super(level, new CustomItemDisplay(level), style);
     }
 
@@ -117,7 +117,7 @@ public class ItemElm extends Elm {
      * @param level The level in which to place the element.
      */
     public ItemElm(final @NotNull ServerLevel level) {
-        super(level, new CustomItemDisplay(level), new ItemElmStyle());
+        super(level, new CustomItemDisplay(level), new ItemStyle());
     }
 
 

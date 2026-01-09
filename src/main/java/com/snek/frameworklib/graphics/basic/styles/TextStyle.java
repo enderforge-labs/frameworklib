@@ -10,8 +10,7 @@ import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.graphics.TextAlignment;
 import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.graphics.basic.elements.FancyTextElm;
-import com.snek.frameworklib.graphics.core.styles.ElmStyle;
+import com.snek.frameworklib.graphics.core.styles.Style;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
 
@@ -25,9 +24,9 @@ import net.minecraft.network.chat.Component;
 
 
 /**
- * The default style of the generic {@link FancyTextElm} element.
+ * The default style of the generic {@link TextElm} element.
  */
-public class SimpleTextElmStyle extends ElmStyle {
+public class TextStyle extends Style {
     public static final float DEFAULT_TEXT_SCALE = 0.3f;
     public static final int   DEFAULT_FONT_SIZE  = 12;
     public static final float TEXT_FONT_FACTOR = DEFAULT_TEXT_SCALE / DEFAULT_FONT_SIZE;
@@ -43,17 +42,17 @@ public class SimpleTextElmStyle extends ElmStyle {
 
 
     /**
-     * Creates a new SimpleTextElmStyle.
+     * Creates a new TextStyle.
      */
-    public SimpleTextElmStyle(final boolean reset) {
+    public TextStyle(final boolean reset) {
         super(false);
         if(reset) resetAll();
     }
 
     /**
-     * Creates a new SimpleTextElmStyle.
+     * Creates a new TextStyle.
      */
-    public SimpleTextElmStyle() {
+    public TextStyle() {
         this(true);
     }
 
@@ -94,7 +93,7 @@ public class SimpleTextElmStyle extends ElmStyle {
     @Override
     public @Nullable Animation getDefaultSpawnAnimation() {
         return new Animation(
-            new Transition(ElmStyle.S_TIME, Easings.sineOut)
+            new Transition(Style.S_TIME, Easings.sineOut)
             .targetOpacity(255)
             .additiveTransform(new Transform().moveX(-SPAWN_ANIMATION_SHIFT))
         );
@@ -104,7 +103,7 @@ public class SimpleTextElmStyle extends ElmStyle {
     @Override
     public @Nullable Animation getDefaultDespawnAnimation() {
         return new Animation(
-            new Transition(ElmStyle.D_TIME, Easings.sineOut)
+            new Transition(Style.D_TIME, Easings.sineOut)
             .targetOpacity(0)
         );
     }
@@ -176,9 +175,9 @@ public class SimpleTextElmStyle extends ElmStyle {
 
 
     // With setters
-    public @NotNull SimpleTextElmStyle withText                 (final @NotNull Component             text                 ) { setText                 (text                 ); return this; }
-    public @NotNull SimpleTextElmStyle withTextOverflowBehaviour(final @NotNull TextOverflowBehaviour textOverflowBehaviour) { setTextOverflowBehaviour(textOverflowBehaviour); return this; }
-    public @NotNull SimpleTextElmStyle withTextAlignment        (final @NotNull TextAlignment         textAlignment        ) { setTextAlignment        (textAlignment        ); return this; }
-    public @NotNull SimpleTextElmStyle withTextOpacity          (final          int                   textOpacity          ) { setTextOpacity          (textOpacity          ); return this; }
-    public @NotNull SimpleTextElmStyle withFontSize             (final          int                   fontSize             ) { setFontSize             (fontSize             ); return this; }
+    public @NotNull TextStyle withText                 (final @NotNull Component             text                 ) { setText                 (text                 ); return this; }
+    public @NotNull TextStyle withTextOverflowBehaviour(final @NotNull TextOverflowBehaviour textOverflowBehaviour) { setTextOverflowBehaviour(textOverflowBehaviour); return this; }
+    public @NotNull TextStyle withTextAlignment        (final @NotNull TextAlignment         textAlignment        ) { setTextAlignment        (textAlignment        ); return this; }
+    public @NotNull TextStyle withTextOpacity          (final          int                   textOpacity          ) { setTextOpacity          (textOpacity          ); return this; }
+    public @NotNull TextStyle withFontSize             (final          int                   fontSize             ) { setFontSize             (fontSize             ); return this; }
 }
