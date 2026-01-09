@@ -1,11 +1,16 @@
 package com.snek.frameworklib.graphics.basic.styles;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import com.snek.frameworklib.data_types.animations.Animation;
+import com.snek.frameworklib.data_types.animations.Transform;
+import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.elements.ItemElm;
 import com.snek.frameworklib.graphics.core.styles.ElmStyle;
+import com.snek.frameworklib.utils.Easings;
 
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -22,6 +27,8 @@ import net.minecraft.world.item.Items;
  * The default style of the generic {@link ItemElm} element.
  */
 public class ItemElmStyle extends ElmStyle {
+    public static final float PRIMER_ANIMATION_SCALE = 0.00001f;
+
     private @NotNull Flagged<@NotNull ItemStack> item = null;
     private @NotNull Flagged<@NotNull ItemDisplayContext> displayContext = null;
 
@@ -56,6 +63,26 @@ public class ItemElmStyle extends ElmStyle {
         editItem();
         editDisplayContext();
         super.flagAll();
+    }
+
+
+
+
+    @Override
+    public @Nullable Animation getDefaultPrimerAnimation() {
+        return new Animation(
+            new Transition()
+            .additiveTransform(new Transform().scale(PRIMER_ANIMATION_SCALE))
+        );
+    }
+
+
+    @Override
+    public @Nullable Animation getDefaultSpawnAnimation() {
+        return new Animation(
+            new Transition(ElmStyle.S_TIME, Easings.sineOut)
+            .additiveTransform(new Transform().scale(1f / PRIMER_ANIMATION_SCALE))
+        );
     }
 
 
