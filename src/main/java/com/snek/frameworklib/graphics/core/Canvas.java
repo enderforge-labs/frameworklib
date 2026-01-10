@@ -15,6 +15,7 @@ import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.styles.PanelStyle;
 import com.snek.frameworklib.graphics.core.elements.CanvasTitle;
 import com.snek.frameworklib.graphics.core.elements.Elm;
+import com.snek.frameworklib.graphics.core.styles.CanvasBorder_S;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Easings;
 import com.snek.frameworklib.utils.Txt;
@@ -392,6 +393,6 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
     public PanelElm createNewBgElement    (final @NotNull ServerLevel level) { return new PanelElm(level, new PanelStyle()); }
     public PanelElm createNewBackElement  (final @NotNull ServerLevel level) { return new PanelElm(level, new PanelStyle()); }
-    public PanelElm createNewTopElement   (final @NotNull ServerLevel level) { return new PanelElm(level, new PanelStyle()); }
-    public PanelElm createNewBottomElement(final @NotNull ServerLevel level) { return new PanelElm(level, new PanelStyle()); }
+    public PanelElm createNewTopElement   (final @NotNull ServerLevel level) { return new PanelElm(level, new CanvasBorder_S()); }
+    public PanelElm createNewBottomElement(final @NotNull ServerLevel level) { return new PanelElm(level, new CanvasBorder_S()); }
 }
