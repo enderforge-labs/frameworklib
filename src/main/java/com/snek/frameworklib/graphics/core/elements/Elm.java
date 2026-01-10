@@ -487,7 +487,6 @@ public abstract class Elm extends Div {
 
             // Call superclass's despawn
             super.despawn(false);
-            // despawning = true; //TODO remove
 
 
             // Handle animations
@@ -552,7 +551,6 @@ public abstract class Elm extends Div {
 
         // Despawn the entity
         entity.despawn();
-        // despawning = false;  //TODO remove
     }
 
 

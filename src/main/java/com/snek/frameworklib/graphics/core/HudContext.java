@@ -163,8 +163,6 @@ public non-sealed class HudContext extends Context {
 
     @Override
     public float calcRot() {
-        // return (Math.round((player.getViewYRot(1) + 180f) / 45f) % 8) * ((float)(Math.PI/4)); //TODO remove
-        // return player.getViewYRot(1) + (float)Math.PI;
         return (float)Math.toRadians(- player.getViewYRot(1) + 180f);
     }
 

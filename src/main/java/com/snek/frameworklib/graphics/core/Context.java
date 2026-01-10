@@ -70,10 +70,6 @@ public abstract sealed class Context permits HudContext, UiContext {
     public abstract  float              getInteractionBlockerSize();
 
 
-    //TODO REMOVE
-    // public float getRotationRadians() {
-    //     return (float)Math.toRadians(lastRotation * -45d);
-    // }
 
 
     // Setters
