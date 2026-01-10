@@ -11,51 +11,38 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * A class that lets you control scheduled tasks.
- * <p> Instances of this class are returned by the Scheduler's methods.
+ * <p>
+ * Instances of this class are returned by the Scheduler's methods.
  */
-public class TaskHandler {
-    private long targetTick;
-    public long getTargetTick() { return targetTick; }
-    public void setTargetTick(long n) { targetTick = n; }
-    protected final @NotNull Runnable task;
-    protected boolean cancelled = false;
+public class TaskHandler extends __base_TaskHandler {
+    private boolean complete = false;
 
 
+
+    /**
+     * Checks if the task was completed.
+     * @return Whether the task has been completed.
+     */
+    public boolean isComplete() {
+        return this.complete;
+    }
 
 
     /**
      * Creates a new TaskHandler.
-     * @param _targetTick The tick the task is scheduled for.
-     * @param _task The task to execute.
+     * @param targetTick The tick the task is scheduled for.
+     * @param task The task to execute.
      */
-    public TaskHandler(final long _targetTick, final @NotNull Runnable _task) {
-        targetTick = _targetTick;
-        task = _task;
+    public TaskHandler(final @NotNull Runnable task, final long targetTick) {
+        super(task, targetTick);
     }
 
 
-    /**
-     * Marks the task as cancelled.
-     * <p> Calling .exec() on cancelled tasks doesn't run them.
-     */
-    public void cancel() {
-        cancelled = true;
-    }
-
-
-    /**
-     * Marks the task as scheduled.
-     * <p> This undos any previous calls to .cancel()
-     */
-    public void schedule() {
-        cancelled = false;
-    }
-
-
-    /**
-     * Immediately runs the task if it hasn't been cancelled.
-     */
+    @Override
     public void compute() {
-        if(!cancelled) task.run();
+        if(!isCancelled() && !complete) {
+            super.compute();
+            complete = true;
+        }
     }
 }

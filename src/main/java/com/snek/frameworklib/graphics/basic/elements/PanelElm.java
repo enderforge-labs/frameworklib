@@ -1,17 +1,17 @@
 package com.snek.frameworklib.graphics.basic.elements;
 
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3d;
 import org.joml.Vector3i;
 import org.joml.Vector4i;
 
 import com.snek.frameworklib.data_types.animations.InterpolatedData;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.containers.Flagged;
-import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.data_types.displays.CustomTextDisplay;
-import com.snek.frameworklib.graphics.Elm;
-import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
-import com.snek.frameworklib.graphics.basic.styles.PanelElmStyle;
+import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.graphics.basic.styles.PanelStyle;
+import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.utils.Txt;
 
 import net.minecraft.server.level.ServerLevel;
@@ -25,11 +25,22 @@ import net.minecraft.server.level.ServerLevel;
 
 /**
  * A simple UI element with a background color and animations.
- * <p> Panels default to a 1x1 blocks size.
+ * <p>
+ * Panels default to a 1x1 blocks size.
  */
 public class PanelElm extends Elm {
-    private @NotNull CustomTextDisplay getThisEntity() { return getEntity(CustomTextDisplay.class); }
-    private @NotNull PanelElmStyle     getThisStyle () { return getStyle (PanelElmStyle    .class); }
+
+    private @NotNull CustomTextDisplay getThisEntity() {
+        assert Require.nonNull(getEntity(), "entity");
+        assert Require.instanceOf(getEntity(), CustomTextDisplay.class, "entity");
+        return getEntity(CustomTextDisplay.class);
+    }
+    private @NotNull PanelStyle getThisStyle () {
+        assert Require.nonNull(getStyle(), "style");
+        assert Require.instanceOf(getStyle(), PanelStyle.class, "style");
+        return getStyle (PanelStyle.class);
+    }
+
 
     // The amount of panel elements of default size would be needed to cover the width of a block
     public static final float ENTITY_BLOCK_RATIO_X = 40f;
@@ -43,34 +54,24 @@ public class PanelElm extends Elm {
 
 
 
-    /**
-     * Creates a new PanelElm using an existing entity and a custom style.
-     * @param _world The world in which to place the element.
-     * @param _entity The display entity.
-     * @param _style The custom style.
-     */
-    protected PanelElm(final @NotNull ServerLevel _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
-        super(_world, _entity, _style);
-        getThisEntity().setText(new Txt().get());
-    }
 
 
     /**
      * Creates a new PanelElm using a custom style.
-     * @param _world The world in which to place the element.
-     * @param _style The custom style.
+     * @param level The level in which to place the element.
+     * @param style The custom style.
      */
-    public PanelElm(final @NotNull ServerLevel _world, final @NotNull ElmStyle _style) {
-        this(_world, new CustomTextDisplay(_world), _style);
+    public PanelElm(final @NotNull ServerLevel level, final @NotNull PanelStyle style) {
+        super(level, new CustomTextDisplay(level), style);
     }
 
 
     /**
      * Creates a new PanelElm using the default style.
-     * @param _world The world in which to place the element.
+     * @param level The level in which to place the element.
      */
-    public PanelElm(final @NotNull ServerLevel _world) {
-        this(_world, new CustomTextDisplay(_world), new PanelElmStyle());
+    public PanelElm(final @NotNull ServerLevel level) {
+        super(level, new CustomTextDisplay(level), new PanelStyle());
     }
 
 
@@ -131,14 +132,6 @@ public class PanelElm extends Elm {
 
 
     @Override
-    public boolean stepTransition() {
-        return super.stepTransition();
-    }
-
-
-
-
-    @Override
     public @NotNull Transform __calcTransform() {
         final Transform t = super.__calcTransform();
         return t.copy()
@@ -146,5 +139,13 @@ public class PanelElm extends Elm {
             .scaleY(ENTITY_BLOCK_RATIO_Y * getAbsSize().y)
             .moveX(ENTITY_SHIFT_X * getAbsSize().x)
         ;
+    }
+
+
+
+
+    @Override
+    protected void prepareEntityForSpawn(final @NotNull Vector3d pos) {
+        getThisEntity().setText(new Txt().get());
     }
 }

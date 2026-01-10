@@ -1,25 +1,26 @@
 package com.snek.frameworklib.input;
 
-import java.util.ArrayList;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferStrategy;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.swing.SwingUtilities;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.debug.DebugCheck;
+import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.debug.UiDebugWindow;
-import com.snek.frameworklib.graphics.Context;
-import com.snek.frameworklib.graphics.Elm;
-import com.snek.frameworklib.graphics.hud._elements.Hud;
-import com.snek.frameworklib.graphics.ui._elements.UI;
+import com.snek.frameworklib.graphics.core.Context;
+import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.utils.UtilityClassBase;
 
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 
 
@@ -38,20 +39,50 @@ import net.minecraft.world.entity.player.Player;
 
 
 /**
- * Utility class containing methods to detect what players are looking at and handle hover events.
+ * Utility class that detects what players are looking at and handles hover events.
+ * <p>
+ * This is responsible for sending hover events to contexts.
  */
-public abstract class HoverReceiver {
+public final class HoverReceiver extends UtilityClassBase {
     private HoverReceiver() {}
 
 
     // Partial ray casting batch data
-    private static @Nullable List<Player> playerListSnapshot = null;
     private static int updateIndex = 0;
-    private static @Nullable HashSet<Player> playersWithContexts = null;
+    private static @NotNull Player[] playersWithContexts = null;
 
 
     // Optimization structures
-    private static @NotNull Map<@NotNull Player, com.snek.frameworklib.graphics.Elm> targetedElms = new HashMap<>();
+    private static @NotNull Map<@NotNull Player, @Nullable Context> targetedContexts    =  new HashMap<>();
+    private static @NotNull HashSet<@NotNull Context> updatedContexts     =  new HashSet<>();
+    private static @NotNull HashSet<@NotNull Context> prevUpdatedContexts =  new HashSet<>();
+
+
+    /**
+     * Find the context the specified player is currently looking at.
+     * @param player The player.
+     * @return The context the player is looking at, or none if  they aren't looking at any context.
+     */
+    public static @Nullable Context getTargetedContext(final @NotNull Player player) {
+        assert Require.nonNull(player, "player");
+        return targetedContexts.get(player);
+    }
+
+
+    /**
+     * Draws the specified element and all of its children in the debug window.
+     * @param div The element to draw.
+     * @param player The player to use as point of view.
+     */
+    public static void traceElements(final @NotNull Div div, final @NotNull Player player) {
+        assert Require.nonNull(div, "div");
+        assert Require.nonNull(player, "player");
+
+        div.checkIntersection(player, false);
+        for(final Div c : div.getChildren()) {
+            traceElements(c, player);
+        }
+    }
 
 
 
@@ -69,55 +100,66 @@ public abstract class HoverReceiver {
         // If this is the first iteration ever or all the batches have been processed
         if(updateIndex == 0) {
 
-            // Reset the lists
-            playerListSnapshot  = new ArrayList<>();
-            playersWithContexts = new HashSet<>();
+            // Recompute player list snapshot
+            playersWithContexts = Context.getActiveContexts().keySet().toArray(new Player[0]);
 
-            // Recalculate player list snapshot
-            for(final ServerLevel serverWorld : FrameworkLib.getServer().getAllLevels()) {
-                for(final Player player : serverWorld.players()) {
-                    playerListSnapshot.add(player);
-                }
+            // Send updates to contexts that have not been hovered on in the last full batch
+            final Set<Context> diff = new HashSet<>(prevUpdatedContexts);
+            diff.removeAll(updatedContexts);
+            for(final Context context : diff) {
+                context.forwardHover(context.getPlayer());
             }
+
+            // Reset lists of contexts
+            prevUpdatedContexts = updatedContexts;
+            updatedContexts = new HashSet<>();
         }
-
-
-
-
-        // Find players that currently have open contexts
-        final int batchSize = Math.max(1, playerListSnapshot.size() / Configs.getPerf().ray_casting_batches.getValue());
-        for(int i = 0; i < batchSize && updateIndex < playerListSnapshot.size(); ++i, ++updateIndex) {
-            final Player player = playerListSnapshot.get(updateIndex);
-
-
-            // Skip player if they are dead or in spectator mode or have a HUD open
-            if(player.isSpectator() || player.isDeadOrDying()) continue;
-            if(Hud.getActiveHUDs().containsKey(player.getUUID()) || UI.getActiveUIs().containsKey(player.getUUID())) {
-                playersWithContexts.add(player);
-            }
-        }
-
-
-
 
 
 
         //! Debug window
         if(DebugCheck.isDebug()) {
             UiDebugWindow.getW().clear();
+            UiDebugWindow.changeColor(Color.GREEN);
         }
 
-        // If all the batches have been processed, reset update index and finalize tick operations
-        if(updateIndex >= playerListSnapshot.size()) {
+
+        // Update players in the current batch
+        final int batchSize = Math.max(1, playersWithContexts.length / Configs.getPerf().ray_casting_batches.getValue());
+        for(int i = 0; i < batchSize && updateIndex < playersWithContexts.length; ++i, ++updateIndex) {
+            final Player player = playersWithContexts[updateIndex];
+
+            // Skip player if they are dead or in spectator mode or have a HUD open //TODO this might not be needed if the contexts are killed when players dead or go in spectator or etc...
+            if(player.isSpectator() || player.isDeadOrDying()) continue; //TODO this might not be needed if the contexts are killed when players dead or go in spectator or etc...
+
+            // Find targeted context and send hover updates
+            final @Nullable Context targetedContext = updateTargetedContext(player);
+            if(DebugCheck.isDebug()) UiDebugWindow.changeColor(Color.GREEN);
+            if(targetedContext != null) {
+                targetedContext.forwardHover(player);
+                updatedContexts.add(targetedContext);
+            }
+        }
+
+
+        // If all the batches have been processed, reset the update index
+        if(updateIndex >= playersWithContexts.length) {
             updateIndex = 0;
-            finalizeTick();
         }
 
 
         //! Debug window update
         if(DebugCheck.isDebug()) {
-            UiDebugWindow.getW().revalidate();
-            UiDebugWindow.getW().paintImmediately(0, 0, UiDebugWindow.getW().getWidth(), UiDebugWindow.getW().getHeight());
+            UiDebugWindow.getW().repaint();
+            SwingUtilities.invokeLater(() -> {
+                final BufferStrategy bs = UiDebugWindow.getFrame().getBufferStrategy();
+                if(bs != null) {
+                    final Graphics g = bs.getDrawGraphics();
+                    UiDebugWindow.getW().paint(g);
+                    g.dispose();
+                    bs.show();
+                }
+            });
         }
     }
 
@@ -129,31 +171,34 @@ public abstract class HoverReceiver {
 
 
     /**
-     * Part of tick operations.
-     * Called after all the ray casting batches have been processed.
+     * Checks which context the specified player is currently targeting and updates the targeted context reference.
+     * <p>
+     * This reference can then be retrieved using {@code #getTargetedContext(Player)}.
+     * @param player The player.
+     * @return The targeted context.
      */
-    public static void finalizeTick() {
+    public static @Nullable Context updateTargetedContext(final @NotNull Player player) {
+        assert Require.nonNull(player, "player");
 
 
-        // Send hover events to the currently hovered elements
-        final List<Player> toRemove = new ArrayList<>();
-        for(final Entry<Player, Elm> entry : targetedElms.entrySet()) {
-            entry.getValue().updateHoverState(entry.getKey());
-            if(!entry.getValue().isHovered()) {
-                toRemove.add(entry.getKey());
-            }
+        // Update context
+        final @Nullable Context topMost = Context.findTopMostContext(player);
+        if(topMost != null) {
+            targetedContexts.put(player, topMost);
+        }
+        else {
+            targetedContexts.remove(player);
         }
 
 
-        // Remove elements that aren't being hovered on anymore from the maps
-        for(final Player player : toRemove) {
-            targetedElms.remove(player);
+        // Trace context elements for debugging
+        if(DebugCheck.isDebug() && topMost != null && topMost.getActiveCanvas() != null) {
+            UiDebugWindow.changeColor(Color.GRAY);
+            traceElements(topMost.getActiveCanvas(), player);
         }
 
 
-        // Send hover updates to active Contexts
-        for(final Player player : playersWithContexts) {
-            Context.forwardHoverStatic(player);
-        }
+        // Return the context
+        return topMost;
     }
 }

@@ -7,8 +7,10 @@ import java.util.UUID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.snek.frameworklib.graphics.Context;
-import com.snek.frameworklib.graphics.InteractionBlocker;
+import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.graphics.core.Context;
+import com.snek.frameworklib.graphics.core.InteractionBlocker;
+import com.snek.frameworklib.utils.UtilityClassBase;
 import com.snek.frameworklib.utils.scheduler.RateLimiter;
 
 import net.minecraft.core.Vec3i;
@@ -29,8 +31,10 @@ import net.minecraft.world.level.Level;
 
 /**
  * A utility class that handles clicks from players.
+ * <p>
+ * This is responsible for sending click events to contexts.
  */
-public abstract class ClickReceiver {
+public final class ClickReceiver extends UtilityClassBase {
     private static final @NotNull Map<@NotNull UUID, @Nullable RateLimiter> clickLimiters = new HashMap<>();
     private ClickReceiver() {}
 
@@ -39,30 +43,46 @@ public abstract class ClickReceiver {
 
     /**
      * Handles left and right clicks on contexts.
-     * @param world The world the player is in.
+     * @param level The level the player is in.
      * @param player The player.
      * @param hand The hand used.
      * @param clickType The type of click (LEFT click or RIGHT click).
      * @return FAIL if the player clicked a context, PASS if not.
      */
-    private static @NotNull InteractionResult onClick(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull ClickAction clickType) {
+    private static @NotNull InteractionResult onClick(
+        final @NotNull Level level,
+        final @NotNull Player player,
+        final @NotNull InteractionHand hand,
+        final @NotNull ClickAction clickType
+    ) {
+        assert Require.nonNull(level,     "level");
+        assert Require.nonNull(player,    "player");
+        assert Require.nonNull(hand,      "hand");
+        assert Require.nonNull(clickType, "click type");
 
         // Skip player if they are dead or in spectator mode
         if(player.isSpectator() || player.isDeadOrDying()) return InteractionResult.PASS;
 
 
-        // Handle limiter
-        RateLimiter limiter = clickLimiters.get(player.getUUID());
-        if(limiter == null) {
-            limiter = new RateLimiter();
-            clickLimiters.put(player.getUUID(), limiter);
-        }
-        if(limiter.attempt()) limiter.renewCooldown(2);
-        else return InteractionResult.FAIL;
+        // Send click to the player's contexts and return if one accepts the click event
+        final @Nullable Context context = HoverReceiver.getTargetedContext(player);
+        if(context != null) {
 
+            // Create limiter if needed
+            RateLimiter limiter = clickLimiters.get(player.getUUID());
+            if(limiter == null) {
+                limiter = new RateLimiter();
+                clickLimiters.put(player.getUUID(), limiter);
+            }
 
-        // Send click to the player's contexts and return if one is present
-        if(Context.forwardClickStatic(player, clickType)) {
+            // Attempt to click if the limiter allows for it. Then renew the cooldown if the click was accepted
+            if(limiter.attempt()) {
+                if(context.forwardClick(player, clickType)) {
+                    limiter.renewCooldown(2);
+                }
+            }
+
+            // Return FAIL if the click was accepted (stops further event processing)
             return InteractionResult.FAIL;
         }
 
@@ -75,17 +95,31 @@ public abstract class ClickReceiver {
 
     /**
      * Handles left and right clicks on contexts.
-     * <p> Must be called on AttackEntityCallback and UseEntityCallback events.
-     * @param world The world the player is in.
+     * <p>
+     * Must be called on AttackEntityCallback and UseEntityCallback events.
+     * @param level The level the player is in.
      * @param player The player.
      * @param hand The hand used.
      * @param clickType The type of click (LEFT click or RIGHT click).
      * @param entity The entity.
      * @return FAIL if the player clicked a context, PASS if not.
      */
-    public static @NotNull InteractionResult onClickEntity(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull ClickAction clickType, final @NotNull Entity entity) {
+    public static @NotNull InteractionResult onClickEntity(
+        final @NotNull Level level,
+        final @NotNull Player player,
+        final @NotNull InteractionHand hand,
+        final @NotNull ClickAction clickType,
+        final @NotNull Entity entity
+    ) {
+        assert Require.nonNull(level,     "level");
+        assert Require.nonNull(player,    "player");
+        assert Require.nonNull(hand,      "hand");
+        assert Require.nonNull(clickType, "click type");
+        assert Require.nonNull(entity,    "entity");
+
+        // Select entities that have the tracking name
         if(entity instanceof Interaction && entity.hasCustomName() && entity.getCustomName().getString().equals(InteractionBlocker.ENTITY_CUSTOM_NAME)) {
-            return onClick(world, player, hand, clickType);
+            return onClick(level, player, hand, clickType);
         }
         return InteractionResult.PASS;
     }
@@ -95,18 +129,30 @@ public abstract class ClickReceiver {
 
     /**
      * Handles left and right clicks on blocks before the interaction blocker is spawned.
-     * <p> Must be called on AttackBlockCallback and UseBlockCallback events.
-     * @param world The world the player is in.
+     * <p>
+     * Must be called on AttackBlockCallback and UseBlockCallback events.
+     * @param level The level the player is in.
      * @param player The player.
      * @param hand The hand used.
      * @param clickType The type of click (LEFT click or RIGHT click).
      * @param pos The position of the clicked block.
      * @return FAIL if the player clicked a context, PASS if not.
      */
-    public static @NotNull InteractionResult onClickBlock(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand, final @NotNull ClickAction clickType, final @NotNull Vec3i pos) {
+    public static @NotNull InteractionResult onClickBlock(
+        final @NotNull Level level,
+        final @NotNull Player player,
+        final @NotNull InteractionHand hand,
+        final @NotNull ClickAction clickType,
+        final @NotNull Vec3i pos
+    ) {
+        assert Require.nonNull(level,     "level");
+        assert Require.nonNull(player,    "player");
+        assert Require.nonNull(hand,      "hand");
+        assert Require.nonNull(clickType, "click type");
+        assert Require.nonNull(pos,       "position");
 
         // Check ray casting result
-        return onClick(world, player, hand, clickType);
+        return onClick(level, player, hand, clickType);
     }
 
 
@@ -114,13 +160,22 @@ public abstract class ClickReceiver {
 
     /**
      * Handles right clicks on blocks before the interaction blocker is spawned.
-     * <p> Must be called on useItemCallback events.
-     * @param world The world the player is in.
+     * <p>
+     * Must be called on useItemCallback events.
+     * @param level The level the player is in.
      * @param player The player.
      * @param hand The hand used.
      * @return FAIL if the player clicked a context, PASS if not.
      */
-    public static @NotNull InteractionResult onUseItem(final @NotNull Level world, final @NotNull Player player, final @NotNull InteractionHand hand) {
-        return onClick(world, player, hand, ClickAction.SECONDARY);
+    public static @NotNull InteractionResult onUseItem(
+        final @NotNull Level level,
+        final @NotNull Player player,
+        final @NotNull InteractionHand hand
+    ) {
+        assert Require.nonNull(level,     "level");
+        assert Require.nonNull(player,    "player");
+        assert Require.nonNull(hand,      "hand");
+
+        return onClick(level, player, hand, ClickAction.SECONDARY);
     }
 }

@@ -5,23 +5,21 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
 
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.containers.Flagged;
 import com.snek.frameworklib.data_types.containers.Pair;
-import com.snek.frameworklib.data_types.displays.CustomDisplay;
 import com.snek.frameworklib.data_types.displays.CustomItemDisplay;
-import com.snek.frameworklib.graphics.Elm;
-import com.snek.frameworklib.graphics.basic.styles.ElmStyle;
-import com.snek.frameworklib.graphics.basic.styles.ItemElmStyle;
+import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.graphics.basic.styles.ItemStyle;
+import com.snek.frameworklib.graphics.core.elements.Elm;
 
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 
 
@@ -34,47 +32,67 @@ import net.minecraft.world.item.Items;
  * An element that can display items.
  */
 public class ItemElm extends Elm {
-    private @NotNull CustomItemDisplay getThisEntity() { return getEntity(CustomItemDisplay.class); }
-    private @NotNull ItemElmStyle      getThisStyle () { return getStyle (ItemElmStyle     .class); }
+
+    private @NotNull CustomItemDisplay getThisEntity() {
+        assert Require.nonNull(getEntity(), "entity");
+        assert Require.instanceOf(getEntity(), CustomItemDisplay.class, "entity");
+        return getEntity(CustomItemDisplay.class);
+    }
+    private @NotNull ItemStyle getThisStyle () {
+        assert Require.nonNull(getStyle(), "style");
+        assert Require.instanceOf(getStyle(), ItemStyle.class, "style");
+        return getStyle (ItemStyle.class);
+    }
+
 
 
 
 
     // Item transform exceptions
     private static final @NotNull Map<
-        @NotNull String,
+        @NotNull Item,
         @Nullable Pair<
             @NotNull ItemDisplayContext,
             @NotNull Transform
         >
     > transformExceptions = new HashMap<>(Map.ofEntries(
-        Map.entry(Items.TRIDENT.getDescriptionId(), Pair.from(
-            ItemDisplayContext.GUI,
-            new Transform()
-        )),
-        Map.entry(Items.SHIELD.getDescriptionId(),  Pair.from(
-            ItemDisplayContext.GROUND,
-            new Transform().scale(2.5f).moveY(-0.15f).rotY((float)Math.PI)
-        ))
+        // Map.entry(Items.TRIDENT, Pair.from(
+        //     ItemDisplayContext.GUI,
+        //     new Transform()
+        // )),
+        // Map.entry(Items.SHIELD, Pair.from(
+        //     ItemDisplayContext.GROUND,
+        //     new Transform().scale(2.5f).moveY(-0.15f).rotY((float)Math.PI)
+        // )),
+
+
+        // Map.entry(Items.LECTERN,        Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI))),
+        // Map.entry(Items.CARVED_PUMPKIN, Pair.from(ItemDisplayContext.NONE, new Transform().rotY((float)Math.PI)))
     ));
+
+
 
 
     // Tag transform exceptions
     private static final @NotNull Map<
-        @NotNull TagKey<@NotNull Item>,
+        @NotNull TagKey<Item>,
         @Nullable Pair<
             @NotNull ItemDisplayContext,
             @NotNull Transform
         >
     > tagTransformExceptions = new HashMap<>(Map.ofEntries(
-        Map.entry(ItemTags.BANNERS, Pair.from(
-            ItemDisplayContext.NONE,
-            new Transform().scale(0.6f).moveY(-0.08f).rotY((float)Math.PI)
-        )),
-        Map.entry(ItemTags.BEDS, Pair.from(
-            ItemDisplayContext.GROUND,
-            new Transform().scale(2.5f).moveY(-0.14f)
-        ))
+        // Map.entry(ItemTags.BANNERS, Pair.from(
+        //     ItemDisplayContext.NONE,
+        //     new Transform().scale(0.6f).moveY(-0.08f).rotY((float)Math.PI)
+        // )),
+        // Map.entry(ItemTags.BEDS, Pair.from(
+        //     ItemDisplayContext.GROUND,
+        //     new Transform().scale(2.5f).moveY(-0.14f)
+        // )),
+        // Map.entry(ItemTags.FENCES, Pair.from(
+        //     ItemDisplayContext.GROUND,
+        //     new Transform().rotY((float)Math.PI)
+        // ))
     ));
 
 
@@ -85,33 +103,21 @@ public class ItemElm extends Elm {
 
 
     /**
-     * Creates a new ItemElm using an existing entity and a custom style.
-     * @param _world The world in which to place the element.
-     * @param _entity The display entity.
-     * @param _style The custom style.
-     */
-    protected ItemElm(final @NotNull ServerLevel _world, final @NotNull CustomDisplay _entity, final @NotNull ElmStyle _style) {
-        super(_world, _entity, _style);
-        getThisEntity().setDisplayType(ItemDisplayContext.NONE);
-    }
-
-
-    /**
      * Creates a new ItemElm using a custom style.
-     * @param _world The world in which to place the element.
-     * @param _style The custom style.
+     * @param level The level in which to place the element.
+     * @param style The custom style.
      */
-    protected ItemElm(final @NotNull ServerLevel _world, final @NotNull ElmStyle _style) {
-        this(_world, new CustomItemDisplay(_world), _style);
+    public ItemElm(final @NotNull ServerLevel level, final @NotNull ItemStyle style) {
+        super(level, new CustomItemDisplay(level), style);
     }
 
 
     /**
      * Creates a new ItemElm using the default style.
-     * @param _world The world in which to place the element.
+     * @param level The level in which to place the element.
      */
-    public ItemElm(final @NotNull ServerLevel _world) {
-        this(_world, new CustomItemDisplay(_world), new ItemElmStyle());
+    public ItemElm(final @NotNull ServerLevel level) {
+        super(level, new CustomItemDisplay(level), new ItemStyle());
     }
 
 
@@ -124,6 +130,14 @@ public class ItemElm extends Elm {
         { final Flagged<ItemStack> f = getThisStyle().getFlaggedItem();
         if(f.isFlagged()) {
             getThisEntity().setItemStack(f.get());
+            f.unflag();
+        }}
+
+
+        // Apply display context
+        { final Flagged<ItemDisplayContext> f = getThisStyle().getFlaggedDisplayContext();
+        if(f.isFlagged()) {
+            getThisEntity().setDisplayType(f.get());
             f.unflag();
         }}
 
@@ -147,23 +161,35 @@ public class ItemElm extends Elm {
 
 
 
+
+
+
+
     @Override
     public @NotNull Transform __calcTransform() {
 
         // Retrieve parent transformation and exception. Item exceptions have priority over tag exceptions
-        Pair<ItemDisplayContext, Transform> exception = transformExceptions.get(getThisStyle().getItem().getItem().getDescriptionId());
-        if(exception == null) for(var entry : tagTransformExceptions.entrySet()) {
+        Pair<ItemDisplayContext, Transform> exception = transformExceptions.get(getThisStyle().getItem().getItem());
+        if(exception == null) for(final var entry : tagTransformExceptions.entrySet()) {
             if(getThisStyle().getItem().is(entry.getKey())) {
                 exception = entry.getValue();
                 break;
             }
         }
 
-        // Update the entity's display type and apply the exception's transformation to the parent one if needed
-        getThisEntity().setDisplayType(exception == null ? ItemDisplayContext.NONE : exception.getFirst());
+        // Calculate the parent transform and apply the transform exception if needed
         final Transform t = super.__calcTransform();
-        return exception == null ? t : t.apply(exception.getSecond());
-        //FIXME shield and other y-translated items don't go up enough when the edit animation is triggered
-        //FIXME ^ y translation doesn't scale with y size so the final translation looks greater on smaller scales
+        if(exception != null && getThisStyle().getDisplayContext() == exception.getFirst()) {
+            t.apply(exception.getSecond());
+        }
+        return t;
+    }
+
+
+
+
+    @Override
+    protected void prepareEntityForSpawn(final @NotNull Vector3d pos) {
+        // Empty
     }
 }

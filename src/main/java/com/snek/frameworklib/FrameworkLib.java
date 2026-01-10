@@ -1,16 +1,23 @@
 package com.snek.frameworklib;
 
+import java.nio.file.Path;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.snek.frameworkconfig.FrameworkConfig;
+import com.snek.frameworklib.cache.PlayerDataCache;
 import com.snek.frameworklib.configs.Configs;
-import com.snek.frameworklib.graphics.Context;
-import com.snek.frameworklib.graphics.Elm;
-import com.snek.frameworklib.graphics.InteractionBlocker;
+import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.graphics.core.Context;
+import com.snek.frameworklib.graphics.core.InteractionBlocker;
+import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.input.ClickReceiver;
 import com.snek.frameworklib.input.HoverReceiver;
 import com.snek.frameworklib.input.MessageReceiver;
+import com.snek.frameworklib.input.ScrollReceiver;
 import com.snek.frameworklib.utils.scheduler.Scheduler;
 
 import net.fabricmc.api.ModInitializer;
@@ -22,9 +29,12 @@ import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.level.storage.LevelResource;
 
 
 
@@ -33,17 +43,29 @@ import net.minecraft.world.inventory.ClickAction;
 
 
 
+/**
+ * The main class and entry point of Framework Lib.
+ * <p>
+ * This class registers all the event callbacks and contains the library's ID, the logger, the phase ID and utility methods.
+ */
 public class FrameworkLib implements ModInitializer {
     public static final String LIB_ID = "frameworklib";
+    public static final @NotNull Logger LOGGER = LoggerFactory.getLogger(LIB_ID);
     public static final ResourceLocation PHASE_ID = new ResourceLocation(LIB_ID, "phase_id");
+
+
+    public static Path getStorageDir(final @NotNull String modId) {
+        return FrameworkLib.getServer().getWorldPath(LevelResource.ROOT).resolve("data/" + modId);
+    }
+    public static Path getConfigDir(final @NotNull String modId) {
+        return FabricLoader.getInstance().getConfigDir().resolve(modId);
+    }
 
 
     // Server instance
     private static @Nullable MinecraftServer serverInstance = null;
     public  static @NotNull  MinecraftServer getServer() {
-        if(serverInstance == null) {
-            throw new NullPointerException("Server instance requested before initialization");
-        }
+        assert Require.condition(serverInstance != null, "Server instance requested before initialization");
         return serverInstance;
     }
 
@@ -53,9 +75,6 @@ public class FrameworkLib implements ModInitializer {
 
 
 
-
-    private static boolean fatal = false;
-    public static void flagFatal() { fatal = true; }
 
     @Override
     public void onInitialize() {
@@ -73,12 +92,18 @@ public class FrameworkLib implements ModInitializer {
             });
 
 
+            // Register player login callbacks
+            ServerPlayConnectionEvents.JOIN.register((handler, sender, _server) -> {
+                PlayerDataCache.onPlayerJoin(handler.getPlayer());
+            });
+
+
             // Read config files
-            if(!Configs.loadConfigs()) fatal = true;
+            Configs.loadConfigs();
 
 
-            // Stop if errors occurred
-            if(fatal) return;
+            // Read caches files
+            PlayerDataCache.loadAllCaches();
         });
 
 
@@ -86,13 +111,12 @@ public class FrameworkLib implements ModInitializer {
 
         // Register post-initialization events
         ServerLifecycleEvents.SERVER_STARTED.register(PHASE_ID, server -> {
-            if(fatal) return;
 
 
             // Schedule UI element update loop
             Scheduler.loop(0, Configs.getPerf().animation_refresh_time.getValue(), () -> {
                 Elm.processUpdateQueue();
-                Context.updateActiveContexts();
+                Context.tickActiveContexts();
             });
 
 
@@ -101,26 +125,29 @@ public class FrameworkLib implements ModInitializer {
             // Schedule hover manager loop
             Scheduler.loop(0, 1, HoverReceiver::tick);
 
+            // Schedule scroll receiver loop
+            Scheduler.loop(0, 1, ScrollReceiver::tick);
+
 
 
 
             // Create and register entity click events (interaction blocker clicks)
-            AttackEntityCallback.EVENT.register(PHASE_ID, (player, world, hand, entity, hitResult) -> {
-                return ClickReceiver.onClickEntity(world, player, hand, ClickAction.PRIMARY, entity);
+            AttackEntityCallback.EVENT.register(PHASE_ID, (player, level, hand, entity, hitResult) -> {
+                return ClickReceiver.onClickEntity(level, player, hand, ClickAction.PRIMARY, entity);
             });
-            UseEntityCallback.EVENT.register(PHASE_ID, (player, world, hand, entity, hitResult) -> {
-                return ClickReceiver.onClickEntity(world, player, hand, ClickAction.SECONDARY, entity);
+            UseEntityCallback.EVENT.register(PHASE_ID, (player, level, hand, entity, hitResult) -> {
+                return ClickReceiver.onClickEntity(level, player, hand, ClickAction.SECONDARY, entity);
             });
 
 
 
 
             // Create and register block click events
-            AttackBlockCallback.EVENT.register(PHASE_ID, (player, world, hand, blockPos, direction) -> {
-                return ClickReceiver.onClickBlock(world, player, hand, ClickAction.PRIMARY, blockPos.offset(direction.getNormal()));
+            AttackBlockCallback.EVENT.register(PHASE_ID, (player, level, hand, blockPos, direction) -> {
+                return ClickReceiver.onClickBlock(level, player, hand, ClickAction.PRIMARY, blockPos.offset(direction.getNormal()));
             });
-            UseBlockCallback.EVENT.register(PHASE_ID, (player, world, hand, hitResult) -> {
-                return ClickReceiver.onClickBlock(world, player, hand, ClickAction.SECONDARY, hitResult.getBlockPos().offset(hitResult.getDirection().getNormal()));
+            UseBlockCallback.EVENT.register(PHASE_ID, (player, level, hand, hitResult) -> {
+                return ClickReceiver.onClickBlock(level, player, hand, ClickAction.SECONDARY, hitResult.getBlockPos().offset(hitResult.getDirection().getNormal()));
             });
 
 
@@ -133,7 +160,7 @@ public class FrameworkLib implements ModInitializer {
 
 
             // Register entity display purge
-            ServerEntityEvents.ENTITY_LOAD.register(PHASE_ID, (entity, world) -> {
+            ServerEntityEvents.ENTITY_LOAD.register(PHASE_ID, (entity, level) -> {
                 Elm.onEntityLoad(entity);
                 InteractionBlocker.onEntityLoad(entity);
             });
@@ -143,6 +170,6 @@ public class FrameworkLib implements ModInitializer {
 
 
         // Log library loading
-        System.out.println("FrameworkLib loaded :3");
+        LOGGER.info("FrameworkLib loaded :3");
     }
 }

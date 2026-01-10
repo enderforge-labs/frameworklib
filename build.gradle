@@ -23,6 +23,27 @@ repositories {
 
 
 
+loom {
+    splitEnvironmentSourceSets()
+    mods {
+        "frameworklib" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
+    runs {
+        client {
+            vmArg "-ea"
+        }
+        server {
+            vmArg "-ea"
+        }
+    }
+}
+
+
+
+
 dependencies {
 
     // Minecraft and mappings

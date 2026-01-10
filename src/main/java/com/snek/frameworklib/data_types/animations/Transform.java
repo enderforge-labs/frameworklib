@@ -6,6 +6,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import com.mojang.math.Transformation;
+import com.snek.frameworklib.debug.Require;
 
 
 
@@ -16,20 +17,36 @@ import com.mojang.math.Transformation;
 
 /**
  * A single transformation specified as local rotation, translation, scale and global rotation.
- * <p> It can be converted to a Minecraft AffineTransformation.
+ * <p>
+ * It can be converted to a {@link com.mojang.math.Transformation#Transformation}.
  */
 public class Transform {
+
+    // Transform data
     protected final @NotNull Vector3f    _pos;
     protected final @NotNull Quaternionf _lrot;
     protected final @NotNull Vector3f    _scale;
     protected final @NotNull Quaternionf _grot;
 
+    // Getters
+    public @NotNull Vector3f    getPos      () { return _pos;   }
+    public @NotNull Quaternionf getRot      () { return _lrot;  }
+    public @NotNull Vector3f    getScale    () { return _scale; }
+    public @NotNull Quaternionf getGlobalRot() { return _grot;  }
+
+
+
 
     /**
-     * Creates a new Matrix4f using the current translation, local rotation, scale and global rotation values.
-     * @return The transformation matric.
+     * Creates a new {@code Matrix4f} using the current translation, local rotation, scale and global rotation values.
+     * @return The transformation matrix.
      */
     public @NotNull Matrix4f toMatrixTransform() {
+        assert Require.nonNull(_scale, "scale");
+        assert Require.nonNull(_lrot,  "local rotation");
+        assert Require.nonNull(_pos,   "position");
+        assert Require.nonNull(_grot,  "global rotation");
+
         final Matrix4f m = new Matrix4f();
         m.rotate   (_grot );
         m.translate(_pos  );
@@ -40,7 +57,7 @@ public class Transform {
 
 
     /**
-     * Creates a new AffineTransformation using the current translation, local rotation, scale and global rotation values.
+     * Creates a new {@link com.mojang.math.Transformation#Transformation} using the current translation, local rotation, scale and global rotation values.
      * @return The transformation.
      */
     public @NotNull Transformation toMinecraftTransform() {
@@ -50,7 +67,7 @@ public class Transform {
 
     /**
      * Creates a new Transform with default data:
-     * <p> No local rotation.
+     *     No local rotation.
      *     No translation.
      *     Scale 1.
      *     No global rotation.
@@ -64,17 +81,31 @@ public class Transform {
 
 
     /**
-     * Creates a new Transform.
-     * @param __pos The translation.
-     * @param __rot The local rotation.
-     * @param __scale The scale.
-     * @param __globalRot The global rotation
+     * Creates a copy of the provided Transform.
+     * @param t The transform to copy.
      */
-    public Transform(final @NotNull Vector3f __pos, final @NotNull Quaternionf __rot, final @NotNull Vector3f __scale, final @NotNull Quaternionf __globalRot) {
-        _pos   = new Vector3f(__pos);
-        _lrot  = new Quaternionf(__rot);
-        _scale = new Vector3f(__scale);
-        _grot  = new Quaternionf(__globalRot);
+    public Transform(final @NotNull Transform t) {
+        this(t.getPos(), t.getRot(), t.getScale(), t.getGlobalRot());
+    }
+
+
+    /**
+     * Creates a new Transform.
+     * @param pos The translation.
+     * @param lrot The local rotation.
+     * @param scale The scale.
+     * @param gRot The global rotation.
+     */
+    public Transform(final @NotNull Vector3f pos, final @NotNull Quaternionf lrot, final @NotNull Vector3f scale, final @NotNull Quaternionf gRot) {
+        assert Require.nonNull(pos,   "position");
+        assert Require.nonNull(lrot,  "local rotation");
+        assert Require.nonNull(scale, "scale");
+        assert Require.nonNull(gRot,  "global rotaiton");
+
+        _pos   = new Vector3f   (pos);
+        _lrot  = new Quaternionf(lrot);
+        _scale = new Vector3f   (scale);
+        _grot  = new Quaternionf(gRot);
     }
 
 
@@ -82,11 +113,11 @@ public class Transform {
      * Creates a copy of this transform.
      * @return A copy of this transform.
      */
-    public Transform copy() {
+    public @NotNull Transform copy() {
         return new Transform(
-            new Vector3f(_pos),
+            new Vector3f   (_pos),
             new Quaternionf(_lrot),
-            new Vector3f(_scale),
+            new Vector3f   (_scale),
             new Quaternionf(_grot)
         );
     }
@@ -98,6 +129,12 @@ public class Transform {
      * @return This transform.
      */
     public @NotNull Transform set(final @NotNull Transform t) {
+        assert Require.nonNull(t, "transform");
+        assert Require.nonNull(t.getScale(),     "transform scale");
+        assert Require.nonNull(t.getRot(),       "transform local rotation");
+        assert Require.nonNull(t.getPos(),       "transform position");
+        assert Require.nonNull(t.getGlobalRot(), "transform global rotation");
+
         _pos   .set(t._pos);
         _lrot  .set(t._lrot);
         _scale .set(t._scale);
@@ -114,6 +151,12 @@ public class Transform {
      * @return this transform.
      */
     public @NotNull Transform apply(final @NotNull Transform t) {
+        assert Require.nonNull(t, "transform");
+        assert Require.nonNull(t.getScale(),     "transform scale");
+        assert Require.nonNull(t.getRot(),       "transform local rotation");
+        assert Require.nonNull(t.getPos(),       "transform position");
+        assert Require.nonNull(t.getGlobalRot(), "transform global rotation");
+
         move(t._pos);
         rot(t._lrot);
         scale(t._scale);
@@ -130,6 +173,12 @@ public class Transform {
      * @return The calculated transform.
      */
     public @NotNull Transform delta(final @NotNull Transform t) {
+        assert Require.nonNull(t, "transform");
+        assert Require.nonNull(t.getScale(),     "transform scale");
+        assert Require.nonNull(t.getRot(),       "transform local rotation");
+        assert Require.nonNull(t.getPos(),       "transform position");
+        assert Require.nonNull(t.getGlobalRot(), "transform global rotation");
+
         return new Transform(
             t._pos.sub(_pos, new Vector3f()),
             t._lrot.mul(_lrot.invert(new Quaternionf()), new Quaternionf()),
@@ -144,10 +193,16 @@ public class Transform {
     /**
      * Applies a linear interpolation to this transform.
      * @param target The target transform.
-     * @param factor The factor. Using 0 will return a copy of this, using 1 will return a copy of target.
+     * @param factor The factor. Using 0 will return a copy of {@code this}, using 1 will return a copy of {@code target}.
      * @return this transform.
      */
     public @NotNull Transform interpolate(final @NotNull Transform target, final float factor) {
+        assert Require.nonNull(target, "targer");
+        assert Require.nonNull(target.getScale(),     "target scale");
+        assert Require.nonNull(target.getRot(),       "target local rotation");
+        assert Require.nonNull(target.getPos(),       "target position");
+        assert Require.nonNull(target.getGlobalRot(), "target global rotation");
+
         _pos  .lerp (target._pos,   factor);
         _lrot .slerp(target._lrot,  factor);
         _scale.lerp (target._scale, factor);
@@ -158,12 +213,32 @@ public class Transform {
 
 
 
-    // Left rotation
+    /**
+     * Inverts the translation, rotation, scale and global rotation of this transform.
+     * @return this transform.
+     */
+    public @NotNull Transform invert() {
+        assert Require.nonNull(_scale, "scale");
+        assert Require.nonNull(_lrot,  "local rotation");
+        assert Require.nonNull(_pos,   "position");
+        assert Require.nonNull(_grot,  "global rotation");
+
+        _pos.negate();
+        _lrot.conjugate();
+        _scale.set(1.0f / _scale.x, 1.0f / _scale.y, 1.0f / _scale.z);
+        _grot.conjugate();
+        return this;
+    }
+
+
+
+
+    // Local rotation
     public @NotNull Transform rotX         (final float x                  ) { _lrot.rotateX(x); return this; }
     public @NotNull Transform rotY         (final float y                  ) { _lrot.rotateY(y); return this; }
     public @NotNull Transform rotZ         (final float z                  ) { _lrot.rotateZ(z); return this; }
-    public @NotNull Transform rot          (final @NotNull Quaternionf r   ) { _lrot.mul(r);     return this; }
-    public @NotNull Transform setRot       (final @NotNull Quaternionf r   ) { _lrot.set(r);     return this; }
+    public @NotNull Transform rot          (final @NotNull Quaternionf r   ) { assert Require.nonNull(r, "roration"); _lrot.mul(r); return this; }
+    public @NotNull Transform setRot       (final @NotNull Quaternionf r   ) { assert Require.nonNull(r, "roration"); _lrot.set(r); return this; }
     public @NotNull Transform rot          (final float x, final float y, final float z) { rotX(x); rotY(y); rotZ(z); return this; }
 
 
@@ -173,13 +248,13 @@ public class Transform {
     public @NotNull Transform moveX        (final float x                  ) { _pos.x += x; return this; }
     public @NotNull Transform moveY        (final float y                  ) { _pos.y += y; return this; }
     public @NotNull Transform moveZ        (final float z                  ) { _pos.z += z; return this; }
-    public @NotNull Transform move         (final @NotNull Vector3f s      ) { _pos.add(s); return this; }
+    public @NotNull Transform move         (final @NotNull Vector3f s      ) { assert Require.nonNull(s, "translation"); _pos.add(s); return this; }
     public @NotNull Transform move         (final float x, final float y, final float z) { moveX(x); moveY(y); moveZ(z); return this; }
 
     public @NotNull Transform setPosX      (final float x                  ) { _pos.x = x;  return this; }
     public @NotNull Transform setPosY      (final float y                  ) { _pos.y = y;  return this; }
     public @NotNull Transform setPosZ      (final float z                  ) { _pos.z = z;  return this; }
-    public @NotNull Transform setPos       (final @NotNull Vector3f s      ) { _pos.set(s); return this; }
+    public @NotNull Transform setPos       (final @NotNull Vector3f s      ) { assert Require.nonNull(s, "position"); _pos.set(s); return this; }
     public @NotNull Transform setPos       (final float x, final float y, final float z) { setPosX(x); setPosY(y); setPosZ(z); return this; }
 
 
@@ -190,33 +265,24 @@ public class Transform {
     public @NotNull Transform scaleY       (final float y                  ) { _scale.y *= y;  return this; }
     public @NotNull Transform scaleZ       (final float z                  ) { _scale.z *= z;  return this; }
     public @NotNull Transform scale        (final float n                  ) { scale(n, n, n); return this; }
-    public @NotNull Transform scale        (final @NotNull  Vector3f s     ) { _scale.mul(s);  return this; }
+    public @NotNull Transform scale        (final @NotNull Vector3f s      ) { assert Require.nonNull(s, "scale"); _scale.mul(s); return this; }
     public @NotNull Transform scale        (final float x, final float y, final float z) { scaleX(x); scaleY(y); scaleZ(z); return this; }
 
     public @NotNull Transform setScaleX    (final float x                  ) { _scale.x = x;       return this; }
     public @NotNull Transform setScaleY    (final float y                  ) { _scale.y = y;       return this; }
     public @NotNull Transform setScaleZ    (final float z                  ) { _scale.z = z;       return this; }
-    public @NotNull Transform setScale     (final float n                   ) { setScale(n, n, n); return this; }
-    public @NotNull Transform setScale     (final @NotNull Vector3f s     ) { _scale.set(s);       return this; }
+    public @NotNull Transform setScale     (final float n                  ) { setScale(n, n, n);  return this; }
+    public @NotNull Transform setScale     (final @NotNull Vector3f s      ) { assert Require.nonNull(s, "scale"); _scale.set(s); return this; }
     public @NotNull Transform setScale     (final float x, final float y, final float z) { setScaleX(x); setScaleY(y); setScaleZ(z); return this; }
 
 
 
 
-    // Right rotation
+    // Global rotation
     public @NotNull Transform rotGlobalX   (final float x                  ) { _grot.rotateX(x); return this; }
     public @NotNull Transform rotGlobalY   (final float y                  ) { _grot.rotateY(y); return this; }
     public @NotNull Transform rotGlobalZ   (final float z                  ) { _grot.rotateZ(z); return this; }
-    public @NotNull Transform rotGlobal    (final @NotNull Quaternionf r   ) { _grot.mul(r);     return this; }
-    public @NotNull Transform setGlobalRot (final @NotNull Quaternionf r   ) { _grot.set(r);     return this; }
+    public @NotNull Transform rotGlobal    (final @NotNull Quaternionf r   ) { assert Require.nonNull(r, "rotation"); _grot.mul(r); return this; }
+    public @NotNull Transform setGlobalRot (final @NotNull Quaternionf r   ) { assert Require.nonNull(r, "rotation"); _grot.set(r); return this; }
     public @NotNull Transform rotGlobal    (final float x, final float y, final float z) { rotGlobalX(x); rotGlobalY(y); rotGlobalZ(z); return this; }
-
-
-
-
-    // Getters
-    public @NotNull Vector3f    getPos      () { return _pos;   }
-    public @NotNull Quaternionf getRot      () { return _lrot;  }
-    public @NotNull Vector3f    getScale    () { return _scale; }
-    public @NotNull Quaternionf getGlobalRot() { return _grot;  }
 }

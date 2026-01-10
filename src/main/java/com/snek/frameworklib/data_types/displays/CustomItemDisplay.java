@@ -1,10 +1,9 @@
 package com.snek.frameworklib.data_types.displays;
 
-import java.lang.reflect.Method;
-
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.mixin.accessors.ItemDisplayAccessorMixin;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Display.ItemDisplay;
@@ -20,27 +19,17 @@ import net.minecraft.world.level.Level;
 
 /**
  * A wrapper for Minecraft's ItemDisplayEntity.
- * <p> This class allows for better customization and more readable code.
+ * <p>
+ * This class allows for better customization and more readable code.
  */
 public class CustomItemDisplay extends CustomDisplay {
-    public @NotNull ItemDisplay getRawDisplay() { return (ItemDisplay)heldEntity; }
-
-
-    // Private methods
-    private static @NotNull Method method_setItemStack;
-    private static @NotNull Method method_setDisplayType;
-    private static @NotNull Method method_getDisplayType;
-    static {
-        try {
-            method_setItemStack   = ItemDisplay.class.getDeclaredMethod("setItemStack",              ItemStack.class);
-            method_setDisplayType = ItemDisplay.class.getDeclaredMethod("setItemTransform", ItemDisplayContext.class);
-            method_getDisplayType = ItemDisplay.class.getDeclaredMethod("getItemTransform");
-        } catch(final NoSuchMethodException | SecurityException e) {
-            e.printStackTrace();
-        }
-        method_setItemStack.setAccessible(true);
-        method_setDisplayType.setAccessible(true);
-        method_getDisplayType.setAccessible(true);
+    public @NotNull ItemDisplay getRawDisplay() {
+        assert Require.nonNull(heldEntity, "held entity");
+        return (ItemDisplay)heldEntity;
+    }
+    private @NotNull ItemDisplayAccessorMixin getAccessibleItemDisplay() {
+        assert Require.nonNull(heldEntity, "held entity");
+        return (ItemDisplayAccessorMixin)heldEntity;
     }
 
 
@@ -48,18 +37,18 @@ public class CustomItemDisplay extends CustomDisplay {
 
     /**
      * Creates a new CustomItemDisplay using an existing ItemDisplayEntity.
-     * @param _rawDisplay The display entity.
+     * @param rawDisplay The display entity.
      */
-    public CustomItemDisplay(final @NotNull ItemDisplay _rawDisplay) {
-        super(_rawDisplay);
+    public CustomItemDisplay(final @NotNull ItemDisplay rawDisplay) {
+        super(rawDisplay);
     }
 
     /**
-     * Creates a new CustomItemDisplay in the specified world.
-     * @param _world The world.
+     * Creates a new CustomItemDisplay in the specified level.
+     * @param level The level.
      */
-    public CustomItemDisplay(final @NotNull Level _world) {
-        super(new ItemDisplay(EntityType.ITEM_DISPLAY, _world));
+    public CustomItemDisplay(final @NotNull Level level) {
+        super(new ItemDisplay(EntityType.ITEM_DISPLAY, level));
     }
 
 
@@ -67,21 +56,25 @@ public class CustomItemDisplay extends CustomDisplay {
 
     /**
      * Sets a new item stack value to the entity.
-     * <p> This is equivalent to changing the entity's "item" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "item" NBT.
      * @param itemStack The new value.
      */
     public void setItemStack(final @NotNull ItemStack itemStack) {
-        Utils.invokeSafe(method_setItemStack, getRawDisplay(), itemStack);
+        assert Require.nonNull(itemStack, "item stack");
+        getAccessibleItemDisplay().invokeSetItemStack(itemStack);
     }
 
 
     /**
      * Sets a new display type value to the entity.
-     * <p> This is equivalent to changing the entity's "item_display" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "item_display" NBT.
      * @param displayType The new value.
      */
     public void setDisplayType(final @NotNull ItemDisplayContext displayType) {
-        Utils.invokeSafe(method_setDisplayType, getRawDisplay(), displayType);
+        assert Require.nonNull(displayType, "item display type");
+        getAccessibleItemDisplay().invokeSetDisplayType(displayType);
     }
 
 
@@ -90,6 +83,6 @@ public class CustomItemDisplay extends CustomDisplay {
      * @return The current display type.
      */
     public @NotNull ItemDisplayContext getDisplayType() {
-        return (ItemDisplayContext)Utils.invokeSafe(method_getDisplayType, heldEntity);
+        return getAccessibleItemDisplay().invokeGetDisplayType();
     }
 }

@@ -11,9 +11,13 @@ import org.jetbrains.annotations.Nullable;
 
 
 /**
- * A simple collection of two values of different types.
+ * A simple container for two objects of different types.
+ * @param <F> The type of the first value.
+ * @param <S> The type of the second value.
  */
 public class Pair<F, S> {
+
+    // Values
     private @Nullable F first;
     private @Nullable S second;
 
@@ -22,15 +26,14 @@ public class Pair<F, S> {
     public @Nullable S getSecond() { return second; }
 
     // Setters
-    public void setFirst (final @Nullable F _first ) { first  = _first;  }
-    public void setSecond(final @Nullable S _second) { second = _second; }
+    public void setFirst (final @Nullable F first ) { this.first  = first;  }
+    public void setSecond(final @Nullable S second) { this.second = second; }
 
 
 
 
     /**
-     * Creates a new Pair.
-     * Both elements are set to null.
+     * Creates a new Pair, setting both elements to {@code null}.
      */
     public Pair() {
         first  = null;
@@ -40,22 +43,24 @@ public class Pair<F, S> {
 
     /**
      * Creates a new Pair using the specified values.
-     * @param _first The first value.
-     * @param _second The second value.
+     * @param first The first value.
+     * @param second The second value.
      */
-    public Pair(final @Nullable F _first, final @Nullable S _second) {
-        first  = _first;
-        second = _second;
+    public Pair(final @Nullable F first, final @Nullable S second) {
+        this.first  = first;
+        this.second = second;
     }
 
 
     /**
      * Creates a new Pair using the specified values.
-     * @param _first The first value.
-     * @param _second The second value.
+     * @param <F> The type of the first value.
+     * @param <S> The type of the second value.
+     * @param first The first value.
+     * @param second The second value.
      * @return The newly created Pair.
      */
-    public static <K, V> @NotNull Pair<@Nullable K, @Nullable V> from(final @Nullable K first, final @Nullable V second) {
+    public static <F, S> @NotNull Pair<@Nullable F, @Nullable S> from(final @Nullable F first, final @Nullable S second) {
         return new Pair<>(first, second);
     }
 }

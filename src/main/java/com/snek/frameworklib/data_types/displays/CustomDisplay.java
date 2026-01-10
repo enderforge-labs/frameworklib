@@ -1,6 +1,5 @@
 package com.snek.frameworklib.data_types.displays;
 
-import java.lang.reflect.Method;
 import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
@@ -8,13 +7,18 @@ import org.joml.Vector3d;
 import org.joml.Vector3f;
 
 import com.mojang.math.Transformation;
-import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.mixin.accessors.DisplayAccessorMixin;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Brightness;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Display.BillboardConstraints;
+import net.minecraft.world.entity.Display.BlockDisplay;
+import net.minecraft.world.entity.Display.ItemDisplay;
+import net.minecraft.world.entity.Display.TextDisplay;
 import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.level.Level;
 
@@ -26,61 +30,20 @@ import net.minecraft.world.level.Level;
 
 /**
  * An abstract wrapper for Minecraft's Display Entities.
- * <p> This class allows for better customization and more readable code.
+ * <p>
+ * This class allows for better customization and more readable code.
  */
 public abstract class CustomDisplay {
     protected @NotNull Display heldEntity;
     protected boolean spawned = false;
 
-
-
-
-    // Private methods
-    private static @NotNull Method method_setTransformation;
-    private static @NotNull Method method_setInterpolationDuration;
-    private static @NotNull Method method_setStartInterpolation;
-    private static @NotNull Method method_setBillboardMode;
-    private static @NotNull Method method_getBillboardMode;
-    private static @NotNull Method method_setViewRange;
-    private static @NotNull Method method_getViewRange;
-    private static @NotNull Method method_setBrightness;
-    private static @NotNull Method method_getBrightness;
-    private static @NotNull Method method_getMaxRenderWidth;
-    private static @NotNull Method method_getMaxRenderHeight;
-    private static @NotNull Method method_setMaxRenderWidth;
-    private static @NotNull Method method_setMaxRenderHeight;
-    static {
-        try {
-            method_setTransformation        = Display.class.getDeclaredMethod("setTransformation",             Transformation.class);
-            method_setInterpolationDuration = Display.class.getDeclaredMethod("setInterpolationDuration",                 int.class);
-            method_setStartInterpolation    = Display.class.getDeclaredMethod("setInterpolationDelay",                    int.class);
-            method_setBillboardMode         = Display.class.getDeclaredMethod("setBillboardConstraints", BillboardConstraints.class);
-            method_getBillboardMode         = Display.class.getDeclaredMethod("getBillboardConstraints");
-            method_setViewRange             = Display.class.getDeclaredMethod("setViewRange",                           float.class);
-            method_getViewRange             = Display.class.getDeclaredMethod("getViewRange");
-            method_setBrightness            = Display.class.getDeclaredMethod("setBrightnessOverride",             Brightness.class);
-            method_getBrightness            = Display.class.getDeclaredMethod("getPackedBrightnessOverride");
-            method_setMaxRenderWidth        = Display.class.getDeclaredMethod("setWidth",                               float.class);
-            method_getMaxRenderWidth        = Display.class.getDeclaredMethod("getWidth");
-            method_setMaxRenderHeight       = Display.class.getDeclaredMethod("setHeight",                              float.class);
-            method_getMaxRenderHeight       = Display.class.getDeclaredMethod("getHeight");
-        } catch(final NoSuchMethodException | SecurityException e) {
-            e.printStackTrace();
-        }
-        method_setTransformation.setAccessible(true);
-        method_setInterpolationDuration.setAccessible(true);
-        method_setStartInterpolation.setAccessible(true);
-        method_setBillboardMode.setAccessible(true);
-        method_getBillboardMode.setAccessible(true);
-        method_setViewRange.setAccessible(true);
-        method_getViewRange.setAccessible(true);
-        method_setBrightness.setAccessible(true);
-        method_getBrightness.setAccessible(true);
-        method_setMaxRenderWidth.setAccessible(true);
-        method_getMaxRenderWidth.setAccessible(true);
-        method_setMaxRenderHeight.setAccessible(true);
-        method_getMaxRenderHeight.setAccessible(true);
+    private @NotNull DisplayAccessorMixin getAccessibleDisplay() {
+        assert Require.nonNull(heldEntity, "held entity");
+        return (DisplayAccessorMixin)heldEntity;
     }
+
+
+
 
     public boolean isRemoved() {
         return heldEntity.isRemoved();
@@ -93,8 +56,10 @@ public abstract class CustomDisplay {
      * Creates a new CustomDisplay using an existing DisplayEntity as in-world entity.
      * @param _heldEntity The display entity.
      */
-    protected CustomDisplay(final @NotNull Display _heldEntity) {
-        heldEntity = _heldEntity;
+    protected CustomDisplay(final @NotNull Display heldEntity) {
+        assert Require.nonNull(heldEntity, "held entity");
+
+        this.heldEntity = heldEntity;
         setBrightness(new Brightness(15, 15));
     }
 
@@ -105,7 +70,8 @@ public abstract class CustomDisplay {
      * Returns the UUID of the raw display entity.
      * @return The UUID.
      */
-    public UUID getUuid() {
+    public @NotNull UUID getUuid() {
+        assert Require.nonNull( heldEntity.getUUID(), "entity UUID");
         return heldEntity.getUUID();
     }
 
@@ -113,26 +79,59 @@ public abstract class CustomDisplay {
 
 
     /**
-     * Spawns the entity into the world.
-     * @param world The world to spawn the entity in.
+     * Spawns the entity into the level.
+     * @param level The level to spawn the entity in.
      * @param pos The position of the spawned entity.
      */
-    public void spawn(final @NotNull Level world, final @NotNull Vector3d pos) {
+    public void spawn(final @NotNull Level level, final @NotNull Vector3d pos) {
+        assert Require.nonNull(level, "level");
+        assert Require.nonNull(pos, "position");
+
         if(!spawned) {
             spawned = true;
+
+            // Set position and add entity to the level
+            assert Require.nonNull(heldEntity, "held entity");
             heldEntity.setPos(pos.x, pos.y, pos.z);
-            world.addFreshEntity(heldEntity);
+            level.addFreshEntity(heldEntity);
+        }
+    }
+
+
+
+
+    /**
+     * Replaces the held entity with a fresh one, but only if it was despawned at some point in the past.
+     * <p>
+     * Notice: This method does NOT copy NBT data to the new entity.
+     * @param level The level to spawn the new entity in.
+     */
+    public void renewEntity(final @NotNull Level level) {
+        assert Require.nonNull(level, "level");
+
+        assert Require.nonNull(heldEntity, "held entity");
+        if(heldEntity.isRemoved()) {
+            if(heldEntity instanceof TextDisplay) {
+                heldEntity = new TextDisplay(EntityType.TEXT_DISPLAY, level);
+            }
+            else if(heldEntity instanceof ItemDisplay) {
+                heldEntity = new ItemDisplay(EntityType.ITEM_DISPLAY, level);
+            }
+            else if(heldEntity instanceof BlockDisplay) {
+                heldEntity = new BlockDisplay(EntityType.BLOCK_DISPLAY, level);
+            }
         }
     }
 
 
     /**
-     * Removes the entity from the world.
+     * Removes the entity from the level.
      */
     public void despawn() {
         if(spawned) {
             spawned = false;
 
+            assert Require.nonNull(heldEntity, "held entity");
             if(!heldEntity.isRemoved()) {
                 heldEntity.remove(RemovalReason.KILLED);
             }
@@ -148,40 +147,47 @@ public abstract class CustomDisplay {
 
     /**
      * Sets a new transformation value to the entity.
-     * <p> This is equivalent to changing the entity's "transformation" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "transformation" NBT.
      * @param transformation The new value.
      */
     public void setTransformation(final @NotNull Transformation transformation) {
-        Utils.invokeSafe(method_setTransformation, heldEntity, transformation);
+        assert Require.nonNull(transformation, "transformation");
+        getAccessibleDisplay().invokeSetTransformation(transformation);
     }
 
 
     /**
      * Sets a new interpolation duration value to the entity.
-     * <p> This is equivalent to changing the entity's "interpolation_duration" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "interpolation_duration" NBT.
      * @param duration The new value, measured in ticks
      */
     public void setInterpolationDuration(final int duration) {
-        Utils.invokeSafe(method_setInterpolationDuration, heldEntity, duration);
+        assert Require.nonNegative(duration, "interpolation duration");
+        getAccessibleDisplay().invokeSetInterpolationDuration(duration);
     }
 
 
     /**
      * Starts the interpolation at the end of the current tick.
-     * <p> This is equivalent to setting the entity's "start_interpolation" NBT to 0.
+     * <p>
+     * This is equivalent to setting the entity's "start_interpolation" NBT to {@code 0}.
      */
     public void setStartInterpolation() {
-        Utils.invokeSafe(method_setStartInterpolation, heldEntity, 0);
+        getAccessibleDisplay().invokeSetStartInterpolation(0);
     }
 
 
     /**
      * Sets a new billboard mode value to the entity.
-     * <p> This is equivalent to changing the entity's "billboard" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "billboard" NBT.
      * @param billboardMode The new value.
      */
     public void setBillboardMode(final @NotNull BillboardConstraints billboardMode) {
-        Utils.invokeSafe(method_setBillboardMode, heldEntity, billboardMode);
+        assert Require.nonNull(billboardMode, "billboard mode");
+        getAccessibleDisplay().invokeSetBillboardMode(billboardMode);
     }
 
 
@@ -190,38 +196,44 @@ public abstract class CustomDisplay {
      * @return The current billboard mode.
      */
     public @NotNull BillboardConstraints getBillboardMode() {
-        return (BillboardConstraints)Utils.invokeSafe(method_getBillboardMode, heldEntity);
+        return getAccessibleDisplay().invokeGetBillboardMode();
     }
 
 
     /**
      * Sets a new view range value to the entity.
-     * <p> This is equivalent to changing the entity's "view_range" NBT.
-     * <p> The maximum distance the entity is visible at is (view_range * 64) blocks.
+     * <p>
+     * This is equivalent to changing the entity's "view_range" NBT.
+     * <p>
+     * The maximum distance the entity is visible at is {@code (view_range * 64)} blocks.
      * @param viewRange The new value.
      */
     public void setViewRange(final float viewRange) {
-        Utils.invokeSafe(method_setViewRange, heldEntity, viewRange);
+        assert Require.nonNegative(viewRange, "view range");
+        getAccessibleDisplay().invokeSetViewRange(viewRange);
     }
 
 
     /**
      * Retrieves the entity's view range.
-     * <p> The maximum distance the entity is visible at is (view_range * 64) blocks.
+     * <p>
+     * The maximum distance the entity is visible at is {@code (view_range * 64)} blocks.
      * @return The current view range.
      */
     public float getViewRange() {
-        return (float)Utils.invokeSafe(method_getViewRange, heldEntity);
+        return getAccessibleDisplay().invokeGetViewRange();
     }
 
 
     /**
      * Sets a new brightness value to the entity.
-     * <p> This is equivalent to changing the entity's "brightness" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "brightness" NBT.
      * @param brightness
      */
     public void setBrightness(final @NotNull Brightness brightness) {
-        Utils.invokeSafe(method_setBrightness, heldEntity, brightness);
+        assert Require.nonNull(brightness, "brightness");
+        getAccessibleDisplay().invokeSetBrightness(brightness);
     }
 
 
@@ -230,26 +242,30 @@ public abstract class CustomDisplay {
      * @return The current brightness.
      */
     public @NotNull Brightness getBrightness() {
-        return (Brightness)Utils.invokeSafe(method_getBrightness, heldEntity);
+        return getAccessibleDisplay().invokeGetBrightness();
     }
 
 
     /**
      * Sets a new custom name value to the entity.
-     * <p> This is equivalent to changing the entity's "custom_name" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "custom_name" NBT.
      * @param name The new value.
      */
     public void setCustomName(final @NotNull Component name) {
+        assert Require.nonNull(name, "name");
         heldEntity.setCustomName(name);
     }
 
 
     /**
      * Sets a new custom name visible value to the entity.
-     * <p> This is equivalent to changing the entity's "custom_name_visible" NBT.
+     * <p>
+     * This is equivalent to changing the entity's "custom_name_visible" NBT.
      * @param name The new value.
      */
     public void setCustomNameVisible(final boolean nameVisible) {
+        assert Require.nonNull(heldEntity, "held entity");
         heldEntity.setCustomNameVisible(nameVisible);
     }
 
@@ -268,6 +284,8 @@ public abstract class CustomDisplay {
      * @param pos The new position.
      */
     public void setPos(final @NotNull Vector3d pos) {
+        assert Require.nonNull(pos, "position");
+        assert Require.nonNull(heldEntity, "held entity");
         heldEntity.setPos(pos.x, pos.y, pos.z);
     }
 
@@ -277,6 +295,7 @@ public abstract class CustomDisplay {
      * @return A copy of the current position.
      */
     public @NotNull Vector3f getPosCopy() {
+        assert Require.nonNull(heldEntity, "held entity");
         return heldEntity.getPosition(1f).toVector3f();
     }
 
@@ -285,12 +304,13 @@ public abstract class CustomDisplay {
 
     /**
      * Sets a new maximum render width to the entity.
-     * <p> This is equivalent to changing the entity's "width" NBT.
-     * <p> NOTICE: This property seems to be very buggy in 1.20.1 and often has no effect.
-     * @param n The new value.
+     * <p>
+     * This is equivalent to changing the entity's "width" NBT.
+     * @param width The new value.
      */
-    public void setMaxRenderWidth(final float n) {
-        Utils.invokeSafe(method_setMaxRenderWidth, heldEntity, n);
+    public void setFrustumCullingBoundingBoxWidth(final float width) {
+        assert Require.nonNegative(width, "width");
+        getAccessibleDisplay().invokeSetFrustumCullingBoundingBoxWidth(width);
     }
 
 
@@ -298,19 +318,20 @@ public abstract class CustomDisplay {
      * Retrieves the entity's maximum render width.
      * @return The current maximum render width.
      */
-    public float getMaxRenderWidth() {
-        return (float)Utils.invokeSafe(method_getMaxRenderWidth, heldEntity);
+    public float getFrustumCullingBoundingBoxWidth() {
+        return getAccessibleDisplay().invokeGetFrustumCullingBoundingBoxWidth();
     }
 
 
     /**
      * Sets a new maximum render height to the entity.
-     * <p> This is equivalent to changing the entity's "height" NBT.
-     * <p> NOTICE: This property seems to be very buggy in 1.20.1 and often has no effect.
-     * @param n The new value.
+     * <p>
+     * This is equivalent to changing the entity's "height" NBT.
+     * @param height The new value.
      */
-    public void setMaxRenderHeight(final float n) {
-        Utils.invokeSafe(method_setMaxRenderHeight, heldEntity, n);
+    public void setFrustumCullingBoundingBoxHeight(final float height) {
+        assert Require.nonNegative(height, "height");
+        getAccessibleDisplay().invokeSetFrustumCullingBoundingBoxHeight(height);
     }
 
 
@@ -318,8 +339,8 @@ public abstract class CustomDisplay {
      * Retrieves the entity's maximum render height.
      * @return The current maximum render height.
      */
-    public float getMaxRenderHeight() {
-        return (float)Utils.invokeSafe(method_getMaxRenderHeight, heldEntity);
+    public float getFrustumCullingBoundingBoxHeight() {
+        return getAccessibleDisplay().invokeGetFrustumCullingBoundingBoxHeight();
     }
 
 
@@ -329,6 +350,8 @@ public abstract class CustomDisplay {
      * @return Whether the display could successfully ride the entity.
      */
     public boolean startRiding(final @NotNull Entity e) {
+        assert Require.nonNull(e, "entity");
+        assert Require.nonNull(heldEntity, "held entity");
         return heldEntity.startRiding(e, true);
     }
 
@@ -338,6 +361,8 @@ public abstract class CustomDisplay {
      * @param pos The target position.
      */
     public void teleport(final @NotNull Vector3d pos) {
+        assert Require.nonNull(pos, "position");
+        assert Require.nonNull(heldEntity, "held entity");
         heldEntity.teleportTo(pos.x, pos.y, pos.z);
     }
 }

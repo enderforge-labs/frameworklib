@@ -4,6 +4,8 @@ import java.util.function.UnaryOperator;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.frameworklib.debug.Require;
+
 
 
 
@@ -13,20 +15,22 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * A class that can store and compute a unary operator on request.
- * <p> This is meant for interpolation easings.
+ * <p>
+ * This is meant for interpolation easings.
  */
 public final class Easing {
-    private @NotNull UnaryOperator<@NotNull Double> f;
+    private final @NotNull UnaryOperator<@NotNull Double> f;
 
 
     /**
      * Creates a new Easing with the specified operator.
-     * @param _f The operator.
-     * <p> This function takes the linear progress and returns the corresponding progress that
+     * @param f The operator.
+     *     This function takes the linear progress and returns the corresponding progress that
      *     the custom easing would produce at the same point in time.
      */
-    public Easing(final @NotNull UnaryOperator<@NotNull Double> _f) {
-        f = _f;
+    public Easing(final @NotNull UnaryOperator<@NotNull Double> f) {
+        assert Require.nonNull(f, "easing operator");
+        this.f = f;
     }
 
 

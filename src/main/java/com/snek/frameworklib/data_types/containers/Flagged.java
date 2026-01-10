@@ -13,6 +13,9 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * A wrapper class that can track value changes of the contained object.
+ * <p>
+ * Notice: Flagged values are created as flagged. Use {@link #unflag()} if you want them to start as not flagged.
+ * @param <T> The type of the object to store.
  */
 public class Flagged<T> {
     private @Nullable T value;
@@ -21,14 +24,15 @@ public class Flagged<T> {
 
     /**
      * Creates a new Flagged value.
-     * @param _value The initial value.
+     * @param value The initial value.
      */
-    private Flagged(final @Nullable T _value) {
-        this.value = _value;
+    private Flagged(final @Nullable T value) {
+        this.value = value;
     }
 
     /**
      * Creates a new Flagged value.
+     * @param <T> The type of the object to store.
      * @param value The initial value.
      * @return The newly created Flagged object.
      */
@@ -50,20 +54,26 @@ public class Flagged<T> {
 
     /**
      * Sets a new value.
-     * Flags the object if !this.get().equals(_value).
-     * @param _value The new value.
+     * <p>
+     * Flags the object if {@code !this.get().equals(value)}.
+     * @param value The new value.
      */
-    public void set(final @Nullable T _value) {
-        if(!Objects.equals(value, _value)) flag = true;
-        value = _value;
+    public void set(final @Nullable T value) {
+        if(!Objects.equals(this.value, value)) flag = true;
+        this.value = value;
     }
 
 
     /**
      * Flags the object and returns a reference to its value.
-     * In case of immutable types, a copy is returned.
+     * <p>
      * This method always flags the object without checking for changes.
-     * @return The object.
+     * <p>
+     * Notice:
+     *     This returns a reference to the object, not a copy.
+     *     For immutable types (e.g., Integer, String), reassignment creates a new object
+     *     instead of modifying the internal value. You should use {@link #set(T)} instead.
+     * @return The object reference.
      */
     public @Nullable T edit() {
         flag = true;
@@ -75,7 +85,7 @@ public class Flagged<T> {
 
     /**
      * Returns the current value of the flag.
-     * @return The flag.
+     * @return Whether the value has changed.
      */
     public boolean isFlagged() {
         return flag;

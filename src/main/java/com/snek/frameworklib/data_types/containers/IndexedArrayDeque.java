@@ -5,6 +5,8 @@ import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.snek.frameworklib.debug.Require;
+
 
 
 
@@ -14,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * An ArrayDequeue that allows indexing in O(1) time.
+ * @param <E> The type of the objects to store.
  */
 public class IndexedArrayDeque<E> extends AccessibleArrayDeque<E> {
     public IndexedArrayDeque() {
@@ -23,9 +26,11 @@ public class IndexedArrayDeque<E> extends AccessibleArrayDeque<E> {
 
 
     /**
-     * Returns the element at index <index>.
-     * @param index The index.
+     * Returns the element at the specified position.
+     * @param index The index of the element to return.
      * @return The element.
+     * @throws IndexOutOfBoundsException if {@code index} is out of range
+     *     ({@code index < 0 || index >= size()})
      */
     @SuppressWarnings("unchecked")
     public @Nullable E get(final int index) {
@@ -39,23 +44,33 @@ public class IndexedArrayDeque<E> extends AccessibleArrayDeque<E> {
 
 
     /**
-     * Returns the element at index <index>.
-     * If no element is present at the specified index, new elements are added to the queue until the desired size is reached.
-     * @param index The index.
-     * @param f The supplier function used to create new elements.
-     * @return The element at index <index>.
+     * Returns the element at the specified position.
+     * <p>
+     * If the element is not present, new elements are added to the queue until the desired size is reached.
+     * @param index The index of the element to return.
+     * @param supplier The supplier function used to create new elements.
+     * @return The element at index {@code index}.
+     * @throws IndexOutOfBoundsException if {@code index} is out of range
+     *     ({@code index < 0})
      */
-    public @Nullable E getOrAdd(final int index, final @NotNull Supplier<E> f) {
-        while(index >= size()) add(f.get());
+    public @Nullable E getOrAdd(final int index, final @NotNull Supplier<E> supplier) {
+        assert Require.nonNull(supplier, "supplier");
+        if(index < 0) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size());
+        }
+
+        while(index >= size()) add(supplier.get());
         return get(index);
     }
 
 
 
     /**
-     * Sets a new value to the element at index <index>.
-     * @param index The index.
+     * Sets a new value to the element at the specified position.
+     * @param index The index of the element to set.
      * @param value The new value.
+     * @throws IndexOutOfBoundsException if {@code index} is out of range
+     *     ({@code index < 0 || index >= size()})
      */
     public void set(final int index, final @Nullable E value) {
         if(index < 0 || index >= size()) {

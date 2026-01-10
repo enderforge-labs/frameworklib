@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.snek.frameworklib.debug.Require;
+
 
 
 
@@ -14,22 +16,87 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * This class identifies an animation expressed as a list of Transitions.
+ * An animation expressed as a list of Transitions.
  */
 public class Animation {
-    private final @NotNull List<@NotNull Transition> transitions = new ArrayList<>();
-    private int totalDuration = 0;
+    private final @NotNull List<@NotNull Transition> transitions;
+    private final int totalDuration;
+
+
+    /**
+     * Creates a copy of the provided Animation.
+     * @param a The animation to copy.
+     */
+    public Animation(final @NotNull Animation a) {
+        assert Require.nonNull(a, "animation");
+        assert Require.notEmpty(a.getTransitions(), "animation transitions");
+        assert Require.nonNegative(a.getTotalDuration(), "animation duration");
+
+        transitions = new ArrayList<>(a.getTransitions().size());
+        for(final Transition t : a.getTransitions()) {
+            this.transitions.add(new Transition(t));
+        }
+        this.totalDuration = a.totalDuration;
+    }
 
 
     /**
      * Creates a new Animation.
-     * @param _transitions One or more transitions.
+     * @param transitions One or more transitions.
      */
-    public Animation(final @NotNull Transition... _transitions) {
-        for(final Transition t : _transitions) {
-            transitions.add(t);
-            totalDuration += t.getDuration();
+    public Animation(final @NotNull Transition... transitions) {
+        assert Require.notEmpty(transitions, "transition list");
+
+        this.transitions = new ArrayList<>(transitions.length);
+        int _totalDuration = 0;
+        for(final Transition t : transitions) {
+            assert Require.nonNull(t, "transition");
+
+            this.transitions.add(new Transition(t));
+            _totalDuration += t.getDuration();
         }
+
+        this.totalDuration = _totalDuration;
+    }
+
+
+    /**
+     * Inverts each of the transitions and flips their order.
+     * <p>
+     * This makes the animation look like it's being played backwards.
+     * <p>
+     * Notice: Background color, Background alpha, and opacity values are not affected.
+     * @return {@code this}.
+     */
+    public @NotNull Animation invertWithEasing() {
+        assert Require.notEmpty(transitions, "transition list");
+
+        for(final Transition t : transitions) {
+            assert Require.nonNull(t, "transition");
+            t.invertWithEasing();
+        }
+        Collections.reverse(transitions);
+        return this;
+    }
+
+
+    /**
+     * Inverts each of the transitions and flips their order, without changing its easing function.
+     * <p>
+     * This makes the animation look like it's being played backwards, but keeping the same rate of change over time as the original one.
+     * <p>
+     * Notice: Background color, Background alpha, and opacity values are not affected.
+     * @return {@code this}.
+     */
+    public @NotNull Animation invert() {
+        assert Require.notEmpty(transitions, "transition list");
+
+        for(final Transition t : transitions) {
+            assert Require.nonNull(t, "transition");
+            t.invert();
+        }
+        Collections.reverse(transitions);
+        return this;
     }
 
 
@@ -38,6 +105,8 @@ public class Animation {
      * @return The translations.
      */
     public @NotNull List<@NotNull Transition> getTransitions() {
+        assert Require.notEmpty(transitions, "transition list");
+
         return Collections.unmodifiableList(transitions);
     }
 

@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 import com.snek.frameworkconfig.ConfigManager;
 import com.snek.frameworklib.FrameworkLib;
+import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.utils.UtilityClassBase;
 
 
 
@@ -15,15 +17,16 @@ import com.snek.frameworklib.FrameworkLib;
 /**
  * A utility class that contains configuration file data.
  */
-public abstract class Configs {
-
+public final class Configs extends UtilityClassBase {
     private Configs() {}
 
-    private static @NotNull UiConfig          ui   = null;
-    private static @NotNull PerformanceConfig perf = null;
+    // Data
+    private static @NotNull GraphicsConfig    graphics = null;
+    private static @NotNull PerformanceConfig perf     = null;
 
-    public static @NotNull UiConfig          getUi  (){ return ui;   }
-    public static @NotNull PerformanceConfig getPerf(){ return perf; }
+    // Getters
+    public static @NotNull GraphicsConfig    getGraphics() { return graphics; }
+    public static @NotNull PerformanceConfig getPerf    () { return perf;     }
 
 
 
@@ -31,9 +34,11 @@ public abstract class Configs {
     /**
      * Loads the configuration files or creates new ones if they are missing.
      */
-    public static boolean loadConfigs() {
-        ui   = ConfigManager.loadConfig("UiConfig",    UiConfig.class,          FrameworkLib.LIB_ID);
-        perf = ConfigManager.loadConfig("Performance", PerformanceConfig.class, FrameworkLib.LIB_ID);
-        return ui != null && perf != null;
+    public static void loadConfigs() {
+        graphics = ConfigManager.loadConfig("Graphics",    GraphicsConfig.class,    FrameworkLib.LIB_ID);
+        perf     = ConfigManager.loadConfig("Performance", PerformanceConfig.class, FrameworkLib.LIB_ID);
+
+        assert Require.nonNull(graphics, "graphics config data");
+        assert Require.nonNull(perf,     "performance config data");
     }
 }
