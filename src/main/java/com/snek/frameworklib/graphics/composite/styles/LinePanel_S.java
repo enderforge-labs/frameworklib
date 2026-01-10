@@ -52,8 +52,7 @@ public class LinePanel_S extends PanelStyle {
 
 
 
-//BUG the inverse primer animation isn't recalculated
-//BUG that messes up respawns
+
     @Override
     public @Nullable Animation getDefaultPrimerAnimation() {
         return new Animation(primerAnimation);
