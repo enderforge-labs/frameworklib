@@ -26,7 +26,7 @@ public enum Direction {
     private Direction(final int eighths, final @NotNull String name) {
         this.eighths = eighths;
         this.degrees = 360d / 8d * eighths;
-        this.radians = Math.PI * 4d * eighths;
+        this.radians = Math.PI / 4d * eighths;
         this.name = name;
     }
 
