@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
 import com.snek.frameworklib.graphics.basic.styles.PanelStyle;
-import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 
 
 
@@ -13,9 +12,6 @@ import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 
 
 
-/**
- * The default style of the {@link CanvasBorder} element.
- */
 public class CanvasBorder_S extends PanelStyle {
     public static final @NotNull Vector3i COLOR = new Vector3i(33, 33, 35);
 

@@ -13,7 +13,6 @@ import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.elements.PanelElm;
 import com.snek.frameworklib.graphics.basic.styles.PanelStyle;
-import com.snek.frameworklib.graphics.core.elements.CanvasBorder;
 import com.snek.frameworklib.graphics.core.elements.CanvasTitle;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.layout.Div;
@@ -56,6 +55,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
     public static final float TOOLBAR_H              = 0.12f;
     public static final float TOOLBAR_BUTTON_SPACING = 0.04f;
     public static final float TOOLBAR_BUTTON_SHIFT   = TOOLBAR_H + TOOLBAR_BUTTON_SPACING;
+    public static final float DEFAULT_BORDER_H       = 0.02f;
 
 
 
@@ -392,6 +392,6 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
     public PanelElm createNewBgElement    (final @NotNull ServerLevel level) { return new PanelElm(level, new PanelStyle()); }
     public PanelElm createNewBackElement  (final @NotNull ServerLevel level) { return new PanelElm(level, new PanelStyle()); }
-    public PanelElm createNewTopElement   (final @NotNull ServerLevel level) { return new CanvasBorder(level); } //TODO remove CanvasBorder element. move default height to Canvas
-    public PanelElm createNewBottomElement(final @NotNull ServerLevel level) { return new CanvasBorder(level); }
+    public PanelElm createNewTopElement   (final @NotNull ServerLevel level) { return new PanelElm(level, new PanelStyle()); }
+    public PanelElm createNewBottomElement(final @NotNull ServerLevel level) { return new PanelElm(level, new PanelStyle()); }
 }
