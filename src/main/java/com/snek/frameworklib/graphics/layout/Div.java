@@ -676,7 +676,7 @@ public class Div {
         final Vector3d spawnPos = canvas.getContext().getSpawnPos();
         return
             new Vector3f(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getGraphics().z_layer_spacing.getValue())
-            .rotateY(canvas.getContext().getRotationRadians()) //! Rotation applied to Z-index translation
+            .rotateY(canvas.getContext().getRotation()) //! Rotation applied to Z-index translation
             .add(new Vector3f((float)spawnPos.x, (float)spawnPos.y, (float)spawnPos.z))
         ;
     }
@@ -748,7 +748,7 @@ public class Div {
 
 
         // Shift the origin to find the corners and rotate them by the context's current rotation
-        final float rotation = canvas.getContext().getRotationRadians();
+        final float rotation = canvas.getContext().getRotation();
         return new Vector3f[] {
             new Vector3f(-getInteractionSizeLeft (), -getInteractionSizeBottom(), 0).rotateY(rotation).add(origin),
             new Vector3f(+getInteractionSizeRight(), -getInteractionSizeBottom(), 0).rotateY(rotation).add(origin),

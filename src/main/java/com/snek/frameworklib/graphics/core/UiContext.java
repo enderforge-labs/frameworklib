@@ -65,7 +65,7 @@ public non-sealed class UiContext extends Context {
             if(!canvasRotationLimiter.attempt()) return;
 
             // If the rotation needs to be updated
-            final int newRot = calcRot();
+            final float newRot = calcRot();
             if(getRotation() != newRot) {
 
                 // If the player has moved far enough
@@ -85,12 +85,12 @@ public non-sealed class UiContext extends Context {
 
 
     @Override
-    public int calcRot() {
+    public float calcRot() {
         final Vec3 playerPos = player.getPosition(1f);              // Get player position
         final double dx = getSpawnPos().x - playerPos.x;            // Calculate X difference
         final double dz = getSpawnPos().z - playerPos.z;            // Calculate Z difference
-        final double angle = Math.toDegrees(Math.atan2(-dx, dz));   // Calculate angle from position difference
-        return (int)Math.round((angle + 180d) / 45d) % 8;           // Convert from degrees to direction
+        final double angle = Math.atan2(dx, dz);   // Calculate angle from position difference
+        return (float)(((int)Math.round((angle + Math.PI) / (Math.PI / 4)) % 8) * (Math.PI / 4f));
     }
 
 

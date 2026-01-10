@@ -134,7 +134,7 @@ public non-sealed class HudContext extends Context {
 
 
             // If the rotation needs to be updated
-            final int newRot = calcRot();
+            final float newRot = calcRot();
             if(getRotation() != newRot) {
 
                 // Rotate the canvas and set the new rotation
@@ -162,8 +162,10 @@ public non-sealed class HudContext extends Context {
 
 
     @Override
-    public int calcRot() {
-        return Math.round((player.getViewYRot(1) + 180f) / 45f) % 8;
+    public float calcRot() {
+        // return (Math.round((player.getViewYRot(1) + 180f) / 45f) % 8) * ((float)(Math.PI/4)); //TODO remove
+        // return player.getViewYRot(1) + (float)Math.PI;
+        return (float)Math.toRadians(- player.getViewYRot(1) + 180f);
     }
 
 
@@ -219,7 +221,7 @@ public non-sealed class HudContext extends Context {
      * @return The translation calculated in the global frame.
      */
     public @NotNull Vector3f __calcVisualShiftGlobal() {
-        final float rotation = getRotationRadians() + (float)Math.PI; //! Add PI to align 0° to East(-Z)
+        final float rotation = getRotation() + (float)Math.PI; //! Add PI to align 0° to East(-Z)
         final Vector3f direction = new Vector3f((float)Math.sin(rotation), 0, (float)Math.cos(rotation));
         return direction.mul(HUD_DISTANCE).sub(0, 0.5f, 0);
     }

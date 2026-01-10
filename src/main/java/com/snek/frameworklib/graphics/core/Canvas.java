@@ -291,21 +291,6 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 
 
 
-    /**
-     * Updates the rotation of the canvas.
-     * @param from The current rotation.
-     * @param to The target rotation.
-     * @param animate Whether the rotation should be animated or instantaneous.
-     */
-    protected void rotate(final int from, final int to, final boolean animate) {
-        assert Require.inRange(from, 0, 7, "starting rotation");
-        assert Require.inRange(to,   0, 7, "target rotation");
-
-        final Animation animation = calcCanvasRotationAnimation(from, to);
-        applyAnimation(animation, true, animate, true);
-    }
-
-
 
     /**
      * Denormalizes the transform of the element.
@@ -315,7 +300,7 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      */
     public void denormalizeTransform(final @NotNull Div elm) {
         assert Require.nonNull(elm, "element");
-        elm.applyAnimation(calcCanvasRotationAnimation(0, context.getRotation()), false, false);
+        elm.applyAnimation(calcCanvasRotationAnimation(0f, context.getRotation()), false, false);
     }
 
 
@@ -329,23 +314,21 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
      */
     public void normalizeTransform(final @NotNull Div elm) {
         assert Require.nonNull(elm, "element");
-        elm.applyAnimation(calcCanvasRotationAnimation(context.getRotation(), 0), false, false);
+        elm.applyAnimation(calcCanvasRotationAnimation(context.getRotation(), 0f), false, false);
     }
 
 
 
 
     /**
-     * Calculates the animations required to face from a specified direction to another one.
-     * @param from The starting direction. 0 to 7.
-     * @param to The new direction to face. 0 to 7.
+     * Calculates the animations required to go from a specified rotation to another one.
+     * @param from The starting rotation.
+     * @param to The new rotation.
      * @return The canvas animation.
      */
-    public static @NotNull Animation calcCanvasRotationAnimation(final int from, final int to) {
-        assert Require.inRange(from, 0, 7, "starting rotation");
-        assert Require.inRange(to,   0, 7, "target rotation");
+    public static @NotNull Animation calcCanvasRotationAnimation(final float from, final float to) {
 
-        final float rotation = (float)(-Math.toRadians(to * 45f - from * 45f));
+        final float rotation = to - from;
         return new Animation(
             new Transition(CANVAS_ROTATION_TIME, Easings.cubicOut)
             .additiveTransform(new Transform().rotGlobalY(rotation))
@@ -353,21 +336,17 @@ public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
     }
 
 
-    /**
-     * Calculates the animations required to face from a specified direction to another one, without rotating the item's model.
-     * @param from The starting direction. 0 to 7.
-     * @param to The new direction to face. 0 to 7.
-     * @return The item display animation.
-     */
-    public static @NotNull Animation calcItemDisplayRotationAnimation(final int from, final int to) {
-        assert Require.inRange(from, 0, 7, "starting rotation");
-        assert Require.inRange(to,   0, 7, "target rotation");
 
-        final float rotation = (float)(-Math.toRadians(to * 45f - from * 45f));
-        return new Animation(
-            new Transition(CANVAS_ROTATION_TIME, Easings.cubicOut)
-            .additiveTransform(new Transform().rotGlobalY(rotation).rotY(- rotation))
-        );
+
+    /**
+     * Updates the rotation of the canvas.
+     * @param from The current rotation.
+     * @param to The target rotation.
+     * @param animate Whether the rotation should be animated or instantaneous.
+     */
+    protected void rotate(final float from, final float to, final boolean animate) {
+        final Animation animation = calcCanvasRotationAnimation(from, to);
+        applyAnimation(animation, true, animate, true);
     }
 
 

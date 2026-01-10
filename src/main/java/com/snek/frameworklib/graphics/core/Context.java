@@ -56,8 +56,8 @@ public abstract sealed class Context permits HudContext, UiContext {
     protected @Nullable Canvas             activeCanvas       = null;
     private   @NotNull Vector3d            spawnPos           = new Vector3d(0);
     protected boolean spawned = false;
-    private   int     lastRotation = 0;
-    public abstract int calcRot();
+    private   float   lastRotation = 0f;
+    public abstract float calcRot();
 
 
     // Getters
@@ -66,13 +66,14 @@ public abstract sealed class Context permits HudContext, UiContext {
     public @NotNull  Vector3d           getSpawnPos          () { assert Require.nonNull(spawnPos, "spawn position"); return spawnPos; }
     public @Nullable Canvas             getActiveCanvas      () { return activeCanvas; }
     public @Nullable InteractionBlocker getInteractionBlocker() { return interactionBlocker; }
-    public int                          getRotation          () { return lastRotation; }
+    public float                        getRotation          () { return lastRotation; }
     public abstract  float              getInteractionBlockerSize();
 
 
-    public float getRotationRadians() {
-        return (float)Math.toRadians(lastRotation * -45d);
-    }
+    //TODO REMOVE
+    // public float getRotationRadians() {
+    //     return (float)Math.toRadians(lastRotation * -45d);
+    // }
 
 
     // Setters
@@ -80,8 +81,7 @@ public abstract sealed class Context permits HudContext, UiContext {
         assert Require.nonNull(spawnPos, "spawn position");
         this.spawnPos = spawnPos;
     }
-    public void setRotation(final int newRotation) {
-        assert Require.inRange(newRotation, 0, 7, "new rotation");
+    public void setRotation(final float newRotation) {
         lastRotation = newRotation;
     }
 

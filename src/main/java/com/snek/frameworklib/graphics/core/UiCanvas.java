@@ -3,6 +3,7 @@ package com.snek.frameworklib.graphics.core;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.debug.Require;
 
 import net.minecraft.network.chat.Component;
