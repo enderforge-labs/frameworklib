@@ -8,6 +8,10 @@
         "accessors.TextDisplayAccessorMixin",
         "accessors.ItemDisplayAccessorMixin",
 
+        "enhanced_recipes.shaped.ClientResultSlotSyncMixin",
+        "enhanced_recipes.shaped.RecipePacketSuppressorMixin",
+        "enhanced_recipes.shaped.IngredientConsumerMixin",
+
         "CommandStackTraceMixin",
         "UnwearableHeadItemMixin"
     ],

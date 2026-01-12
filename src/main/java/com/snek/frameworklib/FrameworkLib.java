@@ -11,6 +11,8 @@ import com.snek.frameworkconfig.FrameworkConfig;
 import com.snek.frameworklib.cache.PlayerDataCache;
 import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.enhanced_recipes.shaped.EnhancedShapedRecipe;
+import com.snek.frameworklib.enhanced_recipes.shaped.EnhancedShapedRecipeSerializer;
 import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.core.InteractionBlocker;
 import com.snek.frameworklib.graphics.core.elements.Elm;
@@ -31,9 +33,12 @@ import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.storage.LevelResource;
 
 
@@ -49,9 +54,21 @@ import net.minecraft.world.level.storage.LevelResource;
  * This class registers all the event callbacks and contains the library's ID, the logger, the phase ID and utility methods.
  */
 public class FrameworkLib implements ModInitializer {
+
+
+    // IDs and loggers
     public static final String LIB_ID = "frameworklib";
     public static final @NotNull Logger LOGGER = LoggerFactory.getLogger(LIB_ID);
     public static final ResourceLocation PHASE_ID = new ResourceLocation(LIB_ID, "phase_id");
+
+
+    // EnhancedShapedRecipe serialier
+    public static final RecipeSerializer<EnhancedShapedRecipe> ENHANCED_SHAPED_RECIPE_SERIALIZER = Registry.register(
+        BuiltInRegistries.RECIPE_SERIALIZER,
+        new ResourceLocation("frameworklib", "enhanced_crafting_shaped"),
+        new EnhancedShapedRecipeSerializer()
+    );
+
 
 
     public static Path getStorageDir(final @NotNull String modId) {
@@ -77,6 +94,7 @@ public class FrameworkLib implements ModInitializer {
 
 
     @Override
+    @SuppressWarnings("java:S2696") //! Assigning static values from a non-static method
     public void onInitialize() {
 
 
