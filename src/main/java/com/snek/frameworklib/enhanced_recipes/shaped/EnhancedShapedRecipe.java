@@ -52,6 +52,12 @@ import net.minecraft.world.level.Level;
  *     Only available for ingredients.
  *     This is compatible with {@code dynamic_ref}, {@code all_nbts}, {@code any_nbt}, and Vanilla's {@code item} and {@code tag}.
  *     For the result, you can use Vanilla's {@code "count": count}.
+ * </li><li>
+ *     Additionally, ingredients can use {@code "frameworklib:client_override": "id"} to display specific item stacks on the client side.
+ *     It works exactly like a {@code dynamic_ref}, but it's only used when sending the recipe to the client.
+ *     This is meant to be used with {@code all_nbts} and {@code any_nbt}, since they don't specify a finite amount of possible items,
+ *     though it is available for other types of ingredients as well.
+ *     This is also available for the result slot.
  * </li></ul></p>
  */
 public class EnhancedShapedRecipe extends ShapedRecipe {
@@ -65,6 +71,19 @@ public class EnhancedShapedRecipe extends ShapedRecipe {
     private final @NotNull Map<@NotNull Integer, @Nullable ItemStack>    dynamicReferenceSlots;
     private final @NotNull Map<@NotNull Integer, @Nullable List<String>> anyNbtSlots;
     private final @NotNull Map<@NotNull Integer, @Nullable List<String>> allNbtsSlots;
+    public Map<Integer, ItemStack> getDynamicReferences() {
+        return dynamicReferenceSlots;
+    }
+    public Map<Integer, Integer> getRequiredCounts() {
+        return requiredCounts;
+    }
+
+
+    // Client overrides. This is only used by the packet proxy mixin
+    private final @NotNull Map<@NotNull Integer, @Nullable String> clientOverrideSlots;
+    public Map<Integer, String> getClientOverrides() {
+        return clientOverrideSlots;
+    }
 
 
 
@@ -107,7 +126,8 @@ public class EnhancedShapedRecipe extends ShapedRecipe {
         final Map<Integer, Integer> requiredCounts,
         final Map<Integer, ItemStack> dynamicReferenceSlots,
         final Map<Integer, List<String>> anyNbtSlots,
-        final Map<Integer, List<String>> allNbtsSlots
+        final Map<Integer, List<String>> allNbtsSlots,
+        final Map<Integer, String> clientOverrideSlots
     ) {
         super(id, group, category,
             pattern[0].length(), pattern.length,
@@ -118,6 +138,7 @@ public class EnhancedShapedRecipe extends ShapedRecipe {
         this.dynamicReferenceSlots = dynamicReferenceSlots;
         this.anyNbtSlots = anyNbtSlots;
         this.allNbtsSlots = allNbtsSlots;
+        this.clientOverrideSlots = clientOverrideSlots;
     }
 
 
@@ -229,13 +250,5 @@ public class EnhancedShapedRecipe extends ShapedRecipe {
     @Override
     public RecipeSerializer<?> getSerializer() {
         return FrameworkLib.ENHANCED_SHAPED_RECIPE_SERIALIZER;
-    }
-
-    public Map<Integer, ItemStack> getDynamicReferences() {
-        return dynamicReferenceSlots;
-    }
-
-    public Map<Integer, Integer> getRequiredCounts() {
-        return requiredCounts;
     }
 }

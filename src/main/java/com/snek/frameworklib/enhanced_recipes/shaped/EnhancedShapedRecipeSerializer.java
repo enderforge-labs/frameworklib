@@ -31,6 +31,7 @@ public class EnhancedShapedRecipeSerializer implements RecipeSerializer<Enhanced
     public static final @NotNull String ANY_NBT_PLACEHOLDER     = "frameworklib:any_nbt";
     public static final @NotNull String ALL_NBTS_PLACEHOLDER    = "frameworklib:all_nbts";
     public static final @NotNull String COUNT                   = "frameworklib:count";
+    public static final @NotNull String CLIENT_OVERRIDE         = "frameworklib:client_override";
 
 
 
@@ -46,6 +47,7 @@ public class EnhancedShapedRecipeSerializer implements RecipeSerializer<Enhanced
         final Map<String, ItemStack> dynamicReferenceIngredients = new HashMap<>();
         final Map<String, List<String>> anyNbtIngredients = new HashMap<>();
         final Map<String, List<String>> allNbtsIngredients = new HashMap<>();
+        final Map<String, String> clientOverrideIngredients = new HashMap<>();
 
         for(final Map.Entry<String, JsonElement> entry : keyObj.entrySet()) {
             final JsonObject ingredientObj = entry.getValue().getAsJsonObject();
@@ -53,6 +55,12 @@ public class EnhancedShapedRecipeSerializer implements RecipeSerializer<Enhanced
             // Extract count if present
             final int count = ingredientObj.has(COUNT) ? ingredientObj.get(COUNT).getAsInt() : 1;
             ingredientRequiredCounts.put(entry.getKey(), count);
+
+            // Parse client overrides
+            if(ingredientObj.has(CLIENT_OVERRIDE)) {
+                final String refId = ingredientObj.get(CLIENT_OVERRIDE).getAsString();
+                clientOverrideIngredients.put(entry.getKey(), refId);
+            }
 
 
             // Dynamic stack reference case
@@ -128,6 +136,7 @@ public class EnhancedShapedRecipeSerializer implements RecipeSerializer<Enhanced
         final Map<Integer, ItemStack> dynamicReferenceSlots = new HashMap<>();
         final Map<Integer, List<String>> anyNbtSlots = new HashMap<>();
         final Map<Integer, List<String>> allNbtsSlots = new HashMap<>();
+        final Map<Integer, String> clientOverrideSlots = new HashMap<>();
         final int width = pattern[0].length();
         for(int i = 0; i < pattern.length; i++) {
             final String row = pattern[i];
@@ -135,25 +144,27 @@ public class EnhancedShapedRecipeSerializer implements RecipeSerializer<Enhanced
                 final char c = row.charAt(j);
                 if(c != ' ') {
                     final String cStr = String.valueOf(c);
+                    final int slot = j + i * width;
 
                     // Save count
                     assert Require.nonNull(ingredientRequiredCounts.get(cStr), "extracted material count");
                     assert Require.positive(ingredientRequiredCounts.get(cStr), "specified material count"); {
-                        final int slot = j + i * width;
                         requiredCountSlots.put(slot, ingredientRequiredCounts.get(cStr));
+                    }
+
+                    // Save client overrides
+                    if(clientOverrideIngredients.containsKey(cStr)) {
+                        clientOverrideSlots.put(slot, clientOverrideIngredients.get(cStr));
                     }
 
                     // Save ingredient type
                     if(dynamicReferenceIngredients.containsKey(cStr)) {
-                        final int slot = j + i * width;
                         dynamicReferenceSlots.put(slot, dynamicReferenceIngredients.get(cStr));
                     }
                     else if(anyNbtIngredients.containsKey(cStr)) {
-                        final int slot = j + i * width;
                         anyNbtSlots.put(slot, anyNbtIngredients.get(cStr));
                     }
                     else if(allNbtsIngredients.containsKey(cStr)) {
-                        final int slot = j + i * width;
                         allNbtsSlots.put(slot, allNbtsIngredients.get(cStr));
                     }
                 }
@@ -172,7 +183,8 @@ public class EnhancedShapedRecipeSerializer implements RecipeSerializer<Enhanced
         // Return data
         return new EnhancedShapedRecipe(
             id, group, category, pattern, keyMap, resultStack,
-            requiredCountSlots, dynamicReferenceSlots, anyNbtSlots, allNbtsSlots
+            requiredCountSlots, dynamicReferenceSlots, anyNbtSlots, allNbtsSlots,
+            clientOverrideSlots
         );
     }
 
