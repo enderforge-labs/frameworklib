@@ -44,7 +44,7 @@ public class EnhancedShapedRecipeSerializer implements RecipeSerializer<Enhanced
         final JsonObject keyObj = json.getAsJsonObject("key");
         final Map<String, Ingredient> keyMap = new HashMap<>();
         final Map<String, Integer> ingredientRequiredCounts = new HashMap<>();
-        final Map<String, ItemStack> dynamicReferenceIngredients = new HashMap<>();
+        final Map<String, String> dynamicReferenceIngredients = new HashMap<>();
         final Map<String, List<String>> anyNbtIngredients = new HashMap<>();
         final Map<String, List<String>> allNbtsIngredients = new HashMap<>();
         final Map<String, String> clientOverrideIngredients = new HashMap<>();
@@ -66,13 +66,8 @@ public class EnhancedShapedRecipeSerializer implements RecipeSerializer<Enhanced
             // Dynamic stack reference case
             if(ingredientObj.has(DYNAMIC_REF_PLACEHOLDER)) {
                 final String refId = ingredientObj.get(DYNAMIC_REF_PLACEHOLDER).getAsString();
-                final ResourceLocation refLocation = new ResourceLocation(refId);
-                final ItemStack refStack = EnhancedShapedRecipe.getItemStackReference(refLocation);
-                if(refStack.isEmpty()) throw new JsonSyntaxException("Unknown ItemStack reference: " + refId);
-
-                // Store for NBT checking later. Use vanilla ingredient for base item type matching
-                dynamicReferenceIngredients.put(entry.getKey(), refStack);
-                keyMap.put(entry.getKey(), Ingredient.of(refStack.getItem()));
+                dynamicReferenceIngredients.put(entry.getKey(), refId);
+                keyMap.put(entry.getKey(), Ingredient.EMPTY);
             }
 
             // Any tag case
@@ -133,7 +128,7 @@ public class EnhancedShapedRecipeSerializer implements RecipeSerializer<Enhanced
 
         // Map character positions to slot indices for NBT checking
         final Map<Integer, Integer> requiredCountSlots = new HashMap<>();
-        final Map<Integer, ItemStack> dynamicReferenceSlots = new HashMap<>();
+        final Map<Integer, String> dynamicReferenceSlots = new HashMap<>();
         final Map<Integer, List<String>> anyNbtSlots = new HashMap<>();
         final Map<Integer, List<String>> allNbtsSlots = new HashMap<>();
         final Map<Integer, String> clientOverrideSlots = new HashMap<>();

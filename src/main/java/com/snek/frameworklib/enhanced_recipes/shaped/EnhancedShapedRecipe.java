@@ -68,10 +68,10 @@ public class EnhancedShapedRecipe extends ShapedRecipe {
 
     // Recipe data - provided by the serializer
     private final @NotNull Map<@NotNull Integer, @Nullable Integer>      requiredCounts;
-    private final @NotNull Map<@NotNull Integer, @Nullable ItemStack>    dynamicReferenceSlots;
+    private final @NotNull Map<@NotNull Integer, @Nullable String>       dynamicReferenceSlots;
     private final @NotNull Map<@NotNull Integer, @Nullable List<String>> anyNbtSlots;
     private final @NotNull Map<@NotNull Integer, @Nullable List<String>> allNbtsSlots;
-    public Map<Integer, ItemStack> getDynamicReferences() {
+    public Map<Integer, String> getDynamicReferences() {
         return dynamicReferenceSlots;
     }
     public Map<Integer, Integer> getRequiredCounts() {
@@ -91,7 +91,7 @@ public class EnhancedShapedRecipe extends ShapedRecipe {
     /**
      * Registers a dynamic ItemStack reference.
      * <p>
-     * All references must be registered before the recipes are loaded.
+     * All references must be registered before any recipe is tested. Your mod's onInitialize() is a good place for that.
      * @param id The ID of the dynamic item reference. This must match the ID specified in the recipe's Json file.
      * @param stack The ItemStack to link to the provided ID. The stack's count is ignored. Use proper count parameters for that.
      */
@@ -124,7 +124,7 @@ public class EnhancedShapedRecipe extends ShapedRecipe {
         final Map<String, Ingredient> key,
         final ItemStack result,
         final Map<Integer, Integer> requiredCounts,
-        final Map<Integer, ItemStack> dynamicReferenceSlots,
+        final Map<Integer, String> dynamicReferenceSlots,
         final Map<Integer, List<String>> anyNbtSlots,
         final Map<Integer, List<String>> allNbtsSlots,
         final Map<Integer, String> clientOverrideSlots
@@ -187,12 +187,16 @@ public class EnhancedShapedRecipe extends ShapedRecipe {
             }
 
             // Check references for slots that require it
-            final var dynamicRef = dynamicReferenceSlots.get(i);
-            if(dynamicRef != null) {
-                final ItemStack actual = container.getItem(i);
-                if(!ItemStack.isSameItemSameTags(actual, dynamicRef)) {
-                    return false;
+            final var dynamicRefId = dynamicReferenceSlots.get(i);
+            if(dynamicRefId != null) {
+                final ItemStack dynamicRef = itemStackReferences.get(new ResourceLocation(dynamicRefId));
+                if(dynamicRef != null) {
+                    final ItemStack actual = container.getItem(i);
+                    if(!ItemStack.isSameItemSameTags(actual, dynamicRef)) {
+                        return false;
+                    }
                 }
+                else FrameworkLib.LOGGER.error("Unknown ItemStack reference: \"{}\"", dynamicRefId, new RuntimeException());
                 continue;
             }
 
