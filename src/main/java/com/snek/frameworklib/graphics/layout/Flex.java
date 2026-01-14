@@ -45,11 +45,34 @@ public class Flex extends Div {
     }
 
 
+
+
     //! Override updateAbsSizeSelf to force a 1, 1 local size
     @Override
     public void updateAbsSizeSelf() {
+        localSize.set(1f, 1f);
         absSize.set(parent == null ? new Vector2f(1f) : new Vector2f(parent.getAbsSize()));
+        updateAbsPosSelf();
     }
+
+    @Override
+    public void updateAbsSizeInverseSelf() {
+        updateAbsSizeSelf();
+    }
+
+    @Override
+    public void updateAbsSize() {
+        super.updateAbsSize();
+        updateLayout();
+    }
+
+    @Override
+    public void updateAbsSizeInverse() {
+        super.updateAbsSizeInverse();
+        updateLayout();
+    }
+
+
 
 
     public void updateLayout() {
@@ -63,7 +86,7 @@ public class Flex extends Div {
         // Reposition elements
         float curPos = 0f - totLen / 2f;
         for(final Div c : children) {
-            final float len = axis.get(c.getLocalSize());
+            final float len = axis.get(c.getAbsSize());
             final float pos = curPos + len / 2f;
             if(axis == Axis2.X) c.setPosX(pos); else c.setPosY(pos);
             curPos += len;
