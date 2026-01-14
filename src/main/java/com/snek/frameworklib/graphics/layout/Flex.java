@@ -84,11 +84,17 @@ public class Flex extends Div {
         }
 
         // Reposition elements
-        float curPos = 0f - totLen / 2f;
+        float curPos = axis == Axis2.X ? -totLen / 2f : 0f;
         for(final Div c : children) {
             final float len = axis.get(c.getAbsSize());
-            final float pos = curPos + len / 2f;
-            if(axis == Axis2.X) c.setPosX(pos); else c.setPosY(pos);
+
+            // Set the position differently based on the axis. Y axis indicates the bottom of the element. X indicates the center
+            if(axis == Axis2.X) {
+                c.setPosX(curPos + len / 2f);
+            }
+            else {
+                c.setPosY(curPos);
+            }
             curPos += len;
         }
     }
