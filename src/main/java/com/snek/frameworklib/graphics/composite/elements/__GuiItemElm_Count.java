@@ -1,53 +1,31 @@
-package com.snek.frameworklib.graphics.basic.presets;
+package com.snek.frameworklib.graphics.composite.elements;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.frameworklib.data_types.animations.Transform;
-import com.snek.frameworklib.graphics.basic.elements.ItemElm;
-import com.snek.frameworklib.graphics.basic.styles.ItemStyle;
+import com.snek.frameworklib.graphics.basic.elements.TextElm;
+import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.ItemStack;
 
 
 
+public class __GuiItemElm_Count extends TextElm {
 
-
-
-
-
-public class ItemElm_Gui extends ItemElm {
-    public static final float Z_SCALE = 0.001f;
-
-
-
-
-    public ItemElm_Gui(@NotNull ServerLevel level) {
-        this(level, new ItemStyle());
+    public __GuiItemElm_Count(final @NotNull ServerLevel level) {
+        super(level);
     }
 
-    public ItemElm_Gui(@NotNull ServerLevel level, @NotNull ItemStyle style) {
-        super(level, style.withDisplayContext(ItemDisplayContext.GUI));
+    public __GuiItemElm_Count(final @NotNull ServerLevel level, final @NotNull TextStyle style) {
+        super(level, style);
     }
-
-    public ItemElm_Gui(@NotNull ServerLevel level, final @NotNull ItemStack item) {
-        this(level, new ItemStyle().withItem(item));
-    }
-
-    public ItemElm_Gui(@NotNull ServerLevel level, @NotNull ItemStyle style, final @NotNull ItemStack item) {
-        this(level, style.withItem(item));
-    }
-
-
-
 
     //! Scale the item to match the element's size
     @Override
     public @NotNull Transform __calcTransform() {
         final float size = Math.min(getAbsSize().x, getAbsSize().y);
-        return super.__calcTransform().scale(size, size, Z_SCALE).rotY((float)Math.PI);
+        return super.__calcTransform().scale(size, size, 1f).move(size / 3f, -size / 4f, 0f);
     }
 
 
