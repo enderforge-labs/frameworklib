@@ -367,6 +367,6 @@ public class PolylineData {
      * @return A copy of this data.
      */
     public @NotNull PolylineData copy() {
-        return new PolylineData(color, alpha, width, points);
+        return new PolylineData(color, alpha, width, cyclic, points);
     }
 }
