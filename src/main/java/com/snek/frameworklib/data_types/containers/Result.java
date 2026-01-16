@@ -2,6 +2,7 @@ package com.snek.frameworklib.data_types.containers;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 
 //TODO properly document the class and every method
@@ -10,6 +11,7 @@ import java.util.function.Function;
 
 
 public class Result<T, E> {
+
     private final Option<T> innerOption;
     private final Option<E> err;
     // innerOption and err can never both be None or both be Some. if they are, the object is invalid, and someone is a spoon.
@@ -30,16 +32,16 @@ public class Result<T, E> {
     }
 
     public boolean is_ok() {
-        return innerOption.is_some();
+        return innerOption.isSome();
     }
-    public boolean is_ok_and(final Function<T,Boolean> function) {
-        return innerOption.is_some_and(function);
+    public boolean is_ok_and(final Predicate<T> function) {
+        return innerOption.isSomeAnd(function);
     }
     public boolean is_err() {
-        return err.is_some();
+        return err.isSome();
     }
-    public boolean is_err_and(final Function<E,Boolean> function) {
-        return err.is_some_and(function);
+    public boolean is_err_and(final Predicate<E> function) {
+        return err.isSomeAnd(function);
     }
     public Option<T> ok() {
         return innerOption;
@@ -54,7 +56,7 @@ public class Result<T, E> {
         return this.innerOption.expect(msg);
     }
     public T unwrap_or(final T default_value) {
-        return this.innerOption.unwrap_or(default_value);
+        return this.innerOption.unwrapOr(default_value);
     }
     public T unwrap_or_else(final Function<E,T> function) {
         if(this.is_ok()) {return this.unwrap();}
@@ -72,7 +74,7 @@ public class Result<T, E> {
         return Result.Ok(this.ok().map(function).unwrap());
     }
     public <U> U map_or(final Function<T,U> function, final U default_value) {
-        return this.ok().map_or(function,default_value);
+        return this.ok().mapOr(function,default_value);
     }
     public <U> U map_or_else(final Function<T,U> function, final Function<E,U> default_function) {
         if(this.is_ok()) {return this.ok().map(function).unwrap();}
