@@ -109,7 +109,7 @@ public class Option<T> {
 
 
     /**
-     * Returns the contianed value or throws an exception with the provided message.
+     * Returns the contained value or throws an exception with the provided message.
      * @param message The message to use for the exception.
      * @return The value contained in this Option.
      */
@@ -227,6 +227,7 @@ public class Option<T> {
      * @return An Option containing the mapped value or the computed default value.
      */
     public <U> U mapOrElse(final @NotNull Function<T, U> f, final @NotNull Supplier<U> supplier) {
+        assert Require.nonNull(f, "f");
         assert Require.nonNull(supplier, "supplier");
         return this.map(f).unwrapOrElse(supplier);
     }
