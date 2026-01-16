@@ -20,15 +20,5 @@ public enum TextOverflowBehaviour {
      * <p>
      * Notice: This is significantly slower than the other methods.
      */
-    SCROLL("scroll");
-
-
-    private final String text;
-    TextOverflowBehaviour(final String text) {
-        this.text = text;
-    }
-
-    public String asString() {
-        return text;
-    }
+    SCROLL;
 }
