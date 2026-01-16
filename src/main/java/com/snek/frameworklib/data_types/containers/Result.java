@@ -1,5 +1,6 @@
 package com.snek.frameworklib.data_types.containers;
 
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -124,6 +125,7 @@ public class Result<T, E> {
     /**
      * Returns the contained success value or throws an exception.
      * @return The success value contained in this Result.
+     * @throws NoSuchElementException if this Result is Err.
      */
     public T unwrap() {
         return this.innerOption.unwrap();
@@ -131,8 +133,9 @@ public class Result<T, E> {
 
     /**
      * Returns the contianed success value or throws an exception with the provided message.
-     * @param message The message to use for the exception.
+     * @param msg The message to use for the exception.
      * @return The success value contained in this Result.
+     * @throws NoSuchElementException if this Result is Err.
      */
     public T expect(final @NotNull String msg) {
         assert Require.nonNull(msg, "msg");
@@ -164,6 +167,7 @@ public class Result<T, E> {
     /**
      * Returns the contained error value or throws an exception.
      * @return The error value contained in this Result.
+     * @throws NoSuchElementException if this Result is Ok.
      */
     public E unwrapErr() {
         return this.err.unwrap();
@@ -171,8 +175,9 @@ public class Result<T, E> {
 
     /**
      * Returns the contianed error value or throws an exception with the provided message.
-     * @param message The message to use for the exception.
+     * @param msg The message to use for the exception.
      * @return The error value contained in this Result.
+     * @throws NoSuchElementException if this Result is Ok.
      */
     public E expectErr(final @NotNull String msg) {
         assert Require.nonNull(msg, "msg");
@@ -187,9 +192,8 @@ public class Result<T, E> {
 
 
     /**
-     * Maps a Result<T, E> to Result<U, E> by applying a function to the success value.
-     * Leaves Err values unchanged.
-     * @param function The function to transform the success value.
+     * Maps the contained success value to a new value using the given function. Leaves Err values unchanged.
+     * @param function The mapping function.
      * @return A new Result with the transformed success value, or the original error if Err.
      */
     public <U> @NotNull Result<U, E> map(final @NotNull Function<T, U> function) {
@@ -227,9 +231,9 @@ public class Result<T, E> {
     }
 
     /**
-     * Maps a Result<T, F> to Result<U, F> by applying a function to the error value.
+     * Maps the contained error value to a new value using the given function. Leaves Ok values unchanged.
      * Leaves Ok values unchanged.
-     * @param function The function to transform the error value.
+     * @param function The mapping function.
      * @return A new Result with the transformed error value, or the original success if Ok.
      */
     public <F> @NotNull Result<T, F> mapErr(final @NotNull Function<E, F> function) {

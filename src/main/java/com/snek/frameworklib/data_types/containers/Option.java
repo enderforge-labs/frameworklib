@@ -112,6 +112,7 @@ public class Option<T> {
      * Returns the contained value or throws an exception with the provided message.
      * @param message The message to use for the exception.
      * @return The value contained in this Option.
+     * @throws NoSuchElementException if this Option is None.
      */
     public T expect(final @NotNull String message) {
         assert Require.nonNull(message, "message");
@@ -121,6 +122,7 @@ public class Option<T> {
     /**
      * Returns the contained value or throws an exception.
      * @return The value contained in this Option.
+     * @throws NoSuchElementException if this Option is None.
      */
     public T unwrap() {
         return innerOptional.orElseThrow();
