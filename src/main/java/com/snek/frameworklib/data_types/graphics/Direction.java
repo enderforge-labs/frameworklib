@@ -69,4 +69,26 @@ public enum Direction {
             default -> NORTHEAST;
         };
     }
+
+
+    /**
+    * Calculates the direction from a rotation expressed in radians.
+    * @param radians The rotation in radians, where 0d is North and positive values rotate clockwise.
+    *     This can safely exceed the [0d, 2π] range.
+    * @return The direction closest to the provided rotation.
+    */
+    public static @NotNull Direction fromRadians(final double radians) {
+        return fromEighths((int)Math.round((radians / (2d * Math.PI)) * 8d));
+    }
+
+
+    /**
+     * Calculates the direction from a rotation expressed in degrees.
+     * @param degrees The rotation in degrees, where 0d is North and positive values rotate clockwise.
+     *     This can safely exceed the [0d, 360d] range.
+     * @return The direction closest to the provided rotation.
+     */
+    public static @NotNull Direction fromDegrees(final double degrees) {
+        return fromEighths((int)Math.round((degrees / 360d) * 8d));
+    }
 }
