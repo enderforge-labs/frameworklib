@@ -70,10 +70,20 @@ public class FrameworkLib implements ModInitializer {
     );
 
 
-
+    /**
+     * Computes the path to the data storage directory for the specified mod.
+     * @param modId The ID of the mod.
+     * @return The path to the storage directory.
+     */
     public static Path getStorageDir(final @NotNull String modId) {
         return FrameworkLib.getServer().getWorldPath(LevelResource.ROOT).resolve("data/" + modId);
     }
+
+    /**
+     * Computes the path to the config directory for the specified mod.
+     * @param modId The ID of the mod.
+     * @return The path to the config directory.
+     */
     public static Path getConfigDir(final @NotNull String modId) {
         return FabricLoader.getInstance().getConfigDir().resolve(modId);
     }
@@ -93,8 +103,8 @@ public class FrameworkLib implements ModInitializer {
 
 
 
-    @Override
     @SuppressWarnings("java:S2696") //! Assigning static values from a non-static method
+    @Override
     public void onInitialize() {
 
 

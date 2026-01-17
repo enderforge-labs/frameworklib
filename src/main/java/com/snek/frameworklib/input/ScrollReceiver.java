@@ -26,7 +26,6 @@ import net.minecraft.world.entity.player.Player;
  */
 public final class ScrollReceiver extends UtilityClassBase {
     private static final @NotNull Map<@NotNull Player, @Nullable Integer> lastSlots = new HashMap<>();
-    private ScrollReceiver() {}
 
 
 

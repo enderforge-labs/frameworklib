@@ -17,7 +17,7 @@ public class CanvasBorder_S extends PanelStyle {
 
 
     /**
-     * Creates a new UiBorder_S.
+     * Creates a new CanvasBorder_S.
      */
     public CanvasBorder_S() {
         super();

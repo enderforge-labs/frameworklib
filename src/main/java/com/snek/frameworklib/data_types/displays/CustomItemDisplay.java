@@ -3,6 +3,7 @@ package com.snek.frameworklib.data_types.displays;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.mixin.accessors.DisplayAccessorMixin;
 import com.snek.frameworklib.mixin.accessors.ItemDisplayAccessorMixin;
 
 import net.minecraft.world.entity.EntityType;
@@ -23,10 +24,20 @@ import net.minecraft.world.level.Level;
  * This class allows for better customization and more readable code.
  */
 public class CustomItemDisplay extends CustomDisplay {
+
+    /**
+     * Retrieves the display entity held by this {@link CustomItemDisplay}.
+     * @return The held {@link ItemDisplay}.
+     */
     public @NotNull ItemDisplay getRawDisplay() {
         assert Require.nonNull(heldEntity, "held entity");
         return (ItemDisplay)heldEntity;
     }
+
+    /**
+     * Retrieves the display entity held by this {@link CustomItemDisplay} as a {@link ItemDisplayAccessorMixin} to allow access to private methods.
+     * @return The held {@link ItemDisplay} as a {@link DisplayAccessorMixin}.
+     */
     private @NotNull ItemDisplayAccessorMixin getAccessibleItemDisplay() {
         assert Require.nonNull(heldEntity, "held entity");
         return (ItemDisplayAccessorMixin)heldEntity;

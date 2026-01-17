@@ -12,8 +12,8 @@
         "enhanced_recipes.shaped.RecipePacketProxyMixin",
         "enhanced_recipes.shaped.IngredientConsumerMixin",
 
-        "CommandStackTraceMixin",
-        "UnwearableHeadItemMixin"
+        "misc.CommandStackTraceMixin",
+        "misc.UnwearableHeadItemMixin"
     ],
     "injectors": {
         "defaultRequire": 1

@@ -44,7 +44,6 @@ import net.minecraft.world.entity.player.Player;
  * This is responsible for sending hover events to contexts.
  */
 public final class HoverReceiver extends UtilityClassBase {
-    private HoverReceiver() {}
 
 
     // Partial ray casting batch data

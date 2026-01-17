@@ -5,6 +5,9 @@ import com.snek.frameworklib.graphics.basic.styles.TextStyle;
 
 
 
+/**
+ * A default TextStyle with font size 9.
+ */
 public class TextStyle_Medium extends TextStyle {
     public TextStyle_Medium() {
         super();

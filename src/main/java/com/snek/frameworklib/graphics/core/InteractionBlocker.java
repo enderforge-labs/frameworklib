@@ -39,6 +39,11 @@ import net.minecraft.world.phys.Vec3;
  * Unlike graphic elements, this entity cannot be respawned.
  */
 public class InteractionBlocker {
+
+    /**
+     * Retrieves the interaction entity held by this {@link Interaction} as an {@link InteractionAccessorMixin} to allow access to private methods.
+     * @return The held {@link Interaction} as a {@link InteractionAccessorMixin}.
+     */
     private @NotNull InteractionAccessorMixin getAccessibleDisplay() {
         assert Require.nonNull(heldEntity, "held entity");
         return (InteractionAccessorMixin)heldEntity;

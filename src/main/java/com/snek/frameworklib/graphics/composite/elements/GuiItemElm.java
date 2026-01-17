@@ -24,7 +24,13 @@ import net.minecraft.world.item.ItemStack;
 
 
 
-
+/**
+ * A special {@link ItemElm} meant for use in 2D contexts.
+ * <p>
+ * It displays an ItemStack and an optional count.
+ * <p>
+ * This element automatically resizes the count text and the item to match its current dimensions.
+ */
 public class GuiItemElm extends ItemElm {
     public static final float Z_SCALE = 0.001f;
     private final @Nullable TextElm text;
@@ -32,6 +38,12 @@ public class GuiItemElm extends ItemElm {
 
 
 
+    /**
+     * Creates a new GuiItemElm with the specified style and count.
+     * @param level The level to spawn associated entities in.
+     * @param style The style.
+     * @param count The count to display.
+     */
     public GuiItemElm(@NotNull ServerLevel level, @NotNull ItemStyle style, final @Nullable Integer count) {
         super(level, style.withDisplayContext(ItemDisplayContext.GUI));
 
@@ -50,32 +62,70 @@ public class GuiItemElm extends ItemElm {
         }
     }
 
+    /**
+     * Creates a new GuiItemElm with the default style and the specified count.
+     * @param level The level to spawn associated entities in.
+     * @param count The count to display.
+     */
     public GuiItemElm(@NotNull ServerLevel level, final @Nullable Integer count) {
         this(level, new ItemStyle(), count);
     }
 
+    /**
+     * Creates a new GuiItemElm with the default style and the specified item and count.
+     * @param level The level to spawn associated entities in.
+     * @param item The item to display.
+     * @param count The count to display.
+     */
     public GuiItemElm(@NotNull ServerLevel level, final @NotNull ItemStack item, final @Nullable Integer count) {
         this(level, new ItemStyle().withItem(item), count);
     }
 
+    /**
+     * Creates a new GuiItemElm with the specified style, item and count.
+     * @param level The level to spawn associated entities in.
+     * @param style The style.
+     * @param item The item to display.
+     * @param count The count to display.
+     */
     public GuiItemElm(@NotNull ServerLevel level, @NotNull ItemStyle style, final @NotNull ItemStack item, final @Nullable Integer count) {
         this(level, style.withItem(item), count);
     }
 
+    /**
+     * Creates a new GuiItemElm with the specified style.
+     * @param level The level to spawn associated entities in.
+     * @param style The style.
+     */
     public GuiItemElm(@NotNull ServerLevel level, @NotNull ItemStyle style) {
-        this(level, style, (Integer)null);
+        this(level, style, (Integer)null); //TODO replace with Option
     }
 
+    /**
+     * Creates a new GuiItemElm with the default style.
+     * @param level The level to spawn associated entities in.
+     */
     public GuiItemElm(@NotNull ServerLevel level) {
-        this(level, new ItemStyle(), (Integer)null);
+        this(level, new ItemStyle(), (Integer)null); //TODO replace with Option
     }
 
+    /**
+     * Creates a new GuiItemElm with the default style and the specified item.
+     * @param level The level to spawn associated entities in.
+     * @param item The item to display.
+     */
     public GuiItemElm(@NotNull ServerLevel level, final @NotNull ItemStack item) {
-        this(level, new ItemStyle().withItem(item), (Integer)null);
+        this(level, new ItemStyle().withItem(item), (Integer)null); //TODO replace with Option
     }
 
+    /**
+     * Creates a new GuiItemElm with the specified style and item.
+     * @param level The level to spawn associated entities in.
+     * @param style The style.
+     * @param item The item to display.
+     */
     public GuiItemElm(@NotNull ServerLevel level, @NotNull ItemStyle style, final @NotNull ItemStack item) {
-        this(level, style.withItem(item), (Integer)null);
+        this(level, style.withItem(item), (Integer)null); //TODO replace with Option
     }
 
 

@@ -75,7 +75,6 @@ import net.minecraft.world.phys.Vec3;
  * A utility class providing functions to handle Minecraft classes and data.
  */
 public final class MinecraftUtils extends UtilityClassBase {
-    private MinecraftUtils() {}
     public static final @NotNull UUID HEAD_OWNER_UUID  = UUID.fromString("069a79f4-44e9-4726-a5be-fca90e38aaf5");
     public static final @NotNull String UNWEARABLE_TAG = FrameworkLib.LIB_ID + ".PlayerHeadItem.unwearable";
 
@@ -437,7 +436,6 @@ public final class MinecraftUtils extends UtilityClassBase {
      * <p>
      * The player can be offline, as long as they have joined the server at least once in the past.
      * @param uuid The player's UUID.
-     * @param server The serverinstance.
      * @return The player's name as a string, or null if the player never joined this server.
      */
     public static @Nullable String getOfflinePlayerName(final @NotNull UUID uuid) {

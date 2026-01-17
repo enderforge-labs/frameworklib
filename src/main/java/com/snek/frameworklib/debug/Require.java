@@ -30,7 +30,7 @@ import com.snek.frameworklib.utils.UtilityClassBase;
  * This can be used in conjunction with Java's assertions or as a substitute.
  * <p>
  * These methods have little cost in production, but not always none.
- * All of the parameters are evaluated before the check (apart from the supplier parameter of {@link #(Supplier, String)}).
+ * All of the parameters are evaluated before the check (apart from the supplier parameter of {@link #condition(BooleanSupplier, String)}).
  * Make sure computing them doesn't add much overhead and doesn't have any side effect.
  * Passing existing values has effectively negligible cost.
  */
@@ -222,7 +222,7 @@ public final class Require extends UtilityClassBase {
     public static boolean inRange(final long value, final long min, final long max, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
             if(min > max) {
-                throw new IllegalArgumentException("Minimum value of " + name + "(" + min + ") must be smaller than the maximum value (" + max + ")");
+                throw new IllegalArgumentException("Minimum value of " + name + " (" + min + ") must be smaller than the maximum value (" + max + ")");
             }
             if(value < min || value > max) {
                 throw new IllegalArgumentException(name + " must be in range [" + min + ", " + max + "], got: " + value);
@@ -314,7 +314,7 @@ public final class Require extends UtilityClassBase {
             __unconditional_Finite(min, name + " min");
             __unconditional_Finite(max, name + " max");
             if(min > max) {
-                throw new IllegalArgumentException("Minimum value of " + name + "(" + min + ") must be smaller than the maximum value (" + max + ")");
+                throw new IllegalArgumentException("Minimum value of " + name + " (" + min + ") must be smaller than the maximum value (" + max + ")");
             }
             if(value < min || value > max) {
                 throw new IllegalArgumentException(name + " must be in range [" + min + ", " + max + "], got: " + value);
@@ -849,6 +849,7 @@ public final class Require extends UtilityClassBase {
      * @param name The name for the error message.
      * @return True.
      */
+    @SuppressWarnings("java:S1221") //! Name too similar to "equals"
     public static boolean equal(final @Nullable Object expected, final @Nullable Object actual, final @NotNull String name) {
         if(DebugCheck.isDebug()) {
             if(!Objects.equals(expected, actual)) {

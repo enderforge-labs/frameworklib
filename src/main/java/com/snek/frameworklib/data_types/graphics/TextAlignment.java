@@ -21,6 +21,11 @@ public enum TextAlignment {
         this.text = text;
     }
 
+    /**
+     * Retrieves the lowercase name of this alignment option.
+     * This matches Minecraft 1.20.1's text alignment NBT tag values for TextDisplay entities.
+     * @return The lowercase name. "left", "center", or "right".
+     */
     public String asString() {
         return text;
     }

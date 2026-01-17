@@ -18,7 +18,6 @@ import com.snek.frameworklib.generated.FontData;
  * This relies on the font dimensions defined in {@link FontData}.
  */
 public final class FontSize extends UtilityClassBase {
-    private FontSize() {}
 
 
 

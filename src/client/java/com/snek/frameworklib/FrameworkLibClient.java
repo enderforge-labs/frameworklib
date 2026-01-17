@@ -23,6 +23,7 @@ public class FrameworkLibClient implements ClientModInitializer {
 
 
     @Override
+    @SuppressWarnings("java:S2696") //! Setting static member from non-static method
     public void onInitializeClient() {
         ClientTickEvents.END_WORLD_TICK.register(client -> {
             if(!generated) {

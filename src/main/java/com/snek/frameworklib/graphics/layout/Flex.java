@@ -23,6 +23,10 @@ public class Flex extends Div {
     private final @NotNull Axis2 axis;
 
 
+    /**
+     * Creates a new Flex.
+     * @param axis The axis to align child elements on.
+     */
     public Flex(final @NotNull Axis2 axis) {
         super();
         assert Require.nonNull(axis, "axis");
@@ -75,6 +79,9 @@ public class Flex extends Div {
 
 
 
+    /**
+     * Updates the positions of the contained elements.
+     */
     public void updateLayout() {
 
         // Calculate total axis-wise length

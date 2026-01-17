@@ -55,8 +55,6 @@ import net.minecraft.world.entity.player.Player;
  */
 public abstract class Elm extends Div {
     public static final @NotNull String ENTITY_CUSTOM_NAME = FrameworkLib.LIB_ID + ".ui.displayentity";
-    public static final int QUEUE_LINGER_TICKS = 4;
-    // ^ Additional update ticks the element stays in the update queue for after all of its steps have been processed.
 
 
     // Animation handling
@@ -98,7 +96,7 @@ public abstract class Elm extends Div {
 
     /**
      * Retrieves the custom display held by this element as the specified subclass.
-     * @param type The sublass to cast the custom display to.
+     * @param type The subclass to cast the custom display to.
      * @return The custom display casted to the specified class.
      */
     public <T> @NotNull T getEntity(final @NotNull Class<T> type) {
@@ -119,7 +117,7 @@ public abstract class Elm extends Div {
 
     /**
      * Retrieves the style used by this element as the specified subclass.
-     * @param type The sublass to cast the style to.
+     * @param type The subclass to cast the style to.
      * @return The style casted to the specified class.
      */
     public <T> @NotNull T getStyle(final @NotNull Class<T> type) {

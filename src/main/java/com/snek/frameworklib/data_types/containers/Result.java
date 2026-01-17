@@ -14,6 +14,10 @@ public class Result<T, E> {
     private final Option<E> err;
     // innerOption and err can never both be None or both be Some. if they are, the object is invalid, and someone is a spoon.
 
+    /**
+     *
+     * @param object
+     */
     private Result(final T object) {
         this.innerOption = Option.Some(object);
         this.err = Option.None();

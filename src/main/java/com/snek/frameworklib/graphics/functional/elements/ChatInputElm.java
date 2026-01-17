@@ -29,7 +29,7 @@ import net.minecraft.world.inventory.ClickAction;
  * A generic chat input element that allows the user to enter a string through the chat after clicking it.
  * <p>
  * This element automatically handles style.text updates.
- * Don't call {@code .setText} directly. Use {@link #setDIsplayedText(Component)} instead.
+ * Don't call {@code .setText} directly. Use {@link #setDisplayedText(Component)} instead.
  */
 public abstract class ChatInputElm extends TextButtonElm {
     public static final int CURSOR_TOGGLE_DELAY = 10;

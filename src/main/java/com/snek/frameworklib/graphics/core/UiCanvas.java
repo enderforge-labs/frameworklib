@@ -3,7 +3,6 @@ package com.snek.frameworklib.graphics.core;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.debug.Require;
 
 import net.minecraft.network.chat.Component;
@@ -29,7 +28,10 @@ import net.minecraft.network.chat.Component;
  */
 public non-sealed class UiCanvas extends Canvas {
 
-    // UI data
+    /**
+     * Retrieves this canvas's context as a UiContext.
+     * @return The context as a UiContext.
+     */
     public @NotNull UiContext getUiContext() {
         assert Require.nonNull(getContext(), "context");
         assert Require.instanceOf(getContext(), UiContext.class, "context");

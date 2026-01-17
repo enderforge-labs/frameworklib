@@ -2,7 +2,6 @@ package com.snek.frameworklib.cache;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.utils.UtilityClassBase;
 
@@ -37,14 +36,21 @@ public final class PlayerDataCache extends UtilityClassBase {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Map<UUID, CachedPlayerData> cache = new HashMap<>();
 
-    public static class CachedPlayerData {
-        public String name;
-        public String texture;
 
-        public CachedPlayerData(String name, String texture) {
+    /**
+     * A class used to store the data of a single player
+     */
+    private static class CachedPlayerData {
+        private final @NotNull String name;
+        private final @NotNull String texture;
+
+        public CachedPlayerData(final @NotNull String name, final @NotNull String texture) {
             this.name = name;
             this.texture = texture;
         }
+
+        public @NotNull String getName   () { return name; }
+        public @NotNull String getTexture() { return texture; }
     }
 
 
@@ -81,11 +87,7 @@ public final class PlayerDataCache extends UtilityClassBase {
         final GameProfile profile = player.getGameProfile();
 
         // Retrieve texture data
-        String textureValue = null;
-        for(final Property property : profile.getProperties().get("textures")) {
-            textureValue = property.getValue();
-            break;
-        }
+        final String textureValue = profile.getProperties().get("textures").iterator().next().getValue();
         if(textureValue != null) {
             cache.put(playerUUID, new CachedPlayerData(profile.getName(), textureValue));
             saveCache(playerUUID);
@@ -126,7 +128,7 @@ public final class PlayerDataCache extends UtilityClassBase {
                     //FIXME add proper message and fallback logic
                 }
             }
-        } catch(IOException e) {
+        } catch(final IOException e) {
             e.printStackTrace();
             //FIXME add proper message and fallback logic
         }
@@ -153,7 +155,7 @@ public final class PlayerDataCache extends UtilityClassBase {
     private static void saveCache(final @NotNull UUID playerUUID) {
         try {
             Files.writeString(calcFilePath(playerUUID), GSON.toJson(cache.get(playerUUID)));
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
             //FIXME add proper message and fallback logic
         }

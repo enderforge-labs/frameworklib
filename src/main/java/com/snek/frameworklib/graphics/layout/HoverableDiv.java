@@ -28,6 +28,9 @@ import net.minecraft.world.entity.player.Player;
  */
 public class HoverableDiv extends Div implements Hoverable {
 
+    /**
+     * Creates a new HoverableDiv.
+     */
     public HoverableDiv() {
         super();
     }

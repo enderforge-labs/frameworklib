@@ -57,7 +57,10 @@ public non-sealed class HudContext extends Context {
 
 
 
-
+    /**
+     * Teleports the provided element and all of its children to the spawn position of this HudContext.
+     * @param div The element to teleport.
+     */
     public void teleportElement(final @NotNull Div div) {
         assert Require.nonNull(div, "element");
         if(div instanceof final Elm e) {

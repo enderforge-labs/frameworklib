@@ -37,6 +37,10 @@ public abstract class CustomDisplay {
     protected @NotNull Display heldEntity;
     protected boolean spawned = false;
 
+    /**
+     * Retrieves the display entity held by this {@link CustomDisplay} as a {@link DisplayAccessorMixin} to allow access to private methods.
+     * @return The held {@link Display} as a {@link DisplayAccessorMixin}.
+     */
     private @NotNull DisplayAccessorMixin getAccessibleDisplay() {
         assert Require.nonNull(heldEntity, "held entity");
         return (DisplayAccessorMixin)heldEntity;
@@ -45,6 +49,10 @@ public abstract class CustomDisplay {
 
 
 
+    /**
+     * Checks if this display is currently despawned.
+     * @return True if the associated entity is currently despawned, false otherwise.
+     */
     public boolean isRemoved() {
         return heldEntity.isRemoved();
     }
@@ -54,7 +62,7 @@ public abstract class CustomDisplay {
 
     /**
      * Creates a new CustomDisplay using an existing DisplayEntity as in-world entity.
-     * @param _heldEntity The display entity.
+     * @param heldEntity The display entity.
      */
     protected CustomDisplay(final @NotNull Display heldEntity) {
         assert Require.nonNull(heldEntity, "held entity");

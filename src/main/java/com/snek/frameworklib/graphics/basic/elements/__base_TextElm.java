@@ -161,7 +161,7 @@ public abstract sealed class __base_TextElm extends Elm permits PanelTextElm, Te
      * <p>
      * Notice: Wrapped lines are counted as one.
      * <p>
-     * Notice: This height value does not include the eneity's margin. Use {@link #calcTotEntityHeightWithMargins()} to account for margins.
+     * Notice: This height value does not include the entity's margin. Use {@link #calcTotEntityHeightWithMargins()} to account for margins.
      * @return The height in blocks.
      */
     public float calcTotEntityHeight() {
@@ -176,7 +176,7 @@ public abstract sealed class __base_TextElm extends Elm permits PanelTextElm, Te
      * <p>
      * Notice: Wrapped lines are counted as one.
      * <p>
-     * Notice: This height value does not include the eneity's margin. Use {@link #calcTotEntityHeightWithMargins()} to account for margins.
+     * Notice: This height value does not include the entity's margin. Use {@link #calcTotEntityHeightWithMargins()} to account for margins.
      * @return The height in blocks.
      */
     public float calcVisualEntityHeight() {
@@ -194,7 +194,7 @@ public abstract sealed class __base_TextElm extends Elm permits PanelTextElm, Te
      * <p>
      * Notice: Wrapped lines are counted as one.
      * <p>
-     * Notice: This height value includes the eneity's margin. Use {@link #calcTotEntityHeight()} to ignore them.
+     * Notice: This height value includes the entity's margin. Use {@link #calcTotEntityHeight()} to ignore them.
      * @return The height in blocks.
      */
     public float calcTotEntityHeightWithMargins() {
@@ -210,7 +210,7 @@ public abstract sealed class __base_TextElm extends Elm permits PanelTextElm, Te
      * <p>
      * Notice: Wrapped lines are counted as one.
      * <p>
-     * Notice: This height value includes the eneity's margin. Use {@link #calcTotEntityHeight()} to ignore them.
+     * Notice: This height value includes the entity's margin. Use {@link #calcTotEntityHeight()} to ignore them.
      * @return The height in blocks.
      */
     public float calcVisualEntityHeightWithMargins() {
@@ -236,7 +236,7 @@ public abstract sealed class __base_TextElm extends Elm permits PanelTextElm, Te
      * <p>
      * Notice: Wrapped lines are counted as one.
      * <p>
-     * Notice: This width value includes the eneity's margin. Use {@link #calcTotEntityWidthWithMargins()} to account for margins.
+     * Notice: This width value includes the entity's margin. Use {@link #calcTotEntityWidthWithMargins()} to account for margins.
      * @return The width in blocks.
      */
     public float calcTotEntityWidth() {
@@ -251,7 +251,7 @@ public abstract sealed class __base_TextElm extends Elm permits PanelTextElm, Te
      * <p>
      * Notice: Wrapped lines are counted as one.
      * <p>
-     * Notice: This width value includes the eneity's margin. Use {@link #calcTotEntityWidthWithMargins()} to account for margins.
+     * Notice: This width value includes the entity's margin. Use {@link #calcTotEntityWidthWithMargins()} to account for margins.
      * @return The width in blocks.
      */
     public float calcVisualEntityWidth() {
@@ -269,7 +269,7 @@ public abstract sealed class __base_TextElm extends Elm permits PanelTextElm, Te
      * <p>
      * Notice: Wrapped lines are counted as one.
      * <p>
-     * Notice: This width value includes the eneity's margin. Use {@link #calcTotEntityWidth()} to ignore them
+     * Notice: This width value includes the entity's margin. Use {@link #calcTotEntityWidth()} to ignore them
      * @return The width in blocks.
      */
     public float calcTotEntityWidthWithMargins() {
@@ -285,7 +285,7 @@ public abstract sealed class __base_TextElm extends Elm permits PanelTextElm, Te
      * <p>
      * Notice: Wrapped lines are counted as one.
      * <p>
-     * Notice: This width value includes the eneity's margin. Use {@link #calcTotEntityWidth()} to ignore them
+     * Notice: This width value includes the entity's margin. Use {@link #calcTotEntityWidth()} to ignore them
      * @return The width in blocks.
      */
     public float calcVisualEntityWidthWithMargins() {
@@ -301,8 +301,12 @@ public abstract sealed class __base_TextElm extends Elm permits PanelTextElm, Te
 
 
 
+    /**
+     * Retrieves the transform to be applied on the foreground entity.
+     * @return The transform value.
+     */
     private @NotNull Transform calcForegroundTransform() {
-        /**/ if(this instanceof final TextElm e) { return                     e.__calcTransform();  }
+        /**/ if(this instanceof final       TextElm e) { return                     e.__calcTransform();  }
         else if(this instanceof final PanelTextElm  e) { return e.__calcTransformFg(e.__calcTransform()); }
 
         //! This is never actually called. __base_TextElm is a sealed class that only permits TextElm and PanelTextElm
@@ -406,6 +410,15 @@ public abstract sealed class __base_TextElm extends Elm permits PanelTextElm, Te
 
 
 
+    /**
+     * Starts the text scroll task. This is only used for text elements with {@link TextOverflowBehaviour} set to SCROLL.
+     * @param text The full text this element should display.
+     * @param xScale The scale on the X axis of the foreground entity.
+     * @param maxWidthPx The total width of the full text, in pixels.
+     * @param textString The text value as a String (no formatting).
+     * @param endSegmentWidth The width of the end segment, in characters.
+     * @param startAnimations Whether to start animating the scrolling motion.
+     */
     private void runScrollTask(final @NotNull Txt text, final float xScale, final int maxWidthPx, final String textString, final int endSegmentWidth, final boolean startAnimations) {
         assert Require.nonNull(text, "text");
         assert Require.nonNull(textString, "text string");

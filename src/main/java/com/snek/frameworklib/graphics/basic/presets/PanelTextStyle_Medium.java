@@ -5,6 +5,9 @@ import com.snek.frameworklib.graphics.basic.styles.PanelTextStyle;
 
 
 
+/**
+ * A default PanelTextStyle with font size 9.
+ */
 public class PanelTextStyle_Medium extends PanelTextStyle {
     public PanelTextStyle_Medium() {
         super();

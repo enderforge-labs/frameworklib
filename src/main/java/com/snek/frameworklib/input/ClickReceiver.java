@@ -36,7 +36,6 @@ import net.minecraft.world.level.Level;
  */
 public final class ClickReceiver extends UtilityClassBase {
     private static final @NotNull Map<@NotNull UUID, @Nullable RateLimiter> clickLimiters = new HashMap<>();
-    private ClickReceiver() {}
 
 
 

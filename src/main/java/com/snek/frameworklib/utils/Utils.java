@@ -267,6 +267,11 @@ public final class Utils extends UtilityClassBase {
 
 
 
+    /**
+     * Converts an RGB color to a shade of gray by setting its saturation to 0.
+     * @param rgb The RGB color.
+     * @return The shade of gray expressed as an RGB color.
+     */
     public static @NotNull Vector3i toBW(final @NotNull Vector3i rgb) {
         assert Require.nonNull(rgb, "rgb");
         assert Require.inRange(rgb.x, 0, 255, "red");
@@ -274,6 +279,12 @@ public final class Utils extends UtilityClassBase {
         assert Require.inRange(rgb.z, 0, 255, "blue");
         return HSVtoRGB(toBW(RGBtoHSV(rgb)));
     }
+
+    /**
+     * Converts an HSV color to a shade of gray by setting its saturation to 0.
+     * @param hsv The HSV color.
+     * @return The shade of gray expressed as an HSV color.
+     */
     public static @NotNull Vector3f toBW(final @NotNull Vector3f hsv) {
         assert Require.nonNull(hsv, "hsv");
         assert Require.inRange(hsv.x, 0, 360, "hue");

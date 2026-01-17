@@ -19,6 +19,10 @@ import com.snek.frameworklib.debug.Require;
  * @param <E> The type of the objects to store.
  */
 public class IndexedArrayDeque<E> extends AccessibleArrayDeque<E> {
+
+    /**
+     * Creates an empty IndexedArrayDequeue with an initial capacity sufficient to hold 16 elements.
+     */
     public IndexedArrayDeque() {
         super();
     }

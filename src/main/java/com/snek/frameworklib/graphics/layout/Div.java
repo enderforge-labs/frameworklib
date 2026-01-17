@@ -114,7 +114,7 @@ public class Div {
      * Returns the parent of this element.
      * <p>
      * The parent of a Canvas is null.
-     * @return
+     * @return The parent.
      */
     public @Nullable Div getParent() {
         return parent;
@@ -123,7 +123,7 @@ public class Div {
 
     /**
      * Sets the parent of this object.
-     * @param _parent The parent.
+     * @param parent The parent.
     */
     public void setParent(final @Nullable Div parent) {
        this.parent = parent;
@@ -165,7 +165,7 @@ public class Div {
 
 
     /**
-     * Creates a new Div with size (1,1)
+     * Creates a new Div with size (1,1).
      */
     public Div() {
         // Empty
@@ -735,7 +735,7 @@ public class Div {
     * Calculates the world coordinates of the 4 corners of the element.
     * <p>
     * This method takes into account anything that might affect their position.
-    * @return The coorindates of the 4 corners, in the order: BottomLeft, BottomRight, TopRight, TopLeft.
+    * @return The coordinates of the 4 corners, in the order: BottomLeft, BottomRight, TopRight, TopLeft.
     */
     public @NotNull Vector3f[] __calcCornerCoords() {
         if(canvas == null) return new Vector3f[]{ new Vector3f(), new Vector3f(), new Vector3f(), new Vector3f() };

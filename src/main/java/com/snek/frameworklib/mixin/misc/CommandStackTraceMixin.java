@@ -1,4 +1,4 @@
-package com.snek.frameworklib.mixin;
+package com.snek.frameworklib.mixin.misc;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;

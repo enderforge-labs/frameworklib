@@ -21,7 +21,6 @@ import com.snek.frameworklib.utils.UtilityClassBase;
  * This scheduler also supports looping and cancelling tasks.
  */
 public final class Scheduler extends UtilityClassBase {
-    private Scheduler() {}
     private static long tickNum = 0;
     private static final @NotNull PriorityQueue<@NotNull __base_TaskHandler> taskQueue = new PriorityQueue<>(
         Comparator.comparingLong(e -> e.getTargetTick())

@@ -5,6 +5,9 @@ import com.snek.frameworklib.graphics.functional.styles.TextButtonStyle;
 
 
 
+/**
+ * A default TextButtonStyle with font size 9.
+ */
 public class TextButtonStyle_Medium extends TextButtonStyle {
     public TextButtonStyle_Medium() {
         super();

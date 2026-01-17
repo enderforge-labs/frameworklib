@@ -3,7 +3,6 @@ package com.snek.frameworklib.graphics.core;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.snek.frameworklib.data_types.animations.Animation;
 import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.debug.Require;
@@ -22,6 +21,11 @@ import net.minecraft.network.chat.Component;
  * A canvas that can be used to create HUDs.
  */
 public non-sealed class HudCanvas extends Canvas {
+
+    /**
+     * Retrieves this canvas's context as a HudContext.
+     * @return The context as a HudContext.
+     */
     public @NotNull HudContext getHudContext() {
         assert Require.nonNull(getContext(), "context");
         assert Require.instanceOf(getContext(), HudContext.class, "context");

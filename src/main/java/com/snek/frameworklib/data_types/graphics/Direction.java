@@ -30,27 +30,49 @@ public enum Direction {
         this.name = name;
     }
 
+
+
+
+    /**
+     * Retrieves the cardinal or intercardinal name of this direction.
+     * @return The direction name (e.g., "North", "Northeast", "East", "Southeast", etc.).
+     */
     public @NotNull String getName() {
         return name;
     }
 
+    /**
+     * Retrieves the angle that represents this direction, in eighths of a full rotation, starting from North and increasing counter-clockwise.
+     * @return The angle (0 for North, 1 for Northwest, etc.).
+     */
     public int getEighths() {
         return eighths;
     }
 
+    /**
+     * Retrieves the angle that represents this direction, in radians, starting from North and increasing counter-clockwise.
+     * @return The angle (0d for North, π/4d for Northwest, etc.).
+     */
     public double getRadians() {
         return radians;
     }
 
+    /**
+     * Retrieves the angle that represents this direction, in degrees, starting from North and increasing counter-clockwise.
+     * @return The angle (0d for North, 45d for Northwest, etc.).
+     */
     public double getDegrees() {
         return degrees;
     }
 
 
+
+
     /**
-     * Calculates the direction from a rotation expressed in eighths of circumference.
-     * @param eighths The rotation. This can safely exceed the [0, 7] range.
-     * @return The direction.
+     * Calculates the direction from a rotation expressed in eighths of a full rotation.
+     * @param eighths The rotation, where 0 is North and positive values rotate clockwise.
+     *     This can safely exceed the [0, 7] range.
+     * @return The direction represented by the provided rotation.
      */
     public static @NotNull Direction fromEighths(final int eighths) {
 
