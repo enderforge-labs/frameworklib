@@ -55,7 +55,7 @@ public abstract class FontDataGenerator {
         try {
             Files.createDirectories(dirPath);
         } catch(final IOException e) {
-            FrameworkLib.LOGGER.error("Couldn't create configuration directory \"{}\".", dirPath.toString(), e);
+            FrameworkLib.LOGGER.error("Couldn't create configuration directory \"{}\".", dirPath, e);
         }
 
 
