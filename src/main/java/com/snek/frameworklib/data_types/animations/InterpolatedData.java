@@ -18,6 +18,7 @@ import com.snek.frameworklib.utils.Utils;
  * A collection of data that can be interpolated by Minecraft's client.
  * <p>
  * This is used to pre-calculate animations.
+ * @since v1.1.0
  */
 public class InterpolatedData {
 

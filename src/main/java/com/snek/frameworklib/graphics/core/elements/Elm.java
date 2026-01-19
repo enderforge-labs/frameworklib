@@ -52,6 +52,7 @@ import net.minecraft.world.entity.player.Player;
  * The base class of every visible graphic element.
  * <p>
  * This implements automatic entity management support for animations on top of the {@link Div} base class.
+ * @since v1.1.0
  */
 public abstract class Elm extends Div {
     public static final @NotNull String ENTITY_CUSTOM_NAME = FrameworkLib.LIB_ID + ".ui.displayentity";

@@ -25,6 +25,7 @@ import net.minecraft.world.level.Level;
  * A wrapper for Minecraft's TextDisplay.
  * <p>
  * This class allows for better customization and more readable code.
+ * @since v1.1.0
  */
 public class CustomTextDisplay extends CustomDisplay {
 

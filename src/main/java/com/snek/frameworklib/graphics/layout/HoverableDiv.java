@@ -25,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 /**
  * A div that counts as a hoverable element.
  * This can be used to group interactive elements to improve performance.
+ * @since v1.1.0
  */
 public class HoverableDiv extends Div implements Hoverable {
 

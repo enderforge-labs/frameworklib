@@ -22,6 +22,7 @@ import com.snek.frameworklib.utils.Easings;
 
 /**
  * The default style of the generic {@link PanelElm} element.
+ * @since v1.1.0
  */
 public class PanelStyle extends Style {
     private @NotNull Flagged<@NotNull Vector3i> color = null;

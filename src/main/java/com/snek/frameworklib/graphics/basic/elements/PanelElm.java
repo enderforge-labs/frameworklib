@@ -27,6 +27,7 @@ import net.minecraft.server.level.ServerLevel;
  * A simple UI element with a background color and animations.
  * <p>
  * Panels default to a 1x1 blocks size.
+ * @since v1.1.0
  */
 public class PanelElm extends Elm {
 

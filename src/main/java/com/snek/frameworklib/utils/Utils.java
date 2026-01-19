@@ -23,6 +23,7 @@ import com.snek.frameworklib.debug.Require;
 
 /**
  * A utility class that provides a collection of handy methods.
+ * @since v1.1.0
  */
 public final class Utils extends UtilityClassBase {
     private Utils() {}

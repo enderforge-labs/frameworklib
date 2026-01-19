@@ -32,6 +32,7 @@ import net.minecraft.server.level.ServerLevel;
  * The base class of {@link PanelTextElm} and {@link TextElm}.
  * <p>
  * This class is sealed as the two subclasses are handled differently throughout the library's codebase.
+ * @since v1.1.0
  */
 public abstract sealed class __base_TextElm extends Elm permits PanelTextElm, TextElm {
 

@@ -23,6 +23,7 @@ import net.minecraft.world.inventory.ClickAction;
 /**
  * This acts as the base class of button elements, even though it is never inherited from.
  * This is because Java doesn't allow multiple inheritance.
+ * @since v1.1.0
  */
 public final class __base_ButtonElm {
     public static final int INITIAL_COOLDOWN = 10;

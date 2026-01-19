@@ -22,6 +22,7 @@ import com.snek.frameworklib.utils.Txt;
 
 /**
  * Represents the data of a multi-segment line.
+ * @since v1.1.0
  */
 public class PolylineData {
 

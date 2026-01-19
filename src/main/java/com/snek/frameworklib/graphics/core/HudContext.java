@@ -32,6 +32,7 @@ import net.minecraft.world.inventory.ClickAction;
  * <p>
  * Unlike UIs, HUDs can be stacked and despawn when the player walks away or stops interacting with it.
  * They are also not bound to a block and can move freely.
+ * @since v1.1.0
  */
 public non-sealed class HudContext extends Context {
 

@@ -41,6 +41,7 @@ import net.minecraft.world.inventory.ClickAction;
  * <p>
  * This is sealed as HudContext and UiContext are the only possible types of contexts.
  * Specialized types must inherit from either of them.
+ * @since v1.1.0
  */
 public abstract sealed class Context permits HudContext, UiContext {
 

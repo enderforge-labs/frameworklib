@@ -33,6 +33,7 @@ import com.snek.frameworklib.utils.UtilityClassBase;
  * All of the parameters are evaluated before the check (apart from the supplier parameter of {@link #condition(BooleanSupplier, String)}).
  * Make sure computing them doesn't add much overhead and doesn't have any side effect.
  * Passing existing values has effectively negligible cost.
+ * @since v1.1.0
  */
 public final class Require extends UtilityClassBase {
 

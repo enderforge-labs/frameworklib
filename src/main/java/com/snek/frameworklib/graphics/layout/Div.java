@@ -49,6 +49,7 @@ import net.minecraft.world.inventory.ClickAction;
  * <p>
  * By default, divs are invisible and don't exist in the minecraft level nor on the client.
  * They have a 2D size, a 2D position and alignment options.
+ * @since v1.1.0
  */
 public class Div {
     public static final float DEFAULT_DESIGN_SIZE = 0.6f;

@@ -11,6 +11,10 @@ import net.minecraft.server.level.ServerLevel;
 
 
 
+/**
+ * A {@link TextElm} used to display the count of a {@link GuiItemElm}.
+ * @since v1.1.0
+ */
 public class __GuiItemElm_Count extends TextElm {
 
     public __GuiItemElm_Count(final @NotNull ServerLevel level) {

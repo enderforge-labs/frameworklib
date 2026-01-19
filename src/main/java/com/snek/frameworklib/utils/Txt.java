@@ -26,6 +26,7 @@ import net.minecraft.network.chat.Style;
  * This version also implements a {@link #substring()} method that preserves the style and a cached {@link #length()}, on top of extra color constants.
  * <p>
  * Use {@link #get()} to create a MutableText from this object's data.
+ * @since v1.1.0
  */
 public class Txt {
     private final MutableComponent rawText;

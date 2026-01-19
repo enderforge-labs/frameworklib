@@ -32,7 +32,9 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
  * <p>
  * This mixin modifies the list of recipes passed to {@link ClientboundUpdateRecipesPacket}'s constructor,
  * applying any specified client overrides and stripping custom parameters to allow the Vanilla client to read the recipe properly.
- * It also sets the count of the ingredient item stacks to the amount specified in the recipe, as Vanilla only supports single-item ingredient stacks.
+ * It also sets the count of the ingredient item stacks to the amount specified in the recipe,
+ * as Vanilla only supports single-item ingredient stacks.
+ * @since v1.2.0
  */
 @SuppressWarnings("java:S1118") //! Add private constructor to hide the public implicit one
 @Mixin(ClientboundUpdateRecipesPacket.class)

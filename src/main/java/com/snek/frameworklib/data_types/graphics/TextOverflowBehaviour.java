@@ -9,6 +9,7 @@ package com.snek.frameworklib.data_types.graphics;
 
 /**
  * Defines how the text of a text element is displayed when it doesn't fit in the specified dimensions.
+ * @since v1.1.0
  */
 public enum TextOverflowBehaviour {
     /** The text is allowed to overflow freely.                         */ OVERFLOW,

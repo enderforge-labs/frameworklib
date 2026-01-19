@@ -14,6 +14,10 @@ import com.snek.frameworklib.utils.UtilityClassBase;
 
 
 
+/**
+ * A utility class that provides methods for creating designs.
+ * @since v1.1.0
+ */
 public final class DesignPrimitives extends UtilityClassBase {
 
     /**

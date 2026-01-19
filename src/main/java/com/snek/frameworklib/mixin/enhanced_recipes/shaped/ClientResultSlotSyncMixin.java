@@ -31,6 +31,7 @@ import net.minecraft.world.level.Level;
  * Not having a client-side mod makes it so the player cannot see the output item.
  * <p>
  * This mixin sends a packet to the client to force it to display the proper result.
+ * @since v1.2.0
  */
 @SuppressWarnings("java:S1118") //! Add private constructor to hide the public implicit one
 @Mixin(CraftingMenu.class)

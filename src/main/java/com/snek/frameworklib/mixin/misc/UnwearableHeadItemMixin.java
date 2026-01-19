@@ -21,6 +21,7 @@ import net.minecraft.world.item.Items;
 
 /**
  * This mixin stops living entities from equipping player heads if they have the {@link MinecraftUtils#UNWEARABLE_TAG} tag.
+ * @since v1.1.0
  */
 @Mixin(LivingEntity.class)
 public class UnwearableHeadItemMixin {

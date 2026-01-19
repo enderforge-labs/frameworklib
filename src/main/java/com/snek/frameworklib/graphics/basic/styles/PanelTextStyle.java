@@ -22,6 +22,7 @@ import com.snek.frameworklib.utils.Easings;
 
 /**
  * The default style of the generic {@link PanelTextElm} element.
+ * @since v1.1.0
  */
 public class PanelTextStyle extends TextStyle {
     private @NotNull Flagged<@NotNull Vector3i>  bgColor     = null;

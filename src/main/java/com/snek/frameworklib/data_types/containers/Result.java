@@ -20,7 +20,7 @@ import com.snek.frameworklib.debug.Require;
  * A Rust-like Result representing either success (Ok) or failure (Err).
  * @param <T> The type of the success value.
  * @param <E> The type of the error value.
- * @author //TODO
+ * @since v1.1.0
  */
 public class Result<T, E> {
 

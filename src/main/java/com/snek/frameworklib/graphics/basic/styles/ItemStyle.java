@@ -25,6 +25,7 @@ import net.minecraft.world.item.Items;
 
 /**
  * The default style of the generic {@link ItemElm} element.
+ * @since v1.1.0
  */
 public class ItemStyle extends Style {
     public static final float PRIMER_ANIMATION_SCALE = 0.00001f;

@@ -17,6 +17,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
  * <p>
  * This mod is used to pre-calculate the width and height of each character of the active font.
  * This data is then used by the library to compute entity dimensions in runtime.
+ * @since v1.1.0
  */
 public class FrameworkLibClient implements ClientModInitializer {
     private static boolean generated = false;

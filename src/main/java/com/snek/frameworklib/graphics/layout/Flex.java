@@ -18,6 +18,7 @@ import com.snek.frameworklib.debug.Require;
  * <p>
  * The alignment options of child elements are not affected. For the Flex to work properly, they must use alignment:NONE on the alignment axis.
  * Alignment options on the other axis can be changed freely.
+ * @since v1.1.0
  */
 public class Flex extends Div {
     private final @NotNull Axis2 axis;

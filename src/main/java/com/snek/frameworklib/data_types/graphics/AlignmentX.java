@@ -5,6 +5,7 @@ package com.snek.frameworklib.data_types.graphics;
 
 /**
  * Defines the horizontal alignment of a UI element.
+ * @since v1.1.0
  */
 public enum AlignmentX {
 

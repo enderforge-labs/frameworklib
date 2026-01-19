@@ -26,6 +26,7 @@ import net.minecraft.server.level.ServerLevel;
  * A composite UI element that can display many multi-segment lines.
  * <p>
  * Each polyline is defined by a list of 2 or more points and has configurable color, opacity and width.
+ * @since v1.1.0
  */
 public class PolylineSetElm extends Div {
 

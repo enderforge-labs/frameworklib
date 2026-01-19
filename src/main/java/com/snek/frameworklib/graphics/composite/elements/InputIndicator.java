@@ -31,6 +31,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 /**
  * A display for click action descriptions defined by the element that's currently being hovered on.
+ * @since v1.1.0
  */
 public class InputIndicator extends Div {
     public static final @NotNull Vector2f BUTTON_SIZE = new Vector2f(0.5f, 0.4f);   // The size of a mouse button compared to the mouse display

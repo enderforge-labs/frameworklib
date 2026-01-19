@@ -9,6 +9,10 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 
 
+/**
+ * An accessor mixin for {@link TextDisplay}.
+ * @since v1.1.0
+ */
 @Mixin(TextDisplay.class)
 public interface TextDisplayAccessorMixin {
     @Invoker("getText")

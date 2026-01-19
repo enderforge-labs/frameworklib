@@ -10,6 +10,7 @@ import com.snek.frameworklib.utils.UtilityClassBase;
 
 /**
  * A class that contains static data shared by {@link TextButtonStyle} and {@link ButtonStyle}.
+ * @since v1.1.0
  */
 public final class __base_ButtonStyle extends UtilityClassBase {
     public static final @NotNull Vector3i HOVER_COLOR          = new Vector3i(220, 220, 220);

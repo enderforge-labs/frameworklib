@@ -13,6 +13,7 @@ import com.snek.frameworklib.debug.Require;
 
 /**
  * The base class of task handlers.
+ * @since v1.1.0
  */
 public class __base_TaskHandler {
     private long targetTick;

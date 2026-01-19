@@ -12,6 +12,7 @@ import com.snek.frameworkconfig.fields.ValueConfigField;
 
 /**
  * Configuration data for runtime performance.
+ * @since v1.1.0
  */
 public class PerformanceConfig implements ConfigFile {
 

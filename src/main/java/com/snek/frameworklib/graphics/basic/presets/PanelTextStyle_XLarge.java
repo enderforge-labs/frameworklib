@@ -7,6 +7,7 @@ import com.snek.frameworklib.graphics.basic.styles.PanelTextStyle;
 
 /**
  * A default PanelTextStyle with font size 18.
+ * @since v1.1.0
  */
 public class PanelTextStyle_XLarge extends PanelTextStyle {
     public PanelTextStyle_XLarge() {

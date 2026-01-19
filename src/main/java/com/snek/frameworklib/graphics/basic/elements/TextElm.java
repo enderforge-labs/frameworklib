@@ -27,6 +27,7 @@ import net.minecraft.server.level.ServerLevel;
  * An element that can display text.
  * <p>
  * This class has transparent background. For a text element with background color, use {@link PanelTextElm}.
+ * @since v1.1.0
  */
 public non-sealed class TextElm extends __base_TextElm {
 

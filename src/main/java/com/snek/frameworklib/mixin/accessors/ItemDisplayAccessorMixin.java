@@ -10,6 +10,10 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 
 
+/**
+ * An accessor mixin for {@link ItemDisplay}.
+ * @since v1.1.0
+ */
 @Mixin(ItemDisplay.class)
 public interface ItemDisplayAccessorMixin {
     @Invoker("setItemStack")

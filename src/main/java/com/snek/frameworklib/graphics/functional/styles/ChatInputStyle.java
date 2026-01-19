@@ -13,6 +13,7 @@ import com.snek.frameworklib.data_types.graphics.TextOverflowBehaviour;
 
 /**
  * The style of the generic ChatInputElm UI element.
+ * @since v1.1.0
  */
 public class ChatInputStyle extends TextButtonStyle {
 

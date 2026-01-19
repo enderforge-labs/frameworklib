@@ -15,6 +15,7 @@ import com.snek.frameworklib.debug.Require;
  * A class that lets you control scheduled loop tasks.
  * <p>
  * Instances of this class are returned by the Scheduler's methods.
+ * @since v1.1.0
  */
 public class LoopTaskHandler extends __base_TaskHandler {
     private final long interval;

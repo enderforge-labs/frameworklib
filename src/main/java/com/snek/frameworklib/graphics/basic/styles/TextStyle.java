@@ -25,6 +25,7 @@ import net.minecraft.network.chat.Component;
 
 /**
  * The default style of the generic {@link TextElm} element.
+ * @since v1.1.0
  */
 public class TextStyle extends Style {
     public static final float DEFAULT_TEXT_SCALE = 0.3f;

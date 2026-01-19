@@ -27,6 +27,7 @@ import net.minecraft.world.item.crafting.RecipeType;
  * <p>
  * This mixin detects {@link EnhancedShapedRecipe}s and replaces their item consumption logic with a custom one that
  * takes the amount of items
+ * @since v1.2.0
  */
 @Mixin(ResultSlot.class)
 public abstract class IngredientConsumerMixin {

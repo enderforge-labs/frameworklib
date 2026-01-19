@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * A class that lets you control scheduled tasks.
  * <p>
  * Instances of this class are returned by the Scheduler's methods.
+ * @since v1.1.0
  */
 public class TaskHandler extends __base_TaskHandler {
     private boolean complete = false;

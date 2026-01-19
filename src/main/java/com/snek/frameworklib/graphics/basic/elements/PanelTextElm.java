@@ -32,6 +32,7 @@ import net.minecraft.world.entity.Display.BillboardConstraints;
 
 /**
  * A text element that also has a configurable, animatable background color.
+ * @since v1.1.0
  */
 public non-sealed class PanelTextElm extends __base_TextElm {
 

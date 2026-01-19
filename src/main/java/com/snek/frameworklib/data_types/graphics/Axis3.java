@@ -8,6 +8,10 @@ import org.joml.Vector3i;
 
 
 
+/**
+ * An enum representing an axis of the 3D cartesian coordinate system.
+ * @since v1.1.0
+ */
 public enum Axis3 {
     X, Y, Z;
 

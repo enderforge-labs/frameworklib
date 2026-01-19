@@ -9,6 +9,7 @@ import com.snek.frameworklib.utils.UtilityClassBase;
 
 /**
  * Utility class that can check if the mod is currently being ran in debug mode.
+ * @since v1.1.0
  */
 public final class DebugCheck extends UtilityClassBase {
     private static boolean IS_DEBUG;

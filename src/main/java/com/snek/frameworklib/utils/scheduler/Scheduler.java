@@ -19,6 +19,7 @@ import com.snek.frameworklib.utils.UtilityClassBase;
  * A utility class that can store tasks and execute them after a specified number of server ticks.
  * <p>
  * This scheduler also supports looping and cancelling tasks.
+ * @since v1.1.0
  */
 public final class Scheduler extends UtilityClassBase {
     private static long tickNum = 0;

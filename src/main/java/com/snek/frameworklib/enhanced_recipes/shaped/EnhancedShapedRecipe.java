@@ -59,6 +59,7 @@ import net.minecraft.world.level.Level;
  *     though it is available for other types of ingredients as well.
  *     This is also available for the result slot.
  * </li></ul></p>
+ * @since v1.2.0
  */
 public class EnhancedShapedRecipe extends ShapedRecipe {
 

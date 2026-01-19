@@ -12,6 +12,10 @@ import com.mojang.math.Transformation;
 
 
 
+/**
+ * An accessor mixin for {@link Display}.
+ * @since v1.1.0
+ */
 @Mixin(Display.class)
 public interface DisplayAccessorMixin {
 

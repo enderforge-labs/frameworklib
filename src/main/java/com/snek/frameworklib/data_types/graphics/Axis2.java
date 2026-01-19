@@ -11,6 +11,10 @@ import org.joml.Vector3i;
 
 
 
+/**
+ * An enum representing an axis of the 2D cartesian coordinate system.
+ * @since v1.1.0
+ */
 public enum Axis2 {
     X, Y;
 

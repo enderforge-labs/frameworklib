@@ -21,6 +21,7 @@ import com.snek.frameworklib.utils.Easings;
 
 /**
  * The default tyle of the generic {@Link ButtonElm} element.
+ * @since v1.1.0
  */
 public class ButtonStyle extends PanelStyle {
     private @Nullable Flagged<Animation> hoverPrimerAnimation         = null;

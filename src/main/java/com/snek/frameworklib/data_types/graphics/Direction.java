@@ -5,6 +5,10 @@ import org.jetbrains.annotations.NotNull;
 
 
 
+/**
+ * An enum representing a cardinal or intercardinal direction.
+ * @since v1.1.0
+ */
 public enum Direction {
     NORTH    (0, "North    "),
     NORTHWEST(1, "Northwest"),

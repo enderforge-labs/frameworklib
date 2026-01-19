@@ -30,6 +30,7 @@ import net.minecraft.world.item.ItemStack;
 
 /**
  * An element that can display items.
+ * @since v1.1.0
  */
 public class ItemElm extends Elm {
 

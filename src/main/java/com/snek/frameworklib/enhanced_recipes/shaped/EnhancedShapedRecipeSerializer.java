@@ -26,6 +26,12 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 
 
 
+/**
+ * The serializer for the custom recipe {@link EnhancedShapedRecipe}.
+ * <p>
+ * This handles the conversion from a JSON file to an {@link EnhancedShapedRecipe} instance.
+ * @since v1.2.0
+ */
 public class EnhancedShapedRecipeSerializer implements RecipeSerializer<EnhancedShapedRecipe> {
     public static final @NotNull String DYNAMIC_REF_PLACEHOLDER = "frameworklib:dynamic_ref";
     public static final @NotNull String ANY_NBT_PLACEHOLDER     = "frameworklib:any_nbt";

@@ -17,6 +17,7 @@ import com.snek.frameworklib.debug.Require;
 
 /**
  * An animation expressed as a list of Transitions.
+ * @since v1.1.0
  */
 public class Animation {
     private final @NotNull List<@NotNull Transition> transitions;

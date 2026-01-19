@@ -47,6 +47,7 @@ import net.minecraft.server.level.ServerLevel;
  * <p>
  * This class is sealed as {@link HudCanvas} and {@link UiCanvas} are the only possible types of canvases.
  * Specialized types must inherit from either of them.
+ * @since v1.1.0
  */
 public abstract sealed class Canvas extends Div permits UiCanvas, HudCanvas {
 

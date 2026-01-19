@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * A utility class containing a collection of common easing functions.
+ * @since v1.1.0
  */
 public final class Easings extends UtilityClassBase {
     private Easings() {}

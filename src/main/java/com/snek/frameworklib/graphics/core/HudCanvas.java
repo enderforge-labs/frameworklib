@@ -19,6 +19,7 @@ import net.minecraft.network.chat.Component;
 
 /**
  * A canvas that can be used to create HUDs.
+ * @since v1.1.0
  */
 public non-sealed class HudCanvas extends Canvas {
 

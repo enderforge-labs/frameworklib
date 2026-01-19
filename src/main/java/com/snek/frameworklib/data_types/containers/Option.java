@@ -26,7 +26,7 @@ import com.snek.frameworklib.debug.Require;
  * <p>
  * Options can be converted to {@link Result}s.
  * @param <T> The type of value contained in the {@link Option}.
- * @author //TODO
+ * @since v1.1.0
  */
 public class Option<T> {
 

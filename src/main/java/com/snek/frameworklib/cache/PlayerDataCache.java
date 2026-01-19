@@ -28,6 +28,7 @@ import java.util.UUID;
  * <p>
  * Player cache files are saved instantly whenever a player joins.
  * They are very small and the events are rare enough to consider the overhead is negligible.
+ * @since v1.1.0
  */
 public final class PlayerDataCache extends UtilityClassBase {
 
@@ -39,6 +40,7 @@ public final class PlayerDataCache extends UtilityClassBase {
 
     /**
      * A class used to store the data of a single player
+     * @author Ilaria (https://github.com/UwUSnek)
      */
     private static class CachedPlayerData {
         private final @NotNull String name;
@@ -57,7 +59,7 @@ public final class PlayerDataCache extends UtilityClassBase {
     /**
      * Calculates the path to the directory where player data caches are saved.
      * @return The path to the save file directory.
-     */
+         */
     public static @NotNull Path calcDirPath() {
         return FrameworkLib.getStorageDir(FrameworkLib.LIB_ID).resolve("cache/player data");
     }
@@ -66,7 +68,7 @@ public final class PlayerDataCache extends UtilityClassBase {
      * Calculates the path to the save file of the specified player.
      * @param playerUuid The uuid of the player.
      * @return The path to the save file of the player's cached data.
-     */
+         */
     public static @NotNull Path calcFilePath(final @NotNull UUID playerUuid) {
         return calcDirPath().resolve(playerUuid.toString() + ".json");
     }
@@ -137,9 +139,20 @@ public final class PlayerDataCache extends UtilityClassBase {
 
 
 
+    /**
+     * Retrieves the cached texture of the player with the specified UUID.
+     * @param uuid The UUID of the player.
+     * @return The texture, or null if not cached.
+     */
     public static @Nullable String getPlayerTexture(final @NotNull UUID uuid) {
         return cache.get(uuid).texture;
     }
+
+    /**
+     * Retrieves the cached name of the player with the specified UUID.
+     * @param uuid The UUID of the player.
+     * @return The name, or null if not cached.
+     */
     public static @Nullable String getPlayerName(final @NotNull UUID uuid) {
         return cache.get(uuid).name;
     }

@@ -25,6 +25,7 @@ import net.minecraft.world.phys.Vec3;
  * A Context that is bound to a block and rotates to face the player.
  * <p>
  * Unlike HUDs, UIs don't despawn automatically. They also cannot move.
+ * @since v1.1.0
  */
 public non-sealed class UiContext extends Context {
 

@@ -27,6 +27,7 @@ import net.minecraft.client.gui.Font;
  * <p>
  * TEXT_PIXEL_BLOCK_RATIO represents the amount of pixels that fit in a minecraft block when rendered through a text display.
  * This assumes the text display has scale (1, 1) and no shearing.
+ * @since v1.1.0
  */
 public abstract class FontDataGenerator {
     private FontDataGenerator() {}

@@ -19,6 +19,7 @@ import com.snek.frameworklib.debug.Require;
  * A single transformation specified as local rotation, translation, scale and global rotation.
  * <p>
  * It can be converted to a {@link com.mojang.math.Transformation#Transformation}.
+ * @since v1.1.0
  */
 public class Transform {
 

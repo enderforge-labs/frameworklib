@@ -19,6 +19,7 @@ import net.minecraft.world.entity.Display.BillboardConstraints;
 
 /**
  * The default style of the generic {@link Elm} element.
+ * @since v1.1.0
  */
 public class Style {
     public static final int S_TIME = 5; // Spawn   animation time. Measured in ticks

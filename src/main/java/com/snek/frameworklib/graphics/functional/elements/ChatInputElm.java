@@ -30,6 +30,7 @@ import net.minecraft.world.inventory.ClickAction;
  * <p>
  * This element automatically handles style.text updates.
  * Don't call {@code .setText} directly. Use {@link #setDisplayedText(Component)} instead.
+ * @since v1.1.0
  */
 public abstract class ChatInputElm extends TextButtonElm {
     public static final int CURSOR_TOGGLE_DELAY = 10;

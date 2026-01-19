@@ -25,6 +25,7 @@ import net.minecraft.network.chat.Component;
 
 /**
  * A canvas that can be used to create UIs.
+ * @since v1.1.0
  */
 public non-sealed class UiCanvas extends Canvas {
 

@@ -52,6 +52,7 @@ import net.minecraft.world.level.storage.LevelResource;
  * The main class and entry point of Framework Lib.
  * <p>
  * This class registers all the event callbacks and contains the library's ID, the logger, the phase ID and utility methods.
+ * @since v1.1.0
  */
 public class FrameworkLib implements ModInitializer {
 

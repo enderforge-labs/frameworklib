@@ -37,6 +37,7 @@ import net.minecraft.world.phys.Vec3;
  * and client-side item use events, preventing annoying UI flashes and visual artifacts.
  * <p>
  * Unlike graphic elements, this entity cannot be respawned.
+ * @since v1.1.0
  */
 public class InteractionBlocker {
 

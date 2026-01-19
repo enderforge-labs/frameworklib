@@ -32,6 +32,7 @@ import net.minecraft.world.level.Level;
  * An abstract wrapper for Minecraft's Display Entities.
  * <p>
  * This class allows for better customization and more readable code.
+ * @since v1.1.0
  */
 public abstract class CustomDisplay {
     protected @NotNull Display heldEntity;

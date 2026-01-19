@@ -30,6 +30,7 @@ import net.minecraft.world.item.ItemStack;
  * It displays an ItemStack and an optional count.
  * <p>
  * This element automatically resizes the count text and the item to match its current dimensions.
+ * @since v1.2.0
  */
 public class GuiItemElm extends ItemElm {
     public static final float Z_SCALE = 0.001f;
