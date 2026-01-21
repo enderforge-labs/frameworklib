@@ -15,6 +15,7 @@ import com.snek.frameworklib.utils.Txt;
 
 /**
  * The style of the MouseButtonDown UI element.
+ * @since v1.1.0
  */
 public class InputIndicator_MouseButtonDown_S extends PanelStyle {
 

@@ -30,6 +30,7 @@ import net.minecraft.world.item.ItemStack;
 
 /**
  * An element that can display items.
+ * @since v1.1.0
  */
 public class ItemElm extends Elm {
 
@@ -56,6 +57,7 @@ public class ItemElm extends Elm {
             @NotNull Transform
         >
     > transformExceptions = new HashMap<>(Map.ofEntries(
+        //TODO
         // Map.entry(Items.TRIDENT, Pair.from(
         //     ItemDisplayContext.GUI,
         //     new Transform()
@@ -81,6 +83,7 @@ public class ItemElm extends Elm {
             @NotNull Transform
         >
     > tagTransformExceptions = new HashMap<>(Map.ofEntries(
+        //TODO
         // Map.entry(ItemTags.BANNERS, Pair.from(
         //     ItemDisplayContext.NONE,
         //     new Transform().scale(0.6f).moveY(-0.08f).rotY((float)Math.PI)

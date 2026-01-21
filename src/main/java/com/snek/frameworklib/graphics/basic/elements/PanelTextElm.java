@@ -32,6 +32,7 @@ import net.minecraft.world.entity.Display.BillboardConstraints;
 
 /**
  * A text element that also has a configurable, animatable background color.
+ * @since v1.1.0
  */
 public non-sealed class PanelTextElm extends __base_TextElm {
 
@@ -69,7 +70,7 @@ public non-sealed class PanelTextElm extends __base_TextElm {
 
 
     /**
-     * Creates a new TextElm using a custom style.
+     * Creates a new PanelTextElm using a custom style.
      * @param level The level in which to place the element.
      * @param style The custom style.
      */
@@ -80,7 +81,7 @@ public non-sealed class PanelTextElm extends __base_TextElm {
 
 
     /**
-     * Creates a new TextElm using the default style.
+     * Creates a new PanelTextElm using the default style.
      * @param level The level in which to place the element.
      */
     public PanelTextElm(final @NotNull ServerLevel level) {

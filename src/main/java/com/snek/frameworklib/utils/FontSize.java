@@ -16,9 +16,9 @@ import com.snek.frameworklib.generated.FontData;
  * A utility class that can calculate the width and height of strings and characters.
  * <p>
  * This relies on the font dimensions defined in {@link FontData}.
+ * @since v1.1.0
  */
 public final class FontSize extends UtilityClassBase {
-    private FontSize() {}
 
 
 

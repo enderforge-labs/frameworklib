@@ -16,6 +16,7 @@ import net.minecraft.world.entity.player.Player;
  * An interface for elements that respond to hovering.
  * <p>
  * It provides hover handling and callback methods.
+ * @since v1.1.0
  */
 public interface Hoverable {
 

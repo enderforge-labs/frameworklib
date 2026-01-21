@@ -22,6 +22,7 @@ import com.snek.frameworklib.utils.Txt;
 
 /**
  * Represents the data of a multi-segment line.
+ * @since v1.1.0
  */
 public class PolylineData {
 
@@ -100,8 +101,8 @@ public class PolylineData {
     ) {
         assert Require.nonNull(color, "color");
         assert Require.inRange(color.x, 0, 255, "color red");
-        assert Require.inRange(color.y, 0, 255, "color blue");
-        assert Require.inRange(color.z, 0, 255, "color green");
+        assert Require.inRange(color.y, 0, 255, "color green");
+        assert Require.inRange(color.z, 0, 255, "color blue");
         assert Require.inRange(alpha, 0, 255, "alpha");
         assert Require.nonNull(points, "point list");
 
@@ -324,7 +325,7 @@ public class PolylineData {
 
 
     /**
-     * Flips the lines along the X and Y axes, using the center of the design(0.5, 0.5) as origin.
+     * Flips the lines along the X and Y axes, using the center of the design (0.5, 0.5) as origin.
      * @return {@code this}.
      */
     public @NotNull PolylineData flipXY() {
@@ -332,7 +333,7 @@ public class PolylineData {
     }
 
     /**
-     * Flips the lines along the X axis, using the center of the design(0.5, 0.5) as origin.
+     * Flips the lines along the X axis, using the center of the design (0.5, 0.5) as origin.
      * @return {@code this}.
      */
     public @NotNull PolylineData flipX() {
@@ -340,7 +341,7 @@ public class PolylineData {
     }
 
     /**
-     * Flips the lines along the X axis, using the center of the design(0.5, 0.5) as origin.
+     * Flips the lines along the Y axis, using the center of the design (0.5, 0.5) as origin.
      * @return {@code this}.
      */
     public @NotNull PolylineData flipY() {
@@ -367,6 +368,6 @@ public class PolylineData {
      * @return A copy of this data.
      */
     public @NotNull PolylineData copy() {
-        return new PolylineData(color, alpha, width, points);
+        return new PolylineData(color, alpha, width, cyclic, points);
     }
 }

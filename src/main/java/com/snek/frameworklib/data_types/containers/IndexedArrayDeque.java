@@ -17,8 +17,13 @@ import com.snek.frameworklib.debug.Require;
 /**
  * An ArrayDequeue that allows indexing in O(1) time.
  * @param <E> The type of the objects to store.
+ * @since v1.1.0
  */
 public class IndexedArrayDeque<E> extends AccessibleArrayDeque<E> {
+
+    /**
+     * Creates an empty IndexedArrayDequeue with an initial capacity sufficient to hold 16 elements.
+     */
     public IndexedArrayDeque() {
         super();
     }

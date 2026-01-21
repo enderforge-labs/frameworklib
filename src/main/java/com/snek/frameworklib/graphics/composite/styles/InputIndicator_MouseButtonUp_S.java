@@ -17,6 +17,7 @@ import com.snek.frameworklib.graphics.composite.elements.InputIndicator;
 
 /**
  * The style of the MouseButtonUp UI element.
+ * @since v1.1.0
  */
 public class InputIndicator_MouseButtonUp_S extends PanelStyle {
     public static final float BUTTON_SCALE = 1.2f;

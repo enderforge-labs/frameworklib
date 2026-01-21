@@ -19,6 +19,7 @@ import com.snek.frameworklib.utils.Easings;
  * A single interpolated transition.
  * <p>
  * This specifies how fast and with what easing a transition should be applied to an element.
+ * @since v1.1.0
  */
 public class Transition {
 

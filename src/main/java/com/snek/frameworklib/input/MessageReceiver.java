@@ -23,10 +23,10 @@ import net.minecraft.world.entity.player.Player;
 
 /**
  * A utility class that detects player messages and executes callbacks based on the sender.
+ * @since v1.1.0
  */
 public final class MessageReceiver extends UtilityClassBase {
     private static final @NotNull Map<@NotNull UUID, @Nullable Predicate<@NotNull String>> callbacks = new HashMap<>();
-    private MessageReceiver() {}
 
 
     /**

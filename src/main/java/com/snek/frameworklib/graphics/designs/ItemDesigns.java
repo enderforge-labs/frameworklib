@@ -12,7 +12,10 @@ import com.snek.frameworklib.utils.UtilityClassBase;
 
 
 
-
+/**
+ * A collection of designs that represent objects.
+ * @since v1.1.0
+ */
 @SuppressWarnings("java:S2386") //! Public mutable members
 public final class ItemDesigns extends UtilityClassBase {
     public static final @NotNull PolylineData[] MagnifyingGlass = {

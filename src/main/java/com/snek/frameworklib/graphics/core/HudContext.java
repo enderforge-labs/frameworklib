@@ -32,6 +32,7 @@ import net.minecraft.world.inventory.ClickAction;
  * <p>
  * Unlike UIs, HUDs can be stacked and despawn when the player walks away or stops interacting with it.
  * They are also not bound to a block and can move freely.
+ * @since v1.1.0
  */
 public non-sealed class HudContext extends Context {
 
@@ -57,7 +58,10 @@ public non-sealed class HudContext extends Context {
 
 
 
-
+    /**
+     * Teleports the provided element and all of its children to the spawn position of this HudContext.
+     * @param div The element to teleport.
+     */
     public void teleportElement(final @NotNull Div div) {
         assert Require.nonNull(div, "element");
         if(div instanceof final Elm e) {
@@ -134,7 +138,7 @@ public non-sealed class HudContext extends Context {
 
 
             // If the rotation needs to be updated
-            final int newRot = calcRot();
+            final float newRot = calcRot();
             if(getRotation() != newRot) {
 
                 // Rotate the canvas and set the new rotation
@@ -162,8 +166,8 @@ public non-sealed class HudContext extends Context {
 
 
     @Override
-    public int calcRot() {
-        return Math.round((player.getViewYRot(1) + 180f) / 45f) % 8;
+    public float calcRot() {
+        return (float)Math.toRadians(- player.getViewYRot(1) + 180f);
     }
 
 
@@ -219,7 +223,7 @@ public non-sealed class HudContext extends Context {
      * @return The translation calculated in the global frame.
      */
     public @NotNull Vector3f __calcVisualShiftGlobal() {
-        final float rotation = getRotationRadians() + (float)Math.PI; //! Add PI to align 0° to East(-Z)
+        final float rotation = getRotation() + (float)Math.PI; //! Add PI to align 0° to East(-Z)
         final Vector3f direction = new Vector3f((float)Math.sin(rotation), 0, (float)Math.cos(rotation));
         return direction.mul(HUD_DISTANCE).sub(0, 0.5f, 0);
     }

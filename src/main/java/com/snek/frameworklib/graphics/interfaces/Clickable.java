@@ -21,6 +21,7 @@ import net.minecraft.world.inventory.ClickAction;
  * An interface for elements that can be clicked.
  * <p>
  * It provides click handling and callback methods.
+ * @since v1.1.0
  */
 public interface Clickable {
 

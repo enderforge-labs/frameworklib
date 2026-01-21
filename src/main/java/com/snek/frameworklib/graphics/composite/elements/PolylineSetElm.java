@@ -26,6 +26,7 @@ import net.minecraft.server.level.ServerLevel;
  * A composite UI element that can display many multi-segment lines.
  * <p>
  * Each polyline is defined by a list of 2 or more points and has configurable color, opacity and width.
+ * @since v1.1.0
  */
 public class PolylineSetElm extends Div {
 
@@ -118,15 +119,22 @@ public class PolylineSetElm extends Div {
 
 
 
+    //! Enforce a 1:1 aspect ratio
+    //TODO move to Elm. Make this automatic
+    //TODO AspectRatio.FREE
+    //TODO AspectRatio.1_1
+    //TODO AspectRatio.3_4
+    //TODO AspectRatio.16_9
     @Override
     public void updateAbsSizeSelf() {
-        final Vector2f adjustedLocalSize = new Vector2f(Math.min(localSize.x, localSize.y));
         if(parent == null) {
-            absSize.set(adjustedLocalSize);
+            final float minDim = Math.min(localSize.x, localSize.y);
+            absSize.set(minDim, minDim);
         }
         else {
-            final Vector2f adjustedParentAbsSize = new Vector2f(Math.min(parent.getAbsSize().x, parent.getAbsSize().y));
-            absSize.set(new Vector2f(adjustedParentAbsSize).mul(adjustedLocalSize));
+            final Vector2f unconstrained = new Vector2f(parent.getAbsSize()).mul(localSize);
+            final float minDim = Math.min(unconstrained.x, unconstrained.y);
+            absSize.set(minDim, minDim);
         }
         updateAbsPosSelf();
     }

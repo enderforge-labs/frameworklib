@@ -26,6 +26,7 @@ import net.minecraft.world.inventory.ClickAction;
  * A generic button element with clicking and hovering capabilities and a configurable cooldown time.
  * <p>
  * This button cannot display text.
+ * @since v1.1.0
  */
 public abstract class ButtonElm extends PanelElm implements Clickable, Hoverable {
     __base_ButtonElm base;

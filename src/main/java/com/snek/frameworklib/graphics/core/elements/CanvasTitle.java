@@ -17,6 +17,10 @@ import net.minecraft.server.level.ServerLevel;
 
 
 
+/**
+ * A custom TextElm used by Canvases to display their title.
+ * @since v1.1.0
+ */
 public class CanvasTitle extends TextElm {
 
     /**

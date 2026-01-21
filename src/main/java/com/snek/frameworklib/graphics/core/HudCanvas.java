@@ -19,8 +19,14 @@ import net.minecraft.network.chat.Component;
 
 /**
  * A canvas that can be used to create HUDs.
+ * @since v1.1.0
  */
 public non-sealed class HudCanvas extends Canvas {
+
+    /**
+     * Retrieves this canvas's context as a HudContext.
+     * @return The context as a HudContext.
+     */
     public @NotNull HudContext getHudContext() {
         assert Require.nonNull(getContext(), "context");
         assert Require.instanceOf(getContext(), HudContext.class, "context");

@@ -12,12 +12,16 @@ import com.snek.frameworklib.graphics.basic.styles.PanelStyle;
 
 
 
+/**
+ * The default style of canvas border elements.
+ * @since v1.1.0
+ */
 public class CanvasBorder_S extends PanelStyle {
     public static final @NotNull Vector3i COLOR = new Vector3i(33, 33, 35);
 
 
     /**
-     * Creates a new UiBorder_S.
+     * Creates a new CanvasBorder_S.
      */
     public CanvasBorder_S() {
         super();

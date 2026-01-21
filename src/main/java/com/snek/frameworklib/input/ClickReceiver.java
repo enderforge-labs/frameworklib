@@ -33,10 +33,10 @@ import net.minecraft.world.level.Level;
  * A utility class that handles clicks from players.
  * <p>
  * This is responsible for sending click events to contexts.
+ * @since v1.1.0
  */
 public final class ClickReceiver extends UtilityClassBase {
     private static final @NotNull Map<@NotNull UUID, @Nullable RateLimiter> clickLimiters = new HashMap<>();
-    private ClickReceiver() {}
 
 
 

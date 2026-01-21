@@ -18,11 +18,16 @@ import com.snek.frameworklib.debug.Require;
  * <p>
  * The alignment options of child elements are not affected. For the Flex to work properly, they must use alignment:NONE on the alignment axis.
  * Alignment options on the other axis can be changed freely.
+ * @since v1.1.0
  */
 public class Flex extends Div {
     private final @NotNull Axis2 axis;
 
 
+    /**
+     * Creates a new Flex.
+     * @param axis The axis to align child elements on.
+     */
     public Flex(final @NotNull Axis2 axis) {
         super();
         assert Require.nonNull(axis, "axis");
@@ -45,13 +50,39 @@ public class Flex extends Div {
     }
 
 
+
+
     //! Override updateAbsSizeSelf to force a 1, 1 local size
     @Override
     public void updateAbsSizeSelf() {
+        localSize.set(1f, 1f);
         absSize.set(parent == null ? new Vector2f(1f) : new Vector2f(parent.getAbsSize()));
+        updateAbsPosSelf();
+    }
+
+    @Override
+    public void updateAbsSizeInverseSelf() {
+        updateAbsSizeSelf();
+    }
+
+    @Override
+    public void updateAbsSize() {
+        super.updateAbsSize();
+        updateLayout();
+    }
+
+    @Override
+    public void updateAbsSizeInverse() {
+        super.updateAbsSizeInverse();
+        updateLayout();
     }
 
 
+
+
+    /**
+     * Updates the positions of the contained elements.
+     */
     public void updateLayout() {
 
         // Calculate total axis-wise length
@@ -61,11 +92,17 @@ public class Flex extends Div {
         }
 
         // Reposition elements
-        float curPos = 0f - totLen / 2f;
+        float curPos = axis == Axis2.X ? -totLen / 2f : 0f;
         for(final Div c : children) {
-            final float len = axis.get(c.getLocalSize());
-            final float pos = curPos + len / 2f;
-            if(axis == Axis2.X) c.setPosX(pos); else c.setPosY(pos);
+            final float len = axis.get(c.getAbsSize());
+
+            // Set the position differently based on the axis. Y axis indicates the bottom of the element. X indicates the center
+            if(axis == Axis2.X) {
+                c.setPosX(curPos + len / 2f);
+            }
+            else {
+                c.setPosY(curPos);
+            }
             curPos += len;
         }
     }

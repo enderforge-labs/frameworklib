@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * Notice: Flagged values are created as flagged. Use {@link #unflag()} if you want them to start as not flagged.
  * @param <T> The type of the object to store.
+ * @since v1.1.0
  */
 public class Flagged<T> {
     private @Nullable T value;

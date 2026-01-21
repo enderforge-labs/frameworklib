@@ -1,0 +1,8 @@
+
+
+Undocumented methods. This ignores methods with @Override
+(?<!(/\*\*(\n|.)*?\*/)(\n.*?(@SuppressWarnings).*?)?)\n(?<!\n.*?(@Override\n))((?!.*?\b(if|catch|switch|else|while|for|do|try)\b).*?\(.*?\)\s*\{(\n|.)*?\})
+
+
+Documented blocks with no @since tag
+/\*\*(?!(?:(?!\*/)[\s\S\n])*@since)([\s\S\n]*?)\*/

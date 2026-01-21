@@ -13,6 +13,7 @@ import com.snek.frameworklib.debug.Require;
 
 /**
  * A class that represets a single step of a transition.
+ * @since v1.1.0
  */
 public class TransitionStep {
     private final          float            factor;

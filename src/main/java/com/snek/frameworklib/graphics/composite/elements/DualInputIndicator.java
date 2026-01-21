@@ -21,6 +21,7 @@ import net.minecraft.world.inventory.ClickAction;
 
 /**
  * A display for click action descriptions defined by the element that's currently being hovered on.
+ * @since v1.1.0
  */
 public class DualInputIndicator extends Div implements InputIndicatorCanvas {
     public static final @NotNull Vector2f DEFAULT_DUAL_INDICATOR_SIZE  = new Vector2f(0.95f, 0.08f);

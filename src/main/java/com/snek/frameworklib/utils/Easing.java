@@ -17,6 +17,7 @@ import com.snek.frameworklib.debug.Require;
  * A class that can store and compute a unary operator on request.
  * <p>
  * This is meant for interpolation easings.
+ * @since v1.1.0
  */
 public final class Easing {
     private final @NotNull UnaryOperator<@NotNull Double> f;

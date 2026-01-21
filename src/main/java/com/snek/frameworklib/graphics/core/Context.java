@@ -41,6 +41,7 @@ import net.minecraft.world.inventory.ClickAction;
  * <p>
  * This is sealed as HudContext and UiContext are the only possible types of contexts.
  * Specialized types must inherit from either of them.
+ * @since v1.1.0
  */
 public abstract sealed class Context permits HudContext, UiContext {
 
@@ -56,8 +57,7 @@ public abstract sealed class Context permits HudContext, UiContext {
     protected @Nullable Canvas             activeCanvas       = null;
     private   @NotNull Vector3d            spawnPos           = new Vector3d(0);
     protected boolean spawned = false;
-    private   int     lastRotation = 0;
-    public abstract int calcRot();
+    private   float   lastRotation = 0f;
 
 
     // Getters
@@ -66,13 +66,10 @@ public abstract sealed class Context permits HudContext, UiContext {
     public @NotNull  Vector3d           getSpawnPos          () { assert Require.nonNull(spawnPos, "spawn position"); return spawnPos; }
     public @Nullable Canvas             getActiveCanvas      () { return activeCanvas; }
     public @Nullable InteractionBlocker getInteractionBlocker() { return interactionBlocker; }
-    public int                          getRotation          () { return lastRotation; }
+    public float                        getRotation          () { return lastRotation; }
     public abstract  float              getInteractionBlockerSize();
 
 
-    public float getRotationRadians() {
-        return (float)Math.toRadians(lastRotation * -45d);
-    }
 
 
     // Setters
@@ -80,8 +77,7 @@ public abstract sealed class Context permits HudContext, UiContext {
         assert Require.nonNull(spawnPos, "spawn position");
         this.spawnPos = spawnPos;
     }
-    public void setRotation(final int newRotation) {
-        assert Require.inRange(newRotation, 0, 7, "new rotation");
+    public void setRotation(final float newRotation) {
         lastRotation = newRotation;
     }
 
@@ -149,6 +145,8 @@ public abstract sealed class Context permits HudContext, UiContext {
             interactionBlocker = null;
 
             // Update context list
+            //! contexts cannot be null when this method is called.
+            //! A context not being despawned means the player's contexts list contains at least 1 element.
             final @Nullable LinkedList<Context> contexts = activeContexts.get(player);
             contexts.remove(this);
             if(contexts.isEmpty()) activeContexts.remove(player);
@@ -169,6 +167,19 @@ public abstract sealed class Context permits HudContext, UiContext {
 
 
 
+    /**
+     * Calculates the desired rotation of the context.
+     * @return The desired rotation in radians.
+     */
+    public abstract float calcRot();
+
+
+
+
+    /**
+     * Changes the active canvas, letting the new canvas inherit background and panel elements if possible.
+     * @param canvas The new canvas.
+     */
     public abstract void changeCanvas(final @NotNull Canvas canvas);
     protected final void finalizeCanvasChange(final @NotNull Canvas newCanvas) {
         assert Require.nonNull(newCanvas, "new canvas");
@@ -305,6 +316,10 @@ public abstract sealed class Context permits HudContext, UiContext {
             }
         }
     }
+
+    /**
+     * Sends an hover tick to the currently targeted element.
+     */
     private final void tickTargetedElm() {
         if(targetedElm instanceof final Hoverable h) {
             h.onHoverTick(player);

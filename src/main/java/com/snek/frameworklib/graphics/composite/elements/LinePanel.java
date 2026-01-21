@@ -25,7 +25,8 @@ import net.minecraft.world.entity.player.Player;
  * <p>
  * This class removes the {@link #checkIntersection(Player, boolean)} and {@link #getIntersectionLength(Player)} logic and doesn't show up in the debug window.
  * <p>
- * Subclasses must NOT implement {@link Clickable}, {@link Scrollable} or {@link Hoverable}. Trying to do so will generate a warning.
+ * Subclasses must NOT implement {@link Clickable}, {@link Scrollable} or {@link Hoverable}.
+ * @since v1.1.0
  */
 public final class LinePanel extends PanelElm {
     final Vector2f absPosOg = new Vector2f();

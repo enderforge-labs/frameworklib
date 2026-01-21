@@ -16,6 +16,7 @@ import com.snek.frameworklib.utils.UtilityClassBase;
 
 /**
  * A utility class that contains configuration file data.
+ * @since v1.1.0
  */
 public final class Configs extends UtilityClassBase {
     private Configs() {}

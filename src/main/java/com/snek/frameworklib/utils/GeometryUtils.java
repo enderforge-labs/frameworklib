@@ -18,9 +18,9 @@ import com.snek.frameworklib.debug.UiDebugWindow;
 
 /**
  * A utility class providing functions for 2D and 3D Euclidean geometry calculations.
+ * @since v1.1.0
  */
 public final class GeometryUtils extends UtilityClassBase {
-    private GeometryUtils() {}
 
 
 

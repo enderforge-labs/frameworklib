@@ -8,8 +8,12 @@
         "accessors.TextDisplayAccessorMixin",
         "accessors.ItemDisplayAccessorMixin",
 
-        "CommandStackTraceMixin",
-        "UnwearableHeadItemMixin"
+        "enhanced_recipes.shaped.ClientResultSlotSyncMixin",
+        "enhanced_recipes.shaped.RecipePacketProxyMixin",
+        "enhanced_recipes.shaped.IngredientConsumerMixin",
+
+        "misc.CommandStackTraceMixin",
+        "misc.UnwearableHeadItemMixin"
     ],
     "injectors": {
         "defaultRequire": 1

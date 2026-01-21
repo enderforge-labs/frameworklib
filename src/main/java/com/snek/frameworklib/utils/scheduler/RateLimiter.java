@@ -4,6 +4,7 @@ import com.snek.frameworklib.debug.Require;
 
 /**
  * An object that can be used to add a variable tick cooldown to arbitrary code.
+ * @since v1.1.0
  */
 public class RateLimiter {
     private long cooldownEnd;

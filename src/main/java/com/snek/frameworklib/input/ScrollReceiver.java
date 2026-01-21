@@ -23,10 +23,10 @@ import net.minecraft.world.entity.player.Player;
 
 /**
  * A class that detects selected slot changes from players and sends scroll events to active contexts.
+ * @since v1.1.0
  */
 public final class ScrollReceiver extends UtilityClassBase {
     private static final @NotNull Map<@NotNull Player, @Nullable Integer> lastSlots = new HashMap<>();
-    private ScrollReceiver() {}
 
 
 

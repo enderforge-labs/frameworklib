@@ -25,10 +25,14 @@ import net.minecraft.network.chat.Component;
 
 /**
  * A canvas that can be used to create UIs.
+ * @since v1.1.0
  */
 public non-sealed class UiCanvas extends Canvas {
 
-    // UI data
+    /**
+     * Retrieves this canvas's context as a UiContext.
+     * @return The context as a UiContext.
+     */
     public @NotNull UiContext getUiContext() {
         assert Require.nonNull(getContext(), "context");
         assert Require.instanceOf(getContext(), UiContext.class, "context");

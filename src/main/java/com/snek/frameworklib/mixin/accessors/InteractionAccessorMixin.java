@@ -7,6 +7,10 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 
 
+/**
+ * An accessor mixin for {@link Interaction}.
+ * @since v1.1.0
+ */
 @Mixin(Interaction.class)
 public interface InteractionAccessorMixin {
     @Invoker("setWidth")

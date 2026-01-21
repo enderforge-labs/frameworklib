@@ -25,16 +25,29 @@ import net.minecraft.world.level.Level;
  * A wrapper for Minecraft's TextDisplay.
  * <p>
  * This class allows for better customization and more readable code.
+ * @since v1.1.0
  */
 public class CustomTextDisplay extends CustomDisplay {
+
+    /**
+     * Retrieves the display entity held by this {@link CustomTextDisplay}.
+     * @return The held {@link TextDisplay}.
+     */
     public @NotNull TextDisplay getRawDisplay() {
         assert Require.nonNull(heldEntity, "held entity");
         return (TextDisplay)heldEntity;
     }
+
+    /**
+     * Retrieves the display entity held by this {@link CustomTextDisplay} as a {@link TextDisplayAccessorMixin} to allow access to private methods.
+     * @return The held {@link TextDisplay} as a {@link TextDisplayAccessorMixin}.
+     */
     private @NotNull TextDisplayAccessorMixin getAccessibleTextDisplay() {
         assert Require.nonNull(heldEntity, "held entity");
         return (TextDisplayAccessorMixin)heldEntity;
     }
+
+
 
 
     // Component cache and flag used to remove the text when the opacity value is lower than 26

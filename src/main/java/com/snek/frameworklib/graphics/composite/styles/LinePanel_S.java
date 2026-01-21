@@ -8,11 +8,16 @@ import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.graphics.basic.styles.PanelStyle;
+import com.snek.frameworklib.graphics.composite.elements.LinePanel;
 import com.snek.frameworklib.utils.Easings;
 
 
 
 
+/**
+ * The default style of the {@link LinePanel} element.
+ * @since v1.1.0
+ */
 public class LinePanel_S extends PanelStyle {
     public static final float LINE_SPAWNING_SCALE  = 0.00001f;
     public static final int   SPAWN_ANIMATION_TIME = 10;

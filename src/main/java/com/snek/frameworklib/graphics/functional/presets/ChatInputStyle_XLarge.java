@@ -5,6 +5,10 @@ import com.snek.frameworklib.graphics.functional.styles.ChatInputStyle;
 
 
 
+/**
+ * A default ChatInputStyle with font size 18.
+ * @since v1.1.0
+ */
 public class ChatInputStyle_XLarge extends ChatInputStyle {
     public ChatInputStyle_XLarge() {
         super();

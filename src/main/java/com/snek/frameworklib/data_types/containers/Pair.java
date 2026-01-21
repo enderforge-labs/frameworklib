@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
  * A simple container for two objects of different types.
  * @param <F> The type of the first value.
  * @param <S> The type of the second value.
+ * @since v1.1.0
  */
 public class Pair<F, S> {
 

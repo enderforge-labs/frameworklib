@@ -52,11 +52,10 @@ import net.minecraft.world.entity.player.Player;
  * The base class of every visible graphic element.
  * <p>
  * This implements automatic entity management support for animations on top of the {@link Div} base class.
+ * @since v1.1.0
  */
 public abstract class Elm extends Div {
     public static final @NotNull String ENTITY_CUSTOM_NAME = FrameworkLib.LIB_ID + ".ui.displayentity";
-    public static final int QUEUE_LINGER_TICKS = 4;
-    // ^ Additional update ticks the element stays in the update queue for after all of its steps have been processed.
 
 
     // Animation handling
@@ -98,7 +97,7 @@ public abstract class Elm extends Div {
 
     /**
      * Retrieves the custom display held by this element as the specified subclass.
-     * @param type The sublass to cast the custom display to.
+     * @param type The subclass to cast the custom display to.
      * @return The custom display casted to the specified class.
      */
     public <T> @NotNull T getEntity(final @NotNull Class<T> type) {
@@ -119,7 +118,7 @@ public abstract class Elm extends Div {
 
     /**
      * Retrieves the style used by this element as the specified subclass.
-     * @param type The sublass to cast the style to.
+     * @param type The subclass to cast the style to.
      * @return The style casted to the specified class.
      */
     public <T> @NotNull T getStyle(final @NotNull Class<T> type) {
@@ -173,7 +172,6 @@ public abstract class Elm extends Div {
      */
     public void flushStyle() {
         assert Require.nonNull(style, "style");
-        epsilonPolarity *= -1;
 
         // Apply transform
         { final Flagged<Transform> f = style.getFlaggedTransform();
@@ -487,7 +485,6 @@ public abstract class Elm extends Div {
 
             // Call superclass's despawn
             super.despawn(false);
-            // despawning = true; //TODO remove
 
 
             // Handle animations
@@ -552,7 +549,6 @@ public abstract class Elm extends Div {
 
         // Despawn the entity
         entity.despawn();
-        // despawning = false;  //TODO remove
     }
 
 
@@ -575,6 +571,8 @@ public abstract class Elm extends Div {
             __applyTransitionStep(futureDataQueue.removeFirst());
 
             // Flush style and start a new minecraft interpolation
+            //! Force epsilon updates (edit transform call). This prevents visual glitches in the entity.
+            getStyle().editTransform();
             flushStyle();
             entity.setInterpolationDuration(Configs.getPerf().animation_refresh_time.getValue());
             entity.setStartInterpolation();
@@ -586,6 +584,7 @@ public abstract class Elm extends Div {
             elmUpdateQueue.remove(this);
             isQueued = false;
         }
+        epsilonPolarity *= -1;
     }
 
 

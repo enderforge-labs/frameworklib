@@ -49,6 +49,7 @@ import net.minecraft.world.inventory.ClickAction;
  * <p>
  * By default, divs are invisible and don't exist in the minecraft level nor on the client.
  * They have a 2D size, a 2D position and alignment options.
+ * @since v1.1.0
  */
 public class Div {
     public static final float DEFAULT_DESIGN_SIZE = 0.6f;
@@ -114,7 +115,7 @@ public class Div {
      * Returns the parent of this element.
      * <p>
      * The parent of a Canvas is null.
-     * @return
+     * @return The parent.
      */
     public @Nullable Div getParent() {
         return parent;
@@ -123,7 +124,7 @@ public class Div {
 
     /**
      * Sets the parent of this object.
-     * @param _parent The parent.
+     * @param parent The parent.
     */
     public void setParent(final @Nullable Div parent) {
        this.parent = parent;
@@ -165,7 +166,7 @@ public class Div {
 
 
     /**
-     * Creates a new Div with size (1,1)
+     * Creates a new Div with size (1,1).
      */
     public Div() {
         // Empty
@@ -676,7 +677,7 @@ public class Div {
         final Vector3d spawnPos = canvas.getContext().getSpawnPos();
         return
             new Vector3f(getAbsPos().x, getAbsPos().y, getZIndex() * Configs.getGraphics().z_layer_spacing.getValue())
-            .rotateY(canvas.getContext().getRotationRadians()) //! Rotation applied to Z-index translation
+            .rotateY(canvas.getContext().getRotation()) //! Rotation applied to Z-index translation
             .add(new Vector3f((float)spawnPos.x, (float)spawnPos.y, (float)spawnPos.z))
         ;
     }
@@ -735,7 +736,7 @@ public class Div {
     * Calculates the world coordinates of the 4 corners of the element.
     * <p>
     * This method takes into account anything that might affect their position.
-    * @return The coorindates of the 4 corners, in the order: BottomLeft, BottomRight, TopRight, TopLeft.
+    * @return The coordinates of the 4 corners, in the order: BottomLeft, BottomRight, TopRight, TopLeft.
     */
     public @NotNull Vector3f[] __calcCornerCoords() {
         if(canvas == null) return new Vector3f[]{ new Vector3f(), new Vector3f(), new Vector3f(), new Vector3f() };
@@ -748,7 +749,7 @@ public class Div {
 
 
         // Shift the origin to find the corners and rotate them by the context's current rotation
-        final float rotation = canvas.getContext().getRotationRadians();
+        final float rotation = canvas.getContext().getRotation();
         return new Vector3f[] {
             new Vector3f(-getInteractionSizeLeft (), -getInteractionSizeBottom(), 0).rotateY(rotation).add(origin),
             new Vector3f(+getInteractionSizeRight(), -getInteractionSizeBottom(), 0).rotateY(rotation).add(origin),

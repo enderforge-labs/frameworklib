@@ -20,6 +20,7 @@ import com.snek.frameworklib.utils.Easings;
 
 /**
  * The default style of the generic {@Link ButtonElm} element.
+ * @since v1.1.0
  */
 public class TextButtonStyle extends PanelTextStyle {
     private @Nullable Flagged<Animation> hoverPrimerAnimation         = null;
