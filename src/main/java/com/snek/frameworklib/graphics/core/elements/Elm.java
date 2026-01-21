@@ -172,7 +172,6 @@ public abstract class Elm extends Div {
      */
     public void flushStyle() {
         assert Require.nonNull(style, "style");
-        epsilonPolarity *= -1;
 
         // Apply transform
         { final Flagged<Transform> f = style.getFlaggedTransform();
@@ -572,6 +571,8 @@ public abstract class Elm extends Div {
             __applyTransitionStep(futureDataQueue.removeFirst());
 
             // Flush style and start a new minecraft interpolation
+            //! Force epsilon updates (edit transform call). This prevents visual glitches in the entity.
+            getStyle().editTransform();
             flushStyle();
             entity.setInterpolationDuration(Configs.getPerf().animation_refresh_time.getValue());
             entity.setStartInterpolation();
@@ -583,6 +584,7 @@ public abstract class Elm extends Div {
             elmUpdateQueue.remove(this);
             isQueued = false;
         }
+        epsilonPolarity *= -1;
     }
 
 

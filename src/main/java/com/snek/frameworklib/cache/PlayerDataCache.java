@@ -40,7 +40,6 @@ public final class PlayerDataCache extends UtilityClassBase {
 
     /**
      * A class used to store the data of a single player
-     * @author Ilaria (https://github.com/UwUSnek)
      */
     private static class CachedPlayerData {
         private final @NotNull String name;
