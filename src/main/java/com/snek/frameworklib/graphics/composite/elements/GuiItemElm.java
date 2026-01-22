@@ -8,8 +8,8 @@ import com.snek.frameworklib.data_types.animations.Transform;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.basic.elements.ItemElm;
 import com.snek.frameworklib.graphics.basic.elements.TextElm;
-import com.snek.frameworklib.graphics.basic.styles.ItemStyle;
 import com.snek.frameworklib.graphics.basic.styles.TextStyle;
+import com.snek.frameworklib.graphics.composite.styles.GuiItemStyle;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.Txt;
 import com.snek.frameworklib.utils.Utils;
@@ -45,7 +45,7 @@ public class GuiItemElm extends ItemElm {
      * @param style The style.
      * @param count The count to display.
      */
-    public GuiItemElm(@NotNull ServerLevel level, @NotNull ItemStyle style, final @Nullable Integer count) {
+    public GuiItemElm(@NotNull ServerLevel level, @NotNull GuiItemStyle style, final @Nullable Integer count) {
         super(level, style.withDisplayContext(ItemDisplayContext.GUI));
 
         // Add count text element
@@ -69,7 +69,7 @@ public class GuiItemElm extends ItemElm {
      * @param count The count to display.
      */
     public GuiItemElm(@NotNull ServerLevel level, final @Nullable Integer count) {
-        this(level, new ItemStyle(), count);
+        this(level, new GuiItemStyle(), count);
     }
 
     /**
@@ -79,7 +79,7 @@ public class GuiItemElm extends ItemElm {
      * @param count The count to display.
      */
     public GuiItemElm(@NotNull ServerLevel level, final @NotNull ItemStack item, final @Nullable Integer count) {
-        this(level, new ItemStyle().withItem(item), count);
+        this(level, (GuiItemStyle)new GuiItemStyle().withItem(item), count);
     }
 
     /**
@@ -89,8 +89,8 @@ public class GuiItemElm extends ItemElm {
      * @param item The item to display.
      * @param count The count to display.
      */
-    public GuiItemElm(@NotNull ServerLevel level, @NotNull ItemStyle style, final @NotNull ItemStack item, final @Nullable Integer count) {
-        this(level, style.withItem(item), count);
+    public GuiItemElm(@NotNull ServerLevel level, @NotNull GuiItemStyle style, final @NotNull ItemStack item, final @Nullable Integer count) {
+        this(level, (GuiItemStyle)style.withItem(item), count);
     }
 
     /**
@@ -98,7 +98,7 @@ public class GuiItemElm extends ItemElm {
      * @param level The level to spawn associated entities in.
      * @param style The style.
      */
-    public GuiItemElm(@NotNull ServerLevel level, @NotNull ItemStyle style) {
+    public GuiItemElm(@NotNull ServerLevel level, @NotNull GuiItemStyle style) {
         this(level, style, (Integer)null); //TODO replace with Option
     }
 
@@ -107,7 +107,7 @@ public class GuiItemElm extends ItemElm {
      * @param level The level to spawn associated entities in.
      */
     public GuiItemElm(@NotNull ServerLevel level) {
-        this(level, new ItemStyle(), (Integer)null); //TODO replace with Option
+        this(level, new GuiItemStyle(), (Integer)null); //TODO replace with Option
     }
 
     /**
@@ -116,7 +116,7 @@ public class GuiItemElm extends ItemElm {
      * @param item The item to display.
      */
     public GuiItemElm(@NotNull ServerLevel level, final @NotNull ItemStack item) {
-        this(level, new ItemStyle().withItem(item), (Integer)null); //TODO replace with Option
+        this(level, (GuiItemStyle)new GuiItemStyle().withItem(item), (Integer)null); //TODO replace with Option
     }
 
     /**
@@ -125,8 +125,8 @@ public class GuiItemElm extends ItemElm {
      * @param style The style.
      * @param item The item to display.
      */
-    public GuiItemElm(@NotNull ServerLevel level, @NotNull ItemStyle style, final @NotNull ItemStack item) {
-        this(level, style.withItem(item), (Integer)null); //TODO replace with Option
+    public GuiItemElm(@NotNull ServerLevel level, @NotNull GuiItemStyle style, final @NotNull ItemStack item) {
+        this(level, (GuiItemStyle)style.withItem(item), (Integer)null); //TODO replace with Option
     }
 
 
