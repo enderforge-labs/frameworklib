@@ -106,14 +106,14 @@ public class Txt {
 
 
     /**
-     * Creates a formatted Txt with colored parameters using positional specifiers.
+     * Creates a formatted Txt positional arguments.
      * <p>
      * This works in the same way as {@link String#format}, but allowing {@link Txt} as parameters.
      * <p>
      * e.g. <code>Txt.Format("%1$x items and %2$ coins. Total: %1$", new Txt("42").gold(), new Txt("100").green())</code>
-     * @param format The format string with %1$, %2$, etc. placeholders.
-     * @param params The Txt objects to insert at specified positions.
-     * @return A new Txt with the formatted.
+     * @param format The format string.
+     * @param params The Txt objects to use as parameters.
+     * @return A new Txt containing the formatted string and parameters.
      */
     @SuppressWarnings("java:S127") //! Index modified from the loop's body
     public static @NotNull Txt Format(final @NotNull String format, final @NotNull Txt... params) {
