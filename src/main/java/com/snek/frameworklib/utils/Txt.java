@@ -105,6 +105,66 @@ public class Txt {
 
 
 
+    /**
+     * Creates a formatted Txt with colored parameters using positional specifiers.
+     * <p>
+     * This works in the same way as {@link String#format}, but allowing {@link Txt} as parameters.
+     * <p>
+     * e.g. <code>Txt.Format("%1$x items and %2$ coins. Total: %1$", new Txt("42").gold(), new Txt("100").green())</code>
+     * @param format The format string with %1$, %2$, etc. placeholders.
+     * @param params The Txt objects to insert at specified positions.
+     * @return A new Txt with the formatted.
+     */
+    @SuppressWarnings("java:S127") //! Index modified from the loop's body
+    public static @NotNull Txt Format(final @NotNull String format, final @NotNull Txt... params) {
+        assert Require.nonNull(format, "format string");
+        assert Require.nonNull(params, "parameters");
+
+        final Txt result = new Txt();
+        int lastEnd = 0;
+
+        for(int i = 0; i < format.length(); i++) {
+            if(format.charAt(i) == '%' && i + 1 < format.length()) {
+                int digitStart = i + 1;
+                int digitEnd = digitStart;
+
+                // Read all consecutive digits
+                while(digitEnd < format.length() && Character.isDigit(format.charAt(digitEnd))) {
+                    digitEnd++;
+                }
+
+                // Check if there is a $ character after the digits
+                if(digitEnd > digitStart && digitEnd < format.length() && format.charAt(digitEnd) == '$') {
+
+                    // Add text before the placeholder
+                    if(i > lastEnd) {
+                        result.cat(format.substring(lastEnd, i));
+                    }
+
+                    // Parse the parameter index (1-based in format string)
+                    int paramIndex = Integer.parseInt(format.substring(digitStart, digitEnd)) - 1;
+
+                    // Add the parameter
+                    if(paramIndex >= 0 && paramIndex < params.length) {
+                        result.cat(params[paramIndex]);
+                    }
+
+                    lastEnd = digitEnd + 1;
+                    i = digitEnd; // Skip to the end of the placeholder
+                }
+            }
+        }
+
+        // Add remaining text after last placeholder
+        if(lastEnd < format.length()) {
+            result.cat(format.substring(lastEnd));
+        }
+
+        return result;
+    }
+
+
+
 
     // Minecraft colors
     public static final @NotNull Vector3i COLOR_BLACK      = new Vector3i(  0,   0,   0); public @NotNull Txt black    () { return color(COLOR_BLACK     ); }
