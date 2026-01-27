@@ -268,6 +268,161 @@ public final class Utils extends UtilityClassBase {
 
 
 
+
+
+
+
+    public enum DurationLabelType { INITIAL, FULL }
+    public enum DurationPrecision { SECONDS, MINUTES }
+    private enum DurationScale { MS, S, M, H, D, MO, Y }
+
+    /**
+     * Returns the duration <ticks> expressed as a string and formatted as specified.
+     * This includes the number of milliseconds (optional), seconds (optional), minutes, hours, days, months, and years.
+     * @param ticks The duration to format, expressed in ticks (20th of a second).
+     * @param labelType The type of label to suffix numbers with.
+     * @return The formatted duration.
+     */
+    public static @NotNull String formatDuration(final long ticks, final @NotNull DurationLabelType labelType) {
+        return formatDuration(ticks, labelType, null);
+    }
+
+
+    /**
+     * Returns the duration <ticks> expressed as a string and formatted as specified.
+     * This includes the number of milliseconds (optional), seconds (optional), minutes, hours, days, months, and years.
+     * @param ticks The duration to format, expressed in ticks (20th of a second).
+     * @param labelType The type of label to suffix numbers with.
+     * @param separator The separator characters to add between numbers. Can be null (equivalent to an empty string).
+     * @return The formatted duration.
+     */
+    public static @NotNull String formatDuration(final long ticks, final @NotNull DurationLabelType labelType, final @Nullable String separator) {
+        return formatDuration(ticks, labelType, separator, DurationPrecision.SECONDS);
+    }
+
+
+    /**
+     * Returns the duration <ticks> expressed as a string and formatted as specified.
+     * This includes the number of milliseconds (optional), seconds (optional), minutes, hours, days, months, and years.
+     * @param ticks The duration to format, expressed in ticks (20th of a second).
+     * @param labelType The type of label to suffix numbers with.
+     * @param separator The separator characters to add between numbers. Can be null (equivalent to an empty string).
+     * @param precision The precision of the formatted string.
+     * @return The formatted duration.
+     */
+    public static @NotNull String formatDuration(
+        final long ticks,
+        final @NotNull DurationLabelType labelType,
+        final @Nullable String separator,
+        final @NotNull DurationPrecision precision
+    ) {
+
+        // Calculate separator string and requirement flag
+        final StringBuilder r = new StringBuilder();
+        final String sep = separator != null ? separator : "";
+        final boolean needSep = !sep.isEmpty();
+
+
+        // Convert ticks to total seconds and round to multiples of 60 if precision is MINUTES
+        long totalSeconds = ticks / 20;
+        if(precision == DurationPrecision.MINUTES) totalSeconds = (totalSeconds / 60) * 60;
+
+
+        // Calculate time components
+        final long years   =  totalSeconds / 31536000;              // 365 days
+        final long months  = (totalSeconds % 31536000) / 2592000;   // 30 days
+        final long days    = (totalSeconds %  2592000) /   86400;   //
+        final long hours   = (totalSeconds %    86400) /    3600;   // 3000 seconds
+        final long minutes = (totalSeconds %     3600) /      60;   //
+        final long seconds =  totalSeconds % 60;                    //
+        final long millis  = (ticks % 20) * 50;                     // Remaining ticks to milliseconds
+
+
+        // Build the formatted string
+        if(years > 0) {
+            r.append(years).append(getLabel(labelType, years, DurationScale.Y));
+        }
+
+        if(months > 0) {
+            if(needSep) r.append(sep);
+            r.append(months);
+            r.append(getLabel(labelType, months, DurationScale.MO));
+        }
+
+        if(days > 0) {
+            if(needSep) r.append(sep);
+            r.append(days);
+            r.append(getLabel(labelType, days, DurationScale.D));
+        }
+
+        if(hours > 0) {
+            if(needSep) r.append(sep);
+            r.append(hours);
+            r.append(getLabel(labelType, hours, DurationScale.H));
+        }
+
+        if(minutes > 0) {
+            if(needSep) r.append(sep);
+            r.append(minutes);
+            r.append(getLabel(labelType, minutes, DurationScale.M));
+        }
+
+        if(precision == DurationPrecision.SECONDS) {
+            if(seconds > 0 || totalSeconds == 0) {
+                if(needSep) r.append(sep);
+                r.append(seconds);
+                r.append(getLabel(labelType, seconds, DurationScale.S));
+            }
+
+            if(millis > 0) {
+                if(needSep) r.append(sep);
+                r.append(millis);
+                r.append(getLabel(labelType, millis, DurationScale.MS));
+            }
+        }
+
+
+        // Handle edge case of zero duration
+        if(r.isEmpty()) {
+            r.append("0");
+            r.append(getLabel(labelType, 0, DurationScale.S));
+        }
+
+        // Return
+        return r.toString();
+    }
+
+
+    private static @NotNull String getLabel(final @NotNull DurationLabelType type, final long value, final @NotNull DurationScale scale) {
+        return switch(type) {
+            case INITIAL -> switch(scale) {
+                case MS -> "ms";
+                case S  -> "s";
+                case M  -> "m";
+                case H  -> "h";
+                case D  -> "d";
+                case MO -> "mo";
+                case Y  -> "y";
+            };
+            case FULL -> " " + switch(scale) {
+                case MS -> "millisecond";
+                case S  -> "second";
+                case M  -> "minute";
+                case H  -> "hour";
+                case D  -> "day";
+                case MO -> "month";
+                case Y  -> "year";
+            } + (value > 1 ? "s" : "");
+        };
+    }
+
+
+
+
+
+
+
+
     /**
      * Converts an RGB color to a shade of gray by setting its saturation to 0.
      * @param rgb The RGB color.
