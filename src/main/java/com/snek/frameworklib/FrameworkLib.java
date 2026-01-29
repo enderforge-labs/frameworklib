@@ -76,6 +76,7 @@ public class FrameworkLib implements ModInitializer {
      * @param modId The ID of the mod.
      * @return The path to the storage directory.
      */
+    //TODO REMOVE
     public static Path getStorageDir(final @NotNull String modId) {
         return FrameworkLib.getServer().getWorldPath(LevelResource.ROOT).resolve("data/" + modId);
     }
@@ -85,6 +86,7 @@ public class FrameworkLib implements ModInitializer {
      * @param modId The ID of the mod.
      * @return The path to the config directory.
      */
+    //TODO REMOVE
     public static Path getConfigDir(final @NotNull String modId) {
         return FabricLoader.getInstance().getConfigDir().resolve(modId);
     }
