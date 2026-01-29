@@ -2,7 +2,7 @@ package com.snek.frameworklib.configs;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.snek.frameworkconfig.ConfigManager;
+import com.snek.frameworkconfig.config.ConfigManager;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.utils.UtilityClassBase;
