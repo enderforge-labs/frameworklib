@@ -94,26 +94,32 @@ public class UiDebugWindow extends JPanel {
         final int centerY = height / 2;
 
 
-        // Fill rectangles
-        _g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
+        final int l = (int)(Math.min(width, height) * 0.5f);
         for(int i = 0; i < vertices.size(); i += 4) {
             try {
-                final int x1 = centerX - (int)(400 * vertices.get(i + 0).getFirst().x);
-                final int y1 = centerY - (int)(400 * vertices.get(i + 0).getFirst().y);
-                final int x2 = centerX - (int)(400 * vertices.get(i + 1).getFirst().x);
-                final int y2 = centerY - (int)(400 * vertices.get(i + 1).getFirst().y);
-                final int x3 = centerX - (int)(400 * vertices.get(i + 2).getFirst().x);
-                final int y3 = centerY - (int)(400 * vertices.get(i + 2).getFirst().y);
-                final int x4 = centerX - (int)(400 * vertices.get(i + 3).getFirst().x);
-                final int y4 = centerY - (int)(400 * vertices.get(i + 3).getFirst().y);
+                final int x1 = centerX - (int)(l * vertices.get(i + 0).getFirst().x);
+                final int y1 = centerY - (int)(l * vertices.get(i + 0).getFirst().y);
+                final int x2 = centerX - (int)(l * vertices.get(i + 1).getFirst().x);
+                final int y2 = centerY - (int)(l * vertices.get(i + 1).getFirst().y);
+                final int x3 = centerX - (int)(l * vertices.get(i + 2).getFirst().x);
+                final int y3 = centerY - (int)(l * vertices.get(i + 2).getFirst().y);
+                final int x4 = centerX - (int)(l * vertices.get(i + 3).getFirst().x);
+                final int y4 = centerY - (int)(l * vertices.get(i + 3).getFirst().y);
 
+                // Fill rectangles
                 final Color color = vertices.get(i).getSecond();
+                _g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
                 _g.setColor(new Color(
                     (int)(color.getRed() * 0.2),
                     (int)(color.getGreen() * 0.2),
                     (int)(color.getBlue() * 0.2)
                 ));
                 _g.fillPolygon(new int[]{ x1, x2, x3, x4 }, new int[] { y1, y2, y3, y4 }, 4);
+
+                // Draw outlines
+                _g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC, 1.0f));
+                _g.setColor(vertices.get(i).getSecond());
+                _g.drawPolygon(new int[]{ x1, x2, x3, x4 }, new int[] { y1, y2, y3, y4 }, 4);
             }
             catch(IndexOutOfBoundsException e) {
                 //! Empty
@@ -124,22 +130,6 @@ public class UiDebugWindow extends JPanel {
                 //! This is not worth fixing as the debug window is only used as a visual aid during development
                 //! and the problem doesn't have any side effect and usually fixes itself within a frame.
             }
-        }
-
-
-        // Draw outlines
-        _g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC, 1.0f));
-        for(int i = 0; i < vertices.size(); i += 4) {
-            final int x1 = centerX - (int)(400 * vertices.get(i + 0).getFirst().x);
-            final int y1 = centerY - (int)(400 * vertices.get(i + 0).getFirst().y);
-            final int x2 = centerX - (int)(400 * vertices.get(i + 1).getFirst().x);
-            final int y2 = centerY - (int)(400 * vertices.get(i + 1).getFirst().y);
-            final int x3 = centerX - (int)(400 * vertices.get(i + 2).getFirst().x);
-            final int y3 = centerY - (int)(400 * vertices.get(i + 2).getFirst().y);
-            final int x4 = centerX - (int)(400 * vertices.get(i + 3).getFirst().x);
-            final int y4 = centerY - (int)(400 * vertices.get(i + 3).getFirst().y);
-            _g.setColor(vertices.get(i).getSecond());
-            _g.drawPolygon(new int[]{ x1, x2, x3, x4 }, new int[] { y1, y2, y3, y4 }, 4);
         }
 
 
