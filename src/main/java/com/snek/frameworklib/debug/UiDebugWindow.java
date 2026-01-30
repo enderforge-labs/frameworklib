@@ -97,22 +97,33 @@ public class UiDebugWindow extends JPanel {
         // Fill rectangles
         _g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
         for(int i = 0; i < vertices.size(); i += 4) {
-            final int x1 = centerX - (int)(400 * vertices.get(i + 0).getFirst().x);
-            final int y1 = centerY - (int)(400 * vertices.get(i + 0).getFirst().y);
-            final int x2 = centerX - (int)(400 * vertices.get(i + 1).getFirst().x);
-            final int y2 = centerY - (int)(400 * vertices.get(i + 1).getFirst().y);
-            final int x3 = centerX - (int)(400 * vertices.get(i + 2).getFirst().x);
-            final int y3 = centerY - (int)(400 * vertices.get(i + 2).getFirst().y);
-            final int x4 = centerX - (int)(400 * vertices.get(i + 3).getFirst().x);
-            final int y4 = centerY - (int)(400 * vertices.get(i + 3).getFirst().y);
+            try {
+                final int x1 = centerX - (int)(400 * vertices.get(i + 0).getFirst().x);
+                final int y1 = centerY - (int)(400 * vertices.get(i + 0).getFirst().y);
+                final int x2 = centerX - (int)(400 * vertices.get(i + 1).getFirst().x);
+                final int y2 = centerY - (int)(400 * vertices.get(i + 1).getFirst().y);
+                final int x3 = centerX - (int)(400 * vertices.get(i + 2).getFirst().x);
+                final int y3 = centerY - (int)(400 * vertices.get(i + 2).getFirst().y);
+                final int x4 = centerX - (int)(400 * vertices.get(i + 3).getFirst().x);
+                final int y4 = centerY - (int)(400 * vertices.get(i + 3).getFirst().y);
 
-            final Color color = vertices.get(i).getSecond();
-            _g.setColor(new Color(
-                (int)(color.getRed() * 0.2),
-                (int)(color.getGreen() * 0.2),
-                (int)(color.getBlue() * 0.2)
-            ));
-            _g.fillPolygon(new int[]{ x1, x2, x3, x4 }, new int[] { y1, y2, y3, y4 }, 4);
+                final Color color = vertices.get(i).getSecond();
+                _g.setColor(new Color(
+                    (int)(color.getRed() * 0.2),
+                    (int)(color.getGreen() * 0.2),
+                    (int)(color.getBlue() * 0.2)
+                ));
+                _g.fillPolygon(new int[]{ x1, x2, x3, x4 }, new int[] { y1, y2, y3, y4 }, 4);
+            }
+            catch(IndexOutOfBoundsException e) {
+                //! Empty
+
+                //! Sometimes the debug window and the list of vertices aren't properly coordinated,
+                //! so getting vertices by hard coded index can cause out-of-bounds accesses.
+
+                //! This is not worth fixing as the debug window is only used as a visual aid during development
+                //! and the problem doesn't have any side effect and usually fixes itself within a frame.
+            }
         }
 
 
