@@ -158,7 +158,8 @@ public final class MinecraftUtils extends UtilityClassBase {
             return new UUID(buffer.getLong(), buffer.getLong());
 
 
-        } catch(final IOException e) {
+        }
+        catch(final IOException e) {
             throw new AssertionError("An error occurred while generating an item's hash code", e);
         }
     }

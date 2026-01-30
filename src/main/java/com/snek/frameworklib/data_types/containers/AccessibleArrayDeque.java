@@ -1255,7 +1255,8 @@ public class AccessibleArrayDeque<E> extends AbstractCollection<E>
             AccessibleArrayDeque<E> result = (AccessibleArrayDeque<E>) super.clone();
             result.elements = Arrays.copyOf(elements, elements.length);
             return result;
-        } catch(final CloneNotSupportedException e) {
+        }
+        catch(final CloneNotSupportedException e) {
             throw new AssertionError();
         }
     }

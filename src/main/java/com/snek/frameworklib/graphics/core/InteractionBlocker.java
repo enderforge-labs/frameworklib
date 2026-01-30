@@ -151,7 +151,8 @@ public class InteractionBlocker {
         /*!  │  */    if(result == 0) {                                                                                     //!
         /*!  │  */        FrameworkLib.LOGGER.warn("Interaction entity update command found no matching entities");         //!
         /*!  │  */    }                                                                                                     //!
-        /*!  │  */} catch(final CommandSyntaxException e) {                                                                 //!
+        /*!  │  */}                                                                                                         //!
+        /*!  │  */catch(final CommandSyntaxException e) {                                                                   //!
         /*!  │  */    FrameworkLib.LOGGER.error("Incorrect syntax for interaction entity update command", e);               //!
         /*!  │  */}                                                                                                         //!
         //!  │                                                                                                              //!

@@ -55,7 +55,8 @@ public abstract class FontDataGenerator {
         final Path dirPath = FabricLoader.getInstance().getConfigDir().resolve(PACKAGE_PATH);
         try {
             Files.createDirectories(dirPath);
-        } catch(final IOException e) {
+        }
+        catch(final IOException e) {
             FrameworkLib.LOGGER.error("Couldn't create configuration directory \"{}\".", dirPath, e);
         }
 
@@ -113,7 +114,8 @@ public abstract class FontDataGenerator {
 
 
             f.write("}");
-        } catch(final IOException e) {
+        }
+        catch(final IOException e) {
             FrameworkLib.LOGGER.error("Couldn't write font data file \"{}\".", filePath, e);
         }
 

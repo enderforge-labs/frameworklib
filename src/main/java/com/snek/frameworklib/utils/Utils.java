@@ -76,7 +76,8 @@ public final class Utils extends UtilityClassBase {
 
         try {
             return method.invoke(target, args);
-        } catch(final IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+        }
+        catch(final IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             FrameworkLib.LOGGER.error("Failed to invoke the specified method", e);
         }
         return null;
@@ -100,7 +101,8 @@ public final class Utils extends UtilityClassBase {
             // Wait for the delay
             try {
                 Thread.sleep(delay);
-            } catch(final InterruptedException e) {
+            }
+            catch(final InterruptedException e) {
                 FrameworkLib.LOGGER.warn("Async task interrupted, proceeding with execution", e);
                 Thread.currentThread().interrupt();
             }
@@ -108,7 +110,8 @@ public final class Utils extends UtilityClassBase {
             // Run task
             try {
                 task.run();
-            } catch(final Exception e) {
+            }
+            catch(final Exception e) {
                 FrameworkLib.LOGGER.error("Async task failed", e);
             }
 

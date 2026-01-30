@@ -129,7 +129,8 @@ public final class PlayerDataCache extends UtilityClassBase {
                     //FIXME add proper message and fallback logic
                 }
             }
-        } catch(final IOException e) {
+        }
+        catch(final IOException e) {
             e.printStackTrace();
             //FIXME add proper message and fallback logic
         }
@@ -167,7 +168,8 @@ public final class PlayerDataCache extends UtilityClassBase {
     private static void saveCache(final @NotNull UUID playerUUID) {
         try {
             Files.writeString(calcFilePath(playerUUID), GSON.toJson(cache.get(playerUUID)));
-        } catch (final IOException e) {
+        }
+        catch (final IOException e) {
             e.printStackTrace();
             //FIXME add proper message and fallback logic
         }
