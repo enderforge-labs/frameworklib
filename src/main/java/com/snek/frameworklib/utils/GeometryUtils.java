@@ -117,7 +117,7 @@ public final class GeometryUtils extends UtilityClassBase {
             new Vector2f(c4.dot(right), c4.dot(up))
         };
 
-        //! Debug draw calls
+        //! Debug draw calls //TODO move to actual graphics. this shouldn't be in the utility method call as it could be used for other stuff
         if(DebugCheck.isDebug()) {
             UiDebugWindow.getW().add(p[0]);
             UiDebugWindow.getW().add(p[1]);

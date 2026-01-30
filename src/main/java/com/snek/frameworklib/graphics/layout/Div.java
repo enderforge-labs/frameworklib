@@ -15,7 +15,9 @@ import com.snek.frameworklib.data_types.animations.Transition;
 import com.snek.frameworklib.data_types.graphics.AlignmentX;
 import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.PolylineData;
+import com.snek.frameworklib.debug.DebugCheck;
 import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.debug.UiDebugWindow;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.HudContext;
@@ -780,6 +782,11 @@ public class Div {
     public @Nullable Vector2f checkIntersection(final @NotNull Player player, final boolean calculateIntersectionCoords) {
         assert Require.nonNull(player, "player");
         if(!isSpawned) return null;
+
+        //! Debug window - update element reference
+        if(DebugCheck.isDebug()) {
+            UiDebugWindow.changeElm(this);
+        }
 
         // Calculate the positions of the 4 corners and compute the intersection
         return GeometryUtils.findLineRectangleIntersection(

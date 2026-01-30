@@ -5,16 +5,28 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 
-import com.snek.frameworklib.data_types.containers.Pair;
+import com.snek.frameworklib.data_types.containers.Triplet;
+import com.snek.frameworklib.graphics.core.Context;
+import com.snek.frameworklib.graphics.interfaces.Clickable;
+import com.snek.frameworklib.graphics.interfaces.Hoverable;
+import com.snek.frameworklib.graphics.interfaces.Scrollable;
+import com.snek.frameworklib.graphics.layout.Div;
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Polygon;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +42,8 @@ public class UiDebugWindow extends JPanel {
     private static JFrame frame;
     public static @NotNull UiDebugWindow getW() { return w; }
     public static @NotNull JFrame getFrame() { return frame; }
+    private Point cursorPosition = null;
+
 
     static {
         if(DebugCheck.isDebug()) {
@@ -61,18 +75,47 @@ public class UiDebugWindow extends JPanel {
         }
     }
 
+
+
+    @SuppressWarnings("java:S4144") //! Identical definitions
+    public UiDebugWindow() {
+
+        // Track cursor movement
+        addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                cursorPosition = e.getPoint();
+                repaint();
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                cursorPosition = e.getPoint();
+                repaint();
+            }
+        });
+    }
+
+
+
+
     private static @NotNull Color currentColor = Color.WHITE;
-    private final @NotNull List<@NotNull Pair<@NotNull Vector2f, @NotNull Color>> vertices = new ArrayList<>();
+    private static @NotNull Div currentElm = null;
+    private final @NotNull List<@NotNull Triplet<Vector2f, Color, Div>> vertices = new ArrayList<>();
 
 
     public static void changeColor(final @NotNull Color newColor) {
         assert Require.nonNull(newColor, "new color");
         currentColor = newColor;
     }
+    public static void changeElm(final @NotNull Div newElm) {
+        assert Require.nonNull(newElm, "new element");
+        currentElm = newElm;
+    }
 
     public void add(final @NotNull Vector2f v) {
         assert Require.nonNull(v, "vector");
-        vertices.add(Pair.from(v, currentColor));
+        vertices.add(Triplet.from(v, currentColor, currentElm));
     }
 
     public void clear() {
@@ -94,6 +137,7 @@ public class UiDebugWindow extends JPanel {
         final int centerY = height / 2;
 
 
+        Div renderedElm = null;
         final int l = (int)(Math.min(width, height) * 0.5f);
         for(int i = 0; i < vertices.size(); i += 4) {
             try {
@@ -106,20 +150,36 @@ public class UiDebugWindow extends JPanel {
                 final int x4 = centerX - (int)(l * vertices.get(i + 3).getFirst().x);
                 final int y4 = centerY - (int)(l * vertices.get(i + 3).getFirst().y);
 
+
                 // Fill rectangles
                 final Color color = vertices.get(i).getSecond();
                 _g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
                 _g.setColor(new Color(
-                    (int)(color.getRed() * 0.2),
+                    (int)(color.getRed()   * 0.2),
                     (int)(color.getGreen() * 0.2),
-                    (int)(color.getBlue() * 0.2)
+                    (int)(color.getBlue()  * 0.2)
                 ));
                 _g.fillPolygon(new int[]{ x1, x2, x3, x4 }, new int[] { y1, y2, y3, y4 }, 4);
+
 
                 // Draw outlines
                 _g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC, 1.0f));
                 _g.setColor(vertices.get(i).getSecond());
                 _g.drawPolygon(new int[]{ x1, x2, x3, x4 }, new int[] { y1, y2, y3, y4 }, 4);
+
+
+                // Find targeted element
+                final Div elm = vertices.get(i).getThird();
+                if(elm != null && cursorPosition != null) {
+                    Polygon polygon = new Polygon();
+                    polygon.addPoint(x1, y1);
+                    polygon.addPoint(x2, y2);
+                    polygon.addPoint(x3, y3);
+                    polygon.addPoint(x4, y4);
+                    if(polygon.contains(cursorPosition)) {
+                        renderedElm = elm;
+                    }
+                }
             }
             catch(IndexOutOfBoundsException e) {
                 //! Empty
@@ -133,10 +193,98 @@ public class UiDebugWindow extends JPanel {
         }
 
 
-        // Draw center
-        _g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+        // Draw info lines
+        final int fontSize = 16;
+        final int lineDist = 5;
+        final int borderDist = 10;
+        _g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC, 1f));
+        _g.setColor(Color.WHITE);
+        _g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, fontSize));
+        final FontMetrics fm = _g.getFontMetrics();
+
+        // True targeted elm info (targeted by the player in game, left side)
+        final var a = Context.getActiveContexts().values().iterator();
+        final var b = a.hasNext() ? a.next() : null;
+        final Context context = (b == null || b.isEmpty()) ? null : b.get(0);
+        final String[] targetedElmLines = computeElmInfoLines(context == null ? null : context.getTargetedElm(), context == null ? "-" : context.getPlayer().getName().getString(), true);
+        for(int i = 0; i < targetedElmLines.length; ++i) {
+            final String line = targetedElmLines[i];
+            _g.drawString(line, width - fm.stringWidth(line) - borderDist, (fontSize + borderDist) + (fontSize + lineDist) * i);
+        }
+
+        // Rendered elm info (targeted by the cursor in the window, right side)
+        final String[] renderedElmLines = computeElmInfoLines(renderedElm, "Debug window", false);
+        for(int i = 0; i < renderedElmLines.length; ++i) {
+            final String line = renderedElmLines[i];
+            _g.drawString(line, borderDist, (fontSize + borderDist) + (fontSize + lineDist) * i);
+        }
+
+
+        // Draw cursor center
+        if(cursorPosition != null) {
+            _g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
+            _g.setColor(Color.WHITE);
+            _g.drawLine(cursorPosition.x, 0, cursorPosition.x, height);
+            _g.drawLine(0, cursorPosition.y, width, cursorPosition.y);
+        }
+
+        // Draw in-game center
+        _g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
         _g.setColor(Color.WHITE);
         _g.drawLine(centerX, 0, centerX, height);
         _g.drawLine(0, centerY, width, centerY);
+    }
+
+
+
+
+
+
+
+    private static final String[] computeElmInfoLines(final @Nullable Div elm, final @NotNull String sourceName, final boolean alignRight) {
+        if(elm == null) {
+            return new String[]{};
+        }
+        return new String[]{
+            elm.getClass().getCanonicalName(),
+            elm.getClass().getSimpleName(),
+            "",
+            "SOURCE: " + sourceName,
+            "hoverable: " + (elm instanceof Hoverable ? "yes" : "no"),
+            "clickable: " + (elm instanceof Clickable ? "yes" : "no"),
+            "scrollable: " + (elm instanceof Scrollable ? "yes" : "no"),
+            "",
+            "hovered: " + (elm.isHovered() ? "yes" : "no"),
+            "alignment: ",
+            computeVectorFieldString(elm.getAlignmentX().name(), "X", alignRight),
+            computeVectorFieldString(elm.getAlignmentY().name(), "Y", alignRight),
+            "world origin: ",
+            computeVectorFieldString(elm.__calcVisualOrigin().x, "X", alignRight),
+            computeVectorFieldString(elm.__calcVisualOrigin().y, "Y", alignRight),
+            computeVectorFieldString(elm.__calcVisualOrigin().z, "Z", alignRight),
+            "",
+            "relPos: ",
+            computeVectorFieldString(elm.getAbsPos().x, "X", alignRight),
+            computeVectorFieldString(elm.getAbsPos().y, "Y", alignRight),
+            "absPos: ",
+            computeVectorFieldString(elm.getLocalPos().x, "X", alignRight),
+            computeVectorFieldString(elm.getLocalPos().y, "Y", alignRight),
+            "",
+            "relSize: ",
+            computeVectorFieldString(elm.getAbsSize().x, "X", alignRight),
+            computeVectorFieldString(elm.getAbsSize().y, "Y", alignRight),
+            "absSize: ",
+            "    X: " + elm.getLocalSize().x,
+            computeVectorFieldString(elm.getLocalSize().y, "Y", alignRight),
+        };
+    }
+
+
+
+    private static <T> String computeVectorFieldString(final T value, final String fieldName, final boolean alignRight) {
+        return alignRight ?
+            ("" + value + " :" + fieldName) :
+            ("    " + fieldName + ": " + value)
+        ;
     }
 }

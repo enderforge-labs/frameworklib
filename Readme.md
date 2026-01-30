@@ -36,6 +36,7 @@ This makes it compatible with all clients and most mods and modpacks.
 - Debug mode detection
 - Inspector window for graphic elements
 - Precondition checks
+//TODO add images of the debug window
 
 ### Misc
 
