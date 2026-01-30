@@ -7,9 +7,11 @@ import javax.swing.WindowConstants;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 import com.snek.frameworklib.data_types.containers.Triplet;
 import com.snek.frameworklib.graphics.core.Context;
+import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
@@ -249,45 +251,39 @@ public class GraphicsDebugWindow extends JPanel {
             return new String[]{};
         }
         return new String[]{
-            elm.getClass().getCanonicalName(),
             elm.getClass().getSimpleName(),
-            "",
             "SOURCE: " + sourceName,
+            "Path: " + elm.getClass().getCanonicalName(),
+            "Style: " + (elm instanceof Elm e ? ("" + e.getStyle().getClass().getCanonicalName()) : "-"),
+            "",
             "Hoverable: " + (elm instanceof Hoverable ? "yes" : "no"),
             "Clickable: " + (elm instanceof Clickable ? "yes" : "no"),
             "Scrollable: " + (elm instanceof Scrollable ? "yes" : "no"),
             "",
+            "World origin: " + getVectorString(elm.__calcVisualOrigin()),
             "Hovered: " + (elm.isHovered() ? "yes" : "no"),
-            "Alignment",
-            computeVectorFieldString(elm.getAlignmentX().name(), "X", alignRight),
-            computeVectorFieldString(elm.getAlignmentY().name(), "Y", alignRight),
-            "World origin",
-            computeVectorFieldString(elm.__calcVisualOrigin().x, "X", alignRight),
-            computeVectorFieldString(elm.__calcVisualOrigin().y, "Y", alignRight),
-            computeVectorFieldString(elm.__calcVisualOrigin().z, "Z", alignRight),
+            "Data queue: " + (elm instanceof Elm e ? ("" + e.getDataQueueSize()) : "-"),
             "",
-            "RelPos",
-            computeVectorFieldString(elm.getAbsPos().x, "X", alignRight),
-            computeVectorFieldString(elm.getAbsPos().y, "Y", alignRight),
-            "AbsPos",
-            computeVectorFieldString(elm.getLocalPos().x, "X", alignRight),
-            computeVectorFieldString(elm.getLocalPos().y, "Y", alignRight),
-            "",
-            "RelSize",
-            computeVectorFieldString(elm.getAbsSize().x, "X", alignRight),
-            computeVectorFieldString(elm.getAbsSize().y, "Y", alignRight),
-            "AbsSize",
-            computeVectorFieldString(elm.getLocalSize().x, "X", alignRight),
-            computeVectorFieldString(elm.getLocalSize().y, "Y", alignRight),
+            "Alignment: (" + elm.getAlignmentX().name() + ", " + elm.getAlignmentY().name() + ")",
+            "RelPos: " + getVectorString(elm.getAbsPos()),
+            "AbsPos: " + getVectorString(elm.getLocalPos()),
+            "RelSize: " + getVectorString(elm.getAbsSize()),
+            "AbsSize: " + getVectorString(elm.getLocalSize()),
         };
     }
 
 
 
-    private static <T> String computeVectorFieldString(final T value, final String fieldName, final boolean alignRight) {
-        return alignRight ?
-            ("" + value + " :" + fieldName + "  ") :
-            ("  " + fieldName + ": " + value)
-        ;
+    // private static <T> String computeVectorFieldString(final T value, final String fieldName, final boolean alignRight) {
+    //     return alignRight ?
+    //         ("" + value + " :" + fieldName + "  ") :
+    //         ("  " + fieldName + ": " + value)
+    //     ;
+    // }
+    private static String getVectorString(final @NotNull Vector3f v) {
+        return "(" + String.format("(%.4f, %.4f, %.4f)", v.x, v.y, v.z) + ")";
+    }
+    private static String getVectorString(final @NotNull Vector2f v) {
+        return "(" + String.format("(%.4f, %.4f)", v.x, v.y) + ")";
     }
 }
