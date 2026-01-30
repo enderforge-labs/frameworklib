@@ -21,7 +21,6 @@ import com.snek.frameworklib.graphics.layout.Div;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
@@ -242,7 +241,7 @@ public class GraphicsDebugWindow extends JPanel {
             "Display entities: " + getEntityCount(Elm.ENTITY_CUSTOM_NAME),
             "Hitbox entities:  " + getEntityCount(InteractionBlocker.ENTITY_CUSTOM_NAME),
         };
-        for(int i = statsLines.length; i >= 0; --i) {
+        for(int i = statsLines.length - 1; i >= 0; --i) {
             final String line = statsLines[i];
             _g.drawString(line, borderDist, height - borderDist - (fontSize + lineDist) * (statsLines.length - 1 - i));
         }
@@ -311,7 +310,8 @@ public class GraphicsDebugWindow extends JPanel {
         int r = 0;
         for(final ServerLevel level : FrameworkLib.getServer().getAllLevels()) {
             for(final Entity entity : level.getAllEntities()) {
-                if(entity.getCustomName().getString().equals(customName)) ++r;
+                final var name = entity.getCustomName();
+                if(name != null && name.getString().equals(customName)) ++r;
             }
         }
         return r;
