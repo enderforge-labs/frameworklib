@@ -25,6 +25,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -131,6 +132,8 @@ public class GraphicsDebugWindow extends JPanel {
 
         super.paintComponent(g);
         final Graphics2D _g = (Graphics2D)g;
+        _g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        _g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         final int width = getWidth();
         final int height = getHeight();
         final int centerX = width / 2;
@@ -250,31 +253,31 @@ public class GraphicsDebugWindow extends JPanel {
             elm.getClass().getSimpleName(),
             "",
             "SOURCE: " + sourceName,
-            "hoverable: " + (elm instanceof Hoverable ? "yes" : "no"),
-            "clickable: " + (elm instanceof Clickable ? "yes" : "no"),
-            "scrollable: " + (elm instanceof Scrollable ? "yes" : "no"),
+            "Hoverable: " + (elm instanceof Hoverable ? "yes" : "no"),
+            "Clickable: " + (elm instanceof Clickable ? "yes" : "no"),
+            "Scrollable: " + (elm instanceof Scrollable ? "yes" : "no"),
             "",
-            "hovered: " + (elm.isHovered() ? "yes" : "no"),
-            "alignment: ",
+            "Hovered: " + (elm.isHovered() ? "yes" : "no"),
+            "Alignment",
             computeVectorFieldString(elm.getAlignmentX().name(), "X", alignRight),
             computeVectorFieldString(elm.getAlignmentY().name(), "Y", alignRight),
-            "world origin: ",
+            "World origin",
             computeVectorFieldString(elm.__calcVisualOrigin().x, "X", alignRight),
             computeVectorFieldString(elm.__calcVisualOrigin().y, "Y", alignRight),
             computeVectorFieldString(elm.__calcVisualOrigin().z, "Z", alignRight),
             "",
-            "relPos: ",
+            "RelPos",
             computeVectorFieldString(elm.getAbsPos().x, "X", alignRight),
             computeVectorFieldString(elm.getAbsPos().y, "Y", alignRight),
-            "absPos: ",
+            "AbsPos",
             computeVectorFieldString(elm.getLocalPos().x, "X", alignRight),
             computeVectorFieldString(elm.getLocalPos().y, "Y", alignRight),
             "",
-            "relSize: ",
+            "RelSize",
             computeVectorFieldString(elm.getAbsSize().x, "X", alignRight),
             computeVectorFieldString(elm.getAbsSize().y, "Y", alignRight),
-            "absSize: ",
-            "    X: " + elm.getLocalSize().x,
+            "AbsSize",
+            computeVectorFieldString(elm.getLocalSize().x, "X", alignRight),
             computeVectorFieldString(elm.getLocalSize().y, "Y", alignRight),
         };
     }
@@ -283,8 +286,8 @@ public class GraphicsDebugWindow extends JPanel {
 
     private static <T> String computeVectorFieldString(final T value, final String fieldName, final boolean alignRight) {
         return alignRight ?
-            ("" + value + " :" + fieldName) :
-            ("    " + fieldName + ": " + value)
+            ("" + value + " :" + fieldName + "  ") :
+            ("  " + fieldName + ": " + value)
         ;
     }
 }
