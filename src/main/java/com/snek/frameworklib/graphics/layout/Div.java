@@ -17,7 +17,7 @@ import com.snek.frameworklib.data_types.graphics.AlignmentY;
 import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.debug.DebugCheck;
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.debug.UiDebugWindow;
+import com.snek.frameworklib.debug.GraphicsDebugWindow;
 import com.snek.frameworklib.graphics.composite.elements.PolylineSetElm;
 import com.snek.frameworklib.graphics.core.Canvas;
 import com.snek.frameworklib.graphics.core.HudContext;
@@ -785,7 +785,7 @@ public class Div {
 
         //! Debug window - update element reference
         if(DebugCheck.isDebug()) {
-            UiDebugWindow.changeElm(this);
+            GraphicsDebugWindow.changeElm(this);
         }
 
         // Calculate the positions of the 4 corners and compute the intersection

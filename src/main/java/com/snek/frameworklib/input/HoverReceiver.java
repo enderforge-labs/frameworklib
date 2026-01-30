@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import com.snek.frameworklib.configs.Configs;
 import com.snek.frameworklib.debug.DebugCheck;
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.debug.UiDebugWindow;
+import com.snek.frameworklib.debug.GraphicsDebugWindow;
 import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.UtilityClassBase;
@@ -119,8 +119,8 @@ public final class HoverReceiver extends UtilityClassBase {
 
         //! Debug window
         if(DebugCheck.isDebug()) {
-            UiDebugWindow.getW().clear();
-            UiDebugWindow.changeColor(Color.GREEN);
+            GraphicsDebugWindow.getW().clear();
+            GraphicsDebugWindow.changeColor(Color.GREEN);
         }
 
 
@@ -134,7 +134,7 @@ public final class HoverReceiver extends UtilityClassBase {
 
             // Find targeted context and send hover updates
             final @Nullable Context targetedContext = updateTargetedContext(player);
-            if(DebugCheck.isDebug()) UiDebugWindow.changeColor(Color.GREEN);
+            if(DebugCheck.isDebug()) GraphicsDebugWindow.changeColor(Color.GREEN);
             if(targetedContext != null) {
                 targetedContext.forwardHover(player);
                 updatedContexts.add(targetedContext);
@@ -150,12 +150,12 @@ public final class HoverReceiver extends UtilityClassBase {
 
         //! Debug window update
         if(DebugCheck.isDebug()) {
-            UiDebugWindow.getW().repaint();
+            GraphicsDebugWindow.getW().repaint();
             SwingUtilities.invokeLater(() -> {
-                final BufferStrategy bs = UiDebugWindow.getFrame().getBufferStrategy();
+                final BufferStrategy bs = GraphicsDebugWindow.getFrame().getBufferStrategy();
                 if(bs != null) {
                     final Graphics g = bs.getDrawGraphics();
-                    UiDebugWindow.getW().paint(g);
+                    GraphicsDebugWindow.getW().paint(g);
                     g.dispose();
                     bs.show();
                 }
@@ -193,7 +193,7 @@ public final class HoverReceiver extends UtilityClassBase {
 
         // Trace context elements for debugging
         if(DebugCheck.isDebug() && topMost != null && topMost.getActiveCanvas() != null) {
-            UiDebugWindow.changeColor(Color.GRAY);
+            GraphicsDebugWindow.changeColor(Color.GRAY);
             traceElements(topMost.getActiveCanvas(), player);
         }
 

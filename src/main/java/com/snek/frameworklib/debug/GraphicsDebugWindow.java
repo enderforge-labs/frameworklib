@@ -37,10 +37,10 @@ import java.util.List;
 
 
 
-public class UiDebugWindow extends JPanel {
-    private static UiDebugWindow w = null;
+public class GraphicsDebugWindow extends JPanel {
+    private static GraphicsDebugWindow w = null;
     private static JFrame frame;
-    public static @NotNull UiDebugWindow getW() { return w; }
+    public static @NotNull GraphicsDebugWindow getW() { return w; }
     public static @NotNull JFrame getFrame() { return frame; }
     private Point cursorPosition = null;
 
@@ -53,7 +53,7 @@ public class UiDebugWindow extends JPanel {
             System.setProperty("sun.java2d.noddraw", "true");
             System.setProperty("sun.java2d.pmoffscreen", "false");
 
-            w = new UiDebugWindow();
+            w = new GraphicsDebugWindow();
             frame = new JFrame("FrameworkLib - Graphics debug window");
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             frame.setAlwaysOnTop(true);
@@ -78,7 +78,7 @@ public class UiDebugWindow extends JPanel {
 
 
     @SuppressWarnings("java:S4144") //! Identical definitions
-    public UiDebugWindow() {
+    public GraphicsDebugWindow() {
 
         // Track cursor movement
         addMouseMotionListener(new MouseAdapter() {

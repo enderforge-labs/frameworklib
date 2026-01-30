@@ -7,7 +7,7 @@ import org.joml.Vector3f;
 
 import com.snek.frameworklib.debug.DebugCheck;
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.debug.UiDebugWindow;
+import com.snek.frameworklib.debug.GraphicsDebugWindow;
 
 
 
@@ -119,10 +119,10 @@ public final class GeometryUtils extends UtilityClassBase {
 
         //! Debug draw calls //TODO move to actual graphics. this shouldn't be in the utility method call as it could be used for other stuff
         if(DebugCheck.isDebug()) {
-            UiDebugWindow.getW().add(p[0]);
-            UiDebugWindow.getW().add(p[1]);
-            UiDebugWindow.getW().add(p[2]);
-            UiDebugWindow.getW().add(p[3]);
+            GraphicsDebugWindow.getW().add(p[0]);
+            GraphicsDebugWindow.getW().add(p[1]);
+            GraphicsDebugWindow.getW().add(p[2]);
+            GraphicsDebugWindow.getW().add(p[3]);
         }
 
 
