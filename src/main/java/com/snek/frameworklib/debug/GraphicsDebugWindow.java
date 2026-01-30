@@ -9,13 +9,19 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.containers.Triplet;
 import com.snek.frameworklib.graphics.core.Context;
+import com.snek.frameworklib.graphics.core.InteractionBlocker;
 import com.snek.frameworklib.graphics.core.elements.Elm;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.graphics.layout.Div;
+
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
@@ -198,6 +204,8 @@ public class GraphicsDebugWindow extends JPanel {
         }
 
 
+
+
         // Draw info lines
         final int fontSize = 16;
         final int lineDist = 5;
@@ -211,18 +219,35 @@ public class GraphicsDebugWindow extends JPanel {
         final var a = Context.getActiveContexts().values().iterator();
         final var b = a.hasNext() ? a.next() : null;
         final Context context = (b == null || b.isEmpty()) ? null : b.get(0);
-        final String[] targetedElmLines = computeElmInfoLines(context == null ? null : context.getTargetedElm(), context == null ? "-" : context.getPlayer().getName().getString(), true);
+        final String[] targetedElmLines = computeElmInfoLines(
+            context == null ? null : context.getTargetedElm(),
+            context == null ? "-" : context.getPlayer().getName().getString()
+        );
         for(int i = 0; i < targetedElmLines.length; ++i) {
             final String line = targetedElmLines[i];
             _g.drawString(line, width - fm.stringWidth(line) - borderDist, (fontSize + borderDist) + (fontSize + lineDist) * i);
         }
 
         // Rendered elm info (targeted by the cursor in the window, right side)
-        final String[] renderedElmLines = computeElmInfoLines(renderedElm, "Debug window", false);
+        final String[] renderedElmLines = computeElmInfoLines(renderedElm, "Debug window");
         for(int i = 0; i < renderedElmLines.length; ++i) {
             final String line = renderedElmLines[i];
             _g.drawString(line, borderDist, (fontSize + borderDist) + (fontSize + lineDist) * i);
         }
+
+        // Render stats
+        final String[] statsLines = {
+            "Players: " + FrameworkLib.getServer().getPlayerCount(),
+            "Active contexts:  " + Context.getActiveContexts().size(),
+            "Display entities: " + getEntityCount(Elm.ENTITY_CUSTOM_NAME),
+            "Hitbox entities:  " + getEntityCount(InteractionBlocker.ENTITY_CUSTOM_NAME),
+        };
+        for(int i = statsLines.length; i >= 0; --i) {
+            final String line = statsLines[i];
+            _g.drawString(line, borderDist, height - borderDist - (fontSize + lineDist) * (statsLines.length - 1 - i));
+        }
+
+
 
 
         // Draw cursor center
@@ -246,7 +271,7 @@ public class GraphicsDebugWindow extends JPanel {
 
 
 
-    private static final String[] computeElmInfoLines(final @Nullable Div elm, final @NotNull String sourceName, final boolean alignRight) {
+    private static final String[] computeElmInfoLines(final @Nullable Div elm, final @NotNull String sourceName) {
         if(elm == null) {
             return new String[]{};
         }
@@ -274,16 +299,21 @@ public class GraphicsDebugWindow extends JPanel {
 
 
 
-    // private static <T> String computeVectorFieldString(final T value, final String fieldName, final boolean alignRight) {
-    //     return alignRight ?
-    //         ("" + value + " :" + fieldName + "  ") :
-    //         ("  " + fieldName + ": " + value)
-    //     ;
-    // }
     private static String getVectorString(final @NotNull Vector3f v) {
         return "(" + String.format("(%.4f, %.4f, %.4f)", v.x, v.y, v.z) + ")";
     }
     private static String getVectorString(final @NotNull Vector2f v) {
         return "(" + String.format("(%.4f, %.4f)", v.x, v.y) + ")";
+    }
+
+
+    private static int getEntityCount(final @NotNull String customName) {
+        int r = 0;
+        for(final ServerLevel level : FrameworkLib.getServer().getAllLevels()) {
+            for(final Entity entity : level.getAllEntities()) {
+                if(entity.getCustomName().getString().equals(customName)) ++r;
+            }
+        }
+        return r;
     }
 }
