@@ -22,7 +22,7 @@ import com.snek.frameworklib.debug.Require;
 
 
 /**
- * A utility class that provides a collection of handy methods.
+ * A utility class that provides a collection of handy methods not strictly related to Minecraft.
  * @since v1.1.0
  */
 public final class Utils extends UtilityClassBase {

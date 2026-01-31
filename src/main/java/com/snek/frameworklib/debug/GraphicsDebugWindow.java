@@ -19,6 +19,7 @@ import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.graphics.layout.Div;
 import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.NetworkUtils;
 import com.snek.frameworklib.utils.Utils;
 import com.snek.frameworklib.utils.Utils.SizeUnits;
 
@@ -281,7 +282,7 @@ public class GraphicsDebugWindow extends JPanel {
 
         final var rawEntity = elm instanceof Elm e ? e.getEntity().getRawEntity() : null;
         final String rawEntityString = rawEntity == null ? "-" : rawEntity.getClass().getSimpleName() + "@" +  Integer.toHexString(System.identityHashCode(rawEntity));
-        final long payloadSize = rawEntity == null ? 0L : MinecraftUtils.getEntityPayloadSize(rawEntity);
+        final long payloadSize = rawEntity == null ? 0L : NetworkUtils.calcEntityPayloadSize(rawEntity);
         return new String[]{
             elm.getClass().getSimpleName(),
             "SOURCE: " + sourceName,

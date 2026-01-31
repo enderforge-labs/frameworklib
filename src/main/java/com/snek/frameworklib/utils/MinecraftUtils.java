@@ -23,7 +23,6 @@ import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.cache.PlayerDataCache;
 import com.snek.frameworklib.debug.Require;
 
-import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -32,20 +31,13 @@ import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
-import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.LingeringPotionItem;
@@ -457,61 +449,6 @@ public final class MinecraftUtils extends UtilityClassBase {
 
 
     /**
-     * Plays a sound on the client of the specified player.
-     * <p>
-     * Other players won't be able to hear it.
-     * @param player The player.
-     * @param sound The sound to play.
-     * @param volume The sound's volume.
-     * @param pitch The sound's pitch.
-     */
-    public static void playSoundClient(final @NotNull Player player, final @NotNull SoundEvent sound, final float volume, final float pitch) {
-        assert Require.nonNull(player, "player");
-        assert Require.nonNull(sound, "sound");
-        assert Require.nonNegative(volume, "volume");
-        assert Require.nonNegative(pitch, "pitch");
-
-        ((ServerPlayer)player).connection.send(
-            new ClientboundSoundPacket(
-                Holder.direct(sound),
-                SoundSource.BLOCKS,
-                player.getX(), player.getY(), player.getZ(),
-                volume, pitch,
-                player.level().getRandom().nextLong()
-            )
-        );
-    }
-
-
-
-
-    /**
-     * Sends a slot update to the client of the specified player.
-     * @param player The player.
-     * @param slot The ID of the slot to update.
-     * @param stack The item stack to set.
-     */
-    public static void sendClientSlotUpdate(final @NotNull Player player, final int slot, final @NotNull ItemStack stack) {
-        assert Require.nonNull(player, "player");
-        assert Require.nonNegative(slot, "slot");
-        assert Require.nonNull(stack, "stack");
-
-        ((ServerPlayer)player).connection.send(new ClientboundContainerSetSlotPacket(
-            InventoryMenu.CONTAINER_ID,
-            player.containerMenu.getStateId(),
-            slot,
-            stack
-        ));
-    }
-
-
-
-
-
-
-
-
-    /**
      * Returns the custom name of an item. If the item has no custom name, the default name is returned.
      * <p>
      * Potions and Tipped Arrows include the first of their effects.
@@ -792,70 +729,5 @@ public final class MinecraftUtils extends UtilityClassBase {
     public static double getPlayerStandingEyeHeight(final @NotNull Player player) {
         assert Require.nonNull(player, "player");
         return player.getStandingEyeHeight(Pose.STANDING, player.getDimensions(Pose.STANDING));
-    }
-
-
-
-
-
-
-
-
-    /**
-     * Calculates the size in bytes of an entity's compressed data.
-     * <p>
-     * This should be a close approximation of what is sent to the client.
-     * <p>
-     * Notice: This method has to serialize and compress the data in order to calculate its size.
-     *     This can be very expensive for complex entities.
-     *     The returned value should be cached whenever possible.
-     * @param entity The entity.
-     * @return The size of the entity's compressed data, in bytes. -1 if errors occur.
-     */
-    public static long getEntityPayloadSize(final @NotNull Entity entity) {
-        final CompoundTag nbt = new CompoundTag();
-        entity.saveWithoutId(nbt);
-        return getCompressedDataSize(nbt);
-    }
-
-
-    /**
-     * Calculates the size in bytes of an item's compressed data.
-     * <p>
-     * This should be a close approximation of what is sent to the client.
-     * <p>
-     * Notice: This method has to serialize and compress the data in order to calculate its size.
-     *     This can be very expensive for complex entities.
-     *     The returned value should be cached whenever possible.
-     * @param itemStack The item.
-     * @return The size of the item's compressed data, in bytes. -1 if errors occur.
-     */
-    public static long getItemPayloadSize(final @NotNull ItemStack itemStack) {
-        final CompoundTag nbt = new CompoundTag();
-        itemStack.save(nbt);
-        return getCompressedDataSize(nbt);
-    }
-
-
-    /**
-     * Calculates the size in bytes the provided NBT data has when compressed.
-     * @param nbt The NBT data.
-     * @return The size of the compressed data, in bytes. -1 if errors occur.
-     */
-    private static long getCompressedDataSize(final @NotNull CompoundTag nbt){
-        try {
-
-            // Serialize the NBT to compressed bytes
-            final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-            final DataOutputStream dataStream = new DataOutputStream(byteStream);
-            NbtIo.write(nbt, dataStream);
-
-            // Return the compressed size
-            return byteStream.toByteArray().length;
-        }
-        catch (final IOException e) {
-            e.printStackTrace();
-            return -1;
-        }
     }
 }
