@@ -11,6 +11,7 @@ import org.joml.Vector3f;
 
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.data_types.containers.Triplet;
+import com.snek.frameworklib.graphics.basic.elements.PanelTextElm;
 import com.snek.frameworklib.graphics.core.Context;
 import com.snek.frameworklib.graphics.core.InteractionBlocker;
 import com.snek.frameworklib.graphics.core.elements.Elm;
@@ -150,7 +151,8 @@ public class GraphicsDebugWindow extends JPanel {
         final int centerY = height / 2;
 
 
-        Div renderedElm = null;
+        Div debugWindow_targetedElm = null;
+        Div debugWindow_centerElm = null;
         final int l = (int)(Math.min(width, height) * 0.5f);
         for(int i = 0; i < vertices.size(); i += 4) {
             try {
@@ -189,8 +191,12 @@ public class GraphicsDebugWindow extends JPanel {
                     polygon.addPoint(x2, y2);
                     polygon.addPoint(x3, y3);
                     polygon.addPoint(x4, y4);
+
                     if(polygon.contains(cursorPosition)) {
-                        renderedElm = elm;
+                        debugWindow_targetedElm = elm;
+                    }
+                    if(polygon.contains(new Point(width / 2, height / 2))) {
+                        debugWindow_centerElm = elm;
                     }
                 }
             }
@@ -223,8 +229,8 @@ public class GraphicsDebugWindow extends JPanel {
         final var b = a.hasNext() ? a.next() : null;
         final Context context = (b == null || b.isEmpty()) ? null : b.get(0);
         final String[] targetedElmLines = computeElmInfoLines(
-            context == null ? null : context.getTargetedElm(),
-            context == null ? "-" : context.getPlayer().getName().getString()
+            context == null ? debugWindow_centerElm : context.getTargetedElm(),
+            context == null ? "Debug window" : context.getPlayer().getName().getString()
         );
         for(int i = 0; i < targetedElmLines.length; ++i) {
             final String line = targetedElmLines[i];
@@ -233,7 +239,7 @@ public class GraphicsDebugWindow extends JPanel {
 
 
         // Rendered elm info (targeted by the cursor in the window, left side)
-        final String[] renderedElmLines = computeElmInfoLines(renderedElm, "Debug window");
+        final String[] renderedElmLines = computeElmInfoLines(debugWindow_targetedElm, "Debug window");
         for(int i = 0; i < renderedElmLines.length; ++i) {
             final String line = renderedElmLines[i];
             _g.drawString(line, borderDist, (fontSize + borderDist) + (fontSize + lineDist) * i);
@@ -302,7 +308,7 @@ public class GraphicsDebugWindow extends JPanel {
 
         final var rawEntity = elm instanceof Elm e ? e.getEntity().getRawEntity() : null;
         final String rawEntityString = rawEntity == null ? "-" : rawEntity.getClass().getSimpleName() + "@" +  Integer.toHexString(System.identityHashCode(rawEntity));
-        final long payloadSize = rawEntity == null ? 0L : NetworkUtils.calcEntityPayloadSize(rawEntity);
+        final long entityPayloadSize = rawEntity == null ? 0L : NetworkUtils.calcEntityPayloadSize(rawEntity);
         return new String[]{
             elm.getClass().getSimpleName(),
             "SOURCE: " + sourceName,
