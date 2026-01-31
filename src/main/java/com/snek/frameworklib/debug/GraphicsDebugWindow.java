@@ -215,7 +215,7 @@ public class GraphicsDebugWindow extends JPanel {
             catch(IndexOutOfBoundsException e) {
                 //! Empty
 
-                //! Sometimes the debug window and the list of vertices aren't properly coordinated,
+                //! Sometimes the debug window and the list of vertices aren't properly synchronized,
                 //! so getting vertices by hard coded index can cause out-of-bounds accesses.
 
                 //! This is not worth fixing as the debug window is only used as a visual aid during development
@@ -287,13 +287,13 @@ public class GraphicsDebugWindow extends JPanel {
         // Render update queue
         final int queueLinesNum = 8;
         final String[] queueLines = new String[queueLinesNum + 1];
-        final int queueSize = Elm.getUpdateQueueSize();
+        final int queueSize = Elm.getUpdateQueue().size();
         queueLines[0] = "[Update queue: " + queueSize + "]";
         for(int i = 0; i < queueLinesNum - 1; ++i) {
-            queueLines[i + 1] = Elm.getUpdateQueueEntry(i);
+            queueLines[i + 1] = getUpdateQueueEntry(i);
         }
         queueLines[queueLinesNum] = queueSize <= queueLinesNum ?
-            Elm.getUpdateQueueEntry(queueLinesNum - 1) :
+            getUpdateQueueEntry(queueLinesNum - 1) :
             ("" + (queueSize - queueLinesNum) + " more...")
         ;
         for(int i = queueLines.length - 1; i >= 0; --i) {
@@ -375,14 +375,27 @@ public class GraphicsDebugWindow extends JPanel {
 
 
     private static int getEntityCount(final @NotNull String customName) {
-        int r = 0;
-        for(final ServerLevel level : FrameworkLib.getServer().getAllLevels()) {
-            for(final Entity entity : level.getAllEntities()) {
-                final var name = entity.getCustomName();
-                if(name != null && name.getString().equals(customName)) ++r;
+        try {
+            int r = 0;
+            for(final ServerLevel level : FrameworkLib.getServer().getAllLevels()) {
+                for(final Entity entity : level.getAllEntities()) {
+                    final var name = entity.getCustomName();
+                    if(name != null && name.getString().equals(customName)) ++r;
+                }
             }
+            return r;
         }
-        return r;
+        catch(Exception e) {
+            //! Empty
+
+            //! Sometimes the debug window tries to iterate the list of entities while Mincraft is modifying it,
+            //! causing all sorts of exceptions.
+
+            //! This is not worth fixing as the debug window is only used as a visual aid during development
+            //! and the problem doesn't have any side effect and usually fixes itself within a frame.
+
+            return 0;
+        }
     }
 
     private static int getRecursiveEntityCount(final @NotNull Div elm) {
@@ -414,5 +427,16 @@ public class GraphicsDebugWindow extends JPanel {
             sum += value;
         }
         return sum / values.length;
+    }
+
+
+    public static @NotNull String getUpdateQueueEntry(final int index) {
+        if(index < Elm.getUpdateQueue().size()){
+            final Div elm = Elm.getUpdateQueue().get(index);
+            return elm.getClass().getSimpleName() + "@" +  Integer.toHexString(System.identityHashCode(elm));
+        }
+        else {
+            return "-";
+        }
     }
 }

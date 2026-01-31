@@ -64,10 +64,7 @@ public abstract class Elm extends Div {
     protected        final @NotNull IndexedArrayDeque<InterpolatedData> futureDataQueue = new IndexedArrayDeque<>(); // The list of transition steps to apply to this instance in the next ticks. 1 for each update tick
     private boolean isQueued = false;                                               // Whether this instance is queued for updates. Updated manually
     public int getDataQueueSize() { return futureDataQueue.size(); }
-    public static int getUpdateQueueSize() { return elmUpdateQueue.size(); }
-    public static @NotNull String getUpdateQueueEntry(final int index) {
-        return index < elmUpdateQueue.size() ? elmUpdateQueue.get(index).getClass().getSimpleName() : "-";
-    }
+    public static List<Elm> getUpdateQueue() { return elmUpdateQueue; }
 
 
     // Forced imperceptible changes applied to the entity's interpolated data.
