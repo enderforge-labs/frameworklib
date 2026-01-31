@@ -24,8 +24,11 @@ This makes it compatible with all clients and most mods and modpacks.
 
 ### Utilities
 
-- Scheduler and task handlers
-- Utility methods for Minecraft (Custom head generator, ItemStack serialization, ItemStack name retrieval etc...)
+- A server-wide Scheduler and task handlers
+- A handy Txt class built on top of Minecraft's Component
+- Generic utility methods (Size/Time/Price/Amount formatters, Color handling, Interpolations, etc...)
+- Minecraft-related utility methods (Custom head generator, ItemStack serialization, ItemStack name retrieval, etc...)
+- Network-related utility methods (Packet sender, payload size calculation, etc...)
 - Containers (Pair, Triplet, Option, Result, Flagged, etc...)
 - Transforms, Easings
 - Command stack trace logger
