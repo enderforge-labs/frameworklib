@@ -54,7 +54,12 @@ public class GraphicsDebugWindow extends JPanel {
     private static JFrame frame;
     public static @NotNull GraphicsDebugWindow getW() { return w; }
     public static @NotNull JFrame getFrame() { return frame; }
+
+
     private Point cursorPosition = null;
+    private long lastTime = 0;
+    private long[] frameTimes = new long[100];
+    private int curFrame = 0;
 
 
     static {
@@ -106,6 +111,13 @@ public class GraphicsDebugWindow extends JPanel {
                 repaint();
             }
         });
+
+
+        // Initialize frame times array
+        final long now = System.nanoTime();
+        for(int i = 0; i < frameTimes.length; ++i) {
+            frameTimes[i] = now;
+        }
     }
 
 
@@ -248,7 +260,19 @@ public class GraphicsDebugWindow extends JPanel {
 
 
         // Render stats
+        long now = System.nanoTime();
+        long diff = now - lastTime;
+        lastTime = now;
+        frameTimes[curFrame++] = diff;
+        if(curFrame == frameTimes.length) curFrame = 0;
+        final long frameTime = Math.max(1, mean(frameTimes));
+        final long tickTime = Math.max(1, mean(FrameworkLib.getServer().tickTimes));
+        final int fps = (int)(1d / (frameTime / 1_000_000_000d));
+        final int tps = (int)(1d / (tickTime / 1_000_000_000d));
         final String[] statsLines = {
+            "Window FPS: " + fps + " (" + (int)(frameTime / 1_000_000d) + "ms)",
+            "Server TPS: " + tps + " (" + (int)(tickTime / 1_000_000d) + "ms) " + (tps > 20 ? "[20 TPS]" : ""),
+            "",
             "Players: " + FrameworkLib.getServer().getPlayerCount(),
             "Active contexts:  " + Context.getActiveContexts().size(),
             "Display entities: " + getEntityCount(Elm.ENTITY_CUSTOM_NAME),
@@ -365,7 +389,7 @@ public class GraphicsDebugWindow extends JPanel {
         int r = 0;
         if(elm instanceof Elm) ++r;
         if(elm instanceof PanelTextElm) ++r;
-        for(final Div c : elm.getChildren()) r += getRecursiveEntityCount(c);
+        for(final Div c : new ArrayList<>(elm.getChildren())) r += getRecursiveEntityCount(c);
         return r;
     }
 
@@ -378,7 +402,17 @@ public class GraphicsDebugWindow extends JPanel {
         else if(elm instanceof Elm e) {
             r += NetworkUtils.calcEntityPayloadSize(e.getEntity().getRawEntity());
         }
-        for(final Div c : elm.getChildren()) r += getRecursivePayloadSize(c);
+        for(final Div c : new ArrayList<>(elm.getChildren())) r += getRecursivePayloadSize(c);
         return r;
+    }
+
+    //TODO move to utils. take a generic container instead of an array
+    //TODO add more methods similar to this one
+    private static long mean(long[] values) {
+        long sum = 0L;
+        for (long value : values) {
+            sum += value;
+        }
+        return sum / values.length;
     }
 }
