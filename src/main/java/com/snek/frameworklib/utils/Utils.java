@@ -273,11 +273,142 @@ public final class Utils extends UtilityClassBase {
 
 
 
+    public enum SizeLabelType {
+        SYMBOL,
+        FULL
+    }
+
+    @SuppressWarnings("java:S115") //! Bad enum constant name
+    public enum SizeUnits {
+        b, B,
+        KB,  MB,  GB,  TB,  PB,  EB,  ZB,  YB,
+        KiB, MiB, GiB, TiB, PiB, EiB, ZiB, YiB
+    }
+
+
+    /**
+     * Returns the value <bytes> expressed as a string in the specified unit.
+     * @param bytes The number of bytes to format. This MUST be >= 0.
+     * @param unit The size unit to display the value in.
+     * @return The formatted byte size.
+     */
+    public static @NotNull String formatBytes(final long bytes, final @NotNull SizeUnits unit) {
+        assert Require.nonNegative(bytes, "bytes");
+        assert Require.nonNull(unit, "unit");
+        return formatBytes(bytes, unit, SizeLabelType.SYMBOL, 2);
+    }
+
+
+    /**
+     * Returns the value <bytes> expressed as a string in the specified unit.
+     * @param bytes The number of bytes to format. This MUST be >= 0.
+     * @param unit The size unit to display the value in.
+     * @param labelType The label type (SYMBOL or FULL).
+     * @return The formatted byte size.
+     */
+    public static @NotNull String formatBytes(final long bytes, final @NotNull SizeUnits unit, final @NotNull SizeLabelType labelType) {
+        assert Require.nonNegative(bytes, "bytes");
+        assert Require.nonNull(unit, "unit");
+        assert Require.nonNull(labelType, "labelType");
+        return formatBytes(bytes, unit, labelType, 2);
+    }
+
+
+    /**
+     * Returns the value <bytes> expressed as a string in the specified unit.
+     * @param bytes The number of bytes to format. This MUST be >= 0.
+     * @param unit The size unit to display the value in.
+     * @param labelType The label type (SYMBOL or FULL).
+     * @param precision The maximum number of decimal places to show. This is redundant is displaying in Bits.
+     * @return The formatted byte size.
+     */
+    @SuppressWarnings("java:S3457") //! Concatenation in String.format
+    public static @NotNull String formatBytes(final long bytes, final @NotNull SizeUnits unit, final @NotNull SizeLabelType labelType, final int precision) {
+        assert Require.nonNegative(bytes, "bytes");
+        assert Require.nonNull(unit, "unit");
+        assert Require.nonNull(labelType, "labelType");
+        assert Require.nonNegative(precision, "precision");
+
+        // Custom logic for bits
+        if(unit == SizeUnits.b) {
+            final long bits = bytes * 8L;
+            return String.format("%d %s", bits, getSizeLabel(labelType, bits, unit));
+        }
+
+        // Determine if using binary (1024) or decimal (1000) units
+        final boolean isBinary = unit.name().endsWith("iB");
+        final long divisor = isBinary ? 1024L : 1000L;
+
+        // Get the exponent for the requested unit
+        final int exp = switch(unit) {
+            case b -> 0;
+            case B -> 0;
+            case KB, KiB -> 1;
+            case MB, MiB -> 2;
+            case GB, GiB -> 3;
+            case TB, TiB -> 4;
+            case PB, PiB -> 5;
+            case EB, EiB -> 6;
+            case ZB, ZiB -> 7;
+            case YB, YiB -> 8;
+        };
+
+        // Calculate the value in the requested unit
+        final double value = bytes / Math.pow(divisor, exp);
+
+        // Format with the specified precision
+        final String formatted = String.format("%." + precision + "f", value)
+            .replaceAll("\\.0+$", "")                // Remove trailing .00
+            .replaceAll("(\\.\\d*[1-9])0+$", "$1")   // Remove trailing zeros after decimal point
+        ;
+
+        // Get the appropriate label
+        final String label = getSizeLabel(labelType, (long)value, unit);
+
+        // Return the formatted size with label
+        return formatted + " " + label;
+    }
+
+
+    private static @NotNull String getSizeLabel(final @NotNull SizeLabelType type, final long value, final @NotNull SizeUnits scale) {
+        return switch(type) {
+            case SYMBOL -> switch(scale) {
+                case b  -> "b";
+                case B  -> "B";
+                case KB -> "KB"; case KiB -> "KiB";
+                case MB -> "MB"; case MiB -> "MiB";
+                case GB -> "GB"; case GiB -> "GiB";
+                case TB -> "TB"; case TiB -> "TiB";
+                case PB -> "PB"; case PiB -> "PiB";
+                case EB -> "EB"; case EiB -> "EiB";
+                case ZB -> "ZB"; case ZiB -> "ZiB";
+                case YB -> "YB"; case YiB -> "YiB";
+            };
+            case FULL -> switch(scale) {
+                case b  -> "Bit";
+                case B  -> "Byte";
+                case KB ->  "Kilobyte"; case KiB -> "Kibibyte";
+                case MB ->  "Megabyte"; case MiB -> "Mebibyte";
+                case GB ->  "Gigabyte"; case GiB -> "Gibibyte";
+                case TB ->  "Terabyte"; case TiB -> "Tebibyte";
+                case PB ->  "Petabyte"; case PiB -> "Pebibyte";
+                case EB ->   "Exabyte"; case EiB -> "Exbibyte";
+                case ZB -> "Zettabyte"; case ZiB -> "Zebibyte";
+                case YB -> "Yottabyte"; case YiB -> "Yobibyte";
+            } + (value != 1 ? "s" : "");
+        };
+    }
+
+
+
+
+
+
 
 
     public enum DurationLabelType { INITIAL, FULL }
     public enum DurationPrecision { SECONDS, MINUTES }
-    private enum DurationScale { MS, S, M, H, D, MO, Y }
+    private enum DurationUnits { MS, S, M, H, D, MO, Y }
 
     /**
      * Returns the duration <ticks> expressed as a string and formatted as specified.
@@ -343,44 +474,44 @@ public final class Utils extends UtilityClassBase {
 
         // Build the formatted string
         if(years > 0) {
-            r.append(years).append(getLabel(labelType, years, DurationScale.Y));
+            r.append(years).append(getTimeLabel(labelType, years, DurationUnits.Y));
         }
 
         if(months > 0) {
             if(needSep) r.append(sep);
             r.append(months);
-            r.append(getLabel(labelType, months, DurationScale.MO));
+            r.append(getTimeLabel(labelType, months, DurationUnits.MO));
         }
 
         if(days > 0) {
             if(needSep) r.append(sep);
             r.append(days);
-            r.append(getLabel(labelType, days, DurationScale.D));
+            r.append(getTimeLabel(labelType, days, DurationUnits.D));
         }
 
         if(hours > 0) {
             if(needSep) r.append(sep);
             r.append(hours);
-            r.append(getLabel(labelType, hours, DurationScale.H));
+            r.append(getTimeLabel(labelType, hours, DurationUnits.H));
         }
 
         if(minutes > 0) {
             if(needSep) r.append(sep);
             r.append(minutes);
-            r.append(getLabel(labelType, minutes, DurationScale.M));
+            r.append(getTimeLabel(labelType, minutes, DurationUnits.M));
         }
 
         if(precision == DurationPrecision.SECONDS) {
             if(seconds > 0 || totalSeconds == 0) {
                 if(needSep) r.append(sep);
                 r.append(seconds);
-                r.append(getLabel(labelType, seconds, DurationScale.S));
+                r.append(getTimeLabel(labelType, seconds, DurationUnits.S));
             }
 
             if(millis > 0) {
                 if(needSep) r.append(sep);
                 r.append(millis);
-                r.append(getLabel(labelType, millis, DurationScale.MS));
+                r.append(getTimeLabel(labelType, millis, DurationUnits.MS));
             }
         }
 
@@ -388,7 +519,7 @@ public final class Utils extends UtilityClassBase {
         // Handle edge case of zero duration
         if(r.isEmpty()) {
             r.append("0");
-            r.append(getLabel(labelType, 0, DurationScale.S));
+            r.append(getTimeLabel(labelType, 0, DurationUnits.S));
         }
 
         // Return
@@ -396,7 +527,7 @@ public final class Utils extends UtilityClassBase {
     }
 
 
-    private static @NotNull String getLabel(final @NotNull DurationLabelType type, final long value, final @NotNull DurationScale scale) {
+    private static @NotNull String getTimeLabel(final @NotNull DurationLabelType type, final long value, final @NotNull DurationUnits scale) {
         return switch(type) {
             case INITIAL -> switch(scale) {
                 case MS -> "ms";
