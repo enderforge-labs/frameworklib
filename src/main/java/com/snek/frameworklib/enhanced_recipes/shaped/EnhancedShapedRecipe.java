@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.common.MinecraftUtils;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;

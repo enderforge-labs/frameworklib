@@ -24,7 +24,7 @@ import com.snek.frameworklib.graphics.core.HudContext;
 import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
-import com.snek.frameworklib.utils.GeometryUtils;
+import com.snek.frameworklib.utils.common.GeometryUtils;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;

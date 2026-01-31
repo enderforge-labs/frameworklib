@@ -11,7 +11,7 @@ import com.snek.frameworklib.data_types.graphics.PolylineData;
 import com.snek.frameworklib.debug.Require;
 import com.snek.frameworklib.graphics.composite.styles.LinePanel_S;
 import com.snek.frameworklib.graphics.layout.Div;
-import com.snek.frameworklib.utils.GeometryUtils;
+import com.snek.frameworklib.utils.common.GeometryUtils;
 
 import net.minecraft.server.level.ServerLevel;
 

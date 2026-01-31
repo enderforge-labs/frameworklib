@@ -1,4 +1,4 @@
-package com.snek.frameworklib.utils;
+package com.snek.frameworklib.utils.common;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -13,6 +13,7 @@ import org.joml.Vector4i;
 
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.utils.UtilityClassBase;
 
 
 

@@ -1,4 +1,4 @@
-package com.snek.frameworklib.utils;
+package com.snek.frameworklib.utils.common;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -8,6 +8,7 @@ import java.util.zip.Deflater;
 import org.jetbrains.annotations.NotNull;
 
 import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.utils.UtilityClassBase;
 
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;

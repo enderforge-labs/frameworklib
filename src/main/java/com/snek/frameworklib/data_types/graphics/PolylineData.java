@@ -10,8 +10,8 @@ import org.joml.Vector2f;
 import org.joml.Vector3i;
 
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.utils.GeometryUtils;
 import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.common.GeometryUtils;
 
 
 

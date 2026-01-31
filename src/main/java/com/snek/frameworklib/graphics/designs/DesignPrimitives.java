@@ -7,8 +7,8 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2f;
 
 import com.snek.frameworklib.debug.Require;
-import com.snek.frameworklib.utils.GeometryUtils;
 import com.snek.frameworklib.utils.UtilityClassBase;
+import com.snek.frameworklib.utils.common.GeometryUtils;
 
 
 

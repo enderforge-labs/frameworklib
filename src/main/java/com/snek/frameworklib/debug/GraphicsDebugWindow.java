@@ -18,10 +18,10 @@ import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.graphics.layout.Div;
-import com.snek.frameworklib.utils.MinecraftUtils;
-import com.snek.frameworklib.utils.NetworkUtils;
-import com.snek.frameworklib.utils.Utils;
-import com.snek.frameworklib.utils.Utils.SizeUnits;
+import com.snek.frameworklib.utils.common.MinecraftUtils;
+import com.snek.frameworklib.utils.common.NetworkUtils;
+import com.snek.frameworklib.utils.common.Utils;
+import com.snek.frameworklib.utils.common.Utils.SizeUnits;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;

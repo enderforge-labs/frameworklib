@@ -1,4 +1,4 @@
-package com.snek.frameworklib.utils;
+package com.snek.frameworklib.utils.common;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -22,6 +22,8 @@ import com.mojang.serialization.JsonOps;
 import com.snek.frameworklib.FrameworkLib;
 import com.snek.frameworklib.cache.PlayerDataCache;
 import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.utils.Txt;
+import com.snek.frameworklib.utils.UtilityClassBase;
 
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;

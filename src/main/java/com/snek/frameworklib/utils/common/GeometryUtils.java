@@ -1,4 +1,4 @@
-package com.snek.frameworklib.utils;
+package com.snek.frameworklib.utils.common;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -7,6 +7,7 @@ import org.joml.Vector3f;
 
 import com.snek.frameworklib.debug.DebugCheck;
 import com.snek.frameworklib.debug.Require;
+import com.snek.frameworklib.utils.UtilityClassBase;
 import com.snek.frameworklib.debug.GraphicsDebugWindow;
 
 
