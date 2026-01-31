@@ -323,8 +323,13 @@ public class GraphicsDebugWindow extends JPanel {
             "RelSize: " + getVectorString(elm.getAbsSize()),
             "AbsSize: " + getVectorString(elm.getLocalSize()),
             "",
+            "[Element]",
             "Raw entity: " + rawEntityString,
-            "Data payload: " + Utils.formatSize(payloadSize, SizeUnits.KB) + " - " + Utils.formatSize(payloadSize, SizeUnits.B),
+            "Data payload: " + Utils.formatSize(entityPayloadSize, SizeUnits.KB) + " - " + Utils.formatSize(entityPayloadSize, SizeUnits.B),
+            "",
+            "[Context]",
+            "Raw entities: " + getRecursiveEntityCount(elm.getCanvas()),
+            "Data payload: " + Utils.formatSize(getRecursivePayloadSize(elm.getCanvas()), SizeUnits.KB),
         };
     }
 
@@ -346,6 +351,27 @@ public class GraphicsDebugWindow extends JPanel {
                 if(name != null && name.getString().equals(customName)) ++r;
             }
         }
+        return r;
+    }
+
+    private static int getRecursiveEntityCount(final @NotNull Div elm) {
+        int r = 0;
+        if(elm instanceof Elm) ++r;
+        if(elm instanceof PanelTextElm) ++r;
+        for(final Div c : elm.getChildren()) r += getRecursiveEntityCount(c);
+        return r;
+    }
+
+    private static long getRecursivePayloadSize(final @NotNull Div elm) {
+        long r = 0;
+        if(elm instanceof PanelTextElm e) {
+            r += NetworkUtils.calcEntityPayloadSize(e.getFgEntity().getRawEntity());
+            r += NetworkUtils.calcEntityPayloadSize(e.getBgEntity().getRawEntity());
+        }
+        else if(elm instanceof Elm e) {
+            r += NetworkUtils.calcEntityPayloadSize(e.getEntity().getRawEntity());
+        }
+        for(final Div c : elm.getChildren()) r += getRecursivePayloadSize(c);
         return r;
     }
 }
