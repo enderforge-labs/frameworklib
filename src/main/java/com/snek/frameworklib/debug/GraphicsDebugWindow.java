@@ -18,6 +18,9 @@ import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.graphics.layout.Div;
+import com.snek.frameworklib.utils.MinecraftUtils;
+import com.snek.frameworklib.utils.Utils;
+import com.snek.frameworklib.utils.Utils.SizeUnits;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -251,7 +254,7 @@ public class GraphicsDebugWindow extends JPanel {
 
         // Draw cursor center
         if(cursorPosition != null) {
-            _g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
+            _g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.125f));
             _g.setColor(Color.WHITE);
             _g.drawLine(cursorPosition.x, 0, cursorPosition.x, height);
             _g.drawLine(0, cursorPosition.y, width, cursorPosition.y);
@@ -274,6 +277,11 @@ public class GraphicsDebugWindow extends JPanel {
         if(elm == null) {
             return new String[]{};
         }
+
+
+        final var rawEntity = elm instanceof Elm e ? e.getEntity().getRawEntity() : null;
+        final String rawEntityString = rawEntity == null ? "-" : rawEntity.getClass().getSimpleName() + "@" +  Integer.toHexString(System.identityHashCode(rawEntity));
+        final long payloadSize = rawEntity == null ? 0L : MinecraftUtils.getEntityPayloadSize(rawEntity);
         return new String[]{
             elm.getClass().getSimpleName(),
             "SOURCE: " + sourceName,
@@ -293,16 +301,19 @@ public class GraphicsDebugWindow extends JPanel {
             "AbsPos: " + getVectorString(elm.getLocalPos()),
             "RelSize: " + getVectorString(elm.getAbsSize()),
             "AbsSize: " + getVectorString(elm.getLocalSize()),
+            "",
+            "Raw entity: " + rawEntityString,
+            "Data payload: " + Utils.formatSize(payloadSize, SizeUnits.KB) + " - " + Utils.formatSize(payloadSize, SizeUnits.B),
         };
     }
 
 
 
     private static String getVectorString(final @NotNull Vector3f v) {
-        return "(" + String.format("(%.4f, %.4f, %.4f)", v.x, v.y, v.z) + ")";
+        return String.format("(%.4f, %.4f, %.4f)", v.x, v.y, v.z);
     }
     private static String getVectorString(final @NotNull Vector2f v) {
-        return "(" + String.format("(%.4f, %.4f)", v.x, v.y) + ")";
+        return String.format("(%.4f, %.4f)", v.x, v.y);
     }
 
 
