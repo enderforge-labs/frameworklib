@@ -18,7 +18,6 @@ import com.snek.frameworklib.graphics.interfaces.Clickable;
 import com.snek.frameworklib.graphics.interfaces.Hoverable;
 import com.snek.frameworklib.graphics.interfaces.Scrollable;
 import com.snek.frameworklib.graphics.layout.Div;
-import com.snek.frameworklib.utils.common.MinecraftUtils;
 import com.snek.frameworklib.utils.common.NetworkUtils;
 import com.snek.frameworklib.utils.common.Utils;
 import com.snek.frameworklib.utils.common.Utils.SizeUnits;
@@ -218,7 +217,8 @@ public class GraphicsDebugWindow extends JPanel {
         _g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, fontSize));
         final FontMetrics fm = _g.getFontMetrics();
 
-        // True targeted elm info (targeted by the player in game, left side)
+
+        // True targeted elm info (targeted by the player in game, right side)
         final var a = Context.getActiveContexts().values().iterator();
         final var b = a.hasNext() ? a.next() : null;
         final Context context = (b == null || b.isEmpty()) ? null : b.get(0);
@@ -231,12 +231,14 @@ public class GraphicsDebugWindow extends JPanel {
             _g.drawString(line, width - fm.stringWidth(line) - borderDist, (fontSize + borderDist) + (fontSize + lineDist) * i);
         }
 
-        // Rendered elm info (targeted by the cursor in the window, right side)
+
+        // Rendered elm info (targeted by the cursor in the window, left side)
         final String[] renderedElmLines = computeElmInfoLines(renderedElm, "Debug window");
         for(int i = 0; i < renderedElmLines.length; ++i) {
             final String line = renderedElmLines[i];
             _g.drawString(line, borderDist, (fontSize + borderDist) + (fontSize + lineDist) * i);
         }
+
 
         // Render stats
         final String[] statsLines = {
@@ -248,6 +250,24 @@ public class GraphicsDebugWindow extends JPanel {
         for(int i = statsLines.length - 1; i >= 0; --i) {
             final String line = statsLines[i];
             _g.drawString(line, borderDist, height - borderDist - (fontSize + lineDist) * (statsLines.length - 1 - i));
+        }
+
+
+        // Render update queue
+        final int queueLinesNum = 8;
+        final String[] queueLines = new String[queueLinesNum + 1];
+        final int queueSize = Elm.getUpdateQueueSize();
+        queueLines[0] = "[Update queue: " + queueSize + "]";
+        for(int i = 0; i < queueLinesNum - 1; ++i) {
+            queueLines[i + 1] = Elm.getUpdateQueueEntry(i);
+        }
+        queueLines[queueLinesNum] = queueSize <= queueLinesNum ?
+            Elm.getUpdateQueueEntry(queueLinesNum - 1) :
+            ("" + (queueSize - queueLinesNum) + " more...")
+        ;
+        for(int i = queueLines.length - 1; i >= 0; --i) {
+            final String line = queueLines[i];
+            _g.drawString(line, width - fm.stringWidth(line) - borderDist, height - borderDist - (fontSize + lineDist) * (queueLines.length - 1 - i));
         }
 
 
