@@ -228,9 +228,10 @@ public class GraphicsDebugWindow extends JPanel {
         final var a = Context.getActiveContexts().values().iterator();
         final var b = a.hasNext() ? a.next() : null;
         final Context context = (b == null || b.isEmpty()) ? null : b.get(0);
+        final Div targetedElm = context == null ? null : context.getTargetedElm();
         final String[] targetedElmLines = computeElmInfoLines(
-            context == null ? debugWindow_centerElm : context.getTargetedElm(),
-            context == null ? "Debug window" : context.getPlayer().getName().getString()
+            targetedElm == null ? debugWindow_centerElm : targetedElm,
+            targetedElm == null ? "Debug window" : context.getPlayer().getName().getString()
         );
         for(int i = 0; i < targetedElmLines.length; ++i) {
             final String line = targetedElmLines[i];
