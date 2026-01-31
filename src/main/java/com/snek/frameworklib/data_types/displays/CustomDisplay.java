@@ -39,6 +39,14 @@ public abstract class CustomDisplay {
     protected boolean spawned = false;
 
     /**
+     * Retrieves the minecraft display entity held by this {@link CustomDisplay}.
+     * @return The raw minecraft display entity.
+     */
+    public @NotNull Display getRawEntity() {
+        return heldEntity;
+    }
+
+    /**
      * Retrieves the display entity held by this {@link CustomDisplay} as a {@link DisplayAccessorMixin} to allow access to private methods.
      * @return The held {@link Display} as a {@link DisplayAccessorMixin}.
      */

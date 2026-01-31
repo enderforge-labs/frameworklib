@@ -292,10 +292,10 @@ public final class Utils extends UtilityClassBase {
      * @param unit The size unit to display the value in.
      * @return The formatted byte size.
      */
-    public static @NotNull String formatBytes(final long bytes, final @NotNull SizeUnits unit) {
+    public static @NotNull String formatSize(final long bytes, final @NotNull SizeUnits unit) {
         assert Require.nonNegative(bytes, "bytes");
         assert Require.nonNull(unit, "unit");
-        return formatBytes(bytes, unit, SizeLabelType.SYMBOL, 2);
+        return formatSize(bytes, unit, SizeLabelType.SYMBOL, 2);
     }
 
 
@@ -306,11 +306,11 @@ public final class Utils extends UtilityClassBase {
      * @param labelType The label type (SYMBOL or FULL).
      * @return The formatted byte size.
      */
-    public static @NotNull String formatBytes(final long bytes, final @NotNull SizeUnits unit, final @NotNull SizeLabelType labelType) {
+    public static @NotNull String formatSize(final long bytes, final @NotNull SizeUnits unit, final @NotNull SizeLabelType labelType) {
         assert Require.nonNegative(bytes, "bytes");
         assert Require.nonNull(unit, "unit");
         assert Require.nonNull(labelType, "labelType");
-        return formatBytes(bytes, unit, labelType, 2);
+        return formatSize(bytes, unit, labelType, 2);
     }
 
 
@@ -323,7 +323,7 @@ public final class Utils extends UtilityClassBase {
      * @return The formatted byte size.
      */
     @SuppressWarnings("java:S3457") //! Concatenation in String.format
-    public static @NotNull String formatBytes(final long bytes, final @NotNull SizeUnits unit, final @NotNull SizeLabelType labelType, final int precision) {
+    public static @NotNull String formatSize(final long bytes, final @NotNull SizeUnits unit, final @NotNull SizeLabelType labelType, final int precision) {
         assert Require.nonNegative(bytes, "bytes");
         assert Require.nonNull(unit, "unit");
         assert Require.nonNull(labelType, "labelType");
