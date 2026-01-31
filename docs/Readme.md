@@ -21,6 +21,7 @@ This makes it compatible with all clients and most mods and modpacks.
 - Support for custom graphic elements and styles
 - Multiline elements and premade icons
 - Bitmap displays //TODO
+- ![alt text](Graphics.png)
 
 ### Utilities
 
@@ -39,7 +40,7 @@ This makes it compatible with all clients and most mods and modpacks.
 - Debug mode detection
 - Inspector window for graphic elements
 - Precondition checks
-//TODO add images of the debug window
+- ![alt text](DebugWindow.png)
 
 ### Misc
 
