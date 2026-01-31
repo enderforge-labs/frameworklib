@@ -41,6 +41,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
@@ -791,5 +792,70 @@ public final class MinecraftUtils extends UtilityClassBase {
     public static double getPlayerStandingEyeHeight(final @NotNull Player player) {
         assert Require.nonNull(player, "player");
         return player.getStandingEyeHeight(Pose.STANDING, player.getDimensions(Pose.STANDING));
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Calculates the size in bytes of an entity's compressed data.
+     * <p>
+     * This should be a close approximation of what is sent to the client.
+     * <p>
+     * Notice: This method has to serialize and compress the data in order to calculate its size.
+     *     This can be very expensive for complex entities.
+     *     The returned value should be cached whenever possible.
+     * @param entity The entity.
+     * @return The size of the entity's compressed data, in bytes. -1 if errors occur.
+     */
+    public static long getEntityPayloadSize(final @NotNull Entity entity) {
+        final CompoundTag nbt = new CompoundTag();
+        entity.saveWithoutId(nbt);
+        return getCompressedDataSize(nbt);
+    }
+
+
+    /**
+     * Calculates the size in bytes of an item's compressed data.
+     * <p>
+     * This should be a close approximation of what is sent to the client.
+     * <p>
+     * Notice: This method has to serialize and compress the data in order to calculate its size.
+     *     This can be very expensive for complex entities.
+     *     The returned value should be cached whenever possible.
+     * @param itemStack The item.
+     * @return The size of the item's compressed data, in bytes. -1 if errors occur.
+     */
+    public static long getItemPayloadSize(final @NotNull ItemStack itemStack) {
+        final CompoundTag nbt = new CompoundTag();
+        itemStack.save(nbt);
+        return getCompressedDataSize(nbt);
+    }
+
+
+    /**
+     * Calculates the size in bytes the provided NBT data has when compressed.
+     * @param nbt The NBT data.
+     * @return The size of the compressed data, in bytes. -1 if errors occur.
+     */
+    private static long getCompressedDataSize(final @NotNull CompoundTag nbt){
+        try {
+
+            // Serialize the NBT to compressed bytes
+            final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+            final DataOutputStream dataStream = new DataOutputStream(byteStream);
+            NbtIo.write(nbt, dataStream);
+
+            // Return the compressed size
+            return byteStream.toByteArray().length;
+        }
+        catch (final IOException e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 }
