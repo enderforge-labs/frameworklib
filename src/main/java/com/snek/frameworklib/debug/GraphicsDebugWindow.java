@@ -111,13 +111,6 @@ public class GraphicsDebugWindow extends JPanel {
                 repaint();
             }
         });
-
-
-        // Initialize frame times array
-        final long now = System.nanoTime();
-        for(int i = 0; i < frameTimes.length; ++i) {
-            frameTimes[i] = now;
-        }
     }
 
 
@@ -259,19 +252,24 @@ public class GraphicsDebugWindow extends JPanel {
         }
 
 
-        // Render stats
+        // Calculate frame time
         long now = System.nanoTime();
         long diff = now - lastTime;
         lastTime = now;
-        frameTimes[curFrame++] = diff;
-        if(curFrame == frameTimes.length) curFrame = 0;
+
+        // Initialize/update frame times array
+        if(curFrame == 0) for(int i = 0; i < frameTimes.length; ++i) frameTimes[i] = diff;
+        else frameTimes[curFrame % frameTimes.length] = diff;
+        ++curFrame;
+
+        // Render stats
         final long frameTime = Math.max(1, mean(frameTimes));
         final long tickTime = Math.max(1, mean(FrameworkLib.getServer().tickTimes));
         final int fps = (int)(1d / (frameTime / 1_000_000_000d));
-        final int tps = (int)(1d / (tickTime / 1_000_000_000d));
+        final int tps = (int)(1d / (tickTime  / 1_000_000_000d));
         final String[] statsLines = {
             "Window FPS: " + fps + " (" + (int)(frameTime / 1_000_000d) + "ms)",
-            "Server TPS: " + tps + " (" + (int)(tickTime / 1_000_000d) + "ms) " + (tps > 20 ? "[20 TPS]" : ""),
+            "Server TPS: " + tps + " (" + (int)(tickTime  / 1_000_000d) + "ms) " + (tps > 20 ? "[20 TPS]" : ""),
             "",
             "Players: " + FrameworkLib.getServer().getPlayerCount(),
             "Active contexts:  " + Context.getActiveContexts().size(),
