@@ -57,7 +57,7 @@ public class GraphicsDebugWindow extends JPanel {
 
 
     private Point cursorPosition = null;
-    private long lastTime = 0;
+    private long lastTime = System.nanoTime();
     private long[] frameTimes = new long[100];
     private int curFrame = 0;
 
