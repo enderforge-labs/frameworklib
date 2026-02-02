@@ -396,11 +396,16 @@ public abstract sealed class __base_TextElm extends Elm permits PanelTextElm, Te
                     //! This is needed in order to compute the correct visual width cache and proper spawn animations
                     //! This immediate call runs before the entity spawns
                     runScrollTask(text, xScale, maxWidthPx, textString, endSegmentWidth, false);
-                    //! ^ Don't start animations as they would create a feedback look with this method and crash the server
+                    //! ^ Don't start animations as they would create a feedback loop with this method and crash the server
+
 
                     // Start a new scroll task that runs every SCROLL_DELAY
+                    //! Make it cancel itself if the element has been despawned (first iteration is ran manually, no check required there)
+                    //! This shouldn't be needed, but if something starts an animation after the element has been fully despawned,
+                    //! a new scroll task handler will be created. The check in finalizeDespawn won't catch that.
                     textAutoScrollHandler = Scheduler.loop(SCROLL_DELAY, SCROLL_DELAY, () -> {
-                        runScrollTask(text, xScale, maxWidthPx, textString, endSegmentWidth, true);
+                        if(!isSpawned) textAutoScrollHandler.cancel();
+                        else runScrollTask(text, xScale, maxWidthPx, textString, endSegmentWidth, true);
                     });
                     break;
                 }
@@ -502,13 +507,11 @@ public abstract sealed class __base_TextElm extends Elm permits PanelTextElm, Te
     }
 
     @Override
-    public void despawn(final boolean animate) {
-        if(isSpawned) {
-            super.despawn(animate);
-            if(textAutoScrollHandler != null) {
-                textAutoScrollHandler.cancel();
-                textAutoScrollHandler = null;
-            }
+    public void finalizeDespawn() {
+        super.finalizeDespawn();
+        if(textAutoScrollHandler != null) {
+            textAutoScrollHandler.cancel();
+            textAutoScrollHandler = null;
         }
     }
 }
