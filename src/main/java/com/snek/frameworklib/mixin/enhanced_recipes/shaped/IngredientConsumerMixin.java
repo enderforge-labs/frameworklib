@@ -31,7 +31,6 @@ import net.minecraft.world.item.crafting.RecipeType;
  */
 @Mixin(ResultSlot.class)
 public abstract class IngredientConsumerMixin {
-
     @Shadow
     private CraftingContainer craftSlots;
 
@@ -40,7 +39,6 @@ public abstract class IngredientConsumerMixin {
 
     @Shadow
     protected abstract void checkTakeAchievements(ItemStack stack);
-
 
 
 
