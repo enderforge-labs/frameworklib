@@ -57,7 +57,7 @@ public class Result<T, E> {
 
     /**
      * Creates a failed Result.
-     * @param obj The error value.
+     * @param err The error value.
      * @return An {@code Err} Result containing the provided value.
      */
     public static <T, E> @NotNull Result<T, E> Err(final E err) {
@@ -222,7 +222,7 @@ public class Result<T, E> {
     /**
      * Maps the contained success value to a new value using the given function or returns a default value computed with the provided function if this Result is Err.
      * @param function The mapping function.
-     * @param defaultValue The function used to compute the default value to return if this Result is Err.
+     * @param defaultFunction The function used to compute the default value to return if this Result is Err.
      * @return The mapped value or the computed default value.
      */
     public <U> U mapOrElse(final Function<T, U> function, final @NotNull Function<E, U> defaultFunction) {
