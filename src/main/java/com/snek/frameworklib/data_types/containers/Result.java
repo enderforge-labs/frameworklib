@@ -57,7 +57,7 @@ public class Result<T, E> {
 
     /**
      * Creates a failed Result.
-     * @param obj The error value.
+     * @param err The error value.
      * @return An {@code Err} Result containing the provided value.
      */
     public static <T, E> @NotNull Result<T, E> Err(final E err) {
