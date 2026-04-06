@@ -88,10 +88,16 @@ public final class PlayerDataCache extends UtilityClassBase {
         final GameProfile profile = player.getGameProfile();
 
         // Retrieve texture data
-        final String textureValue = profile.getProperties().get("textures").iterator().next().getValue();
-        if(textureValue != null) {
-            cache.put(playerUUID, new CachedPlayerData(profile.getName(), textureValue));
-            saveCache(playerUUID);
+        final var textures = profile.getProperties().get("textures");
+        if(textures != null && !textures.isEmpty()) {
+            final String textureValue = textures.iterator().next().getValue();
+            if(textureValue != null && !textureValue.isBlank()) {
+                cache.put(playerUUID, new CachedPlayerData(profile.getName(), textureValue));
+                saveCache(playerUUID);
+            }
+            else {
+                //FIXME add proper error logs and fallback logic
+            }
         }
         else {
             //FIXME add proper error logs and fallback logic
