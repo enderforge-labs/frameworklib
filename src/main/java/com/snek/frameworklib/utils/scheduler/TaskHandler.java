@@ -32,10 +32,11 @@ public class TaskHandler extends __base_TaskHandler {
     /**
      * Creates a new TaskHandler.
      * @param targetTick The tick the task is scheduled for.
+     * @param taskIndex The index of this task within its scheduled tick.
      * @param task The task to execute.
      */
-    public TaskHandler(final @NotNull Runnable task, final long targetTick) {
-        super(task, targetTick);
+    public TaskHandler(final @NotNull Runnable task, final long targetTick, final long taskIndex) {
+        super(task, targetTick, taskIndex);
     }
 
 
